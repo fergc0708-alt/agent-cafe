@@ -98,6 +98,17 @@ export async function signedReplay(c: Capsule, bins: Record<string, string>, con
   return { ...res, envelope };
 }
 
+/** Every upload is explicit: show what leaves the machine and require --yes (or an interactive yes). */
+async function confirmPublish(yes: boolean, what: string): Promise<boolean> {
+  console.error(what);
+  if (yes) return true;
+  if (!process.stdin.isTTY) throw new Error("Refusing to publish without --yes (non-interactive).");
+  const rl = createInterface({ input: process.stdin, output: process.stderr });
+  const ans = await rl.question("\nPublish? [y/N] ");
+  rl.close();
+  return /^y(es)?$/i.test(ans.trim());
+}
+
 async function main() {
   const [cmd, ...rest] = process.argv.slice(2);
   const { pos, bins, conditions, f } = flags(rest);
@@ -149,11 +160,14 @@ async function main() {
     }
     case "push": {
       const raw = JSON.parse(readFileSync(pos[0], "utf8"));
+      if (!(await confirmPublish(f.has("yes"), `This publishes the capsule PUBLICLY and permanently to ${CAFE_URL}:\n  title: ${raw?.title}\n  files: ${["before", "after", "check"].map((k) => `${k}=[${Object.keys(raw?.[k]?.files ?? {}).join(", ")}]`).join(" ")}\nMake sure it contains no secrets, private code or internal paths.`))) return;
       console.log(JSON.stringify(await api("/api/v1/capsules", { method: "POST", body: JSON.stringify(raw) }), null, 2));
       return;
     }
     case "submit": {
       const env = JSON.parse(readFileSync(pos[0], "utf8"));
+      const pred = JSON.parse(Buffer.from(env.payload, "base64").toString("utf8")).predicate;
+      if (!(await confirmPublish(f.has("yes"), `This publishes a signed result PUBLICLY to ${CAFE_URL}: verdict ${pred?.verdict}, environment "${pred?.env?.key}", os ${pred?.env?.os}/${pred?.env?.arch}, kernel ${pred?.env?.kernel ?? "-"}.`))) return;
       const id = Buffer.from(env.payload, "base64").toString("utf8").match(/"capsule_id":"([0-9a-f]{64})"/)?.[1];
       console.log(JSON.stringify(await api(`/api/v1/capsules/${id}/attestations`, { method: "POST", body: JSON.stringify(env) }), null, 2));
       return;

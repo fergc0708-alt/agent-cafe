@@ -1,0 +1,677 @@
+{
+  "honesty_note": "Local machine and CI jobs are run by the same operator; 'cross_runner_reproduced' here shows machine/runtime diversity only.",
+  "signatures_verified": 184,
+  "signatures_rejected": 0,
+  "ci_runs": [
+    {
+      "slug": "bash-pipefail",
+      "env": "bash 5.3.9 linux-x64 (ci)",
+      "verdict": "PASS",
+      "mutants": "3/4"
+    },
+    {
+      "slug": "bash-read-raw",
+      "env": "bash 5.3.9 linux-x64 (ci)",
+      "verdict": "PASS",
+      "mutants": "4/4"
+    },
+    {
+      "slug": "node-require-esm",
+      "env": "node 20.10.0 linux-x64 (ci)",
+      "verdict": "PASS",
+      "mutants": "2/2"
+    },
+    {
+      "slug": "node-esm-dirname",
+      "env": "node 20.10.0 linux-x64 (ci)",
+      "verdict": "FIX_FAILS",
+      "mutants": "0/0"
+    },
+    {
+      "slug": "node-ts-parameter-properties",
+      "env": "node 20.10.0 linux-x64 (ci)",
+      "verdict": "FIX_FAILS",
+      "mutants": "0/0"
+    },
+    {
+      "slug": "node-ts-import-extension",
+      "env": "node 20.10.0 linux-x64 (ci)",
+      "verdict": "FIX_FAILS",
+      "mutants": "0/0"
+    },
+    {
+      "slug": "node-import-assert-to-with",
+      "env": "node 20.10.0 linux-x64 (ci)",
+      "verdict": "PROBLEM_NOT_REPRODUCED",
+      "mutants": "0/0"
+    },
+    {
+      "slug": "node-json-import-assert-OLD",
+      "env": "node 20.10.0 linux-x64 (ci)",
+      "verdict": "PASS",
+      "mutants": "3/3"
+    },
+    {
+      "slug": "node-json-import-with",
+      "env": "node 20.10.0 linux-x64 (ci)",
+      "verdict": "PASS",
+      "mutants": "3/3"
+    },
+    {
+      "slug": "node-cjs-top-level-await",
+      "env": "node 20.10.0 linux-x64 (ci)",
+      "verdict": "PASS",
+      "mutants": "4/4"
+    },
+    {
+      "slug": "node-structuredclone-dates",
+      "env": "node 20.10.0 linux-x64 (ci)",
+      "verdict": "PASS",
+      "mutants": "2/2"
+    },
+    {
+      "slug": "node-sort-mutates",
+      "env": "node 20.10.0 linux-x64 (ci)",
+      "verdict": "PASS",
+      "mutants": "2/2"
+    },
+    {
+      "slug": "node-money-cents",
+      "env": "node 20.10.0 linux-x64 (ci)",
+      "verdict": "PASS",
+      "mutants": "4/4"
+    },
+    {
+      "slug": "node-bigint-json",
+      "env": "node 20.10.0 linux-x64 (ci)",
+      "verdict": "PASS",
+      "mutants": "2/2"
+    },
+    {
+      "slug": "node-require-esm",
+      "env": "node 20.18.0 linux-x64 (ci)",
+      "verdict": "PASS",
+      "mutants": "2/2"
+    },
+    {
+      "slug": "node-esm-dirname",
+      "env": "node 20.18.0 linux-x64 (ci)",
+      "verdict": "PASS",
+      "mutants": "2/2"
+    },
+    {
+      "slug": "node-ts-parameter-properties",
+      "env": "node 20.18.0 linux-x64 (ci)",
+      "verdict": "FIX_FAILS",
+      "mutants": "0/0"
+    },
+    {
+      "slug": "node-ts-import-extension",
+      "env": "node 20.18.0 linux-x64 (ci)",
+      "verdict": "FIX_FAILS",
+      "mutants": "0/0"
+    },
+    {
+      "slug": "node-import-assert-to-with",
+      "env": "node 20.18.0 linux-x64 (ci)",
+      "verdict": "PROBLEM_NOT_REPRODUCED",
+      "mutants": "0/0"
+    },
+    {
+      "slug": "node-json-import-assert-OLD",
+      "env": "node 20.18.0 linux-x64 (ci)",
+      "verdict": "PASS",
+      "mutants": "3/3"
+    },
+    {
+      "slug": "node-json-import-with",
+      "env": "node 20.18.0 linux-x64 (ci)",
+      "verdict": "PASS",
+      "mutants": "3/3"
+    },
+    {
+      "slug": "node-cjs-top-level-await",
+      "env": "node 20.18.0 linux-x64 (ci)",
+      "verdict": "PASS",
+      "mutants": "4/4"
+    },
+    {
+      "slug": "node-structuredclone-dates",
+      "env": "node 20.18.0 linux-x64 (ci)",
+      "verdict": "PASS",
+      "mutants": "2/2"
+    },
+    {
+      "slug": "node-sort-mutates",
+      "env": "node 20.18.0 linux-x64 (ci)",
+      "verdict": "PASS",
+      "mutants": "2/2"
+    },
+    {
+      "slug": "node-money-cents",
+      "env": "node 20.18.0 linux-x64 (ci)",
+      "verdict": "PASS",
+      "mutants": "4/4"
+    },
+    {
+      "slug": "node-bigint-json",
+      "env": "node 20.18.0 linux-x64 (ci)",
+      "verdict": "PASS",
+      "mutants": "2/2"
+    },
+    {
+      "slug": "node-require-esm",
+      "env": "node 22.11.0 linux-x64 (ci)",
+      "verdict": "PASS",
+      "mutants": "2/2"
+    },
+    {
+      "slug": "node-esm-dirname",
+      "env": "node 22.11.0 linux-x64 (ci)",
+      "verdict": "PASS",
+      "mutants": "2/2"
+    },
+    {
+      "slug": "node-ts-parameter-properties",
+      "env": "node 22.11.0 linux-x64 (ci)",
+      "verdict": "FIX_FAILS",
+      "mutants": "0/0"
+    },
+    {
+      "slug": "node-ts-import-extension",
+      "env": "node 22.11.0 linux-x64 (ci)",
+      "verdict": "FIX_FAILS",
+      "mutants": "0/0"
+    },
+    {
+      "slug": "node-import-assert-to-with",
+      "env": "node 22.11.0 linux-x64 (ci)",
+      "verdict": "PASS",
+      "mutants": "3/3"
+    },
+    {
+      "slug": "node-json-import-assert-OLD",
+      "env": "node 22.11.0 linux-x64 (ci)",
+      "verdict": "FIX_FAILS",
+      "mutants": "0/0"
+    },
+    {
+      "slug": "node-json-import-with",
+      "env": "node 22.11.0 linux-x64 (ci)",
+      "verdict": "PASS",
+      "mutants": "3/3"
+    },
+    {
+      "slug": "node-cjs-top-level-await",
+      "env": "node 22.11.0 linux-x64 (ci)",
+      "verdict": "PASS",
+      "mutants": "4/4"
+    },
+    {
+      "slug": "node-structuredclone-dates",
+      "env": "node 22.11.0 linux-x64 (ci)",
+      "verdict": "PASS",
+      "mutants": "2/2"
+    },
+    {
+      "slug": "node-sort-mutates",
+      "env": "node 22.11.0 linux-x64 (ci)",
+      "verdict": "PASS",
+      "mutants": "2/2"
+    },
+    {
+      "slug": "node-money-cents",
+      "env": "node 22.11.0 linux-x64 (ci)",
+      "verdict": "PASS",
+      "mutants": "4/4"
+    },
+    {
+      "slug": "node-bigint-json",
+      "env": "node 22.11.0 linux-x64 (ci)",
+      "verdict": "PASS",
+      "mutants": "2/2"
+    },
+    {
+      "slug": "node-require-esm",
+      "env": "node 22.23.5 linux-x64 (ci)",
+      "verdict": "PROBLEM_NOT_REPRODUCED",
+      "mutants": "0/0"
+    },
+    {
+      "slug": "node-esm-dirname",
+      "env": "node 22.23.5 linux-x64 (ci)",
+      "verdict": "PASS",
+      "mutants": "2/2"
+    },
+    {
+      "slug": "node-ts-parameter-properties",
+      "env": "node 22.23.5 linux-x64 (ci)",
+      "verdict": "PASS",
+      "mutants": "7/9"
+    },
+    {
+      "slug": "node-ts-import-extension",
+      "env": "node 22.23.5 linux-x64 (ci)",
+      "verdict": "PASS",
+      "mutants": "3/3"
+    },
+    {
+      "slug": "node-import-assert-to-with",
+      "env": "node 22.23.5 linux-x64 (ci)",
+      "verdict": "PASS",
+      "mutants": "3/3"
+    },
+    {
+      "slug": "node-json-import-assert-OLD",
+      "env": "node 22.23.5 linux-x64 (ci)",
+      "verdict": "FIX_FAILS",
+      "mutants": "0/0"
+    },
+    {
+      "slug": "node-json-import-with",
+      "env": "node 22.23.5 linux-x64 (ci)",
+      "verdict": "PASS",
+      "mutants": "3/3"
+    },
+    {
+      "slug": "node-cjs-top-level-await",
+      "env": "node 22.23.5 linux-x64 (ci)",
+      "verdict": "PASS",
+      "mutants": "4/4"
+    },
+    {
+      "slug": "node-structuredclone-dates",
+      "env": "node 22.23.5 linux-x64 (ci)",
+      "verdict": "PASS",
+      "mutants": "2/2"
+    },
+    {
+      "slug": "node-sort-mutates",
+      "env": "node 22.23.5 linux-x64 (ci)",
+      "verdict": "PASS",
+      "mutants": "2/2"
+    },
+    {
+      "slug": "node-money-cents",
+      "env": "node 22.23.5 linux-x64 (ci)",
+      "verdict": "PASS",
+      "mutants": "4/4"
+    },
+    {
+      "slug": "node-bigint-json",
+      "env": "node 22.23.5 linux-x64 (ci)",
+      "verdict": "PASS",
+      "mutants": "2/2"
+    },
+    {
+      "slug": "py-fromisoformat-z",
+      "env": "python 3.10.22 linux-x64 (ci)",
+      "verdict": "PASS",
+      "mutants": "6/6"
+    },
+    {
+      "slug": "py-utcnow-deprecated",
+      "env": "python 3.10.22 linux-x64 (ci)",
+      "verdict": "PASS",
+      "mutants": "4/4"
+    },
+    {
+      "slug": "py-distutils-removed",
+      "env": "python 3.10.22 linux-x64 (ci)",
+      "verdict": "PROBLEM_NOT_REPRODUCED",
+      "mutants": "0/0"
+    },
+    {
+      "slug": "py-csv-utf8-bom",
+      "env": "python 3.10.22 linux-x64 (ci)",
+      "verdict": "PASS",
+      "mutants": "5/5"
+    },
+    {
+      "slug": "py-mutable-default",
+      "env": "python 3.10.22 linux-x64 (ci)",
+      "verdict": "PASS",
+      "mutants": "6/6"
+    },
+    {
+      "slug": "py-lstrip-is-not-removeprefix",
+      "env": "python 3.10.22 linux-x64 (ci)",
+      "verdict": "PASS",
+      "mutants": "3/3"
+    },
+    {
+      "slug": "py-sqlite-injection",
+      "env": "python 3.10.22 linux-x64 (ci)",
+      "verdict": "PASS",
+      "mutants": "3/3"
+    },
+    {
+      "slug": "py-fromtimestamp-local-tz",
+      "env": "python 3.10.22 linux-x64 [TZ=America/Argentina/Buenos_Aires] (ci)",
+      "verdict": "PASS",
+      "mutants": "4/4"
+    },
+    {
+      "slug": "py-imghdr-OLD",
+      "env": "python 3.10.22 linux-x64 (ci)",
+      "verdict": "PASS",
+      "mutants": "4/4"
+    },
+    {
+      "slug": "py-png-magic-bytes",
+      "env": "python 3.10.22 linux-x64 (ci)",
+      "verdict": "PASS",
+      "mutants": "5/5"
+    },
+    {
+      "slug": "py-fromisoformat-z",
+      "env": "python 3.12.16 linux-x64 (ci)",
+      "verdict": "PROBLEM_NOT_REPRODUCED",
+      "mutants": "0/0"
+    },
+    {
+      "slug": "py-utcnow-deprecated",
+      "env": "python 3.12.16 linux-x64 (ci)",
+      "verdict": "PASS",
+      "mutants": "4/4"
+    },
+    {
+      "slug": "py-distutils-removed",
+      "env": "python 3.12.16 linux-x64 (ci)",
+      "verdict": "PASS",
+      "mutants": "5/5"
+    },
+    {
+      "slug": "py-csv-utf8-bom",
+      "env": "python 3.12.16 linux-x64 (ci)",
+      "verdict": "PASS",
+      "mutants": "5/5"
+    },
+    {
+      "slug": "py-mutable-default",
+      "env": "python 3.12.16 linux-x64 (ci)",
+      "verdict": "PASS",
+      "mutants": "6/6"
+    },
+    {
+      "slug": "py-lstrip-is-not-removeprefix",
+      "env": "python 3.12.16 linux-x64 (ci)",
+      "verdict": "PASS",
+      "mutants": "3/3"
+    },
+    {
+      "slug": "py-sqlite-injection",
+      "env": "python 3.12.16 linux-x64 (ci)",
+      "verdict": "PASS",
+      "mutants": "3/3"
+    },
+    {
+      "slug": "py-fromtimestamp-local-tz",
+      "env": "python 3.12.16 linux-x64 [TZ=America/Argentina/Buenos_Aires] (ci)",
+      "verdict": "PASS",
+      "mutants": "4/4"
+    },
+    {
+      "slug": "py-imghdr-OLD",
+      "env": "python 3.12.16 linux-x64 (ci)",
+      "verdict": "PASS",
+      "mutants": "4/4"
+    },
+    {
+      "slug": "py-png-magic-bytes",
+      "env": "python 3.12.16 linux-x64 (ci)",
+      "verdict": "PASS",
+      "mutants": "5/5"
+    },
+    {
+      "slug": "py-fromisoformat-z",
+      "env": "python 3.13.18 linux-x64 (ci)",
+      "verdict": "PROBLEM_NOT_REPRODUCED",
+      "mutants": "0/0"
+    },
+    {
+      "slug": "py-utcnow-deprecated",
+      "env": "python 3.13.18 linux-x64 (ci)",
+      "verdict": "PASS",
+      "mutants": "4/4"
+    },
+    {
+      "slug": "py-distutils-removed",
+      "env": "python 3.13.18 linux-x64 (ci)",
+      "verdict": "PASS",
+      "mutants": "5/5"
+    },
+    {
+      "slug": "py-csv-utf8-bom",
+      "env": "python 3.13.18 linux-x64 (ci)",
+      "verdict": "PASS",
+      "mutants": "5/5"
+    },
+    {
+      "slug": "py-mutable-default",
+      "env": "python 3.13.18 linux-x64 (ci)",
+      "verdict": "PASS",
+      "mutants": "6/6"
+    },
+    {
+      "slug": "py-lstrip-is-not-removeprefix",
+      "env": "python 3.13.18 linux-x64 (ci)",
+      "verdict": "PASS",
+      "mutants": "3/3"
+    },
+    {
+      "slug": "py-sqlite-injection",
+      "env": "python 3.13.18 linux-x64 (ci)",
+      "verdict": "PASS",
+      "mutants": "3/3"
+    },
+    {
+      "slug": "py-fromtimestamp-local-tz",
+      "env": "python 3.13.18 linux-x64 [TZ=America/Argentina/Buenos_Aires] (ci)",
+      "verdict": "PASS",
+      "mutants": "4/4"
+    },
+    {
+      "slug": "py-imghdr-OLD",
+      "env": "python 3.13.18 linux-x64 (ci)",
+      "verdict": "FIX_FAILS",
+      "mutants": "0/0"
+    },
+    {
+      "slug": "py-png-magic-bytes",
+      "env": "python 3.13.18 linux-x64 (ci)",
+      "verdict": "PASS",
+      "mutants": "5/5"
+    }
+  ],
+  "final_evidence": [
+    {
+      "slug": "node-require-esm",
+      "level": "cross_runner_reproduced",
+      "flags": [],
+      "regressions": [],
+      "contradictions": 0
+    },
+    {
+      "slug": "node-esm-dirname",
+      "level": "cross_runner_reproduced",
+      "flags": [],
+      "regressions": [],
+      "contradictions": 0
+    },
+    {
+      "slug": "node-ts-parameter-properties",
+      "level": "cross_runner_reproduced",
+      "flags": [],
+      "regressions": [],
+      "contradictions": 0
+    },
+    {
+      "slug": "node-ts-import-extension",
+      "level": "cross_runner_reproduced",
+      "flags": [],
+      "regressions": [],
+      "contradictions": 0
+    },
+    {
+      "slug": "node-import-assert-to-with",
+      "level": "cross_runner_reproduced",
+      "flags": [],
+      "regressions": [],
+      "contradictions": 0
+    },
+    {
+      "slug": "node-json-import-assert-OLD",
+      "level": "cross_runner_reproduced",
+      "flags": [
+        "regressed",
+        "contradicted"
+      ],
+      "regressions": [
+        {
+          "from": "node 20.18.0 linux-x64",
+          "to": "node 22.11.0 linux-x64"
+        }
+      ],
+      "contradictions": 4
+    },
+    {
+      "slug": "node-json-import-with",
+      "level": "cross_runner_reproduced",
+      "flags": [],
+      "regressions": [],
+      "contradictions": 0
+    },
+    {
+      "slug": "node-cjs-top-level-await",
+      "level": "cross_runner_reproduced",
+      "flags": [],
+      "regressions": [],
+      "contradictions": 0
+    },
+    {
+      "slug": "node-structuredclone-dates",
+      "level": "cross_runner_reproduced",
+      "flags": [],
+      "regressions": [],
+      "contradictions": 0
+    },
+    {
+      "slug": "node-sort-mutates",
+      "level": "cross_runner_reproduced",
+      "flags": [],
+      "regressions": [],
+      "contradictions": 0
+    },
+    {
+      "slug": "node-money-cents",
+      "level": "cross_runner_reproduced",
+      "flags": [],
+      "regressions": [],
+      "contradictions": 0
+    },
+    {
+      "slug": "node-bigint-json",
+      "level": "cross_runner_reproduced",
+      "flags": [],
+      "regressions": [],
+      "contradictions": 0
+    },
+    {
+      "slug": "py-fromisoformat-z",
+      "level": "runner_replayed",
+      "flags": [],
+      "regressions": [],
+      "contradictions": 0
+    },
+    {
+      "slug": "py-utcnow-deprecated",
+      "level": "cross_runner_reproduced",
+      "flags": [],
+      "regressions": [],
+      "contradictions": 0
+    },
+    {
+      "slug": "py-distutils-removed",
+      "level": "cross_runner_reproduced",
+      "flags": [],
+      "regressions": [],
+      "contradictions": 0
+    },
+    {
+      "slug": "py-csv-utf8-bom",
+      "level": "cross_runner_reproduced",
+      "flags": [],
+      "regressions": [],
+      "contradictions": 0
+    },
+    {
+      "slug": "py-mutable-default",
+      "level": "cross_runner_reproduced",
+      "flags": [],
+      "regressions": [],
+      "contradictions": 0
+    },
+    {
+      "slug": "py-lstrip-is-not-removeprefix",
+      "level": "cross_runner_reproduced",
+      "flags": [],
+      "regressions": [],
+      "contradictions": 0
+    },
+    {
+      "slug": "py-sqlite-injection",
+      "level": "cross_runner_reproduced",
+      "flags": [],
+      "regressions": [],
+      "contradictions": 0
+    },
+    {
+      "slug": "py-fromtimestamp-local-tz",
+      "level": "cross_runner_reproduced",
+      "flags": [],
+      "regressions": [],
+      "contradictions": 0
+    },
+    {
+      "slug": "py-imghdr-OLD",
+      "level": "cross_runner_reproduced",
+      "flags": [
+        "regressed",
+        "contradicted"
+      ],
+      "regressions": [
+        {
+          "from": "python 3.12.16 linux-x64",
+          "to": "python 3.13.18 linux-x64"
+        },
+        {
+          "from": "python 3.12.3 linux-x64 [SITE=venv-clean]",
+          "to": "python 3.13.18 linux-x64 [SITE=venv-clean]"
+        }
+      ],
+      "contradictions": 3
+    },
+    {
+      "slug": "py-png-magic-bytes",
+      "level": "cross_runner_reproduced",
+      "flags": [],
+      "regressions": [],
+      "contradictions": 0
+    },
+    {
+      "slug": "bash-pipefail",
+      "level": "cross_runner_reproduced",
+      "flags": [],
+      "regressions": [],
+      "contradictions": 0
+    },
+    {
+      "slug": "bash-read-raw",
+      "level": "cross_runner_reproduced",
+      "flags": [],
+      "regressions": [],
+      "contradictions": 0
+    }
+  ]
+}
