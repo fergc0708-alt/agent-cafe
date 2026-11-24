@@ -47,6 +47,9 @@ export interface TrustPolicy {
   events?: string[];
   /** Max age of the token at verification time (default 7 days). */
   maxAgeMs?: number;
+  /** Pin numeric ids too: a deleted and re-created repository/owner with the same NAME gets new ids. */
+  repositoryIds?: string[];
+  ownerIds?: string[];
 }
 
 const DEFAULT_EVENTS = ["push", "workflow_dispatch", "schedule"];
@@ -99,12 +102,17 @@ export async function verifyGithubOidc(
   if (c.nbf !== undefined && Number(c.nbf) * 1000 > now + 120_000) throw new Error("token not yet valid");
   if (c.runner_environment !== "github-hosted") throw new Error("not a GitHub-hosted runner (self-hosted runners can fabricate executions)");
   if (!(opts.policy.events ?? DEFAULT_EVENTS).includes(c.event_name)) throw new Error(`event ${c.event_name} is not trusted`);
-  const wf = String(c.job_workflow_ref ?? c.workflow_ref ?? "");
+  // job_workflow_ref names the workflow file that actually ran the job; never fall back to workflow_ref.
+  if (typeof c.job_workflow_ref !== "string" || !c.job_workflow_ref) throw new Error("missing job_workflow_ref");
+  const wf = c.job_workflow_ref;
   if (!opts.policy.workflows.some((p) => matchesWorkflow(wf, p))) throw new Error(`workflow ${wf} is not in the trust policy`);
+  if (opts.policy.repositoryIds && !opts.policy.repositoryIds.includes(String(c.repository_id))) throw new Error("repository_id is not the pinned one");
+  if (opts.policy.ownerIds && !opts.policy.ownerIds.includes(String(c.repository_owner_id))) throw new Error("repository_owner_id is not the pinned one");
   for (const k of ["repository", "repository_id", "repository_owner", "repository_owner_id", "sha", "run_id", "jti"]) {
     if (typeof c[k] !== "string" || !c[k]) throw new Error(`missing claim ${k}`);
   }
   if (!/^[0-9a-f]{40}$/.test(c.sha)) throw new Error("bad sha claim");
+  if (c.exp !== undefined && Number(c.exp) * 1000 < iat) throw new Error("token expires before it was issued");
   if (!wf.startsWith(`${c.repository}/`)) throw new Error("workflow ref does not belong to the token's repository");
   return {
     repository: c.repository,
@@ -135,6 +143,12 @@ export async function fetchGithubJwks(fetcher: typeof fetch = fetch): Promise<Jw
   if (!Array.isArray(jwks?.keys)) throw new Error("bad JWKS");
   cache = { at: Date.now(), jwks };
   return jwks;
+}
+
+/** Digest of a key set (kid, kty, n, e only): lets a JWKS snapshot be pinned in source code. */
+export async function jwksDigest(jwks: Jwks): Promise<string> {
+  const keys = jwks.keys.map((k) => ({ kid: k.kid, kty: k.kty, n: k.n, e: k.e })).sort((a, b) => String(a.kid).localeCompare(String(b.kid)));
+  return sha256Hex(JSON.stringify(keys));
 }
 
 /** Server trust policy from CAFE_TRUSTED_WORKFLOWS (comma-separated). Empty means: trust no workflow. */

@@ -152,7 +152,7 @@ async function main() {
         case "doctor": {
             const { doctor } = await import("./doctor.js");
             const { renderDoctor, markdownDoctor } = await import("./render.js");
-            const r = await doctor(resolve(pos[0] ?? "."), values.target ?? [], bins);
+            const r = await doctor(resolve(pos[0] ?? "."), values.target ?? [], bins, true);
             if (f.has("json"))
                 console.log(JSON.stringify(r, null, 2));
             else if (f.has("markdown"))
@@ -160,8 +160,13 @@ async function main() {
             else
                 console.log(renderDoctor(r, f.has("verbose")));
             const failOn = values["fail-on"]?.[0] ?? "never";
+            if (!["now", "upgrade", "never"].includes(failOn))
+                throw new Error(`--fail-on must be now, upgrade or never (got "${failOn}")`);
             const now = r.findings.some((x) => x.verdicts.some((v) => !v.env.label.startsWith("upgrade") && v.status.startsWith("affected")));
             const any = r.findings.some((x) => x.verdicts.some((v) => v.status.startsWith("affected")));
+            // Fail closed: code that could not be evaluated is never a pass.
+            if (failOn !== "never" && r.not_evaluated.length)
+                process.exitCode = 1;
             if ((failOn === "now" && now) || (failOn === "upgrade" && any))
                 process.exitCode = 1;
             return;
@@ -174,7 +179,7 @@ async function main() {
                 text = readFileSync(0, "utf8");
             if (!text.trim())
                 throw new Error('Give the error text: cafe diagnose "ModuleNotFoundError: ..." (or pipe it in with -)');
-            const r = await diagnose(resolve("."), text, values.target ?? [], bins);
+            const r = await diagnose(resolve("."), text, values.target ?? [], bins, true);
             console.log(f.has("json") ? JSON.stringify(r, null, 2) : renderDiagnose(r));
             return;
         }

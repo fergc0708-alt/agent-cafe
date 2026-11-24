@@ -5,7 +5,7 @@ import type { Status } from "@core/doctor/match.ts";
 export const metadata = { title: "Compatibility matrix", description: "Known Node.js and Python breaking changes, with the versions where they were executed: breaks, not affected, fix fails." };
 
 const SYM: Record<Status, [string, string]> = {
-  affected_fix_verified: ["✖", "breaks here; the fix works here"],
+  affected_fix_works: ["✖", "breaks here; the fix works here"],
   affected_fix_fails: ["!", "breaks here and this fix fails here"],
   fix_breaks: ["!", "the old code works here but this fix breaks it"],
   not_affected: ["✓", "not affected (old code works)"],
@@ -24,7 +24,7 @@ export default async function Compat({ searchParams }: { searchParams: Promise<{
       <h1>Compatibility matrix</h1>
       <p className="lede">Each row is a known break with a fix and a check. Each cell is what happened when that check ran on that runtime version.</p>
       <p className="meta legend">
-        {(["affected_fix_verified", "fix_breaks", "not_affected", "conflicting", "untested"] as Status[]).map((s) => (
+        {(["affected_fix_works", "fix_breaks", "not_affected", "conflicting", "untested"] as Status[]).map((s) => (
           <span key={s} className={`cell s-${s}`} style={{ marginRight: 14 }}>
             {SYM[s][0]} <span className="meta">{SYM[s][1]}</span>
           </span>

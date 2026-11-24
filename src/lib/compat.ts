@@ -6,7 +6,7 @@ import evidence from "../../capsules/built/evidence.json";
 import type { Capsule } from "@core/capsule/capsule.ts";
 import { evaluate, type EvidenceRow, type IndexEntry, type Status } from "@core/doctor/match.ts";
 
-type Ev = { generated_at: string; note: string; ci_jobs: { label: string; identity: { repository: string; sha: string; run_id: string; workflow: string } }[]; capsules: Record<string, { id: string; rows: EvidenceRow[] }> };
+type Ev = { generated_at: string; note: string; ci_jobs: { label: string; repository: string; sha: string; run_id: string; workflow: string }[]; capsules: Record<string, { id: string; rows: EvidenceRow[] }> };
 const ev = evidence as unknown as Ev;
 
 export const ENTRIES: IndexEntry[] = (catalog as unknown as { slug: string; id: string; capsule: Capsule }[]).map(({ slug, id, capsule }) => ({
@@ -24,7 +24,7 @@ export const EVIDENCE_META = {
   generated_at: ev.generated_at,
   note: ev.note,
   jobs: ev.ci_jobs.length,
-  run: ev.ci_jobs[0]?.identity ?? null,
+  run: ev.ci_jobs[0] ?? null,
   verified: ENTRIES.flatMap((e) => e.rows).filter((r) => r.trust === "verified").length,
   claimed: ENTRIES.flatMap((e) => e.rows).filter((r) => r.trust === "claimed").length,
 };

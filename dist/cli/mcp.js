@@ -5,7 +5,8 @@
 import { existsSync } from "node:fs";
 import { createInterface } from "node:readline";
 import { basename, isAbsolute, resolve } from "node:path";
-import { describeReplay, loadCapsule, replayDigest, signedReplay } from "./cafe.js";
+import { describeReplay, replayDigest, signedReplay } from "./cafe.js";
+import { sha256Hex } from "../core/util.js";
 import { diagnose, doctor, environments, loadIndex } from "./doctor.js";
 import { fingerprint } from "./fingerprint.js";
 import { envLine } from "./render.js";
@@ -22,7 +23,7 @@ const interpretersSchema = { type: "object", description: 'Interpreters that rea
 const TOOLS = [
     {
         name: "cafe_doctor",
-        description: "Check the project for KNOWN runtime/toolchain breaks that affect its code in its real environment (installed + declared versions) and on upgrade. Each finding has file:line, per-environment results backed by executed evidence (including where a fix FAILS), and one action. Use it before upgrading Node/Python or when a project fails right after an upgrade. Runs locally; fast; no network.",
+        description: "Check the project for KNOWN runtime/toolchain breaks that affect its code in its real environment (installed + declared versions) and on upgrade. Each finding has file:line, per-environment results backed by executed evidence (including where a fix FAILS), and one action. Use it before upgrading Node/Python or when a project fails right after an upgrade. Runs locally, no network; interpreters other than PATH ones are only probed inside the sandbox.",
         inputSchema: { type: "object", properties: { path: s("Project directory (default: current directory)"), targets: targetsSchema, interpreters: interpretersSchema } },
         annotations: { readOnlyHint: true },
     },
@@ -76,6 +77,8 @@ const TOOLS = [
         annotations: { readOnlyHint: true },
     },
 ];
+/** Keeps previews within an agent's budget; the full code is in the capsule (cafe_show / cafe show). */
+const preview = (t, max = 6000) => (t.length > max ? `${t.slice(0, max)}\n… [${t.length - max} more characters: review the full files with \`cafe show\` before approving]` : t);
 const short = (v) => `${v.env.runtime} ${v.env.version.split(".").slice(0, 2).join(".")} (${v.env.label}): ${v.status}${v.trust ? `, ${v.trust}` : ""}${v.exact ? "" : `. ${v.summary}`}`;
 function fixDiff(e, max = 2500) {
     const out = [];
@@ -96,7 +99,8 @@ const compact = (f, index, withFix) => ({
     where: f.hits.slice(0, 3).map((h) => `${h.file}:${h.line}`),
     environments: f.verdicts.map(short),
     action: f.action,
-    ...(withFix ? { fix: fixDiff(index.bySlug.get(f.slug)) } : {}),
+    ...(f.origin === "local" ? { origin: "this project's .cafe/capsules: unverified, written by whoever committed it" } : {}),
+    ...(withFix ? { fix: fixDiff(index.byId.get(f.id)) } : {}),
     ...(f.notes.length ? { notes: f.notes } : {}),
 });
 async function call(name, a) {
@@ -119,6 +123,7 @@ async function call(name, a) {
                 environment: envLine(r.fingerprint),
                 checked: r.environments.map((e) => `${e.runtime} ${e.version} (${e.label})`),
                 findings: r.findings.slice(0, 10).map((f) => compact(f, index, false)),
+                not_evaluated: r.not_evaluated.map((n) => `${n.slug}: no ${n.runtime} found; NOT checked`),
                 not_affected: r.clear.map((c) => (c.conditional ? `${c.slug} (only here: ${c.conditional})` : c.slug)),
                 not_determined: r.fingerprint.missing,
                 evidence: `${r.evidence.verified} verified CI runs + ${r.evidence.claimed} self-reported. Verified = where it ran, not independent review.`,
@@ -162,11 +167,17 @@ async function call(name, a) {
                     throw new Error(`bins.${k}: must be an absolute path to a node/bun/python/bash interpreter`);
                 bins[k] = v;
             }
-            const c = await loadCapsule(ref); // verifies the content hash for ids
-            const digest = await replayDigest(c);
+            // Only capsules from the bundled catalog or this project's index: no network fetch here.
+            const index = await loadIndex(project);
+            const entry = index.bySlug.get(ref) ?? index.byId.get(ref);
+            if (!entry)
+                throw new Error(`No capsule "${ref}" in the catalog. Use cafe_search.`);
+            const c = entry.capsule;
+            // The consent digest covers the code AND the interpreters it will run with (red-team 3.0 M3).
+            const digest = await sha256Hex(`${await replayDigest(c)}\n${JSON.stringify(Object.entries(bins).sort())}`);
             if (!a.confirm_digest) {
                 previewed.add(digest);
-                return { needs_confirmation: true, confirm_digest: digest, will_run: describeReplay(c), notice: NOTICE };
+                return { needs_confirmation: true, confirm_digest: digest, interpreters: bins, will_run: preview(describeReplay(c)), notice: NOTICE };
             }
             if (a.confirm_digest !== digest || !previewed.has(digest))
                 throw new Error("confirm_digest does not match a preview from this session; preview again");
@@ -183,7 +194,7 @@ async function call(name, a) {
             const digest = await capsuleId(cand.capsule);
             if (!a.confirm_digest) {
                 previewed.add(digest);
-                return { needs_confirmation: true, confirm_digest: digest, files: cand.files, will_run: describeReplay(cand.capsule), notice: "Runs your test against HEAD and your change in the sandbox. Saves locally only." };
+                return { needs_confirmation: true, confirm_digest: digest, files: cand.files, will_run: preview(describeReplay(cand.capsule)), notice: "Runs your test against HEAD and your change in the sandbox. Saves locally only." };
             }
             if (a.confirm_digest !== digest || !previewed.has(digest))
                 throw new Error("confirm_digest does not match a preview from this session; preview again");

@@ -11,7 +11,7 @@ const red = c("31"), yellow = c("33"), green = c("32"), dim = c("2"), bold = c("
 
 const ICON: Record<EnvVerdict["status"], string> = {
   affected_fix_fails: red("✖"),
-  affected_fix_verified: red("✖"),
+  affected_fix_works: red("✖"),
   fix_breaks: red("!"),
   conflicting: yellow("≠"),
   untested: yellow("?"),
@@ -35,7 +35,7 @@ function verdictLine(v: EnvVerdict): string {
 
 function finding(f: Finding, verbose = false): string[] {
   const now = f.verdicts.filter((v) => !v.env.label.startsWith("upgrade"));
-  const brokenNow = now.some((v) => v.status === "affected_fix_verified" || v.status === "affected_fix_fails");
+  const brokenNow = now.some((v) => v.status === "affected_fix_works" || v.status === "affected_fix_fails");
   void 0;
   const tag = f.scope === "code" ? yellow(bold("CODE ISSUE")) : brokenNow ? red(bold("BROKEN NOW")) : f.verdicts.some((v) => v.status.startsWith("affected")) ? yellow(bold("BREAKS ON UPGRADE")) : f.verdicts.some((v) => v.status === "conflicting") ? yellow(bold("ENVIRONMENT-DEPENDENT")) : yellow(bold("UNTESTED"));
   const out = [`${tag}  ${bold(f.title)}${f.origin === "local" ? dim(" [your private capsule]") : ""}`];
@@ -55,7 +55,12 @@ export function renderDoctor(r: DoctorReport, verbose = false): string {
   out.push(`Checking:    ${r.environments.map((e) => `${e.runtime} ${e.version.split(".").slice(0, 2).join(".")} (${e.label})`).join(", ") || "no runtimes found"}`);
   out.push(dim(`Scanned ${r.scanned_files} files against ${r.rules} known breaking changes. Nothing left this machine.`));
   out.push("");
-  if (!r.findings.length) out.push(green("No known break applies to your code in these environments."));
+  for (const n of r.not_evaluated) {
+    out.push(`${yellow(bold("NOT EVALUATED"))}  ${bold(n.title)}`);
+    for (const h of n.hits.slice(0, 3)) out.push(dim(`   ${h.file}:${h.line}  `) + h.text);
+    out.push(`   ${cyan("→")} No ${n.runtime} interpreter was found or could be probed, so this was not checked. Install it or pass --${n.runtime === "node" ? "node" : "python"} <path>.`, "");
+  }
+  if (!r.findings.length && !r.not_evaluated.length) out.push(green("No known break applies to your code in these environments."));
   for (const f of r.findings) out.push(...finding(f, verbose), "");
   const plain = r.clear.filter((c) => !c.conditional);
   if (plain.length) out.push(green(`✓ ${plain.length} other known break${plain.length === 1 ? "" : "s"} found in your code ${plain.length === 1 ? "does" : "do"} not affect these environments: `) + dim(plain.map((c) => c.slug).join(", ")));
@@ -122,7 +127,9 @@ export function renderShow(e: IndexEntry, verdicts: EnvVerdict[]): string {
 
 export function markdownDoctor(r: DoctorReport): string {
   const out = ["## Agent Café doctor", "", `**Environment:** ${envLine(r.fingerprint)}  `, `**Checked:** ${r.environments.map((e) => `${e.runtime} ${e.version.split(".").slice(0, 2).join(".")} (${e.label})`).join(", ")}  `, `Scanned ${r.scanned_files} files against ${r.rules} known breaking changes.`, ""];
-  if (!r.findings.length) out.push("✅ No known break applies to this code in the checked environments.");
+  for (const n of r.not_evaluated) out.push(`### ❔ Not evaluated (no ${n.runtime} found): ${n.title}`, ...n.hits.slice(0, 3).map((h) => `- \`${h.file}:${h.line}\``), "");
+  if (!r.findings.length && !r.not_evaluated.length) out.push("✅ No known break applies to this code in the checked environments.");
+  if (r.fingerprint.missing.length) out.push("", `Not determined: ${r.fingerprint.missing.join("; ")}.`);
   for (const f of r.findings) {
     out.push(`### ${f.scope === "code" ? "ℹ️ Code issue (all versions)" : f.verdicts.some((v) => !v.env.label.startsWith("upgrade") && v.status.startsWith("affected")) ? "❌ Broken now" : "⚠️ Breaks on upgrade / untested"}: ${f.title}`);
     for (const h of f.hits.slice(0, 3)) out.push(`- \`${h.file}:${h.line}\` \`${h.text.replace(/`/g, "'")}\``);

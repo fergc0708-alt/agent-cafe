@@ -6,22 +6,22 @@
 // runner REFUSES to run unless the caller explicitly picks a weaker mode. Even bubblewrap is not a
 // guarantee against kernel exploits; see docs/SECURITY-THREAT-MODEL.md.
 import { spawnSync } from "node:child_process";
-import { mkdirSync, mkdtempSync, realpathSync, rmSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, mkdtempSync, realpathSync, rmSync, writeFileSync } from "node:fs";
 import os from "node:os";
 import { basename, dirname, join } from "node:path";
 import { capsuleId, changedFiles, checkDigest } from "../core/capsule/capsule.js";
 import { lintCapsule } from "../core/capsule/lint.js";
 const TOOL = "agent-cafe-cli/0.3.0";
-const probe = (cmd, args) => spawnSync(cmd, args, { stdio: "ignore", timeout: 5000 }).status === 0;
+const works = (cmd, args) => spawnSync(cmd, args, { stdio: "ignore", timeout: 5000 }).status === 0;
 const available = { none: true };
 export function isolationAvailable(mode) {
     if (available[mode] === undefined) {
         if (process.platform !== "linux")
             available[mode] = false;
         else if (mode === "net-only")
-            available[mode] = probe("unshare", ["-rn", "true"]);
+            available[mode] = works("unshare", ["-rn", "true"]);
         else
-            available[mode] = probe("bwrap", ["--unshare-all", "--die-with-parent", "--ro-bind", "/", "/", "true"]);
+            available[mode] = works("bwrap", ["--unshare-all", "--die-with-parent", "--ro-bind", "/", "/", "true"]);
     }
     return available[mode];
 }
@@ -49,7 +49,14 @@ function sandboxArgs(dir, bin) {
     // read-only: both the path as given and its resolved target.
     const hidden = /^\/(tmp|home|root|var\/tmp)\//;
     const full = bin.includes("/") ? bin : spawnSync("sh", ["-c", 'command -v "$1"', "sh", bin], { encoding: "utf8" }).stdout.trim();
-    for (const p of full ? [full, realpathSync(full)] : []) {
+    let real = "";
+    try {
+        real = full ? realpathSync(full) : "";
+    }
+    catch {
+        /* missing interpreter: bwrap will fail to exec it */
+    }
+    for (const p of full ? [full, real].filter(Boolean) : []) {
         if (hidden.test(p))
             args.push("--ro-bind", dirname(dirname(p)), dirname(dirname(p)));
     }
@@ -104,22 +111,46 @@ export function mutantsOf(c, max) {
     }
     return out;
 }
+/**
+ * Runs an interpreter for a short probe (version, site setup). Inside the bubblewrap sandbox whenever it
+ * is available: an "interpreter" can be any file a repository ships (e.g. .venv/bin/python), so probing it
+ * is executing untrusted code (red-team 3.0 C1). Without a sandbox, only `allowUnsandboxed` callers
+ * (interpreters from PATH or typed by the user) run; everything else returns null.
+ */
+export function probe(bin, args, opts) {
+    if (bin.includes("/") && !existsSync(bin))
+        return null;
+    const env = { PATH: "/usr/local/bin:/usr/bin:/bin", LANG: "C.UTF-8", HOME: "/nonexistent" };
+    if (isolationAvailable("sandbox")) {
+        const dir = mkdtempSync(join(os.tmpdir(), "cafe-probe-"));
+        try {
+            const r = spawnSync("bwrap", [...sandboxArgs(dir, bin), bin, ...args], { encoding: "utf8", timeout: 8000, killSignal: "SIGKILL", env, maxBuffer: 100_000 });
+            return r.status === 0 ? `${r.stdout ?? ""}${r.stderr ?? ""}`.trim() : null;
+        }
+        finally {
+            rmSync(dir, { recursive: true, force: true });
+        }
+    }
+    if (!opts.allowUnsandboxed)
+        return null;
+    const r = spawnSync(bin, args, { encoding: "utf8", timeout: 8000, env, maxBuffer: 100_000 });
+    return r.status === 0 ? `${r.stdout ?? ""}${r.stderr ?? ""}`.trim() : null;
+}
 const siteCache = new Map();
 /** Python environment fact that changes behavior (Experiment C): is distutils absent (clean venv) or
  *  provided by setuptools' shim? Recorded in every Python result so evidence is not ambiguous. */
 export function pythonSite(bin) {
     if (siteCache.has(bin))
         return siteCache.get(bin);
-    const probe = "import importlib.util, sys, sysconfig\ns = importlib.util.find_spec('distutils')\nstd = sysconfig.get_paths()['stdlib']\no = (s.origin or '') if s else ''\nprint(('setuptools-shim' if ('setuptools' in o or '-packages' in o) else 'distutils-stdlib') if s else ('venv-clean' if sys.prefix != sys.base_prefix else 'no-distutils'))";
-    const r = spawnSync(bin, ["-I", "-c", probe], { encoding: "utf8", timeout: 5000 });
-    const v = r.status === 0 ? r.stdout.trim() : null;
+    const code = "import importlib.util, sys, sysconfig\ns = importlib.util.find_spec('distutils')\nstd = sysconfig.get_paths()['stdlib']\no = (s.origin or '') if s else ''\nprint(('setuptools-shim' if ('setuptools' in o or '-packages' in o) else 'distutils-stdlib') if s else ('venv-clean' if sys.prefix != sys.base_prefix else 'no-distutils'))";
+    const out = probe(bin, ["-I", "-c", code], { allowUnsandboxed: true });
+    const v = out && /^(setuptools-shim|distutils-stdlib|venv-clean|no-distutils)$/.test(out) ? out : null;
     siteCache.set(bin, v);
     return v;
 }
 export function runtimeVersion(c, bins) {
     const bin = resolveBin(c.check.run[0], bins);
-    const r = spawnSync(bin, ["--version"], { encoding: "utf8", timeout: 5000 });
-    const text = `${r.stdout ?? ""}${r.stderr ?? ""}`;
+    const text = probe(bin, ["--version"], { allowUnsandboxed: true }) ?? "";
     return text.match(/\d+\.\d+(\.\d+)?/)?.[0] ?? "unknown";
 }
 export async function replay(c, opts = {}) {

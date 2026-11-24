@@ -36,6 +36,8 @@ describe("GitHub OIDC verification", () => {
     const aud = await bindingAudience("PUBKEY", ["d1", "d2"]);
     const policy = { workflows: ["acme/compat-lab/.github/workflows/replay.yml@refs/heads/*"] };
     const ok = await verifyGithubOidc(await iss.sign(claims(aud)), { jwks: iss.jwks, expectedAudience: aud, policy });
+    // numeric ids are pinned: a re-created repository with the same name gets a new id
+    await expect(verifyGithubOidc(await iss.sign(claims(aud, { repository_id: "999" })), { jwks: iss.jwks, expectedAudience: aud, policy: { ...policy, repositoryIds: ["11"] } })).rejects.toThrow(/repository_id/);
     expect(ok.repository_owner_id).toBe("7");
     // the audience binds key + exact payload set (order-insensitive)
     expect(await bindingAudience("PUBKEY", ["d2", "d1"])).toBe(aud);
@@ -51,6 +53,8 @@ describe("GitHub OIDC verification", () => {
       ["future", iss.sign(claims(aud, { iat: Math.floor(Date.now() / 1000) + 3600 }))],
       ["repo substitution", iss.sign(claims(aud, { repository: "evil/repo" }))],
       ["alg none", iss.sign(claims(aud), { alg: "none", kid: "test-kid" })],
+      ["no job_workflow_ref", iss.sign(claims(aud, { job_workflow_ref: undefined }))],
+      ["expires before issued", iss.sign(claims(aud, { exp: Math.floor(Date.now() / 1000) - 3600 }))],
       ["unknown kid", iss.sign(claims(aud), { alg: "RS256", kid: "other" })],
     ];
     for (const [name, t] of bad) await expect(verifyGithubOidc(await t, { jwks: iss.jwks, expectedAudience: aud, policy }), name).rejects.toThrow();

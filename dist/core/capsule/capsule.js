@@ -9,7 +9,12 @@ export const RUNTIMES = ["node", "python", "bash", "bun"];
 export function safeRegex(src, max = 160) {
     if (typeof src !== "string" || !src || src.length > max)
         return null;
-    if (/\([^)]*[*+][^)]*\)\s*[*+{]/.test(src) || /(\.\*){3,}/.test(src))
+    // Heuristic guards against catastrophic backtracking (patterns run over user files and error text):
+    // quantified groups that contain a quantifier or an alternation, and chains of adjacent unbounded
+    // quantifiers. Conservative on purpose: rejecting a valid rule is cheap, a hung scan is not.
+    if (/\([^)]*[*+|][^)]*\)\s*[*+{]/.test(src))
+        return null;
+    if (/([*+]|\{\d*,\})\??\s*(\\[a-zA-Z]|\.|\[[^\]]*\])[*+]/.test(src))
         return null;
     try {
         new RegExp(src);

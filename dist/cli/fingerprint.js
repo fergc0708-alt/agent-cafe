@@ -1,15 +1,11 @@
-// Environment fingerprint: what actually decides whether a known break applies to THIS project.
-// Collected locally and never uploaded. It records kinds, versions and conditions, not paths,
-// usernames, hostnames, environment variable values or package contents.
-import { spawnSync } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { canonical } from "../core/capsule/capsule.js";
 import { sha256Hex } from "../core/util.js";
-const run = (cmd, args) => {
-    const r = spawnSync(cmd, args, { encoding: "utf8", timeout: 8000, env: { PATH: process.env.PATH ?? "/usr/bin:/bin", HOME: process.env.HOME ?? "/tmp", LANG: "C.UTF-8" } });
-    return r.status === 0 ? `${r.stdout}`.trim() : null;
-};
+import { probe } from "./runner.js";
+// Interpreters from PATH or typed by the user may be probed directly; anything else (a project's own
+// .venv, an MCP-supplied path) only inside the sandbox. See runner.ts probe().
+const run = (cmd, args, trusted = true) => probe(cmd, args, { allowUnsandboxed: trusted });
 const readJson = (p) => {
     try {
         return JSON.parse(readFileSync(p, "utf8"));
@@ -49,7 +45,7 @@ function timeZone() {
     }
 }
 /** `bins` points at the interpreters that actually run the code (e.g. a deploy venv) instead of PATH. */
-export async function fingerprint(projectDir, bins = {}) {
+export async function fingerprint(projectDir, bins = {}, opts = {}) {
     const missing = [];
     const pkg = readJson(join(projectDir, "package.json"));
     const kinds = [];
@@ -73,7 +69,7 @@ export async function fingerprint(projectDir, bins = {}) {
     if (pyv)
         declared["python (.python-version)"] = pyv.split("\n")[0];
     const runtimes = [];
-    const nodeV = run(bins.node ?? "node", ["--version"]);
+    const nodeV = run(bins.node ?? "node", ["--version"], !bins.node || opts.trustGivenBins === true);
     if (nodeV)
         runtimes.push({ runtime: "node", version: nodeV.replace(/^v/, ""), source: bins.node ? "given interpreter" : "PATH", details: {} });
     else if (kinds.includes("node"))
@@ -85,7 +81,9 @@ export async function fingerprint(projectDir, bins = {}) {
     const venvPy = [".venv/bin/python", "venv/bin/python", ".venv/Scripts/python.exe"].map((p) => join(projectDir, p)).find((p) => existsSync(p));
     const given = bins.python3 ?? bins.python;
     const pyBin = given ?? venvPy ?? "python3";
-    const py = run(pyBin, ["-I", "-c", PY_PROBE]);
+    const py = run(pyBin, ["-I", "-c", PY_PROBE], given ? opts.trustGivenBins === true : !venvPy);
+    if (!py && venvPy && !given)
+        missing.push("the project virtualenv was not probed (needs the bubblewrap sandbox); pass --python <path> to use it");
     if (py) {
         const d = JSON.parse(py);
         runtimes.push({ runtime: "python", version: d.version, source: given ? "given interpreter" : venvPy ? "project virtualenv" : "PATH", details: { kind: d.kind, system_site_packages: d.system_site_packages, distutils: d.distutils, setuptools: d.setuptools } });
@@ -97,8 +95,9 @@ export async function fingerprint(projectDir, bins = {}) {
         runtimes.push({ runtime: "bash", version: bashV, source: "PATH", details: {} });
     const conditions = {};
     const tz = timeZone();
+    // Only the class matters for matching; the zone name is not reported (privacy).
     if (tz)
-        conditions.TZ = tz;
+        conditions.TZ = /^(UTC|Etc\/UTC|GMT|Etc\/GMT|Z)$/i.test(tz) ? "UTC" : "local";
     else
         missing.push("time zone unknown");
     const pyInfo = runtimes.find((r) => r.runtime === "python");

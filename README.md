@@ -1,6 +1,6 @@
 # Agent Café ☕ — know which runtime upgrades break your code
 
-**`cafe doctor` scans your project and its real environment and tells you which known Node.js and Python breaking changes hit _your_ lines: now, on the versions you declare, and on the next upgrade.** Every answer is backed by fixes that were *executed* in that environment, including the places where a fix **fails**. It runs locally; nothing about your project leaves the machine.
+**`cafe doctor` scans your project and its real environment and tells you which known Node.js and Python breaking changes hit _your_ lines: now, on the versions you declare, and on the next upgrade.** Every answer is backed by fixes that were *executed* in that environment, including the places where a fix **fails**. `doctor`, `diagnose` and `show` run locally and never use the network; interpreters other than the ones on your PATH (or that you pass with `--python/--node`) are only probed inside the sandbox, because a repository can ship its own "python".
 
 ```text
 $ cafe doctor
@@ -9,14 +9,14 @@ Checking:    node 22.23 (installed), python 3.13 (installed), node 20.0 (declare
 
 BROKEN NOW  imp was removed in Python 3.12: load modules with importlib.util
    app/legacy.py:1  import imp
-   ✖ python 3.13 (installed): breaks here; the fix was verified here. Seen on python 3.13.18 (verified: GitHub Actions …)
+   ✖ python 3.13 (installed): breaks here; the fix works here. Seen on python 3.13.18 (verified: GitHub Actions …)
    ✓ not affected on python 3.11
    → Broken now: apply the fix (cafe show py-imp-removed).
 
 BREAKS ON UPGRADE  Dirent.path was removed in Node 24: use dirent.parentPath (Node >= 20.12)
    app/walk.js:5  …map((d) => path.join(d.path, d.name))
    ? node 20.0 (declared engines >=20): not tested. Nearest newer: 20.10 -> the old code works here, but this FIX BREAKS it
-   ✖ node 24.22 (upgrade target): breaks here; the fix was verified here.
+   ✖ node 24.22 (upgrade target): breaks here; the fix works here.
    → Breaks on node 24.22, but the known fix breaks node 20.0: you need a version-guarded fix, not this one as-is.
 ```
 
@@ -42,7 +42,7 @@ cafe capture --check tests/test_loader.py  # turn YOUR fix + regression test int
 
 | command | what it does |
 |---|---|
-| `doctor` | Fingerprints the environment (runtimes, project virtualenv, declared versions, time zone, Python site-packages setup), scans source files with each capsule's detection rule, and evaluates every hit per environment. Exit code via `--fail-on now\|upgrade\|never`; `--json`, `--markdown`. |
+| `doctor` | Fingerprints the environment (runtimes, project virtualenv, declared versions, time-zone class, Python site-packages setup), scans source files with each capsule's detection rule (no symlinks followed), and evaluates every hit per environment. Code for a runtime it could not evaluate is reported as **NOT EVALUATED** and fails `--fail-on`, never passes. Flags all-clears that only hold because of a local condition (e.g. "works here only because setuptools' distutils shim is installed"). Exit code via `--fail-on now\|upgrade\|never`; `--json`, `--markdown`. |
 | `diagnose` | Matches an error to a known break **for this environment**. Says plainly when nothing matches. If your default runtime is immune but another version is affected, it says so instead of guessing. |
 | `show` / `search` | A capsule's fix (diff), its check, what it proves and does not prove, and the per-version results. |
 | `replay` | Runs a capsule's check here: it must fail on the broken code, pass on the fix, and catch mutants of the fix. Sandboxed with bubblewrap; refuses to run without it unless you opt out explicitly. |
@@ -82,7 +82,7 @@ A **capsule** is a minimal broken program, its fix, and a check that must fail o
 
 `capsules/built/evidence.json` holds **376 results for 42 capsules** (Node 20.10–24.22, Bun 1.4, Python 3.10–3.13 incl. clean venvs, bash; time-zone and site-packages conditions):
 
-- **verified** rows come from GitHub-hosted runners of a trusted workflow (`.github/workflows/replay-matrix.yml`). Each job signs its results with an ephemeral Ed25519 key (in-toto/DSSE) and obtains a **GitHub Actions OIDC token whose audience is bound to that key and the exact set of result digests**. `scripts/build-evidence.ts` verifies the RS256 signature against GitHub's keys, the issuer, the audience binding, `runner_environment == github-hosted`, the event and the workflow ref against a pinned policy. `npm test` re-verifies every bundled token against a pinned JWKS snapshot.
+- **verified** rows come from GitHub-hosted runners of the workflow pinned in [`core/doctor/pins.ts`](core/doctor/pins.ts) (`replay-matrix.yml` on this repository's `main` or `goat/evidence-network`, pinned by repository and owner **ids**, third-party actions pinned by commit SHA). Each job signs its results with an ephemeral Ed25519 key (in-toto/DSSE) and obtains a **GitHub Actions OIDC token whose audience is bound to that key and the exact set of result digests**. The verifier checks the RS256 signature against GitHub's keys (digest pinned in source), issuer, audience binding, `job_workflow_ref`, `runner_environment == github-hosted` and the event. The signed sources ship in `capsules/built/evidence-sources.json`, and `npm test` **re-derives every shipped row from those signatures** and fails if any row, key or policy was altered.
 - **self-reported** rows come from the curator's machine (signed, not identity-verified).
 - When both exist for an environment, verified rows win; a contradicting claim cannot flip them. Results that disagree within verified evidence are shown as *environment-dependent*.
 
@@ -90,7 +90,8 @@ A **capsule** is a minimal broken program, its fix, and a check that must fail o
 
 ## Measured results (honest)
 
-- **Engine and evidence:** 59 automated tests (`npm test`), including OIDC forgery/replay attempts, the evidence semantics, the scan and the MCP approval flow.
+- **Engine and evidence:** 62 automated tests (`npm test`), including OIDC forgery/replay attempts, the evidence semantics and its re-derivation from signatures, the scan, the MCP approval flow, and regressions for every reproduced red-team finding.
+- **Security audit:** two adversarial audits by separate agents (same model family, so not independent in the strong sense). The second found 1 critical, 5 high and 7 medium issues on this iteration (repository-shipped interpreters executed during `doctor`, planted local capsules, a green pass when a runtime was not evaluated, a circular evidence-integrity test, a broad OIDC policy, …); all critical/high and most medium ones are fixed with regression tests. See [docs/SECURITY-THREAT-MODEL.md](docs/SECURITY-THREAT-MODEL.md).
 - **Utility for agents:** a pre-registered controlled evaluation ([`experiments/eval`](experiments/eval/RESULTS.md)): 4 tasks × {with, without} × 2 repetitions, same model, hidden graders. **Both arms solved 8/8; the agents with Agent Café were slower (median 34 s vs 21 s on the wedge tasks).** The pre-registered success rule was not met. On these well-documented breaks the model already knows the fix. The evaluation also exposed two product defects (a detection rule that missed submodule imports; diagnose ruling out the right fix because it only checked the default runtime), both fixed afterwards and not re-run. Only one model family was available, so the cross-family run is still pending.
 - **Where it plausibly helps (not yet measured):** catching breaks before any agent or developer time is spent (the CI guard), breaks newer than the model's knowledge, environment traps that look fine locally (the distutils/setuptools case), and "this fix breaks your other supported version".
 
@@ -98,7 +99,9 @@ A **capsule** is a minimal broken program, its fix, and a check that must fail o
 
 - The catalog is small (42 capsules, ~25 with detection rules) and curated by one operator. Detection is line-regex based, so it can miss code (aliases, dynamic imports) and flag false positives; each hit shows the line so you can judge.
 - Sandboxed replay/capture are Linux-only (bubblewrap). Elsewhere they refuse to run unless you pass `--isolation none` deliberately (e.g. inside a VM).
-- The fingerprint does not yet cover native dependencies, compilers or dependency versions from lockfiles; `cafe env` lists what is undetermined.
+- The fingerprint does not yet cover native dependencies, compilers or dependency versions from lockfiles; `cafe env` lists what is undetermined. The runner forces `TZ=UTC` and only records a time zone when a capsule sets one.
+- "Verified" is identity, not review: the same operator controls the capsules and the pinned workflow. Detection-rule regexes are guarded against catastrophic backtracking by a heuristic, not a linear-time engine.
+- The MCP approval step can still be completed by the model itself; the human gate is your client's tool-approval prompt.
 - No external users yet, no retention data.
 
 ## Repository layout

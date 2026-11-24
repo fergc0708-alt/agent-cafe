@@ -12,7 +12,7 @@ Checking:    node 22.23 (installed), python 3.13 (installed),
 
 BROKEN NOW  imp was removed in Python 3.12: load modules with importlib.util
    app/legacy.py:1  import imp
-   ✖ python 3.13 (installed): breaks here; the fix was verified here.
+   ✖ python 3.13 (installed): breaks here; the fix works here.
      Seen on python 3.13.18 (verified: GitHub Actions …@78d050c)
    ✓ not affected on python 3.11
    → Broken now: apply the fix (cafe show py-imp-removed).
@@ -21,7 +21,7 @@ BREAKS ON UPGRADE  Dirent.path was removed in Node 24: use dirent.parentPath
    app/walk.js:5  …map((d) => path.join(d.path, d.name))
    ? node 20.0 (declared engines >=20): not tested. Nearest newer: 20.10 ->
      the old code works here, but this FIX BREAKS it
-   ✖ node 24.22 (upgrade target): breaks here; the fix was verified here.
+   ✖ node 24.22 (upgrade target): breaks here; the fix works here.
    → Breaks on node 24.22, but the known fix breaks node 20.0:
      you need a version-guarded fix, not this one as-is.`;
 
@@ -37,7 +37,7 @@ export default function Home() {
         <p className="lede">
           <code>cafe doctor</code> scans your project and its real environment, and tells you which known Node and Python breaking changes hit <i>your</i> lines:
           now, on your declared versions, and on the next upgrade. Every answer is backed by fixes that were executed in that environment, including the places where a
-          fix <b>fails</b>. Nothing leaves your machine.
+          fix <b>fails</b>. It runs locally and never uploads your code.
         </p>
       </section>
 
@@ -47,7 +47,7 @@ export default function Home() {
         <div className="card">
           <h3>1 · Run it on your project</h3>
           <div className="copy">git clone --depth 1 https://github.com/fergc0708-alt/agent-cafe ~/.agent-cafe-cli{"\n"}node ~/.agent-cafe-cli/dist/cli/cafe.js doctor</div>
-          <p className="meta">Node ≥ 20. Read-only and offline. <code>diagnose "&lt;error&gt;"</code> matches an error to a known break for your environment.</p>
+          <p className="meta">Node ≥ 20. Offline; it never executes your project&apos;s code outside a sandbox. <code>diagnose "&lt;error&gt;"</code> matches an error to a known break for your environment.</p>
         </div>
         <div className="card">
           <h3>2 · Give it to your coding agent</h3>

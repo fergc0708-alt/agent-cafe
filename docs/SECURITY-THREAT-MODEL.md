@@ -49,7 +49,7 @@ Found while re-testing: passing an unknown isolation value (e.g. `true`) to the 
 
 ## Remaining risks (honest list)
 
-1. **No verified runners exist yet.** Until CI identities are verified (Sigstore keyless / GitHub OIDC tied to a pinned workflow), the network has *claims*, not *evidence*. This is the biggest gap and it is product-defining.
+1. ~~No verified runners exist yet.~~ *(3.0)* GitHub Actions OIDC identities are verified (RS256 against GitHub's JWKS, audience bound to the runner key and exact result digests, GitHub-hosted only, pinned workflow policy). Remaining gap: every verified identity today belongs to the same operator who wrote the capsules, so verified means *where it ran*, not independent review.
 2. **Same-author check quality** (C3 residual). Mutation testing measures sensitivity to the fix's text, not that the check tests the stated problem.
 3. **Sandbox coverage.** bubblewrap is Linux-only and a kernel exploit escapes any namespace sandbox. Hosted or VM-based replay (E2B, Firecracker) is not built.
 4. **The local MCP cannot force a human decision**; it depends on the client's approval UI.
@@ -62,3 +62,31 @@ Found while re-testing: passing an unknown isolation value (e.g. `true`) to the 
 - The runner label defaults to `runner`, not the hostname.
 - Predicates contain runtime, version, OS/arch and the conditions the user set. No hostnames, paths, kernel versions, env vars or output.
 - Capsule files are scanned for secrets before they are stored (422 on detection).
+
+
+## Red team 3.0 (compatibility product, 2026-11-24)
+
+A separate agent (same model family: not an independent audit in the strong sense) attacked `cafe doctor`, the
+evidence bundle, OIDC verification, MCP, capture and the Action. Status after the fixes:
+
+| id | finding | status |
+|---|---|---|
+| C1 | `doctor`/`diagnose` executed a repository-shipped `.venv/bin/python` (and MCP `interpreters`) with no approval | **FIXED**: interpreters other than PATH or a user-typed `--python/--node` are only probed inside bubblewrap; without a sandbox they are not run and the report says so. Version/site probes of replays also run sandboxed. |
+| H1 | Planted `.cafe/capsules` could shadow a catalog capsule's diff, inject instructions, exfiltrate via `detect` | **FIXED**: local capsules live under `local:<name>`, cannot collide with catalog ids, carry no `detect`/`supersedes`, are dropped if their text contains instruction patterns; diffs are looked up by id. |
+| H2 | Green "no known break" when the relevant runtime was not evaluated | **FIXED**: such hits are reported as NOT EVALUATED, fail `--fail-on`, and every runtime with hits is evaluated. |
+| H3 | Evidence integrity test was circular (policy/JWKS from the same bundle, rows not tied to signatures) | **FIXED**: policy, JWKS digest and local key are pinned in `core/doctor/pins.ts`; signed sources ship with the bundle; tests re-derive every row and detect flipped verdicts, foreign keys and other repositories. |
+| H4 | OIDC policy accepted any `goat/*` branch, names only, `workflow_ref` fallback, tag-pinned actions | **FIXED/MITIGATED**: exact refs, pinned repository/owner ids, `job_workflow_ref` required, actions pinned by SHA. Residual: the operator controls those branches. |
+| H5 | False "BROKEN NOW": setuptools' distutils shim misclassified as stdlib | **FIXED**: classification by origin; every Python result records the site setup; only conditions that demonstrably change a capsule's outcome are enforced. |
+| M1 | ReDoS patterns passed `safeRegex` | **FIXED (heuristic)**: quantified groups with alternation and chained unbounded quantifiers are rejected; local capsules carry no detect rules; scan has a wall-time bound. Not a linear-time engine. |
+| M2 | Scan followed symlinks, read /dev/zero, FIFOs | **FIXED**: `lstat`, regular files only, directory and time bounds. |
+| M3 | Replay consent did not cover the interpreter; probes ran unsandboxed | **FIXED**: digest covers `bins`; probes sandboxed. |
+| M4 | `cafe_capture` path traversal | **FIXED**: regular files inside the project only. |
+| M5 | Compiled `dist/` stale vs source | **FIXED** for this commit; CI checks it, but CI is not a required check on this branch. |
+| M6 | "the fix was verified here" printed for self-reported rows | **FIXED**: wording is "the fix works here", with "(self-reported only, not verified)" when applicable. |
+| M7 | MCP consent model-controlled; huge previews | **MITIGATED**: previews truncated; consent residual documented. |
+| L1 | Repo-local git config (fsmonitor, hooks) ran during capture | **FIXED**: git runs with those disabled and no system/global config. |
+| L2 | `--fail-on` typos failed open | **FIXED**: validated. |
+| L3 | JSON report leaked the absolute path and zone name; MCP replay could fetch | **FIXED**: relative path, TZ class only; MCP replay uses the local index only. |
+| L4 | Action on Node < 20 | **FIXED**: explicit version check. |
+| L5 | Published CI artifacts replayable to a registry within 7 days | OPEN (low): attribution stays with the GitHub identity. |
+| L6 | TZ forced to UTC but not recorded | OPEN (documented in README limits). |

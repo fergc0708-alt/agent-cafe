@@ -38,7 +38,7 @@ If the capsule declares `problem.symptom_regex`, the *before* run's output must 
 ## 3. Evidence levels (aggregate over signed attestations) — IMPLEMENTED, TESTED
 
 **Verified vs claimed.** Every capsule view has two summaries:
-- `evidence.level` / `evidence.flags`: computed **only from runners the registry verified** (`runner.trusted`, set by the operator after verifying an identity; there is no API for it). Verification of CI identities via Sigstore/GitHub OIDC is PENDING, so **today every capsule's verified level is `draft`**.
+- `evidence.level` / `evidence.flags`: computed **only from verified runners**: a GitHub Actions job whose OIDC token verifies against the server's trust policy (`core/capsule/oidc.ts`, `CAFE_TRUSTED_WORKFLOWS`), or a runner the operator marked trusted. *(Updated in 3.0: OIDC verification is IMPLEMENTED and TESTED; the bundled evidence has 179 OIDC-verified CI results.)* Levels count distinct identity **owners** (`repository_owner_id`): one owner reaches `ci_reproduced` ("verified where it ran; the owner may be the author"), two owners `cross_runner_reproduced`.
 - `evidence.claimed`: the same computation over every signed result from any registered key, labeled "self-reported, not verified". Kept because negative results matter, but it never moves the main level. The red team showed one operator with free accounts and keys can produce any claimed level.
 
 The levels below apply to both summaries.

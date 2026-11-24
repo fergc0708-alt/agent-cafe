@@ -4,8 +4,8 @@
 // in the sandbox: it must fail on before, pass on after, and catch mutants of the fix. Only a
 // candidate that passes all of that is saved, to <project>/.cafe/capsules/. Nothing is uploaded.
 import { spawnSync } from "node:child_process";
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
-import { basename, extname, join } from "node:path";
+import { existsSync, lstatSync, mkdirSync, readFileSync, realpathSync, writeFileSync } from "node:fs";
+import { basename, extname, join, sep } from "node:path";
 import { CAPSULE_SCHEMA, validateCapsule, type Capsule } from "../core/capsule/capsule.ts";
 import { lintCapsule } from "../core/capsule/lint.ts";
 import { findSecrets } from "../core/security.ts";
@@ -22,8 +22,10 @@ export interface CaptureOptions {
   isolation?: Isolation;
 }
 
+// Repository-local git config can run programs (core.fsmonitor, filters, hooks): disable them.
 const git = (cwd: string, args: string[]) => {
-  const r = spawnSync("git", args, { cwd, encoding: "utf8", maxBuffer: 4_000_000 });
+  const safe = ["-c", "core.fsmonitor=false", "-c", "core.hooksPath=/dev/null", "-c", "diff.external=", "-c", "core.pager=cat", "--no-pager"];
+  const r = spawnSync("git", [...safe, ...args], { cwd, encoding: "utf8", maxBuffer: 4_000_000, env: { PATH: process.env.PATH ?? "/usr/bin:/bin", HOME: "/nonexistent", GIT_CONFIG_NOSYSTEM: "1", GIT_ATTR_NOSYSTEM: "1", LANG: "C.UTF-8" } as unknown as NodeJS.ProcessEnv });
   return r.status === 0 ? r.stdout : null;
 };
 
@@ -40,17 +42,29 @@ const RUNTIME_BY_EXT: Record<string, { runtime: Capsule["runtime"]; interp: stri
 export function buildCandidate(o: CaptureOptions): { capsule?: Capsule; problems: string[]; files: string[] } {
   const problems: string[] = [];
   if (!git(o.project, ["rev-parse", "--is-inside-work-tree"])) return { problems: ["not a git repository: capture needs the committed version of your files as the 'before' state"], files: [] };
-  const checkPath = join(o.project, o.check);
-  if (!existsSync(checkPath)) return { problems: [`check file not found: ${o.check}`], files: [] };
+  // Every path must be a regular file inside the project (no ../, no absolute paths, no symlinks).
+  const root = realpathSync(o.project);
+  const inside = (rel: string) => {
+    const p = join(root, rel);
+    try {
+      return !lstatSync(p).isSymbolicLink() && lstatSync(p).isFile() && realpathSync(p).startsWith(root + sep);
+    } catch {
+      return false;
+    }
+  };
+  if (!inside(o.check)) return { problems: [`check file must be a regular file inside the project: ${o.check}`], files: [] };
+  const checkPath = join(root, o.check);
   const changed = o.files?.length ? o.files : (git(o.project, ["diff", "--name-only", "HEAD"]) ?? "").split("\n").filter(Boolean).filter((f) => f !== o.check);
-  const files = changed.filter((f) => RUNTIME_BY_EXT[extname(f)] && existsSync(join(o.project, f))).slice(0, 8);
+  const outside = changed.filter((f) => !inside(f) && existsSync(join(root, f)));
+  if (outside.length) problems.push(`files must be regular files inside the project: ${outside.join(", ")}`);
+  const files = changed.filter((f) => RUNTIME_BY_EXT[extname(f)] && inside(f)).slice(0, 8);
   if (!files.length) problems.push("no changed source files found (git diff HEAD); pass --files a.py,b.py");
   const before: Record<string, string> = {};
   const after: Record<string, string> = {};
   for (const f of files) {
     const old = git(o.project, ["show", `HEAD:${f}`]);
     if (old !== null) before[f] = old;
-    after[f] = readFileSync(join(o.project, f), "utf8");
+    after[f] = readFileSync(join(root, f), "utf8");
   }
   const checkName = `cafe_check_${basename(o.check)}`;
   const kind = RUNTIME_BY_EXT[extname(o.check)];

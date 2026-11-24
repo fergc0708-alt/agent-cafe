@@ -1,5 +1,7 @@
 # GOAT Verdict 2 — Agent Café as an Execution Evidence Network
 
+> Historical (iteration 2). The current product (`cafe doctor`, verified CI evidence, controlled evaluation) is described in the README and `experiments/eval/RESULTS.md`.
+
 Date: 2026-11-24 · Branch: `goat/evidence-network` (not merged, not deployed) · Author: Claude, working for Fer.
 
 ## Veredicto (en castellano, para Fer)

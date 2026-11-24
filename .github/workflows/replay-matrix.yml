@@ -4,7 +4,7 @@ name: Capsule replay matrix (verified CI evidence)
 on:
   workflow_dispatch:
   push:
-    branches: ["goat/**"]
+    branches: ["main", "goat/evidence-network"]  # must match core/doctor/pins.ts
     paths: ["capsules/**", "cli/**", "core/capsule/**", "experiments/v2/ci-replay.ts", ".github/workflows/replay-matrix.yml"]
 permissions:
   contents: read
@@ -27,14 +27,14 @@ jobs:
           - { runtime: python, version: "3.13" }
           - { runtime: bash, version: system }
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       - if: matrix.runtime == 'node'
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with: { node-version: "${{ matrix.version }}" }
       - if: matrix.runtime == 'node'
         run: echo "TARGET_BIN=$(which node)" >> "$GITHUB_ENV"
       - if: matrix.runtime == 'python'
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
         with: { python-version: "${{ matrix.version }}" }
       - if: matrix.runtime == 'python'
         run: echo "TARGET_BIN=$(which python)" >> "$GITHUB_ENV"
@@ -44,14 +44,14 @@ jobs:
       # this ephemeral VM relaxes that so bwrap can create its sandbox.
       - run: sudo apt-get install -y bubblewrap && sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0 || true
       # The CLI itself needs Node >= 22.18 (type stripping); the TARGET runtime is passed separately.
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with: { node-version: "24" }
       - run: node experiments/v2/ci-replay.ts
         env:
           TARGET_RUNTIME: ${{ matrix.runtime }}
           LABEL: ci-${{ matrix.runtime }}-${{ matrix.version }}
           IMPORT_AS: ci-runner
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: replay-${{ matrix.runtime }}-${{ matrix.version }}
           path: experiments/v2/results-ci/

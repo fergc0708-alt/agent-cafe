@@ -32,6 +32,7 @@ runs:
         # workflow actually set up. The CLI is precompiled (dist/) and needs Node >= 20.
         set -euo pipefail
         command -v node >/dev/null || { echo "::error::Agent Café needs node on PATH (actions/setup-node)"; exit 1; }
+        node -e 'process.exit(Number(process.versions.node.split(".")[0]) >= 20 ? 0 : 1)' || { echo "::error::Agent Café needs Node >= 20 on PATH (found $(node --version))"; exit 1; }
         report="$RUNNER_TEMP/agent-cafe-report.json"
         args=(doctor "$CAFE_PATH")
         if [ -n "$CAFE_TARGETS" ]; then args+=(--target "$CAFE_TARGETS"); fi

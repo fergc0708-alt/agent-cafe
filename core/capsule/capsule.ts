@@ -42,7 +42,11 @@ export interface Detect {
 /** Rejects regexes that are long or have nested quantifiers (catastrophic backtracking on user files). */
 export function safeRegex(src: unknown, max = 160): string | null {
   if (typeof src !== "string" || !src || src.length > max) return null;
-  if (/\([^)]*[*+][^)]*\)\s*[*+{]/.test(src) || /(\.\*){3,}/.test(src)) return null;
+  // Heuristic guards against catastrophic backtracking (patterns run over user files and error text):
+  // quantified groups that contain a quantifier or an alternation, and chains of adjacent unbounded
+  // quantifiers. Conservative on purpose: rejecting a valid rule is cheap, a hung scan is not.
+  if (/\([^)]*[*+|][^)]*\)\s*[*+{]/.test(src)) return null;
+  if (/([*+]|\{\d*,\})\??\s*(\\[a-zA-Z]|\.|\[[^\]]*\])[*+]/.test(src)) return null;
   try {
     new RegExp(src);
     return src;

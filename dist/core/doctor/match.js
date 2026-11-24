@@ -85,14 +85,14 @@ function classify(rows) {
     if (fails)
         return { status: "affected_fix_fails", trust };
     if (pass)
-        return { status: "affected_fix_verified", trust };
+        return { status: "affected_fix_works", trust };
     if (nr)
         return { status: "not_affected", trust };
     void pick;
     return { status: "no_evidence", trust };
 }
 const WORDS = {
-    affected_fix_verified: "breaks here; the fix was verified here",
+    affected_fix_works: "breaks here; the fix works here",
     affected_fix_fails: "breaks here and THIS fix also fails here",
     fix_breaks: "the old code works here, but this FIX BREAKS it (do not apply it here unguarded)",
     not_affected: "not affected here (the old code still works)",
@@ -107,7 +107,7 @@ export function evaluate(entry, env) {
     if (same.length) {
         const { status, trust } = classify(same);
         const where = [...new Set(same.map((r) => `${r.runtime} ${r.version}${Object.keys(r.conditions).length ? ` [${Object.entries(r.conditions).map(([k, v]) => `${k}=${v}`).join(",")}]` : ""} (${r.trust === "verified" ? "verified: " : "self-reported: "}${r.source})`))];
-        return { env, status, exact: true, trust, summary: `${WORDS[status]}. Seen on ${where.slice(0, 3).join("; ")}${where.length > 3 ? ` and ${where.length - 3} more` : ""}.`, rows: same };
+        return { env, status, exact: true, trust, summary: `${WORDS[status]}${trust === "claimed" ? " (self-reported only, not verified)" : ""}. Seen on ${where.slice(0, 3).join("; ")}${where.length > 3 ? ` and ${where.length - 3} more` : ""}.`, rows: same };
     }
     if (!all.length)
         return { env, status: "no_evidence", exact: false, trust: null, summary: `${WORDS.no_evidence} for ${env.runtime}.`, rows: [] };
@@ -115,18 +115,19 @@ export function evaluate(entry, env) {
     const versions = [...new Set(all.map((r) => mm(r.version)))].sort(cmpMm);
     const lower = versions.filter((v) => cmpMm(v, env.version) < 0).at(-1);
     const higher = versions.find((v) => cmpMm(v, env.version) > 0);
-    const st = (v) => (v ? classify(all.filter((r) => mm(r.version) === v)).status : undefined);
+    const st = (v) => (v ? classify(all.filter((r) => mm(r.version) === v)) : undefined);
     const lo = st(lower), hi = st(higher);
+    const tr = (c) => (c?.trust === "claimed" ? " (self-reported)" : "");
     let summary = `${env.runtime} ${mm(env.version)} was not tested.`;
     if (lower)
-        summary += ` Nearest older: ${lower} -> ${WORDS[lo]}.`;
+        summary += ` Nearest older: ${lower} -> ${WORDS[lo.status]}${tr(lo)}.`;
     if (higher)
-        summary += ` Nearest newer: ${higher} -> ${WORDS[hi]}.`;
-    if (lo && hi && lo === hi)
+        summary += ` Nearest newer: ${higher} -> ${WORDS[hi.status]}${tr(hi)}.`;
+    if (lo && hi && lo.status === hi.status)
         summary += ` Both neighbours agree, so it is LIKELY the same here (inferred, not tested).`;
     return { env, status: "untested", exact: false, trust: null, summary, rows: [] };
 }
-const SEVERITY = { affected_fix_fails: 60, fix_breaks: 55, affected_fix_verified: 50, conflicting: 40, untested: 20, no_evidence: 10, not_affected: 0 };
+const SEVERITY = { affected_fix_fails: 60, fix_breaks: 55, affected_fix_works: 50, conflicting: 40, untested: 20, no_evidence: 10, not_affected: 0 };
 const CODE_ISSUE_PENALTY = 40;
 export function buildFinding(entry, envs, reason, hits, byId) {
     const verdicts = envs.filter((e) => e.runtime === entry.capsule.runtime || (entry.capsule.runtime === "node" && e.runtime === "bun")).map((e) => evaluate(entry, e));
@@ -137,7 +138,7 @@ export function buildFinding(entry, envs, reason, hits, byId) {
     if (entry.capsule.detect?.note)
         notes.push(entry.capsule.detect.note);
     const failing = verdicts.find((v) => v.status === "affected_fix_fails");
-    const broken = verdicts.find((v) => v.status === "affected_fix_verified" || v.status === "affected_fix_fails");
+    const broken = verdicts.find((v) => v.status === "affected_fix_works" || v.status === "affected_fix_fails");
     const fixBreaks = verdicts.find((v) => v.status === "fix_breaks" || (v.status === "untested" && /FIX BREAKS/.test(v.summary)));
     let action;
     if (broken && fixBreaks)

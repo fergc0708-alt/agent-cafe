@@ -1,11 +1,12 @@
 // `cafe doctor` and `cafe diagnose`: the product's core workflow.
 // Everything runs locally against the bundled catalog + evidence (and the project's private
 // .cafe/capsules). Nothing about the project is sent anywhere.
-import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
+import { existsSync, lstatSync, readdirSync, readFileSync } from "node:fs";
 import { extname, join, relative } from "node:path";
 import { capsuleId, parseVersion, validateCapsule } from "../core/capsule/capsule.js";
 import { buildFinding, evaluate, matchError, relevantConditions } from "../core/doctor/match.js";
 import { fingerprint } from "./fingerprint.js";
+import { findInjection } from "../core/security.js";
 // Works from the source tree (cli/) and from the compiled CLI (dist/cli/).
 const BUILT = [new URL("../capsules/built/", import.meta.url), new URL("../../capsules/built/", import.meta.url)].find((u) => existsSync(new URL("index.json", u)));
 /** Bundled catalog + evidence, plus private capsules captured in <project>/.cafe/capsules. */
@@ -25,8 +26,18 @@ export async function loadIndex(projectDir) {
                 const v = validateCapsule(raw.capsule ?? raw);
                 if (!v.ok)
                     continue;
-                const rows = Array.isArray(raw.local_results) ? raw.local_results.map((r) => ({ ...r, trust: "claimed" })) : [];
-                entries.push({ id: await capsuleId(v.capsule), slug: f.replace(/\.json$/, ""), capsule: v.capsule, rows, superseded_by: [], origin: "local" });
+                // A repository can ship .cafe/capsules: treat them as untrusted (red-team 3.0 H1). They live in
+                // their own namespace, never override a catalog capsule, carry no detection rules, and any
+                // instruction-like text gets them dropped.
+                const c = { ...v.capsule, detect: undefined, supersedes: undefined };
+                const id = await capsuleId(c);
+                if (entries.some((e) => e.id === id))
+                    continue;
+                const text = [c.title, c.problem.symptom, c.problem.description, c.limitations.proves, c.limitations.does_not_prove].join("\n");
+                if (findInjection(text).length)
+                    continue;
+                const rows = Array.isArray(raw.local_results) ? raw.local_results.slice(0, 20).map((r) => ({ ...r, trust: "claimed", source: "this project's .cafe/capsules (unverified)" })) : [];
+                entries.push({ id, slug: `local:${f.replace(/\.json$/, "").slice(0, 60)}`, capsule: c, rows, superseded_by: [], origin: "local" });
             }
             catch {
                 /* ignore unreadable local capsule */
@@ -37,7 +48,7 @@ export async function loadIndex(projectDir) {
     for (const e of entries)
         for (const old of e.capsule.supersedes ?? []) {
             const o = byId.get(old);
-            if (o && o.capsule.author === e.capsule.author)
+            if (o && o.origin === "catalog" && e.origin === "catalog" && o.capsule.author === e.capsule.author)
                 o.superseded_by.push(e.id);
         }
     const all = entries.flatMap((e) => e.rows);
@@ -55,8 +66,12 @@ export function scanProject(dir, entries, limits = { files: 20_000, bytes: 512_0
     const exts = new Set(rules.flatMap((r) => [...r.exts]));
     const hits = new Map();
     let scanned = 0;
+    let dirs = 0;
+    const started = Date.now();
     const walk = (d, depth) => {
-        if (depth > 12 || scanned >= limits.files)
+        // Symlinks are never followed (no escape to /, /proc, loops); only regular files are read; directories
+        // and wall time are bounded too (red-team 3.0 M2).
+        if (depth > 12 || scanned >= limits.files || ++dirs > 5000 || Date.now() - started > 20_000)
             return;
         let names;
         try {
@@ -71,18 +86,20 @@ export function scanProject(dir, entries, limits = { files: 20_000, bytes: 512_0
             const p = join(d, n);
             let st;
             try {
-                st = statSync(p);
+                st = lstatSync(p);
             }
             catch {
                 continue;
             }
+            if (st.isSymbolicLink())
+                continue;
             if (st.isDirectory()) {
                 if (!SKIP.has(n) && !n.startsWith("."))
                     walk(p, depth + 1);
                 continue;
             }
             const ext = extname(n);
-            if (!exts.has(ext) || st.size > limits.bytes)
+            if (!st.isFile() || !exts.has(ext) || st.size > limits.bytes)
                 continue;
             scanned++;
             const text = readFileSync(p, "utf8");
@@ -109,7 +126,7 @@ function lowerBound(range) {
     const m = range.match(/(\d+)(?:\.(\d+))?(?:\.(\d+))?/);
     return m ? `${m[1]}.${m[2] ?? 0}.${m[3] ?? 0}` : null;
 }
-export function environments(fp, index, targets, withUpgrades = true) {
+export function environments(fp, index, targets, withUpgrades = true, alsoRuntimes = new Set()) {
     const envs = [];
     const seen = new Set();
     const push = (e) => {
@@ -118,7 +135,7 @@ export function environments(fp, index, targets, withUpgrades = true) {
             seen.add(k), envs.push(e);
     };
     // Only runtimes the project actually uses (Bun only with a Bun lockfile); all of them if unknown.
-    const uses = (rt) => !fp.project.kinds.length || fp.project.kinds.includes(rt) || (rt === "bun" && fp.project.lockfiles.some((l) => l.startsWith("bun.")));
+    const uses = (rt) => !fp.project.kinds.length || fp.project.kinds.includes(rt) || alsoRuntimes.has(rt) || (rt === "bun" && fp.project.lockfiles.some((l) => l.startsWith("bun.")));
     for (const r of fp.runtimes)
         if (uses(r.runtime))
             push({ runtime: r.runtime, version: r.version, conditions: fp.conditions, label: "installed" });
@@ -144,18 +161,24 @@ export function environments(fp, index, targets, withUpgrades = true) {
     }
     return envs;
 }
-export async function doctor(projectDir, targets = [], bins = {}) {
+/** `trustGivenBins`: the user typed these paths (CLI) so they may run unsandboxed; MCP-supplied paths may not. */
+export async function doctor(projectDir, targets = [], bins = {}, trustGivenBins = false) {
     const index = await loadIndex(projectDir);
-    const fp = await fingerprint(projectDir, bins);
-    const envs = environments(fp, index, targets);
+    const fp = await fingerprint(projectDir, bins, { trustGivenBins });
     const { hits, scanned } = scanProject(projectDir, index.entries);
+    // Evaluate every runtime that has hits, even if the project markers suggested another language.
+    const hitRuntimes = new Set([...hits.keys()].map((id) => index.byId.get(id).capsule.runtime));
+    const envs = environments(fp, index, targets, true, hitRuntimes);
+    const not_evaluated = [];
     const findings = [];
     const clear = [];
     for (const [id, h] of hits) {
         const entry = index.byId.get(id);
         const f = buildFinding(entry, envs, `your code uses the affected API (${h.length}${h.length === 5 ? "+" : ""} place${h.length === 1 ? "" : "s"})`, h, index.byId);
-        if (!f.verdicts.length)
+        if (!f.verdicts.length) {
+            not_evaluated.push({ slug: f.slug, title: f.title, runtime: entry.capsule.runtime, hits: h });
             continue;
+        }
         if (f.verdicts.every((v) => v.status === "not_affected")) {
             const mmOf = (v) => v.split(".").slice(0, 2).join(".");
             const versions = new Set(f.verdicts.map((v) => `${v.env.runtime}@${mmOf(v.env.version)}`));
@@ -169,11 +192,11 @@ export async function doctor(projectDir, targets = [], bins = {}) {
         continue;
     }
     findings.sort((a, b) => b.severity - a.severity);
-    return { project: projectDir, fingerprint: fp, environments: envs, scanned_files: scanned, rules: index.entries.filter((e) => e.capsule.detect).length, findings, clear, evidence: index.evidence };
+    return { project: ".", fingerprint: fp, environments: envs, scanned_files: scanned, rules: index.entries.filter((e) => e.capsule.detect).length, findings, clear, not_evaluated, evidence: index.evidence };
 }
-export async function diagnose(projectDir, error, targets = [], bins = {}) {
+export async function diagnose(projectDir, error, targets = [], bins = {}, trustGivenBins = false) {
     const index = await loadIndex(projectDir);
-    const fp = await fingerprint(projectDir, bins);
+    const fp = await fingerprint(projectDir, bins, { trustGivenBins });
     const envs = environments(fp, index, targets, false);
     const matches = [];
     const rejected = [];
