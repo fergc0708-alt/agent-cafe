@@ -12,3 +12,5 @@ jobs:
       - run: npm run typecheck
       - run: npm test
       - run: npm run build
+      - name: Compiled CLI (used by the GitHub Action) is up to date
+        run: npm run build:cli && git diff --exit-code -- dist/

@@ -1,0 +1,42 @@
+name: Agent Café guard
+description: Catch known Node/Python breaking changes that affect YOUR code, now and on the next runtime upgrade, with executed evidence. Runs locally in the job; uploads nothing.
+branding:
+  icon: shield
+  color: orange
+inputs:
+  path:
+    description: Project directory to check
+    default: "."
+  targets:
+    description: Extra runtimes to check, comma-separated (e.g. "node@24,python@3.13"). By default the newest verified versions are checked as upgrade targets.
+    default: ""
+  fail-on:
+    description: "now = fail if the code is broken on the job's runtimes; upgrade = also fail on breaks at the targets; never = report only"
+    default: now
+outputs:
+  report:
+    description: Path of the JSON report
+    value: ${{ steps.doctor.outputs.report }}
+runs:
+  using: composite
+  steps:
+    - id: doctor
+      shell: bash
+      env:
+        CAFE_PATH: ${{ inputs.path }}
+        CAFE_TARGETS: ${{ inputs.targets }}
+        CAFE_FAIL_ON: ${{ inputs.fail-on }}
+        CAFE_ACTION_DIR: ${{ github.action_path }}
+      run: |
+        # Uses the job's own node/python on PATH, so the report describes the toolchain this
+        # workflow actually set up. The CLI is precompiled (dist/) and needs Node >= 20.
+        set -euo pipefail
+        command -v node >/dev/null || { echo "::error::Agent Café needs node on PATH (actions/setup-node)"; exit 1; }
+        report="$RUNNER_TEMP/agent-cafe-report.json"
+        args=(doctor "$CAFE_PATH")
+        if [ -n "$CAFE_TARGETS" ]; then args+=(--target "$CAFE_TARGETS"); fi
+        node "$CAFE_ACTION_DIR/dist/cli/cafe.js" "${args[@]}" --json > "$report"
+        node "$CAFE_ACTION_DIR/dist/cli/cafe.js" "${args[@]}" --markdown >> "$GITHUB_STEP_SUMMARY"
+        node "$CAFE_ACTION_DIR/dist/cli/cafe.js" "${args[@]}"
+        echo "report=$report" >> "$GITHUB_OUTPUT"
+        node "$CAFE_ACTION_DIR/dist/cli/cafe.js" "${args[@]}" --fail-on "$CAFE_FAIL_ON" > /dev/null

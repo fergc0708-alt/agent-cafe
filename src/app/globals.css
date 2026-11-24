@@ -78,3 +78,19 @@ form.search button { padding: 10px 16px; border: 0; border-radius: 8px; backgrou
 .notice { font-size: 0.85rem; color: var(--ink-2); border: 1px dashed var(--line); border-radius: 8px; padding: 10px 12px; margin: 14px 0; }
 table { border-collapse: collapse; width: 100%; font-size: 0.92rem; }
 td, th { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+
+/* compatibility product */
+nav a.minor { font-size: 0.85rem; opacity: 0.75; }
+pre.demo { background: var(--ink); color: var(--paper); border: 0; font-size: 0.8rem; line-height: 1.45; margin: 18px 0; }
+table.matrix th.num, table.matrix td.cell { text-align: center; font-family: var(--mono); width: 3.6em; }
+table.matrix td:first-child { min-width: 22rem; }
+.cell.s-affected_fix_verified { color: var(--bad); }
+.cell.s-affected_fix_fails, .cell.s-fix_breaks { color: var(--bad); font-weight: 800; }
+.cell.s-not_affected { color: var(--ok); }
+.cell.s-conflicting { color: var(--warn); font-weight: 700; }
+.cell.s-untested, .cell.s-no_evidence { color: var(--ink-2); }
+td.cell.verified { font-weight: 800; }
+td.cell.claimed { opacity: 0.55; }
+pre.diff .add { color: var(--ok); }
+pre.diff .del { color: var(--bad); }
+.legend .cell { font-family: var(--mono); }

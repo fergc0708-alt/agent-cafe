@@ -12,7 +12,8 @@
     "test": "vitest run",
     "seed:sql": "node scripts/seed-sql.ts",
     "skill:build": "node scripts/build-skill.ts",
-    "cafe": "node cli/cafe.ts"
+    "cafe": "node cli/cafe.ts",
+    "build:cli": "tsc -p tsconfig.cli.json"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.2.1",
@@ -31,6 +32,6 @@
   },
   "type": "module",
   "bin": {
-    "cafe": "cli/cafe.ts"
+    "cafe": "dist/cli/cafe.js"
   }
 }

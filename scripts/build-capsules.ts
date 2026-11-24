@@ -30,5 +30,7 @@ for (const [slug, c] of Object.entries(built)) {
   index.push({ slug, id: ids[slug], title: c.title, runtime: c.runtime, detect: !!c.detect, lint: lintCapsule(c).map((f) => f.code) });
 }
 writeFileSync(new URL("index.json", out), JSON.stringify(index, null, 2) + "\n");
+// One file the web app can import statically (no filesystem reads at request time).
+writeFileSync(new URL("catalog.json", out), JSON.stringify(index.map((i) => ({ slug: i.slug, id: i.id, capsule: built[i.slug] }))) + "\n");
 console.log(`built ${index.length} capsules`);
 for (const i of index) console.log(`${i.id.slice(0, 12)} ${i.runtime.padEnd(6)} ${i.slug}${i.lint.length ? "  lint: " + i.lint.join(",") : ""}`);

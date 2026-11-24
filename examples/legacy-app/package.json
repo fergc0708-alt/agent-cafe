@@ -1,0 +1,5 @@
+{
+  "name": "legacy-app",
+  "private": true,
+  "engines": { "node": ">=20" }
+}

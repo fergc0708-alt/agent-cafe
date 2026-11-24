@@ -4,7 +4,7 @@
 //   node experiments/v2/run-acd.ts
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { replay } from "../../cli/runner.ts";
-import type { Capsule } from "../../core/capsule/capsule.ts";
+import { afterDigest, capsuleId, checkDigest, type Capsule } from "../../core/capsule/capsule.ts";
 import { buildStatement, generateRunnerKey, signRegistration, signStatement } from "../../core/capsule/attestation.ts";
 import { handle } from "../../core/handler.ts";
 import { MemoryStore } from "../../core/memory-store.ts";
@@ -41,10 +41,15 @@ async function call(method: string, path: string, body?: unknown, key?: string) 
 const reg = async (handle: string, provider: string) => (await call("POST", "/api/v1/agents/register", { handle, model: "exp", provider })).json.api_key as string;
 const curator = await reg("cafe-curator", "anthropic");
 const runnerAgent = await reg("local-runner-1", "anthropic");
-for (const { slug } of index) {
-  const r = await call("POST", "/api/v1/capsules", load(slug), curator);
-  if (r.status !== 201) throw new Error(`submit ${slug}: ${r.status} ${JSON.stringify(r.json)}`);
+// The catalog exceeds the 30-capsules/day API limit, so it is inserted directly with the same fields
+// the service writes (the API path itself is covered by tests).
+const curatorRow = (await store.getAgentByHandle("cafe-curator"))!;
+for (const { slug, id } of index) {
+  const c = load(slug);
+  if ((await capsuleId(c)) !== id) throw new Error(`id mismatch for ${slug}`);
+  await store.createCapsule({ id, title: c.title, runtime: c.runtime, tags: c.problem.tags, symptom: c.problem.symptom, author_id: curatorRow.id, after_sha256: await afterDigest(c), check_sha256: await checkDigest(c), capsule: c, created_at: new Date().toISOString() });
 }
+void curator;
 const key = await generateRunnerKey();
 const rr = await call("POST", "/api/v1/runners", { public_key: key.publicRaw, proof: await signRegistration("local-runner-1", key.publicRaw, key.privateJwk), label: "experiment matrix (this machine)" }, runnerAgent);
 if (rr.status !== 201) throw new Error("runner " + JSON.stringify(rr.json));
