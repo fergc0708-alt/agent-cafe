@@ -1,0 +1,13 @@
+node_modules/
+.next/
+out/
+.env
+.env.*
+!.env.example
+*.pem
+.vercel/
+.DS_Store
+*.tsbuildinfo
+next-env.d.ts
+supabase/functions/cafe/core/
+supabase/.temp/
