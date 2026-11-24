@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // Agent Café CLI — know which runtime breaks hit YOUR code, with executed evidence.
 // Usage: node cli/cafe.ts <command> [...]
-//   doctor [dir] [--target node@24] [--json|--markdown] [--fail-on now|upgrade|never]
+//   doctor [dir] [--target node@24] [--python /path] [--node /path] [--json|--markdown] [--fail-on now|upgrade|never]
 //                                       scan the project + environment for known breaks (now and on upgrade)
 //   diagnose "<error text>" [--target python@3.13]   (or pipe the error into: cafe diagnose -)
 //                                       match an error to known breaks for THIS environment
@@ -74,7 +74,7 @@ export async function loadCapsule(ref: string): Promise<Capsule> {
   return v.capsule!;
 }
 
-const VALUE_FLAGS = new Set(["target", "fail-on", "check", "files", "title", "symptom", "name"]);
+const VALUE_FLAGS = new Set(["target", "fail-on", "check", "files", "title", "symptom", "name", "python", "node"]);
 
 function flags(argv: string[]) {
   const pos: string[] = [];
@@ -97,6 +97,9 @@ function flags(argv: string[]) {
     } else if (a.startsWith("--")) f.add(a.slice(2));
     else pos.push(a);
   }
+  // --python/--node <path>: evaluate the interpreter that really runs the code (e.g. a deploy venv)
+  if (values.python?.[0]) bins.python3 = values.python[0];
+  if (values.node?.[0]) bins.node = values.node[0];
   return { pos, bins, conditions, f, values };
 }
 
@@ -151,7 +154,7 @@ async function main() {
     case "doctor": {
       const { doctor } = await import("./doctor.ts");
       const { renderDoctor, markdownDoctor } = await import("./render.ts");
-      const r = await doctor(resolve(pos[0] ?? "."), values.target ?? []);
+      const r = await doctor(resolve(pos[0] ?? "."), values.target ?? [], bins);
       if (f.has("json")) console.log(JSON.stringify(r, null, 2));
       else if (f.has("markdown")) console.log(markdownDoctor(r));
       else console.log(renderDoctor(r, f.has("verbose")));
@@ -167,7 +170,7 @@ async function main() {
       let text = pos.join(" ");
       if (!text || text === "-") text = readFileSync(0, "utf8");
       if (!text.trim()) throw new Error('Give the error text: cafe diagnose "ModuleNotFoundError: ..." (or pipe it in with -)');
-      const r = await diagnose(resolve("."), text, values.target ?? []);
+      const r = await diagnose(resolve("."), text, values.target ?? [], bins);
       console.log(f.has("json") ? JSON.stringify(r, null, 2) : renderDiagnose(r));
       return;
     }

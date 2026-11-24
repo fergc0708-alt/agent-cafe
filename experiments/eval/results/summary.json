@@ -1,0 +1,110 @@
+[
+  {
+    "task": "clean-venv-versions",
+    "arm": "control",
+    "n": 2,
+    "success": 2,
+    "time_s": 24.61,
+    "tokens": 59426,
+    "tools": 6.5
+  },
+  {
+    "task": "clean-venv-versions",
+    "arm": "cafe",
+    "n": 2,
+    "success": 2,
+    "time_s": 36.4995,
+    "tokens": 61688.5,
+    "tools": 8.5
+  },
+  {
+    "task": "no-capsule-duration",
+    "arm": "control",
+    "n": 2,
+    "success": 2,
+    "time_s": 22.889,
+    "tokens": 59312,
+    "tools": 7
+  },
+  {
+    "task": "no-capsule-duration",
+    "arm": "cafe",
+    "n": 2,
+    "success": 2,
+    "time_s": 25.9835,
+    "tokens": 59638.5,
+    "tools": 7.5
+  },
+  {
+    "task": "node24-gzip-stats",
+    "arm": "control",
+    "n": 2,
+    "success": 2,
+    "time_s": 21.329,
+    "tokens": 59280,
+    "tools": 7
+  },
+  {
+    "task": "node24-gzip-stats",
+    "arm": "cafe",
+    "n": 2,
+    "success": 2,
+    "time_s": 28.112,
+    "tokens": 60593,
+    "tools": 6
+  },
+  {
+    "task": "py313-plugins",
+    "arm": "control",
+    "n": 2,
+    "success": 2,
+    "time_s": 19.5155,
+    "tokens": 58566.5,
+    "tools": 6
+  },
+  {
+    "task": "py313-plugins",
+    "arm": "cafe",
+    "n": 2,
+    "success": 2,
+    "time_s": 35.03,
+    "tokens": 60802,
+    "tools": 9
+  },
+  {
+    "task": "ALL (wedge tasks)",
+    "arm": "control",
+    "n": 6,
+    "success": 6,
+    "time_s": 21.329,
+    "tokens": 59249.5,
+    "tools": 6.5
+  },
+  {
+    "task": "ALL (wedge tasks)",
+    "arm": "cafe",
+    "n": 6,
+    "success": 6,
+    "time_s": 34.322,
+    "tokens": 61142,
+    "tools": 8.5
+  },
+  {
+    "task": "ALL",
+    "arm": "control",
+    "n": 8,
+    "success": 8,
+    "time_s": 21.3655,
+    "tokens": 59280,
+    "tools": 7
+  },
+  {
+    "task": "ALL",
+    "arm": "cafe",
+    "n": 8,
+    "success": 8,
+    "time_s": 33.8375,
+    "tokens": 60802,
+    "tools": 8
+  }
+]

@@ -51,7 +51,7 @@
     "files": [
       "*.py"
     ],
-    "pattern": "^\\s*(import\\s+imghdr\\b|from\\s+imghdr\\s+import)"
+    "pattern": "^\\s*(import\\s+imghdr\\b|from\\s+imghdr(\\.[.\\w]+)?\\s+import)"
   },
   "supersedes": [
     "15dcae65b091361afca8052c01ddcf0e9097cd912d67f4db413e3fbd9e302059"

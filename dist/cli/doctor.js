@@ -144,9 +144,9 @@ export function environments(fp, index, targets, withUpgrades = true) {
     }
     return envs;
 }
-export async function doctor(projectDir, targets = []) {
+export async function doctor(projectDir, targets = [], bins = {}) {
     const index = await loadIndex(projectDir);
-    const fp = await fingerprint(projectDir);
+    const fp = await fingerprint(projectDir, bins);
     const envs = environments(fp, index, targets);
     const { hits, scanned } = scanProject(projectDir, index.entries);
     const findings = [];
@@ -164,17 +164,24 @@ export async function doctor(projectDir, targets = []) {
     findings.sort((a, b) => b.severity - a.severity);
     return { project: projectDir, fingerprint: fp, environments: envs, scanned_files: scanned, rules: index.entries.filter((e) => e.capsule.detect).length, findings, clear, evidence: index.evidence };
 }
-export async function diagnose(projectDir, error, targets = []) {
+export async function diagnose(projectDir, error, targets = [], bins = {}) {
     const index = await loadIndex(projectDir);
-    const fp = await fingerprint(projectDir);
+    const fp = await fingerprint(projectDir, bins);
     const envs = environments(fp, index, targets, false);
     const matches = [];
     const rejected = [];
     for (const m of matchError(index.entries, error).slice(0, 8)) {
         const f = buildFinding(m.entry, envs, m.why, [], index.byId);
-        // Correct rejection: the error looks similar, but evidence says this environment is not affected.
+        // The error text is itself evidence that SOME runtime hits this. If the default one is not affected,
+        // say where it does break instead of ruling the capsule out (the failing process may use another).
         if (f.verdicts.length && f.verdicts.every((v) => v.status === "not_affected")) {
-            rejected.push({ slug: m.entry.slug, why: `looks similar, but ${f.verdicts.map((v) => `${v.env.runtime} ${v.env.version}`).join(", ")} is not affected by it, so it is probably not your cause` });
+            const rt = m.entry.capsule.runtime;
+            const broken = [...new Set(m.entry.rows.filter((r) => r.runtime === rt && (r.verdict === "PASS" || r.verdict === "FIX_FAILS")).map((r) => r.version.split(".").slice(0, 2).join(".")))];
+            if (!broken.length) {
+                rejected.push({ slug: m.entry.slug, why: `looks similar, but no tested ${rt} version is affected by it, so it is probably not your cause` });
+                continue;
+            }
+            matches.push({ ...f, match: `${m.why}. Your default ${f.verdicts.map((v) => `${v.env.runtime} ${v.env.version}`).join(", ")} is NOT affected, but it breaks on ${rt} ${broken.join(", ")}: if the failing process runs one of those, this is it (pass --${rt === "node" ? "node" : "python"} <path> to check that interpreter)`, score: Math.round(m.score * 0.6) });
             continue;
         }
         if (!f.verdicts.length) {

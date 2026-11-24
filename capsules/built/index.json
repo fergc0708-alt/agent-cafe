@@ -9,7 +9,7 @@
   },
   {
     "slug": "node-esm-dirname",
-    "id": "f40f1ba0e8f48d76465f752c3c9d3643b2f02a2590f42e98b8e60f60e176ecd8",
+    "id": "1d2f5e4b4865846fb0a775643beb05324259ffcebf328445b4c05cedfd4fa06f",
     "title": "__dirname is not defined in ES modules: use import.meta.dirname",
     "runtime": "node",
     "detect": true,
@@ -17,7 +17,7 @@
   },
   {
     "slug": "node-ts-parameter-properties",
-    "id": "d9f80afeb0cdce8a4d2d5edaaf34a55dc008089be0969206d330db791a8d6ee0",
+    "id": "c1d21f8432e272c46e82ce544cd5bfd22cb7b2a3ba5829caa03c7b84abedf08b",
     "title": "Node type stripping rejects TypeScript parameter properties: declare fields explicitly",
     "runtime": "node",
     "detect": true,
@@ -33,7 +33,7 @@
   },
   {
     "slug": "node-import-assert-to-with",
-    "id": "5b14240681b47b135205fcab4b610d5c0d489f434236b4f430ff3de309749846",
+    "id": "de303042d3ff1fd03406fc603ca22d533e7e6a8b8fbf30754212da004e752f31",
     "title": "Import assertions (assert { type: 'json' }) were removed in Node 22: use import attributes (with)",
     "runtime": "node",
     "detect": true,
@@ -97,7 +97,7 @@
   },
   {
     "slug": "py-fromisoformat-z",
-    "id": "149e923e1c72c41d5f2630899072e60b0f0460f7ce892892ee299685b45aa2f8",
+    "id": "29961a538fe001a3c4e5bdfa35b0e17bcaa79650dd2571d6633c1370b01b872a",
     "title": "datetime.fromisoformat rejects a trailing 'Z' before Python 3.11: normalize it to +00:00",
     "runtime": "python",
     "detect": true,
@@ -105,7 +105,7 @@
   },
   {
     "slug": "py-utcnow-deprecated",
-    "id": "cb8b31c7381071ee629cf99a4f26177d1f15b097f326a402888a5f0393f2ecd6",
+    "id": "b45cd8185730b2006443889171c850105adccc096a47a6a3f389c64b9b5ee9dc",
     "title": "datetime.utcnow() is deprecated and naive: use datetime.now(timezone.utc)",
     "runtime": "python",
     "detect": true,
@@ -113,7 +113,7 @@
   },
   {
     "slug": "py-distutils-removed",
-    "id": "e1afecc73fa414c59f1ffe1dd66218cda603f6c8128fc2108dd99efc43ac9715",
+    "id": "5e43b822d4f7fb8a056134c8a807c591395d58871e9305b15eae2ce7fd7575fe",
     "title": "distutils was removed in Python 3.12: stop using distutils.version.LooseVersion",
     "runtime": "python",
     "detect": true,
@@ -153,7 +153,7 @@
   },
   {
     "slug": "py-fromtimestamp-local-tz",
-    "id": "277f02aa8b9ecc789ad51fb26684bbfa03e204e32ef54341801232428e30ae4c",
+    "id": "7199a245f7fc4d00fcb3fdf95875bab95dc447680a84c5143eb5b8269c1295ed",
     "title": "datetime.fromtimestamp(0) depends on the machine's time zone: pass tz=timezone.utc",
     "runtime": "python",
     "detect": true,
@@ -193,7 +193,7 @@
   },
   {
     "slug": "py-imghdr-removed",
-    "id": "cb0f21827de738fd7b73a69760423101178777f0a99da550c5bece3fdfd6aea3",
+    "id": "e9451516618cd400115f58bd0a70b247674454d1b8d2cb17cbc42337aa3d78c3",
     "title": "imghdr was removed in Python 3.13: detect PNG by its magic bytes",
     "runtime": "python",
     "detect": true,
@@ -201,7 +201,7 @@
   },
   {
     "slug": "py-pipes-removed",
-    "id": "90cb4a7f4ba4232c04cc924fc332ff1d8dd4781e1dd5cb482de95afe136b7438",
+    "id": "7feb0f2b9d52f1c1cf4af12883aba5d5fec143a4f7351c61b6c97bec12275ab8",
     "title": "pipes was removed in Python 3.13: use shlex.quote",
     "runtime": "python",
     "detect": true,
@@ -209,7 +209,7 @@
   },
   {
     "slug": "py-cgi-parse-header",
-    "id": "fafcf8995d65a5d2ec457e60a24edc06cbbf4d7571b908db4fd021d78d6f3018",
+    "id": "8a376544404a16ec685405cdb08dcd776d99d01fe18a15bfdd92ba1975857b95",
     "title": "cgi was removed in Python 3.13: parse Content-Type with email.message",
     "runtime": "python",
     "detect": true,
@@ -217,7 +217,7 @@
   },
   {
     "slug": "py-unittest-makesuite",
-    "id": "8c3b1804c8160e4cc7fd87d4ef3dc9d552ac4d0b57f363adf73a178d17dfccf1",
+    "id": "961cb31c477c88d52952f5eb3212ec1cf60dc703f64c28824c9a6ea1d56cc989",
     "title": "unittest.makeSuite was removed in Python 3.13: use TestLoader().loadTestsFromTestCase",
     "runtime": "python",
     "detect": true,
@@ -225,7 +225,7 @@
   },
   {
     "slug": "py-typing-io",
-    "id": "4fdaa44fd2cef785e3323817bce1cb5856332e1ed7b83c43e95f662542e75215",
+    "id": "4459de823c25ce739758a927a9c41b469ac7f68d1222555d45cdc84bdc93acb9",
     "title": "typing.io / typing.re were removed in Python 3.13: import IO, Pattern from typing",
     "runtime": "python",
     "detect": true,
@@ -233,7 +233,7 @@
   },
   {
     "slug": "py-uu-removed",
-    "id": "2f86b7fe3dd57de41b0fe79770fbc4ad62df6c174dfc4ab2c391d6245fffcc76",
+    "id": "791b94f1e55a3db1b36759297153c400b5e8c8e758beb6506a1ade25a9bfc320",
     "title": "uu was removed in Python 3.13: use binascii.b2a_uu",
     "runtime": "python",
     "detect": true,
@@ -241,7 +241,7 @@
   },
   {
     "slug": "py-imp-removed",
-    "id": "5b132a7cc9780f2e0769431a892850978372957d6ea332602b166ee62d73c2e5",
+    "id": "bc25bacdff220900839b8287757327b8f0c90bf577977b5d9ecc052e29f5ab38",
     "title": "imp was removed in Python 3.12: load modules with importlib.util",
     "runtime": "python",
     "detect": true,
@@ -249,7 +249,7 @@
   },
   {
     "slug": "py-unittest-assertequals",
-    "id": "224737f4ecca52db2f5406adcb37a6f749bc1befbdfcfd397a40e908ca05ca36",
+    "id": "f913df2a073accdbaa070076e82602d1693fa7056f98a868d99ff7b8bdad1590",
     "title": "assertEquals and other unittest aliases were removed in Python 3.12: use assertEqual",
     "runtime": "python",
     "detect": true,
@@ -257,7 +257,7 @@
   },
   {
     "slug": "py-safeconfigparser",
-    "id": "90e3e4338fa4fcffa7b515457e30f940319a1c75151ecea95ce3db0b2d770c7e",
+    "id": "19b8e4234f740f82d9c35bb1ee3d1e9030df11b339ee800dc93e8bf96118b189",
     "title": "configparser.SafeConfigParser was removed in Python 3.12: use ConfigParser",
     "runtime": "python",
     "detect": true,
@@ -265,7 +265,7 @@
   },
   {
     "slug": "py-ssl-wrap-socket",
-    "id": "70add3874b6d0c5444dad69c5e299af2295ac3b644aab0c18abbf34a2871b20a",
+    "id": "d34ee161d56a1ad95c1170fbfbb005e722d6a1b967f3f00ac84ea91097945bde",
     "title": "ssl.wrap_socket was removed in Python 3.12: use an SSLContext",
     "runtime": "python",
     "detect": true,
@@ -273,7 +273,7 @@
   },
   {
     "slug": "py-locale-format",
-    "id": "8f8197fa9130e8ebec2e18cbd616827f3215cacc16bae10e851e177d25da536e",
+    "id": "c5da6c2a4f612862b3179fe207d7a2ca8e5f10b79ed656cd6acb43b01eb052c9",
     "title": "locale.format was removed in Python 3.12: use locale.format_string",
     "runtime": "python",
     "detect": true,
@@ -281,7 +281,7 @@
   },
   {
     "slug": "py-getargspec",
-    "id": "a4cc69f7f6944c23d947a4035d02e477a4e739a847fd879180f9478709b4bf06",
+    "id": "e582f381cda5726549c7bd477bb75e2a0d9bb8ecaf45b4a3d414c3e9f59ac839",
     "title": "inspect.getargspec was removed in Python 3.11: use getfullargspec or signature",
     "runtime": "python",
     "detect": true,
@@ -289,7 +289,7 @@
   },
   {
     "slug": "py-asyncio-coroutine",
-    "id": "0d058b23dd05877108fd44ab1bbaeea71d6c83509d3eec752c6a5b7f2c8514e3",
+    "id": "04c3374d2bc9629fdb1c7fd57bf0e86684539619854d1de6f38259ceb7aeba47",
     "title": "@asyncio.coroutine was removed in Python 3.11: use async def",
     "runtime": "python",
     "detect": true,
@@ -297,7 +297,7 @@
   },
   {
     "slug": "node-util-is-removed",
-    "id": "0a718104aa30bad76e9f8ffea88eb95e51dd1e6b02344a27469cef54a20ce705",
+    "id": "693fc2aabb56d25c09e9eed6f52d2845c21458553efb3d6d7c28cb7ae244508f",
     "title": "util.isBoolean/isString/... were removed in Node 23+: use typeof and Array.isArray",
     "runtime": "node",
     "detect": true,
@@ -305,7 +305,7 @@
   },
   {
     "slug": "node-util-log",
-    "id": "d163902dd4747568eea1eac9884a6b63675426f2da7e00fe565ce98561de06e2",
+    "id": "1e178172b8acdfd2e7fa7dfef19e287fa4142052b8a491776439dd4355fdf8f2",
     "title": "util.log was removed in Node 23+: log with console.log and your own timestamp",
     "runtime": "node",
     "detect": true,
@@ -313,7 +313,7 @@
   },
   {
     "slug": "node-dirent-path",
-    "id": "f14f5a2f0cc83f88ab7d137ac7c746d25ceb7196e9b95da6a07af87ed0f6534c",
+    "id": "cc94defaf6831ffa96efe3719c4953f8d7f1c00b9bc90d1b0529893e057b213a",
     "title": "Dirent.path was removed in Node 24: use dirent.parentPath (Node >= 20.12)",
     "runtime": "node",
     "detect": true,
@@ -321,7 +321,7 @@
   },
   {
     "slug": "node-zlib-bytesread",
-    "id": "91d79fb7e822a479f7acc57baed11156c9a3cb6acf0aa5c4f5b839aac43dd404",
+    "id": "276509ac4b7fcd10325198950e9abdd23709f2ade3df1d80a1c4706652e2808b",
     "title": "zlib bytesRead was removed in Node 24: use bytesWritten",
     "runtime": "node",
     "detect": true,
@@ -329,7 +329,7 @@
   },
   {
     "slug": "node-crypto-createcipher",
-    "id": "0236351d92dd1bb72d0950603ac9efad7f8786289130399b996c09a4b690bf27",
+    "id": "5f00439dc3196f441f7aea36bd1c09978834d96741d732bb5e7e82477c14ac0e",
     "title": "crypto.createCipher was removed in Node 22: use createCipheriv with a real key and IV",
     "runtime": "node",
     "detect": true,

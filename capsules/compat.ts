@@ -52,7 +52,8 @@ function node(s: Spec): Capsule {
   };
 }
 
-const imp = (mod: string) => `^\\s*(import\\s+${mod}\\b|from\\s+${mod}\\s+import)`;
+// Matches "import m", "import m.sub", "from m import x" and "from m.sub import x".
+const imp = (mod: string) => `^\\s*(import\\s+${mod}\\b|from\\s+${mod}(\\.[.\\w]+)?\\s+import)`;
 
 export const COMPAT: Record<string, Capsule> = {
   // ---------------- Python 3.13 (PEP 594 "dead batteries" and API removals) ----------------

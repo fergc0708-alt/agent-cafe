@@ -22,20 +22,21 @@ const SAFE_BIN = /^(node|bun|bash|sh|python|python3(\.\d+)?)$/;
 type Obj = Record<string, any>;
 const s = (description: string) => ({ type: "string", description });
 const targetsSchema = { type: "array", items: { type: "string" }, description: 'Optional upgrade targets like ["node@24", "python@3.13"]' };
+const interpretersSchema = { type: "object", description: 'Interpreters that really run the code, if not the ones on PATH, e.g. {"python": "/srv/app/.venv/bin/python", "node": "/opt/node24/bin/node"}' };
 
 const TOOLS = [
   {
     name: "cafe_doctor",
     description:
       "Check the project for KNOWN runtime/toolchain breaks that affect its code in its real environment (installed + declared versions) and on upgrade. Each finding has file:line, per-environment results backed by executed evidence (including where a fix FAILS), and one action. Use it before upgrading Node/Python or when a project fails right after an upgrade. Runs locally; fast; no network.",
-    inputSchema: { type: "object", properties: { path: s("Project directory (default: current directory)"), targets: targetsSchema } },
+    inputSchema: { type: "object", properties: { path: s("Project directory (default: current directory)"), targets: targetsSchema, interpreters: interpretersSchema } },
     annotations: { readOnlyHint: true },
   },
   {
     name: "cafe_diagnose",
     description:
       "Paste an error message or stack trace. Returns the known break it matches FOR THIS ENVIRONMENT with the minimal fix as a diff, or says plainly that nothing matches (then debug normally). Also rules out look-alike causes that cannot happen in this environment.",
-    inputSchema: { type: "object", properties: { error: s("Error text / stack trace"), path: s("Project directory"), targets: targetsSchema }, required: ["error"] },
+    inputSchema: { type: "object", properties: { error: s("Error text / stack trace"), path: s("Project directory"), targets: targetsSchema, interpreters: interpretersSchema }, required: ["error"] },
     annotations: { readOnlyHint: true },
   },
   {
@@ -113,9 +114,15 @@ const compact = (f: Finding, index: { bySlug: Map<string, IndexEntry> }, withFix
 async function call(name: string, a: Obj): Promise<unknown> {
   const project = resolve(typeof a.path === "string" && a.path ? a.path : ".");
   const targets = Array.isArray(a.targets) ? a.targets.filter((t: unknown) => typeof t === "string" && /^(node|python|bun)@\d+(\.\d+){0,2}$/.test(t as string)) : [];
+  const interp: Record<string, string> = {};
+  for (const [k, v] of Object.entries((a.interpreters as Obj) ?? {})) {
+    if (typeof v !== "string" || !isAbsolute(v) || !SAFE_BIN.test(basename(v)) || !existsSync(v)) throw new Error(`interpreters.${k}: must be an absolute path to a node/python interpreter`);
+    if (k === "python" || k === "python3") interp.python3 = v;
+    else if (k === "node") interp.node = v;
+  }
   switch (name) {
     case "cafe_doctor": {
-      const r = await doctor(project, targets);
+      const r = await doctor(project, targets, interp);
       const index = await loadIndex(project);
       return {
         environment: envLine(r.fingerprint),
@@ -128,7 +135,7 @@ async function call(name: string, a: Obj): Promise<unknown> {
       };
     }
     case "cafe_diagnose": {
-      const r = await diagnose(project, String(a.error ?? "").slice(0, 20_000), targets);
+      const r = await diagnose(project, String(a.error ?? "").slice(0, 20_000), targets, interp);
       const index = await loadIndex(project);
       return { verdict: r.verdict, matches: r.matches.map((m) => ({ ...compact(m, index, true), why: m.match })), ruled_out: r.rejected };
     }

@@ -189,9 +189,10 @@ export function canonical(value) {
     const keys = Object.keys(value).filter((k) => value[k] !== undefined).sort();
     return "{" + keys.map((k) => JSON.stringify(k) + ":" + canonical(value[k])).join(",") + "}";
 }
-/** Content address of a capsule (any edit produces a new id). */
+/** Content address of a capsule. `detect` is excluded: it is a local scanning hint, not part of what is
+ *  executed or claimed, so improving a detection rule must not orphan the capsule's evidence. */
 export function capsuleId(c) {
-    return sha256Hex(canonical(c));
+    return sha256Hex(canonical({ ...c, detect: undefined }));
 }
 /** Digest of exactly what a replay executes: check files + run command. */
 export function checkDigest(c) {

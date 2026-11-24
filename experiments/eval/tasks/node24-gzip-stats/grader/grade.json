@@ -1,0 +1,1 @@
+{"files": ["stats.cjs"], "runs": [["/opt/node22/bin/node", "hidden_test.cjs"], ["/opt/node24/bin/node", "hidden_test.cjs"]]}

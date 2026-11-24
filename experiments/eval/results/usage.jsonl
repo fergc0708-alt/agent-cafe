@@ -1,0 +1,16 @@
+{"ws":"py313-plugins__control__r2","tokens":58563,"tool_uses":6,"ms":19185,"failed_approaches":"none","cafe_report":"n/a"}
+{"ws":"py313-plugins__control__r1","tokens":58570,"tool_uses":6,"ms":19846,"failed_approaches":"none","cafe_report":"n/a"}
+{"ws":"node24-gzip-stats__control__r2","tokens":59278,"tool_uses":7,"ms":21265,"failed_approaches":"none","cafe_report":"n/a"}
+{"ws":"no-capsule-duration__control__r1","tokens":59307,"tool_uses":7,"ms":21338,"failed_approaches":"none","cafe_report":"n/a"}
+{"ws":"node24-gzip-stats__control__r1","tokens":59282,"tool_uses":7,"ms":21393,"failed_approaches":"none","cafe_report":"n/a"}
+{"ws":"node24-gzip-stats__cafe__r1","tokens":59913,"tool_uses":4,"ms":21586,"failed_approaches":"none","cafe_report":"doctor flagged stats.cjs:11 for node 24, pointed to node-zlib-bytesread; correct; saved some debugging though the Node 22 deprecation warning pointed to the same fix"}
+{"ws":"clean-venv-versions__control__r2","tokens":59221,"tool_uses":6,"ms":23751,"failed_approaches":"none","cafe_report":"n/a"}
+{"ws":"no-capsule-duration__cafe__r1","tokens":59258,"tool_uses":7,"ms":23793,"failed_approaches":"none","cafe_report":"diagnose said no match; correct and irrelevant"}
+{"ws":"no-capsule-duration__control__r2","tokens":59317,"tool_uses":7,"ms":24440,"failed_approaches":"none","cafe_report":"n/a"}
+{"ws":"clean-venv-versions__control__r1","tokens":59631,"tool_uses":7,"ms":25469,"failed_approaches":"none","cafe_report":"n/a"}
+{"ws":"no-capsule-duration__cafe__r2","tokens":60019,"tool_uses":8,"ms":28174,"failed_approaches":"none","cafe_report":"diagnose said no match; correct, irrelevant, not misleading"}
+{"ws":"clean-venv-versions__cafe__r1","tokens":61416,"tool_uses":8,"ms":33669,"failed_approaches":"none","cafe_report":"diagnose weak keyword match to py-distutils-removed: correct; show: correct; doctor: MISLEADING false all-clear (checked only system python 3.13, not the clean venv named in TASK.md)"}
+{"ws":"py313-plugins__cafe__r2","tokens":61011,"tool_uses":9,"ms":34006,"failed_approaches":"none","cafe_report":"diagnose matched py-imp-removed, show gave the importlib diff; correct and directly relevant"}
+{"ws":"node24-gzip-stats__cafe__r2","tokens":61273,"tool_uses":8,"ms":34638,"failed_approaches":"none","cafe_report":"diagnose MISLEADING: no match and ruled out the right capsule because only default node 22 was checked; doctor correct; show correct"}
+{"ws":"py313-plugins__cafe__r1","tokens":60593,"tool_uses":9,"ms":36054,"failed_approaches":"none","cafe_report":"diagnose matched py-imp-removed; show diff applied; correct"}
+{"ws":"clean-venv-versions__cafe__r2","tokens":61961,"tool_uses":9,"ms":39330,"failed_approaches":"none","cafe_report":"diagnose weak match correct; show correct (agent generalized the int-tuple idea); doctor MISLEADING false all-clear"}

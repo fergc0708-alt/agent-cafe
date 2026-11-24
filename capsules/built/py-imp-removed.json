@@ -51,6 +51,6 @@
     "files": [
       "*.py"
     ],
-    "pattern": "^\\s*(import\\s+imp\\b|from\\s+imp\\s+import)"
+    "pattern": "^\\s*(import\\s+imp\\b|from\\s+imp(\\.[.\\w]+)?\\s+import)"
   }
 }

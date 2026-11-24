@@ -1,0 +1,310 @@
+[
+  {
+    "task": "clean-venv-versions",
+    "arm": "cafe",
+    "rep": "r1",
+    "pass": false,
+    "results": [
+      {
+        "bin": "/usr/bin/python3.11",
+        "pass": true,
+        "err": ""
+      },
+      {
+        "bin": "/tmp/venv-3.12/bin/python",
+        "pass": false,
+        "err": "ModuleNotFoundError: No module named 'distutils'"
+      },
+      {
+        "bin": "/tmp/venv-3.13/bin/python",
+        "pass": false,
+        "err": "ModuleNotFoundError: No module named 'distutils'"
+      }
+    ]
+  },
+  {
+    "task": "clean-venv-versions",
+    "arm": "cafe",
+    "rep": "r2",
+    "pass": false,
+    "results": [
+      {
+        "bin": "/usr/bin/python3.11",
+        "pass": true,
+        "err": ""
+      },
+      {
+        "bin": "/tmp/venv-3.12/bin/python",
+        "pass": false,
+        "err": "ModuleNotFoundError: No module named 'distutils'"
+      },
+      {
+        "bin": "/tmp/venv-3.13/bin/python",
+        "pass": false,
+        "err": "ModuleNotFoundError: No module named 'distutils'"
+      }
+    ]
+  },
+  {
+    "task": "clean-venv-versions",
+    "arm": "control",
+    "rep": "r1",
+    "pass": false,
+    "results": [
+      {
+        "bin": "/usr/bin/python3.11",
+        "pass": true,
+        "err": ""
+      },
+      {
+        "bin": "/tmp/venv-3.12/bin/python",
+        "pass": false,
+        "err": "ModuleNotFoundError: No module named 'distutils'"
+      },
+      {
+        "bin": "/tmp/venv-3.13/bin/python",
+        "pass": false,
+        "err": "ModuleNotFoundError: No module named 'distutils'"
+      }
+    ]
+  },
+  {
+    "task": "clean-venv-versions",
+    "arm": "control",
+    "rep": "r2",
+    "pass": false,
+    "results": [
+      {
+        "bin": "/usr/bin/python3.11",
+        "pass": true,
+        "err": ""
+      },
+      {
+        "bin": "/tmp/venv-3.12/bin/python",
+        "pass": false,
+        "err": "ModuleNotFoundError: No module named 'distutils'"
+      },
+      {
+        "bin": "/tmp/venv-3.13/bin/python",
+        "pass": false,
+        "err": "ModuleNotFoundError: No module named 'distutils'"
+      }
+    ]
+  },
+  {
+    "task": "no-capsule-duration",
+    "arm": "cafe",
+    "rep": "r1",
+    "pass": false,
+    "results": [
+      {
+        "bin": "/usr/bin/python3.12",
+        "pass": false,
+        "err": "AssertionError: ('1h30m', 1860)"
+      },
+      {
+        "bin": "/usr/bin/python3.13",
+        "pass": false,
+        "err": "AssertionError: ('1h30m', 1860)"
+      }
+    ]
+  },
+  {
+    "task": "no-capsule-duration",
+    "arm": "cafe",
+    "rep": "r2",
+    "pass": false,
+    "results": [
+      {
+        "bin": "/usr/bin/python3.12",
+        "pass": false,
+        "err": "AssertionError: ('1h30m', 1860)"
+      },
+      {
+        "bin": "/usr/bin/python3.13",
+        "pass": false,
+        "err": "AssertionError: ('1h30m', 1860)"
+      }
+    ]
+  },
+  {
+    "task": "no-capsule-duration",
+    "arm": "control",
+    "rep": "r1",
+    "pass": false,
+    "results": [
+      {
+        "bin": "/usr/bin/python3.12",
+        "pass": false,
+        "err": "AssertionError: ('1h30m', 1860)"
+      },
+      {
+        "bin": "/usr/bin/python3.13",
+        "pass": false,
+        "err": "AssertionError: ('1h30m', 1860)"
+      }
+    ]
+  },
+  {
+    "task": "no-capsule-duration",
+    "arm": "control",
+    "rep": "r2",
+    "pass": false,
+    "results": [
+      {
+        "bin": "/usr/bin/python3.12",
+        "pass": false,
+        "err": "AssertionError: ('1h30m', 1860)"
+      },
+      {
+        "bin": "/usr/bin/python3.13",
+        "pass": false,
+        "err": "AssertionError: ('1h30m', 1860)"
+      }
+    ]
+  },
+  {
+    "task": "node24-gzip-stats",
+    "arm": "cafe",
+    "rep": "r1",
+    "pass": false,
+    "results": [
+      {
+        "bin": "/opt/node22/bin/node",
+        "pass": true,
+        "err": ""
+      },
+      {
+        "bin": "/opt/node24/bin/node",
+        "pass": false,
+        "err": "NaN !== 4096"
+      }
+    ]
+  },
+  {
+    "task": "node24-gzip-stats",
+    "arm": "cafe",
+    "rep": "r2",
+    "pass": false,
+    "results": [
+      {
+        "bin": "/opt/node22/bin/node",
+        "pass": true,
+        "err": ""
+      },
+      {
+        "bin": "/opt/node24/bin/node",
+        "pass": false,
+        "err": "NaN !== 4096"
+      }
+    ]
+  },
+  {
+    "task": "node24-gzip-stats",
+    "arm": "control",
+    "rep": "r1",
+    "pass": false,
+    "results": [
+      {
+        "bin": "/opt/node22/bin/node",
+        "pass": true,
+        "err": ""
+      },
+      {
+        "bin": "/opt/node24/bin/node",
+        "pass": false,
+        "err": "NaN !== 4096"
+      }
+    ]
+  },
+  {
+    "task": "node24-gzip-stats",
+    "arm": "control",
+    "rep": "r2",
+    "pass": false,
+    "results": [
+      {
+        "bin": "/opt/node22/bin/node",
+        "pass": true,
+        "err": ""
+      },
+      {
+        "bin": "/opt/node24/bin/node",
+        "pass": false,
+        "err": "NaN !== 4096"
+      }
+    ]
+  },
+  {
+    "task": "py313-plugins",
+    "arm": "cafe",
+    "rep": "r1",
+    "pass": false,
+    "results": [
+      {
+        "bin": "/usr/bin/python3.11",
+        "pass": true,
+        "err": ""
+      },
+      {
+        "bin": "/usr/bin/python3.13",
+        "pass": false,
+        "err": "ModuleNotFoundError: No module named 'imp'"
+      }
+    ]
+  },
+  {
+    "task": "py313-plugins",
+    "arm": "cafe",
+    "rep": "r2",
+    "pass": false,
+    "results": [
+      {
+        "bin": "/usr/bin/python3.11",
+        "pass": true,
+        "err": ""
+      },
+      {
+        "bin": "/usr/bin/python3.13",
+        "pass": false,
+        "err": "ModuleNotFoundError: No module named 'imp'"
+      }
+    ]
+  },
+  {
+    "task": "py313-plugins",
+    "arm": "control",
+    "rep": "r1",
+    "pass": false,
+    "results": [
+      {
+        "bin": "/usr/bin/python3.11",
+        "pass": true,
+        "err": ""
+      },
+      {
+        "bin": "/usr/bin/python3.13",
+        "pass": false,
+        "err": "ModuleNotFoundError: No module named 'imp'"
+      }
+    ]
+  },
+  {
+    "task": "py313-plugins",
+    "arm": "control",
+    "rep": "r2",
+    "pass": false,
+    "results": [
+      {
+        "bin": "/usr/bin/python3.11",
+        "pass": true,
+        "err": ""
+      },
+      {
+        "bin": "/usr/bin/python3.13",
+        "pass": false,
+        "err": "ModuleNotFoundError: No module named 'imp'"
+      }
+    ]
+  }
+]

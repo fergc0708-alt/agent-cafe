@@ -50,7 +50,7 @@
     "files": [
       "*.py"
     ],
-    "pattern": "^\\s*(import\\s+distutils\\b|from\\s+distutils\\s+import)",
+    "pattern": "^\\s*(import\\s+distutils\\b|from\\s+distutils(\\.[.\\w]+)?\\s+import)",
     "note": "Hidden when setuptools is installed in the same environment (it ships a distutils shim)."
   }
 }

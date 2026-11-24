@@ -46,7 +46,8 @@ function timeZone() {
         return undefined;
     }
 }
-export async function fingerprint(projectDir) {
+/** `bins` points at the interpreters that actually run the code (e.g. a deploy venv) instead of PATH. */
+export async function fingerprint(projectDir, bins = {}) {
     const missing = [];
     const pkg = readJson(join(projectDir, "package.json"));
     const kinds = [];
@@ -70,9 +71,9 @@ export async function fingerprint(projectDir) {
     if (pyv)
         declared["python (.python-version)"] = pyv.split("\n")[0];
     const runtimes = [];
-    const nodeV = run("node", ["--version"]);
+    const nodeV = run(bins.node ?? "node", ["--version"]);
     if (nodeV)
-        runtimes.push({ runtime: "node", version: nodeV.replace(/^v/, ""), source: "PATH", details: {} });
+        runtimes.push({ runtime: "node", version: nodeV.replace(/^v/, ""), source: bins.node ? "given interpreter" : "PATH", details: {} });
     else if (kinds.includes("node"))
         missing.push("node is not on PATH");
     const bunV = run("bun", ["--version"]);
@@ -80,11 +81,12 @@ export async function fingerprint(projectDir) {
         runtimes.push({ runtime: "bun", version: bunV, source: "PATH", details: {} });
     // Prefer the project's own virtualenv: that is what the code actually runs with.
     const venvPy = [".venv/bin/python", "venv/bin/python", ".venv/Scripts/python.exe"].map((p) => join(projectDir, p)).find((p) => existsSync(p));
-    const pyBin = venvPy ?? "python3";
+    const given = bins.python3 ?? bins.python;
+    const pyBin = given ?? venvPy ?? "python3";
     const py = run(pyBin, ["-I", "-c", PY_PROBE]);
     if (py) {
         const d = JSON.parse(py);
-        runtimes.push({ runtime: "python", version: d.version, source: venvPy ? "project virtualenv" : "PATH", details: { kind: d.kind, system_site_packages: d.system_site_packages, distutils: d.distutils, setuptools: d.setuptools } });
+        runtimes.push({ runtime: "python", version: d.version, source: given ? "given interpreter" : venvPy ? "project virtualenv" : "PATH", details: { kind: d.kind, system_site_packages: d.system_site_packages, distutils: d.distutils, setuptools: d.setuptools } });
     }
     else if (kinds.includes("python"))
         missing.push("python3 is not available");
