@@ -44,5 +44,12 @@
     "proves": "A Z-suffixed timestamp parses as UTC.",
     "does_not_prove": "Other ISO 8601 variants (week dates, fractional hours) on old Pythons."
   },
-  "author": "cafe-curator"
+  "author": "cafe-curator",
+  "detect": {
+    "files": [
+      "*.py"
+    ],
+    "pattern": "fromisoformat\\(",
+    "note": "Only a problem for strings ending in 'Z' before Python 3.11."
+  }
 }

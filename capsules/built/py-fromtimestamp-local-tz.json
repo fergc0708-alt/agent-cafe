@@ -49,5 +49,12 @@
     "proves": "The epoch is rendered in UTC regardless of TZ.",
     "does_not_prove": "Correct behavior for timestamps before 1970 on Windows."
   },
-  "author": "cafe-curator"
+  "author": "cafe-curator",
+  "detect": {
+    "files": [
+      "*.py"
+    ],
+    "pattern": "\\.fromtimestamp\\([^,)]*\\)",
+    "note": "Calls without tz= depend on the machine's time zone."
+  }
 }

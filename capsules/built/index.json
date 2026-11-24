@@ -4,20 +4,23 @@
     "id": "9a5fab90b52b0772d45eaf53b69e983f26dea1a9a7d1ba5b7fbe181e980f5dac",
     "title": "CommonJS can't require() an ES module (ERR_REQUIRE_ESM): load it with dynamic import()",
     "runtime": "node",
+    "detect": false,
     "lint": []
   },
   {
     "slug": "node-esm-dirname",
-    "id": "1d2f5e4b4865846fb0a775643beb05324259ffcebf328445b4c05cedfd4fa06f",
+    "id": "f40f1ba0e8f48d76465f752c3c9d3643b2f02a2590f42e98b8e60f60e176ecd8",
     "title": "__dirname is not defined in ES modules: use import.meta.dirname",
     "runtime": "node",
+    "detect": true,
     "lint": []
   },
   {
     "slug": "node-ts-parameter-properties",
-    "id": "c1d21f8432e272c46e82ce544cd5bfd22cb7b2a3ba5829caa03c7b84abedf08b",
+    "id": "d9f80afeb0cdce8a4d2d5edaaf34a55dc008089be0969206d330db791a8d6ee0",
     "title": "Node type stripping rejects TypeScript parameter properties: declare fields explicitly",
     "runtime": "node",
+    "detect": true,
     "lint": []
   },
   {
@@ -25,13 +28,15 @@
     "id": "de798c279baa7473fcba4f3582db50efea9a3cee77c1f222c45dead8ae3f365d",
     "title": "Node type stripping needs explicit .ts extensions in imports",
     "runtime": "node",
+    "detect": false,
     "lint": []
   },
   {
     "slug": "node-import-assert-to-with",
-    "id": "de303042d3ff1fd03406fc603ca22d533e7e6a8b8fbf30754212da004e752f31",
+    "id": "5b14240681b47b135205fcab4b610d5c0d489f434236b4f430ff3de309749846",
     "title": "Import assertions (assert { type: 'json' }) were removed in Node 22: use import attributes (with)",
     "runtime": "node",
+    "detect": true,
     "lint": []
   },
   {
@@ -39,6 +44,7 @@
     "id": "35c87d3615acc631a1c32d70618cf5f1f1c65ba626a5091be8af78e2ebed22bd",
     "title": "(OLD FIX) Importing JSON in ESM: add assert { type: 'json' }",
     "runtime": "node",
+    "detect": false,
     "lint": []
   },
   {
@@ -46,6 +52,7 @@
     "id": "8270e0d0aafbcf1daef856ac2ded1bcbb3d1b5ebd87b9925bd6905dc6c27f1a1",
     "title": "Importing JSON in ESM: add with { type: 'json' } (import attributes)",
     "runtime": "node",
+    "detect": false,
     "lint": []
   },
   {
@@ -53,6 +60,7 @@
     "id": "aac7c0c50203d5b37fb013c9e3e763f69f25d88fd83eebc8e8358ce9a392c06a",
     "title": "Top-level await is not allowed in CommonJS: wrap it in an async function",
     "runtime": "node",
+    "detect": false,
     "lint": []
   },
   {
@@ -60,6 +68,7 @@
     "id": "66b19192fdec52de6cc5a91ff29c8ee691b8ff0a8a7f76647b015a16feb4f4e2",
     "title": "JSON deep copy turns Dates into strings: use structuredClone",
     "runtime": "node",
+    "detect": false,
     "lint": []
   },
   {
@@ -67,6 +76,7 @@
     "id": "681e0caf441bb1032c10f58b9b31b4a22ef54b42817cf7dfb6847f51949e1061",
     "title": "Array.prototype.sort mutates the input: use toSorted for a sorted copy",
     "runtime": "node",
+    "detect": false,
     "lint": []
   },
   {
@@ -74,6 +84,7 @@
     "id": "9b5a0ede5d3faac83bcb141f0768360ed33c263cd46b18dd7a0c4a6f679894ff",
     "title": "Summing prices with floats gives 0.30000000000000004: add integer cents",
     "runtime": "node",
+    "detect": false,
     "lint": []
   },
   {
@@ -81,27 +92,31 @@
     "id": "c53ae9a9ad90fc871e34c16fcca48461f82f6a8ab4e2853f17037c740023e4a6",
     "title": "JSON.stringify throws on BigInt: serialize it as a string",
     "runtime": "node",
+    "detect": false,
     "lint": []
   },
   {
     "slug": "py-fromisoformat-z",
-    "id": "29961a538fe001a3c4e5bdfa35b0e17bcaa79650dd2571d6633c1370b01b872a",
+    "id": "149e923e1c72c41d5f2630899072e60b0f0460f7ce892892ee299685b45aa2f8",
     "title": "datetime.fromisoformat rejects a trailing 'Z' before Python 3.11: normalize it to +00:00",
     "runtime": "python",
+    "detect": true,
     "lint": []
   },
   {
     "slug": "py-utcnow-deprecated",
-    "id": "b45cd8185730b2006443889171c850105adccc096a47a6a3f389c64b9b5ee9dc",
+    "id": "cb8b31c7381071ee629cf99a4f26177d1f15b097f326a402888a5f0393f2ecd6",
     "title": "datetime.utcnow() is deprecated and naive: use datetime.now(timezone.utc)",
     "runtime": "python",
+    "detect": true,
     "lint": []
   },
   {
     "slug": "py-distutils-removed",
-    "id": "5e43b822d4f7fb8a056134c8a807c591395d58871e9305b15eae2ce7fd7575fe",
+    "id": "e1afecc73fa414c59f1ffe1dd66218cda603f6c8128fc2108dd99efc43ac9715",
     "title": "distutils was removed in Python 3.12: stop using distutils.version.LooseVersion",
     "runtime": "python",
+    "detect": true,
     "lint": []
   },
   {
@@ -109,6 +124,7 @@
     "id": "b8659d78b2dcddb469e2482f159708ace3a375c3bd6de6b011f36b9d30596d45",
     "title": "CSV header starts with \\ufeff (BOM from Excel): open with encoding='utf-8-sig'",
     "runtime": "python",
+    "detect": false,
     "lint": []
   },
   {
@@ -116,6 +132,7 @@
     "id": "3b2660683e10edad0fc2f4cfabf91231f3c20188e54e13cafc3760589f90d835",
     "title": "Mutable default argument keeps state between calls: default to None",
     "runtime": "python",
+    "detect": false,
     "lint": []
   },
   {
@@ -123,6 +140,7 @@
     "id": "b77e55e06438e6753657ac883134bc5e38f9a95c67febf6077f4441b009cebb9",
     "title": "str.lstrip('abc_') strips characters, not a prefix: use removeprefix",
     "runtime": "python",
+    "detect": false,
     "lint": []
   },
   {
@@ -130,13 +148,15 @@
     "id": "402994d16cd708818a30ef66f8903bd870d6e6f52a2f3bc75e776d4e80489bbe",
     "title": "f-string SQL lets input rewrite the query: use parameter placeholders",
     "runtime": "python",
+    "detect": false,
     "lint": []
   },
   {
     "slug": "py-fromtimestamp-local-tz",
-    "id": "7199a245f7fc4d00fcb3fdf95875bab95dc447680a84c5143eb5b8269c1295ed",
+    "id": "277f02aa8b9ecc789ad51fb26684bbfa03e204e32ef54341801232428e30ae4c",
     "title": "datetime.fromtimestamp(0) depends on the machine's time zone: pass tz=timezone.utc",
     "runtime": "python",
+    "detect": true,
     "lint": []
   },
   {
@@ -144,6 +164,7 @@
     "id": "15dcae65b091361afca8052c01ddcf0e9097cd912d67f4db413e3fbd9e302059",
     "title": "(OLD FIX) Detect PNG files regardless of extension with imghdr.what",
     "runtime": "python",
+    "detect": false,
     "lint": []
   },
   {
@@ -151,6 +172,7 @@
     "id": "eaeac3f6686c53a2d2df461ed9e534fc277844be2c0775520fa478e074144765",
     "title": "Detect PNG files by their magic bytes (imghdr is gone in Python 3.13)",
     "runtime": "python",
+    "detect": false,
     "lint": []
   },
   {
@@ -158,6 +180,7 @@
     "id": "d7bbcc42b46d24e5180ad93a7b1904cbd3ae0fe171ab64ef10f72715f57c08eb",
     "title": "A failing command in a pipeline is ignored: set -eo pipefail",
     "runtime": "bash",
+    "detect": false,
     "lint": []
   },
   {
@@ -165,6 +188,151 @@
     "id": "b0a1812fca95d59d2be86a34aaeb99d3f801b1594ebf6b912b96a5f40a1f1c81",
     "title": "read mangles backslashes and leading spaces: use IFS= read -r",
     "runtime": "bash",
+    "detect": false,
+    "lint": []
+  },
+  {
+    "slug": "py-imghdr-removed",
+    "id": "cb0f21827de738fd7b73a69760423101178777f0a99da550c5bece3fdfd6aea3",
+    "title": "imghdr was removed in Python 3.13: detect PNG by its magic bytes",
+    "runtime": "python",
+    "detect": true,
+    "lint": []
+  },
+  {
+    "slug": "py-pipes-removed",
+    "id": "90cb4a7f4ba4232c04cc924fc332ff1d8dd4781e1dd5cb482de95afe136b7438",
+    "title": "pipes was removed in Python 3.13: use shlex.quote",
+    "runtime": "python",
+    "detect": true,
+    "lint": []
+  },
+  {
+    "slug": "py-cgi-parse-header",
+    "id": "fafcf8995d65a5d2ec457e60a24edc06cbbf4d7571b908db4fd021d78d6f3018",
+    "title": "cgi was removed in Python 3.13: parse Content-Type with email.message",
+    "runtime": "python",
+    "detect": true,
+    "lint": []
+  },
+  {
+    "slug": "py-unittest-makesuite",
+    "id": "8c3b1804c8160e4cc7fd87d4ef3dc9d552ac4d0b57f363adf73a178d17dfccf1",
+    "title": "unittest.makeSuite was removed in Python 3.13: use TestLoader().loadTestsFromTestCase",
+    "runtime": "python",
+    "detect": true,
+    "lint": []
+  },
+  {
+    "slug": "py-typing-io",
+    "id": "4fdaa44fd2cef785e3323817bce1cb5856332e1ed7b83c43e95f662542e75215",
+    "title": "typing.io / typing.re were removed in Python 3.13: import IO, Pattern from typing",
+    "runtime": "python",
+    "detect": true,
+    "lint": []
+  },
+  {
+    "slug": "py-uu-removed",
+    "id": "2f86b7fe3dd57de41b0fe79770fbc4ad62df6c174dfc4ab2c391d6245fffcc76",
+    "title": "uu was removed in Python 3.13: use binascii.b2a_uu",
+    "runtime": "python",
+    "detect": true,
+    "lint": []
+  },
+  {
+    "slug": "py-imp-removed",
+    "id": "5b132a7cc9780f2e0769431a892850978372957d6ea332602b166ee62d73c2e5",
+    "title": "imp was removed in Python 3.12: load modules with importlib.util",
+    "runtime": "python",
+    "detect": true,
+    "lint": []
+  },
+  {
+    "slug": "py-unittest-assertequals",
+    "id": "224737f4ecca52db2f5406adcb37a6f749bc1befbdfcfd397a40e908ca05ca36",
+    "title": "assertEquals and other unittest aliases were removed in Python 3.12: use assertEqual",
+    "runtime": "python",
+    "detect": true,
+    "lint": []
+  },
+  {
+    "slug": "py-safeconfigparser",
+    "id": "90e3e4338fa4fcffa7b515457e30f940319a1c75151ecea95ce3db0b2d770c7e",
+    "title": "configparser.SafeConfigParser was removed in Python 3.12: use ConfigParser",
+    "runtime": "python",
+    "detect": true,
+    "lint": []
+  },
+  {
+    "slug": "py-ssl-wrap-socket",
+    "id": "70add3874b6d0c5444dad69c5e299af2295ac3b644aab0c18abbf34a2871b20a",
+    "title": "ssl.wrap_socket was removed in Python 3.12: use an SSLContext",
+    "runtime": "python",
+    "detect": true,
+    "lint": []
+  },
+  {
+    "slug": "py-locale-format",
+    "id": "8f8197fa9130e8ebec2e18cbd616827f3215cacc16bae10e851e177d25da536e",
+    "title": "locale.format was removed in Python 3.12: use locale.format_string",
+    "runtime": "python",
+    "detect": true,
+    "lint": []
+  },
+  {
+    "slug": "py-getargspec",
+    "id": "a4cc69f7f6944c23d947a4035d02e477a4e739a847fd879180f9478709b4bf06",
+    "title": "inspect.getargspec was removed in Python 3.11: use getfullargspec or signature",
+    "runtime": "python",
+    "detect": true,
+    "lint": []
+  },
+  {
+    "slug": "py-asyncio-coroutine",
+    "id": "0d058b23dd05877108fd44ab1bbaeea71d6c83509d3eec752c6a5b7f2c8514e3",
+    "title": "@asyncio.coroutine was removed in Python 3.11: use async def",
+    "runtime": "python",
+    "detect": true,
+    "lint": []
+  },
+  {
+    "slug": "node-util-is-removed",
+    "id": "0a718104aa30bad76e9f8ffea88eb95e51dd1e6b02344a27469cef54a20ce705",
+    "title": "util.isBoolean/isString/... were removed in Node 23+: use typeof and Array.isArray",
+    "runtime": "node",
+    "detect": true,
+    "lint": []
+  },
+  {
+    "slug": "node-util-log",
+    "id": "d163902dd4747568eea1eac9884a6b63675426f2da7e00fe565ce98561de06e2",
+    "title": "util.log was removed in Node 23+: log with console.log and your own timestamp",
+    "runtime": "node",
+    "detect": true,
+    "lint": []
+  },
+  {
+    "slug": "node-dirent-path",
+    "id": "f14f5a2f0cc83f88ab7d137ac7c746d25ceb7196e9b95da6a07af87ed0f6534c",
+    "title": "Dirent.path was removed in Node 24: use dirent.parentPath (Node >= 20.12)",
+    "runtime": "node",
+    "detect": true,
+    "lint": []
+  },
+  {
+    "slug": "node-zlib-bytesread",
+    "id": "91d79fb7e822a479f7acc57baed11156c9a3cb6acf0aa5c4f5b839aac43dd404",
+    "title": "zlib bytesRead was removed in Node 24: use bytesWritten",
+    "runtime": "node",
+    "detect": true,
+    "lint": []
+  },
+  {
+    "slug": "node-crypto-createcipher",
+    "id": "0236351d92dd1bb72d0950603ac9efad7f8786289130399b996c09a4b690bf27",
+    "title": "crypto.createCipher was removed in Node 22: use createCipheriv with a real key and IV",
+    "runtime": "node",
+    "detect": true,
     "lint": []
   }
 ]

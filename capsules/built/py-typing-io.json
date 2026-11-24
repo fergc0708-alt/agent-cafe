@@ -1,0 +1,54 @@
+{
+  "schema": "agent-cafe.capsule/v0.1",
+  "title": "typing.io / typing.re were removed in Python 3.13: import IO, Pattern from typing",
+  "problem": {
+    "symptom": "ModuleNotFoundError: No module named 'typing.io'",
+    "description": "The typing.io and typing.re pseudo-submodules warned since 3.8 and are gone in 3.13.",
+    "tags": [
+      "python",
+      "typing",
+      "removed-3.13"
+    ],
+    "refs": [
+      "https://docs.python.org/3/whatsnew/3.13.html"
+    ],
+    "symptom_regex": "typing\\.(io|re)"
+  },
+  "runtime": "python",
+  "applicability": {
+    "claims": {
+      "python": ">=3.5"
+    }
+  },
+  "before": {
+    "files": {
+      "types_.py": "from typing.io import IO\n\n\ndef name(f: IO) -> str:\n    return f.name\n"
+    }
+  },
+  "after": {
+    "files": {
+      "types_.py": "from typing import IO\n\n\ndef name(f: IO) -> str:\n    return f.name\n"
+    }
+  },
+  "check": {
+    "run": [
+      "python3",
+      "check.py"
+    ],
+    "files": {
+      "check.py": "import typing\nfrom types_ import name\n\nwith open('x.txt', 'w') as f:\n    assert name(f) == 'x.txt'\nassert name.__annotations__['f'] is typing.IO\n"
+    },
+    "timeout_ms": 10000
+  },
+  "limitations": {
+    "proves": "The annotation resolves to typing.IO and the function works.",
+    "does_not_prove": "Third-party stubs that still reference typing.io."
+  },
+  "author": "cafe-curator",
+  "detect": {
+    "files": [
+      "*.py"
+    ],
+    "pattern": "typing\\.(io|re)\\b"
+  }
+}

@@ -16,13 +16,16 @@ export interface AttestationRecord {
   created_at: string;
   /** Result came from a runner whose identity the registry verified. */
   trusted?: boolean;
+  /** For verified results: who controls the runner identity (e.g. "github:<repository_owner_id>"). */
+  identity_owner?: string;
 }
 
-export type EvidenceLevel = "draft" | "author_observed" | "runner_replayed" | "cross_runner_reproduced" | "independent_check_confirmed";
+export type EvidenceLevel = "draft" | "author_observed" | "ci_reproduced" | "runner_replayed" | "cross_runner_reproduced" | "independent_check_confirmed";
 
 export const LEVEL_MEANING: Record<EvidenceLevel, string> = {
   draft: "Submitted, never executed by a registered runner.",
   author_observed: "The author's own runner saw the check fail without the fix and pass with it.",
+  ci_reproduced: "A runner with a verified identity (e.g. a trusted GitHub Actions workflow on a GitHub-hosted runner) reproduced fail->pass. Its owner may be the author: this proves where it ran, not independence.",
   runner_replayed: "A runner owned by someone other than the author reproduced fail->pass.",
   cross_runner_reproduced: "At least two different runners reproduced fail->pass (different machines/keys; the check is still the author's).",
   independent_check_confirmed: "A second check written by a different author also goes fail->pass on the same fix.",
@@ -185,6 +188,14 @@ export function evidenceView(
   const verifiedAtts = atts.filter((a) => a.trusted);
   const verified = summarize(verifiedAtts, { ...opts, siblingIndependentPass: opts.siblingVerifiedPass });
   const claimed = summarize(atts, { ...opts, siblingIndependentPass: opts.siblingClaimedPass });
+  // Verified ladder: counted by identity OWNER (two jobs of the same repo owner are not independent).
+  const passes = verifiedAtts.filter(sensitivePass);
+  const owners = new Set(passes.map((a) => a.identity_owner ?? a.owner_id));
+  let level: EvidenceLevel = passes.length === 0 ? "draft" : owners.size >= 2 ? "cross_runner_reproduced" : "ci_reproduced";
+  if (level !== "draft" && opts.siblingVerifiedPass) level = "independent_check_confirmed";
+  if (level !== "draft" && verified.flags.some((f) => f.startsWith("weak_check"))) level = "ci_reproduced";
+  verified.level = level;
+  verified.meaning = LEVEL_MEANING[level];
   if (!verifiedAtts.length) verified.statement = "No result from a verified runner yet. See `claimed` for self-reported results.";
   return {
     ...verified,

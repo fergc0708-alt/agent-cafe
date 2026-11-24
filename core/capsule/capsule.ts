@@ -24,6 +24,31 @@ export interface Capsule {
   author: string;
   /** Capsule ids this one replaces (e.g. an older fix that stopped working). */
   supersedes?: string[];
+  /** How `cafe doctor` finds code affected by this problem in a project (runs locally, never uploaded). */
+  detect?: Detect;
+}
+
+export interface Detect {
+  /** File globs of the form "*.ext". */
+  files: string[];
+  /** Line regex (JavaScript syntax) that marks a likely affected line. */
+  pattern: string;
+  /** Optional regex that must ALSO appear somewhere in the same file. */
+  also?: string;
+  /** Shown with every hit, e.g. "only if you run .ts files directly with Node". */
+  note?: string;
+}
+
+/** Rejects regexes that are long or have nested quantifiers (catastrophic backtracking on user files). */
+export function safeRegex(src: unknown, max = 160): string | null {
+  if (typeof src !== "string" || !src || src.length > max) return null;
+  if (/\([^)]*[*+][^)]*\)\s*[*+{]/.test(src) || /(\.\*){3,}/.test(src)) return null;
+  try {
+    new RegExp(src);
+    return src;
+  } catch {
+    return null;
+  }
 }
 
 const INTERPRETERS = new Set(["node", "python3", "python", "bash", "sh", "bun"]);
@@ -90,16 +115,10 @@ export function validateCapsule(input: unknown): ValidationResult {
   if (!description) errors.push("problem.description is required");
   let symptomRegex: string | undefined;
   if (p.symptom_regex !== undefined) {
-    if (typeof p.symptom_regex !== "string" || p.symptom_regex.length > 200) errors.push("problem.symptom_regex must be a string <= 200 chars");
-    else {
-      try {
-        new RegExp(p.symptom_regex);
-        symptomRegex = p.symptom_regex;
-      } catch {
-        errors.push("problem.symptom_regex is not a valid regular expression");
-      }
-    }
+    symptomRegex = safeRegex(p.symptom_regex, 200) ?? undefined;
+    if (!symptomRegex) errors.push("problem.symptom_regex must be a valid regex <= 200 chars without nested quantifiers");
   }
+
   const tags = Array.isArray(p.tags) ? p.tags.filter((t: unknown) => typeof t === "string").slice(0, 10) : [];
   const refs = Array.isArray(p.refs) ? p.refs.filter((r: unknown) => typeof r === "string" && /^https:\/\//.test(r)).slice(0, 10) : [];
   if (!RUNTIMES.includes(o.runtime)) errors.push(`runtime must be one of ${RUNTIMES.join(", ")}`);
@@ -146,6 +165,16 @@ export function validateCapsule(input: unknown): ValidationResult {
   if (!proves || !doesNot) errors.push("limitations.proves and limitations.does_not_prove are required");
   const author = str(o.author, 64);
   if (!author) errors.push("author is required");
+  let detect: Detect | undefined;
+  if (o.detect !== undefined) {
+    const d = o.detect ?? {};
+    const files = Array.isArray(d.files) ? d.files.filter((f: unknown) => typeof f === "string" && /^\*\.[a-z0-9]{1,6}$/.test(f)).slice(0, 8) : [];
+    const pattern = safeRegex(d.pattern, 240);
+    const also = d.also === undefined ? undefined : safeRegex(d.also);
+    const note = d.note === undefined ? undefined : str(d.note, 300);
+    if (!files.length || !pattern || also === null || note === null) errors.push('detect must be {files: ["*.py"], pattern: <safe regex <= 240 chars>, also?: <safe regex>, note?: string}');
+    else detect = { files, pattern, ...(also ? { also } : {}), ...(note ? { note } : {}) };
+  }
   if (errors.length) return { ok: false, errors };
   const capsule: Capsule = {
     schema: CAPSULE_SCHEMA,
@@ -162,6 +191,7 @@ export function validateCapsule(input: unknown): ValidationResult {
     check: { run: run as string[], files: checkF, ...(Object.keys(env).length ? { env } : {}), timeout_ms: timeout },
     limitations: { proves: proves!, does_not_prove: doesNot! },
     author: author!,
+    ...(detect ? { detect } : {}),
     ...(Array.isArray(o.supersedes) ? { supersedes: o.supersedes.filter((s: unknown) => typeof s === "string" && /^[0-9a-f]{64}$/.test(s as string)) } : {}),
   };
   return { ok: true, errors: [], capsule };

@@ -1,0 +1,56 @@
+{
+  "schema": "agent-cafe.capsule/v0.1",
+  "title": "imp was removed in Python 3.12: load modules with importlib.util",
+  "problem": {
+    "symptom": "ModuleNotFoundError: No module named 'imp'",
+    "description": "The imp module, deprecated since 3.4, is gone in 3.12. importlib.util.spec_from_file_location replaces load_source.",
+    "tags": [
+      "python",
+      "imp",
+      "importlib",
+      "plugins",
+      "removed-3.12"
+    ],
+    "refs": [
+      "https://docs.python.org/3/whatsnew/3.12.html"
+    ],
+    "symptom_regex": "No module named '?imp'"
+  },
+  "runtime": "python",
+  "applicability": {
+    "claims": {
+      "python": ">=3.5"
+    }
+  },
+  "before": {
+    "files": {
+      "plugins.py": "import imp\n\n\ndef load(path):\n    return imp.load_source('plugin', path)\n"
+    }
+  },
+  "after": {
+    "files": {
+      "plugins.py": "import importlib.util\nimport sys\n\n\ndef load(path):\n    spec = importlib.util.spec_from_file_location('plugin', path)\n    mod = importlib.util.module_from_spec(spec)\n    sys.modules['plugin'] = mod\n    spec.loader.exec_module(mod)\n    return mod\n"
+    }
+  },
+  "check": {
+    "run": [
+      "python3",
+      "check.py"
+    ],
+    "files": {
+      "check.py": "import os\nfrom plugins import load\n\nos.makedirs('p', exist_ok=True)\nwith open('p/plug.py', 'w') as f:\n    f.write('VALUE = 41 + 1\\n')\nm = load('p/plug.py')\nassert m.VALUE == 42, m.VALUE\n"
+    },
+    "timeout_ms": 10000
+  },
+  "limitations": {
+    "proves": "A module is loaded from an arbitrary path and executed.",
+    "does_not_prove": "Other imp functions (find_module, reload: use importlib.reload)."
+  },
+  "author": "cafe-curator",
+  "detect": {
+    "files": [
+      "*.py"
+    ],
+    "pattern": "^\\s*(import\\s+imp\\b|from\\s+imp\\s+import)"
+  }
+}

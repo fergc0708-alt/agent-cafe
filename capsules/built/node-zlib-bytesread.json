@@ -1,0 +1,59 @@
+{
+  "schema": "agent-cafe.capsule/v0.1",
+  "title": "zlib bytesRead was removed in Node 24: use bytesWritten",
+  "problem": {
+    "symptom": "Compression stats are NaN/undefined: zlib stream bytesRead is undefined",
+    "description": "The misnamed zlib bytesRead property (deprecated since Node 10) is undefined in Node 24; bytesWritten has the same value.",
+    "tags": [
+      "node",
+      "zlib",
+      "removed-node-24"
+    ],
+    "refs": [
+      "https://nodejs.org/api/zlib.html#zlibbyteswritten"
+    ]
+  },
+  "runtime": "node",
+  "applicability": {
+    "claims": {
+      "node": ">=10"
+    }
+  },
+  "before": {
+    "files": {
+      "gz.cjs": "const zlib = require('node:zlib');\nexports.gzipStats = (buf) => new Promise((res) => { const z = zlib.createGzip(); const out = []; z.on('data', (c) => out.push(c)); z.on('end', () => res({ input: z.bytesRead, output: Buffer.concat(out).length })); z.end(buf); });\n"
+    }
+  },
+  "after": {
+    "files": {
+      "gz.cjs": "const zlib = require('node:zlib');\nexports.gzipStats = (buf) => new Promise((res) => { const z = zlib.createGzip(); const out = []; z.on('data', (c) => out.push(c)); z.on('end', () => res({ input: z.bytesWritten, output: Buffer.concat(out).length })); z.end(buf); });\n"
+    }
+  },
+  "check": {
+    "run": [
+      "node",
+      "check.cjs"
+    ],
+    "files": {
+      "check.cjs": "const assert = require('node:assert');\nrequire('./gz.cjs').gzipStats(Buffer.alloc(5000, 'a')).then((s) => { assert.strictEqual(s.input, 5000); assert.ok(s.output > 0 && s.output < 5000); }).catch((e) => { console.error(e.message); process.exit(1); });\n"
+    },
+    "timeout_ms": 10000
+  },
+  "limitations": {
+    "proves": "The number of input bytes is reported correctly.",
+    "does_not_prove": "Other zlib stream properties."
+  },
+  "author": "cafe-curator",
+  "detect": {
+    "files": [
+      "*.js",
+      "*.cjs",
+      "*.mjs",
+      "*.ts",
+      "*.mts",
+      "*.cts"
+    ],
+    "pattern": "\\.bytesRead\\b",
+    "also": "zlib"
+  }
+}

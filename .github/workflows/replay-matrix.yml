@@ -1,13 +1,14 @@
-name: Capsule replay matrix (Experiment E)
+name: Capsule replay matrix (verified CI evidence)
 # Replays the capsule catalog on GitHub-hosted runners with runtimes not available locally.
 # Read-only: no secrets are used, nothing is published; results are uploaded as a workflow artifact.
 on:
   workflow_dispatch:
   push:
     branches: ["goat/**"]
-    paths: ["capsules/**", "cli/**", "core/capsule/**", "experiments/v2/**", ".github/workflows/replay-matrix.yml"]
+    paths: ["capsules/**", "cli/**", "core/capsule/**", "experiments/v2/ci-replay.ts", ".github/workflows/replay-matrix.yml"]
 permissions:
   contents: read
+  id-token: write # OIDC token that binds this job's identity to its signed results
 jobs:
   replay:
     runs-on: ubuntu-latest
@@ -19,7 +20,9 @@ jobs:
           - { runtime: node, version: "20.18.0" }
           - { runtime: node, version: "22.11.0" }
           - { runtime: node, version: "22" }
+          - { runtime: node, version: "24" }
           - { runtime: python, version: "3.10" }
+          - { runtime: python, version: "3.11" }
           - { runtime: python, version: "3.12" }
           - { runtime: python, version: "3.13" }
           - { runtime: bash, version: system }
@@ -47,7 +50,7 @@ jobs:
         env:
           TARGET_RUNTIME: ${{ matrix.runtime }}
           LABEL: ci-${{ matrix.runtime }}-${{ matrix.version }}
-          IMPORT_AS: ci-runner-${{ matrix.runtime == 'node' && 'a' || 'b' }}
+          IMPORT_AS: ci-runner
       - uses: actions/upload-artifact@v4
         with:
           name: replay-${{ matrix.runtime }}-${{ matrix.version }}

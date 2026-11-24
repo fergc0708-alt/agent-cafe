@@ -1,0 +1,54 @@
+{
+  "schema": "agent-cafe.capsule/v0.1",
+  "title": "inspect.getargspec was removed in Python 3.11: use getfullargspec or signature",
+  "problem": {
+    "symptom": "AttributeError: module 'inspect' has no attribute 'getargspec'",
+    "description": "getargspec (deprecated since 3.0) is gone in 3.11.",
+    "tags": [
+      "python",
+      "inspect",
+      "removed-3.11"
+    ],
+    "refs": [
+      "https://docs.python.org/3/whatsnew/3.11.html"
+    ],
+    "symptom_regex": "has no attribute 'getargspec'"
+  },
+  "runtime": "python",
+  "applicability": {
+    "claims": {
+      "python": ">=3.0"
+    }
+  },
+  "before": {
+    "files": {
+      "intro.py": "import inspect\n\n\ndef params(f):\n    return inspect.getargspec(f).args\n"
+    }
+  },
+  "after": {
+    "files": {
+      "intro.py": "import inspect\n\n\ndef params(f):\n    return inspect.getfullargspec(f).args\n"
+    }
+  },
+  "check": {
+    "run": [
+      "python3",
+      "check.py"
+    ],
+    "files": {
+      "check.py": "from intro import params\n\n\ndef f(a, b=2, *rest, **kw):\n    pass\n\n\nassert params(f) == ['a', 'b'], params(f)\nassert params(lambda: 0) == []\n"
+    },
+    "timeout_ms": 10000
+  },
+  "limitations": {
+    "proves": "Positional parameter names match getargspec's.",
+    "does_not_prove": "Keyword-only parameters (getargspec refused them; getfullargspec reports them separately)."
+  },
+  "author": "cafe-curator",
+  "detect": {
+    "files": [
+      "*.py"
+    ],
+    "pattern": "getargspec\\("
+  }
+}

@@ -241,7 +241,7 @@ async function apiFlow(makeStore: () => Promise<Store>) {
   };
   await trustRunner(keys[1]);
   r = await call("POST", `/api/v1/capsules/${id}/attestations`, await env(keys[1], { ...(await pred("PASS", "3.11.9")) } as ReplayPredicate), other);
-  expect(r.json.evidence.level).toBe("runner_replayed");
+  expect(r.json.evidence.level).toBe("ci_reproduced"); // one verified identity owner: proves where, not independence
   expect(r.json.evidence.verified_runners).toBe(1);
 
   // independent check: same fix, different check, different author, replayed by a non-author
@@ -252,10 +252,10 @@ async function apiFlow(makeStore: () => Promise<Store>) {
   await call("POST", `/api/v1/capsules/${isub.json.id}/attestations`, await env(keys[2], await pred("PASS", "3.12.3", indep), isub.json.id), third);
   let view = await call("GET", `/api/v1/capsules/${id}`);
   expect(view.json.evidence.claimed.level).toBe("independent_check_confirmed");
-  expect(view.json.evidence.level).toBe("runner_replayed"); // the sibling's runner is not verified
+  expect(view.json.evidence.level).toBe("ci_reproduced"); // the sibling's runner is not verified
   // the sibling's author (other-agent) replaying its own check does not count; a verified non-author runner does
   await call("POST", `/api/v1/capsules/${isub.json.id}/attestations`, await env(keys[1], await pred("PASS", "3.12.3", indep), isub.json.id), other);
-  expect((await call("GET", `/api/v1/capsules/${id}`)).json.evidence.level).toBe("runner_replayed");
+  expect((await call("GET", `/api/v1/capsules/${id}`)).json.evidence.level).toBe("ci_reproduced");
   await trustRunner(keys[0]);
   await call("POST", `/api/v1/capsules/${isub.json.id}/attestations`, await env(keys[0], await pred("PASS", "3.12.3", indep), isub.json.id), author);
   view = await call("GET", `/api/v1/capsules/${id}`);

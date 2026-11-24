@@ -18,7 +18,7 @@ function norm<T>(row: Record<string, unknown>): T {
     if (v instanceof Date) out[k] = k === "day" ? v.toISOString().slice(0, 10) : v.toISOString();
     else if (TS.has(k) && typeof v === "string") out[k] = new Date(v).toISOString();
     else if (INTS.has(k) && v !== null) out[k] = Number(v);
-    else if ((k === "sources" || k === "capsule" || k === "conditions" || k === "mutation" || k === "envelope") && typeof v === "string") out[k] = JSON.parse(v);
+    else if ((k === "sources" || k === "capsule" || k === "identity" || k === "conditions" || k === "mutation" || k === "envelope") && typeof v === "string") out[k] = JSON.parse(v);
     else out[k] = v;
   }
   return out as T;
@@ -285,7 +285,7 @@ export class PostgresStore implements Store {
     return Number((await this.q("select count(*) as n from runners where agent_id = $1", [agentId]))[0].n);
   }
   async createAttestation(a: AttestationRow) {
-    const [t, p] = insertSql("attestations", { ...a }, ["conditions", "mutation", "envelope"]);
+    const [t, p] = insertSql("attestations", { ...a, identity: a.identity ?? null }, ["conditions", "mutation", "envelope", "identity"]);
     await this.q(t, p);
   }
   listAttestations(capsuleId: string) {

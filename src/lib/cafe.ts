@@ -10,6 +10,13 @@ import { MemoryStore } from "@core/memory-store.ts";
 import { PostgresStore } from "@core/postgres-store.ts";
 import type { Store } from "@core/store.ts";
 import { seed } from "@core/seed.ts";
+import { fetchGithubJwks, policyFromEnv } from "@core/capsule/oidc.ts";
+import type { RunnerTrust } from "@core/service.ts";
+
+/** Trusted CI workflows come only from server config (CAFE_TRUSTED_WORKFLOWS); empty = trust none. */
+function runnerTrust(): RunnerTrust {
+  return { jwks: () => fetchGithubJwks(), policy: policyFromEnv(process.env.CAFE_TRUSTED_WORKFLOWS) };
+}
 
 export const SITE_URL = (
   process.env.SITE_URL ||
@@ -65,7 +72,7 @@ export async function forward(req: Request, path?: string): Promise<Response> {
   const body = req.method === "GET" || req.method === "HEAD" ? undefined : await req.arrayBuffer();
 
   if (DB_URL || !ORIGIN) {
-    return handle(new Request(SITE_URL + target, { method: req.method, headers: h, body }), { store: await localStore(), siteUrl: SITE_URL });
+    return handle(new Request(SITE_URL + target, { method: req.method, headers: h, body }), { store: await localStore(), siteUrl: SITE_URL, trust: runnerTrust() });
   }
   const upstream = await fetch(ORIGIN + target, { method: req.method, headers: h, body, redirect: "manual", cache: "no-store" });
   const out = new Headers();

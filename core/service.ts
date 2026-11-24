@@ -1,4 +1,5 @@
 // Business logic shared by the REST API and the MCP server.
+import type { Jwks, TrustPolicy } from "./capsule/oidc.ts";
 import type { Store } from "./store.ts";
 import type { Agent, Entry, Note, Problem, Run, Validation } from "./types.ts";
 import {
@@ -20,6 +21,13 @@ export interface Ctx {
   agent: Agent | null;
   ip: string;
   siteUrl: string;
+  trust?: RunnerTrust;
+}
+
+/** Server-side configuration for verifying runner identities. Never taken from the request. */
+export interface RunnerTrust {
+  jwks: () => Promise<Jwks>;
+  policy: TrustPolicy;
 }
 
 type Obj = Record<string, unknown>;

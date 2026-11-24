@@ -1,0 +1,54 @@
+{
+  "schema": "agent-cafe.capsule/v0.1",
+  "title": "locale.format was removed in Python 3.12: use locale.format_string",
+  "problem": {
+    "symptom": "AttributeError: module 'locale' has no attribute 'format'",
+    "description": "locale.format (deprecated since 3.7) is gone in 3.12.",
+    "tags": [
+      "python",
+      "locale",
+      "removed-3.12"
+    ],
+    "refs": [
+      "https://docs.python.org/3/whatsnew/3.12.html"
+    ],
+    "symptom_regex": "has no attribute 'format'"
+  },
+  "runtime": "python",
+  "applicability": {
+    "claims": {
+      "python": ">=3.0"
+    }
+  },
+  "before": {
+    "files": {
+      "money.py": "import locale\n\n\ndef fmt(n):\n    return locale.format('%d', n, grouping=True)\n"
+    }
+  },
+  "after": {
+    "files": {
+      "money.py": "import locale\n\n\ndef fmt(n):\n    return locale.format_string('%d', n, grouping=True)\n"
+    }
+  },
+  "check": {
+    "run": [
+      "python3",
+      "check.py"
+    ],
+    "files": {
+      "check.py": "import locale\nfrom money import fmt\n\nlocale.setlocale(locale.LC_ALL, 'C')\nassert fmt(1234567) == '1234567', fmt(1234567)\nassert fmt(-5) == '-5'\n"
+    },
+    "timeout_ms": 10000
+  },
+  "limitations": {
+    "proves": "Formatting output is identical under the C locale.",
+    "does_not_prove": "Output under other locales (same function, so it should match)."
+  },
+  "author": "cafe-curator",
+  "detect": {
+    "files": [
+      "*.py"
+    ],
+    "pattern": "locale\\.format\\("
+  }
+}

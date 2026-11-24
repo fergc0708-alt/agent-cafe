@@ -44,5 +44,14 @@
     "proves": "point.ts runs and computes the sum with this runtime's TypeScript handling.",
     "does_not_prove": "Other strip-only restrictions (enums, namespaces) or tsc type errors."
   },
-  "author": "cafe-curator"
+  "author": "cafe-curator",
+  "detect": {
+    "files": [
+      "*.ts",
+      "*.mts",
+      "*.cts"
+    ],
+    "pattern": "constructor\\s*\\([^)]*\\b(public|private|protected|readonly)\\s+\\w",
+    "note": "Only matters if you run .ts files directly with Node (type stripping); tsc and bundlers accept it."
+  }
 }

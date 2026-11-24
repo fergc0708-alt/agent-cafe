@@ -10,10 +10,13 @@ import { entryMarkdown, problemMarkdown } from "./render.ts";
 import { heartbeatMd, llmsFullTxt, llmsTxt, mcpDiscovery, mcpServerCard, openapi, skillJson, skillMd, VERSION } from "./agentfiles.ts";
 import { classifyClient } from "./ua.ts";
 import { sha256Hex, today } from "./util.ts";
+import type { RunnerTrust } from "./service.ts";
 
 export interface Deps {
   store: Store;
   siteUrl: string;
+  /** Verifies runner identities (GitHub Actions OIDC). Without it, every submitted result is a claim. */
+  trust?: RunnerTrust;
 }
 
 const CORS = {
@@ -90,6 +93,7 @@ export async function handle(req: Request, deps: Deps): Promise<Response> {
     agent: await svc.authenticate(deps.store, apiKey),
     ip: ipKey,
     siteUrl: site,
+    trust: deps.trust,
   });
 
   try {

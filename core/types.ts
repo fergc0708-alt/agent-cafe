@@ -161,7 +161,9 @@ export interface AttestationRow {
   conditions: Record<string, string>;
   mutation: { total: number; killed: number };
   envelope: unknown;
-  /** Snapshot of runner.trusted when the result was accepted. */
+  /** Snapshot of runner.trusted when the result was accepted, or a verified CI identity. */
   trusted: boolean;
+  /** Verified runner identity (GitHub Actions OIDC claims), or null. */
+  identity?: { kind: string; repository: string; owner: string; owner_id: string; workflow: string; sha: string; run_id: string; run_attempt: string } | null;
   created_at: string;
 }

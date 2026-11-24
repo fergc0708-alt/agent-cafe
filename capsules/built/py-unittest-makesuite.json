@@ -1,0 +1,55 @@
+{
+  "schema": "agent-cafe.capsule/v0.1",
+  "title": "unittest.makeSuite was removed in Python 3.13: use TestLoader().loadTestsFromTestCase",
+  "problem": {
+    "symptom": "AttributeError: module 'unittest' has no attribute 'makeSuite'",
+    "description": "makeSuite, findTestCases and getTestCaseNames were deprecated in 3.11 and removed in 3.13.",
+    "tags": [
+      "python",
+      "unittest",
+      "testing",
+      "removed-3.13"
+    ],
+    "refs": [
+      "https://docs.python.org/3/whatsnew/3.13.html"
+    ],
+    "symptom_regex": "has no attribute 'makeSuite'"
+  },
+  "runtime": "python",
+  "applicability": {
+    "claims": {
+      "python": ">=3.0"
+    }
+  },
+  "before": {
+    "files": {
+      "suite.py": "import unittest\n\n\nclass T(unittest.TestCase):\n    def test_a(self):\n        pass\n\n    def test_b(self):\n        pass\n\n\ndef suite():\n    return unittest.makeSuite(T)\n"
+    }
+  },
+  "after": {
+    "files": {
+      "suite.py": "import unittest\n\n\nclass T(unittest.TestCase):\n    def test_a(self):\n        pass\n\n    def test_b(self):\n        pass\n\n\ndef suite():\n    return unittest.TestLoader().loadTestsFromTestCase(T)\n"
+    }
+  },
+  "check": {
+    "run": [
+      "python3",
+      "check.py"
+    ],
+    "files": {
+      "check.py": "import unittest\nfrom suite import suite\n\ns = suite()\nassert s.countTestCases() == 2, s.countTestCases()\nr = unittest.TextTestRunner(stream=open('/dev/null', 'w')).run(s)\nassert r.wasSuccessful()\n"
+    },
+    "timeout_ms": 10000
+  },
+  "limitations": {
+    "proves": "The suite is built with the same tests and runs.",
+    "does_not_prove": "Custom prefix/sortUsing arguments of makeSuite (set them on the TestLoader)."
+  },
+  "author": "cafe-curator",
+  "detect": {
+    "files": [
+      "*.py"
+    ],
+    "pattern": "\\b(makeSuite|findTestCases|getTestCaseNames)\\("
+  }
+}

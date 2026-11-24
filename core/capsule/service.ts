@@ -2,7 +2,8 @@
 // The server never executes capsules. It verifies signatures and computes scoped evidence.
 import { CafeError, UNTRUSTED_NOTICE, screen } from "../security.ts";
 import { handleMap, publicAgent, writeGuard, type Ctx } from "../service.ts";
-import { clampInt, nowIso, uuid } from "../util.ts";
+import { clampInt, nowIso, sha256Hex, uuid } from "../util.ts";
+import { bindingAudience, verifyGithubOidc, type GithubIdentity } from "./oidc.ts";
 import { afterDigest, capsuleId, checkDigest, validateCapsule, type Capsule } from "./capsule.ts";
 import { lintCapsule } from "./lint.ts";
 import { verifyEnvelope, verifyRegistration, keyIdFromRaw, type Envelope, type Verdict } from "./attestation.ts";
@@ -23,10 +24,11 @@ function toRecord(a: AttestationRow): AttestationRecord {
     mutation: a.mutation,
     created_at: a.created_at,
     trusted: a.trusted === true,
+    identity_owner: a.identity ? `github:${(a.identity as { owner_id: string }).owner_id}` : a.owner_id,
   };
 }
 
-const LEVEL_RANK: Record<EvidenceLevel, number> = { draft: 0, author_observed: 1, runner_replayed: 2, cross_runner_reproduced: 3, independent_check_confirmed: 4 };
+const LEVEL_RANK: Record<EvidenceLevel, number> = { draft: 0, author_observed: 1, ci_reproduced: 2, runner_replayed: 3, cross_runner_reproduced: 4, independent_check_confirmed: 5 };
 const MAX_ENVELOPE_PAYLOAD = 16_000;
 const MAX_RESULT_AGE_MS = 7 * 86_400_000;
 
@@ -130,6 +132,7 @@ export async function getCapsuleView(ctx: Ctx, id: string) {
     replacement_claims,
     attestations: atts.map((a) => ({
       trusted_runner: a.trusted === true,
+      verified_identity: a.identity ?? null,
       verdict: a.verdict,
       env_key: a.env_key,
       mutation: a.mutation,
@@ -195,8 +198,12 @@ export async function registerRunner(ctx: Ctx, input: Record<string, unknown>) {
   };
 }
 
-export async function submitAttestation(ctx: Ctx, id: string, envelope: Envelope) {
+/** Body: a DSSE envelope, or {envelope, github_oidc: {token, manifest}} to prove the runner's CI identity. */
+export async function submitAttestation(ctx: Ctx, id: string, body: Envelope | { envelope: Envelope; github_oidc?: { token: string; manifest: string[] } }) {
   const agent = await writeGuard(ctx, "attestation");
+  const wrapped = body && typeof body === "object" && "envelope" in body;
+  const envelope = (wrapped ? (body as { envelope: Envelope }).envelope : body) as Envelope;
+  const oidc = wrapped ? (body as { github_oidc?: { token: string; manifest: string[] } }).github_oidc : undefined;
   const row = await ctx.store.getCapsule(id);
   if (!row) throw new CafeError(404, "not_found", "No capsule with that id.");
   if (!envelope || typeof envelope.payload !== "string" || !Array.isArray(envelope.signatures) || !envelope.signatures.length || envelope.signatures.length > 4) {
@@ -234,6 +241,24 @@ export async function submitAttestation(ctx: Ctx, id: string, envelope: Envelope
   if (!envKey || !/^\d+\.\d+/.test(version)) throw new CafeError(400, "bad_env", "Missing environment fingerprint.");
   const conditions: Record<string, string> = {};
   for (const [k, v] of Object.entries(p.env?.conditions ?? {})) if (/^[A-Z_]{1,32}$/.test(k) && typeof v === "string") conditions[k] = v.slice(0, 100);
+  // Optional verified identity (GitHub Actions OIDC). The policy and keys come from server config only;
+  // nothing in the request can mark a result as trusted.
+  let identity: GithubIdentity | null = null;
+  let identityNote: string | undefined;
+  if (oidc) {
+    if (!ctx.trust || !ctx.trust.policy.workflows.length) identityNote = "This registry trusts no CI workflow yet; stored as a claim.";
+    else {
+      const manifest = Array.isArray(oidc.manifest) ? oidc.manifest.filter((d) => typeof d === "string" && /^[0-9a-f]{64}$/.test(d)).slice(0, 500) : [];
+      if (!manifest.includes(await sha256Hex(envelope.payload))) throw new CafeError(400, "not_in_manifest", "This result is not in the manifest the OIDC token vouches for.");
+      try {
+        identity = await verifyGithubOidc(String(oidc.token ?? ""), { jwks: await ctx.trust.jwks(), expectedAudience: await bindingAudience(runner.public_key, manifest), policy: ctx.trust.policy });
+      } catch (e) {
+        throw new CafeError(400, "bad_identity", `GitHub OIDC identity rejected: ${(e as Error).message}`);
+      }
+      // The token must be issued after the run it vouches for, within a few hours.
+      if (identity.iat * 1000 < started - 120_000 || identity.iat * 1000 - started > 6 * 3_600_000) throw new CafeError(400, "bad_identity", "OIDC token was not issued right after this run.");
+    }
+  }
   const existing = await ctx.store.listAttestations(id);
   if (existing.some((e) => (e.envelope as Envelope)?.payload === envelope.payload)) {
     throw new CafeError(409, "duplicate", "This exact result was already submitted.");
@@ -251,10 +276,13 @@ export async function submitAttestation(ctx: Ctx, id: string, envelope: Envelope
     mutation: { total, killed },
     // Store only the canonical DSSE fields (extra fields were stored verbatim before: red-team M3).
     envelope: { payloadType: envelope.payloadType, payload: envelope.payload, signatures: envelope.signatures.map((x) => ({ keyid: String(x.keyid), sig: String(x.sig) })) },
-    trusted: runner.trusted === true,
+    trusted: runner.trusted === true || identity !== null,
+    identity: identity
+      ? { kind: "github-actions", repository: identity.repository, owner: identity.repository_owner, owner_id: identity.repository_owner_id, workflow: identity.job_workflow_ref, sha: identity.sha, run_id: identity.run_id, run_attempt: identity.run_attempt }
+      : null,
     created_at: nowIso(),
   };
   await ctx.store.createAttestation(att);
   const { summary } = await evidenceFor(ctx, row);
-  return { accepted: true, by_author: agent.id === row.author_id, evidence: summary };
+  return { accepted: true, by_author: agent.id === row.author_id, verified_identity: att.identity, ...(identityNote ? { note: identityNote } : {}), evidence: summary };
 }

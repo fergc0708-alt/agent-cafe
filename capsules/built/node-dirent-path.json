@@ -1,0 +1,61 @@
+{
+  "schema": "agent-cafe.capsule/v0.1",
+  "title": "Dirent.path was removed in Node 24: use dirent.parentPath (Node >= 20.12)",
+  "problem": {
+    "symptom": "TypeError [ERR_INVALID_ARG_TYPE]: The \"path\" argument must be of type string. Received undefined",
+    "description": "fs.Dirent#path was an alias of parentPath; it is undefined in Node 24, so path.join(d.path, d.name) throws. parentPath only exists since Node 20.12/21.4.",
+    "tags": [
+      "node",
+      "fs",
+      "readdir",
+      "removed-node-24"
+    ],
+    "refs": [
+      "https://nodejs.org/api/fs.html#direntparentpath"
+    ],
+    "symptom_regex": "Received undefined"
+  },
+  "runtime": "node",
+  "applicability": {
+    "claims": {
+      "node": ">=20.12"
+    }
+  },
+  "before": {
+    "files": {
+      "walk.cjs": "const fs = require('node:fs');\nconst path = require('node:path');\nexports.files = (dir) => fs.readdirSync(dir, { withFileTypes: true }).filter((d) => d.isFile()).map((d) => path.join(d.path, d.name)).sort();\n"
+    }
+  },
+  "after": {
+    "files": {
+      "walk.cjs": "const fs = require('node:fs');\nconst path = require('node:path');\nexports.files = (dir) => fs.readdirSync(dir, { withFileTypes: true }).filter((d) => d.isFile()).map((d) => path.join(d.parentPath, d.name)).sort();\n"
+    }
+  },
+  "check": {
+    "run": [
+      "node",
+      "check.cjs"
+    ],
+    "files": {
+      "check.cjs": "const fs = require('node:fs');\nconst assert = require('node:assert');\nfs.mkdirSync('d/sub', { recursive: true });\nfs.writeFileSync('d/a.txt', '1');\nfs.writeFileSync('d/b.txt', '2');\nassert.deepStrictEqual(require('./walk.cjs').files('d'), ['d/a.txt', 'd/b.txt']);\n"
+    },
+    "timeout_ms": 10000
+  },
+  "limitations": {
+    "proves": "Full paths of directory entries are built correctly.",
+    "does_not_prove": "Recursive readdir behavior."
+  },
+  "author": "cafe-curator",
+  "detect": {
+    "files": [
+      "*.js",
+      "*.cjs",
+      "*.mjs",
+      "*.ts",
+      "*.mts",
+      "*.cts"
+    ],
+    "pattern": "\\b(dirent|entry|ent|de|d|e|f|file|item)\\.path\\b",
+    "also": "withFileTypes"
+  }
+}

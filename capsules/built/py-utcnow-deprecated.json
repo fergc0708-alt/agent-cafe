@@ -44,5 +44,11 @@
     "proves": "now_utc returns an aware UTC datetime without deprecation warnings.",
     "does_not_prove": "Callers that compare it with naive datetimes (they will now raise TypeError)."
   },
-  "author": "cafe-curator"
+  "author": "cafe-curator",
+  "detect": {
+    "files": [
+      "*.py"
+    ],
+    "pattern": "\\butc(now|fromtimestamp)\\("
+  }
 }

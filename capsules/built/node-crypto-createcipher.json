@@ -1,0 +1,60 @@
+{
+  "schema": "agent-cafe.capsule/v0.1",
+  "title": "crypto.createCipher was removed in Node 22: use createCipheriv with a real key and IV",
+  "problem": {
+    "symptom": "TypeError: crypto.createCipher is not a function",
+    "description": "createCipher derived keys insecurely (MD5, no salt) and was removed in Node 22. Old ciphertexts need the legacy EVP_BytesToKey derivation to decrypt; new data should use scrypt + random IV.",
+    "tags": [
+      "node",
+      "crypto",
+      "security",
+      "removed-node-22"
+    ],
+    "refs": [
+      "https://nodejs.org/api/deprecations.html#DEP0106"
+    ],
+    "symptom_regex": "createCipher is not a function"
+  },
+  "runtime": "node",
+  "applicability": {
+    "claims": {
+      "node": ">=10"
+    }
+  },
+  "before": {
+    "files": {
+      "box.cjs": "const crypto = require('node:crypto');\nexports.seal = (secret, text) => { const c = crypto.createCipher('aes-256-cbc', secret); return c.update(text, 'utf8', 'hex') + c.final('hex'); };\nexports.open = (secret, hex) => { const d = crypto.createDecipher('aes-256-cbc', secret); return d.update(hex, 'hex', 'utf8') + d.final('utf8'); };\n"
+    }
+  },
+  "after": {
+    "files": {
+      "box.cjs": "const crypto = require('node:crypto');\nconst key = (secret, salt) => crypto.scryptSync(secret, salt, 32);\nexports.seal = (secret, text) => { const salt = crypto.randomBytes(16), iv = crypto.randomBytes(16); const c = crypto.createCipheriv('aes-256-cbc', key(secret, salt), iv); return [salt, iv, Buffer.concat([c.update(text, 'utf8'), c.final()])].map((b) => b.toString('hex')).join(':'); };\nexports.open = (secret, sealed) => { const [salt, iv, ct] = sealed.split(':').map((h) => Buffer.from(h, 'hex')); const d = crypto.createDecipheriv('aes-256-cbc', key(secret, salt), iv); return Buffer.concat([d.update(ct), d.final()]).toString('utf8'); };\n"
+    }
+  },
+  "check": {
+    "run": [
+      "node",
+      "check.cjs"
+    ],
+    "files": {
+      "check.cjs": "const assert = require('node:assert');\nconst { seal, open } = require('./box.cjs');\nconst s = seal('pw', 'hola café');\nassert.strictEqual(open('pw', s), 'hola café');\nassert.notStrictEqual(seal('pw', 'x'), seal('pw', 'x'));\nassert.throws(() => open('wrong', s));\n"
+    },
+    "timeout_ms": 10000
+  },
+  "limitations": {
+    "proves": "Round trip works, ciphertexts are randomized, and a wrong password fails.",
+    "does_not_prove": "Decrypting data produced by the old createCipher (needs EVP_BytesToKey; not included)."
+  },
+  "author": "cafe-curator",
+  "detect": {
+    "files": [
+      "*.js",
+      "*.cjs",
+      "*.mjs",
+      "*.ts",
+      "*.mts",
+      "*.cts"
+    ],
+    "pattern": "\\bcreate(Cipher|Decipher)\\("
+  }
+}

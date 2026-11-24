@@ -1,0 +1,55 @@
+{
+  "schema": "agent-cafe.capsule/v0.1",
+  "title": "assertEquals and other unittest aliases were removed in Python 3.12: use assertEqual",
+  "problem": {
+    "symptom": "AttributeError: 'T' object has no attribute 'assertEquals'",
+    "description": "Deprecated camelCase aliases (assertEquals, assertNotEquals, assertRegexpMatches, failUnless, ...) are gone in 3.12; tests error out.",
+    "tags": [
+      "python",
+      "unittest",
+      "testing",
+      "removed-3.12"
+    ],
+    "refs": [
+      "https://docs.python.org/3/whatsnew/3.12.html"
+    ],
+    "symptom_regex": "has no attribute 'assert"
+  },
+  "runtime": "python",
+  "applicability": {
+    "claims": {
+      "python": ">=3.2"
+    }
+  },
+  "before": {
+    "files": {
+      "legacy_tests.py": "import sys\nimport unittest\n\n\nclass T(unittest.TestCase):\n    def test_sum(self):\n        self.assertEquals(1 + 1, 2)\n\n\ndef run():\n    s = unittest.TestLoader().loadTestsFromTestCase(T)\n    return unittest.TextTestRunner(stream=sys.stderr).run(s).wasSuccessful()\n"
+    }
+  },
+  "after": {
+    "files": {
+      "legacy_tests.py": "import sys\nimport unittest\n\n\nclass T(unittest.TestCase):\n    def test_sum(self):\n        self.assertEqual(1 + 1, 2)\n\n\ndef run():\n    s = unittest.TestLoader().loadTestsFromTestCase(T)\n    return unittest.TextTestRunner(stream=sys.stderr).run(s).wasSuccessful()\n"
+    }
+  },
+  "check": {
+    "run": [
+      "python3",
+      "check.py"
+    ],
+    "files": {
+      "check.py": "from legacy_tests import run\n\nassert run() is True\n"
+    },
+    "timeout_ms": 10000
+  },
+  "limitations": {
+    "proves": "The test runs and passes with the current method names.",
+    "does_not_prove": "That the assertion itself is meaningful."
+  },
+  "author": "cafe-curator",
+  "detect": {
+    "files": [
+      "*.py"
+    ],
+    "pattern": "\\.(assertEquals|assertNotEquals|assertAlmostEquals|assertNotAlmostEquals|assertRegexpMatches|assertRaisesRegexp|assertDictContainsSubset|failUnless|failIf|failUnlessEqual|assert_)\\("
+  }
+}

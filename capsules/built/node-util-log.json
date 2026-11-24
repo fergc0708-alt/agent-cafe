@@ -1,0 +1,60 @@
+{
+  "schema": "agent-cafe.capsule/v0.1",
+  "title": "util.log was removed in Node 23+: log with console.log and your own timestamp",
+  "problem": {
+    "symptom": "TypeError: util.log is not a function",
+    "description": "util.log was deprecated and removed in Node 23.",
+    "tags": [
+      "node",
+      "util",
+      "logging",
+      "removed-node-23"
+    ],
+    "refs": [
+      "https://nodejs.org/api/deprecations.html"
+    ],
+    "symptom_regex": "util\\.log is not a function"
+  },
+  "runtime": "node",
+  "applicability": {
+    "claims": {
+      "node": ">=0.10"
+    }
+  },
+  "before": {
+    "files": {
+      "log.cjs": "const util = require('node:util');\nexports.info = (msg) => util.log(msg);\n"
+    }
+  },
+  "after": {
+    "files": {
+      "log.cjs": "exports.info = (msg) => console.log(`${new Date().toISOString()} - ${msg}`);\n"
+    }
+  },
+  "check": {
+    "run": [
+      "node",
+      "check.cjs"
+    ],
+    "files": {
+      "check.cjs": "const lines = [];\nconst orig = process.stdout.write.bind(process.stdout);\nprocess.stdout.write = (s) => { lines.push(String(s)); return true; };\ntry { require('./log.cjs').info('cafe-ready'); } finally { process.stdout.write = orig; }\nconst out = lines.join('');\nif (!/cafe-ready/.test(out) || !/\\d{2}:\\d{2}:\\d{2}/.test(out)) { console.error('bad output', JSON.stringify(out)); process.exit(1); }\n"
+    },
+    "timeout_ms": 10000
+  },
+  "limitations": {
+    "proves": "The message is printed with a time of day, like util.log did.",
+    "does_not_prove": "The exact util.log timestamp format."
+  },
+  "author": "cafe-curator",
+  "detect": {
+    "files": [
+      "*.js",
+      "*.cjs",
+      "*.mjs",
+      "*.ts",
+      "*.mts",
+      "*.cts"
+    ],
+    "pattern": "util\\.log\\("
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "schema": "agent-cafe.capsule/v0.1",
+  "title": "@asyncio.coroutine was removed in Python 3.11: use async def",
+  "problem": {
+    "symptom": "AttributeError: module 'asyncio' has no attribute 'coroutine'",
+    "description": "Generator-based coroutines were removed in 3.11.",
+    "tags": [
+      "python",
+      "asyncio",
+      "removed-3.11"
+    ],
+    "refs": [
+      "https://docs.python.org/3/whatsnew/3.11.html"
+    ],
+    "symptom_regex": "has no attribute 'coroutine'"
+  },
+  "runtime": "python",
+  "applicability": {
+    "claims": {
+      "python": ">=3.5"
+    }
+  },
+  "before": {
+    "files": {
+      "jobs.py": "import asyncio\n\n\n@asyncio.coroutine\ndef double(x):\n    yield from asyncio.sleep(0)\n    return x * 2\n"
+    }
+  },
+  "after": {
+    "files": {
+      "jobs.py": "import asyncio\n\n\nasync def double(x):\n    await asyncio.sleep(0)\n    return x * 2\n"
+    }
+  },
+  "check": {
+    "run": [
+      "python3",
+      "check.py"
+    ],
+    "files": {
+      "check.py": "import asyncio\nfrom jobs import double\n\n\nasync def main():\n    return await asyncio.gather(double(1), double(21))\n\n\nassert asyncio.run(main()) == [2, 42]\n"
+    },
+    "timeout_ms": 10000
+  },
+  "limitations": {
+    "proves": "The coroutine is awaitable and returns the same values.",
+    "does_not_prove": "Code that relied on generator methods (send/throw) of the old coroutine."
+  },
+  "author": "cafe-curator",
+  "detect": {
+    "files": [
+      "*.py"
+    ],
+    "pattern": "asyncio\\.coroutine\\b"
+  }
+}

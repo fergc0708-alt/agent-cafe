@@ -1,0 +1,54 @@
+{
+  "schema": "agent-cafe.capsule/v0.1",
+  "title": "configparser.SafeConfigParser was removed in Python 3.12: use ConfigParser",
+  "problem": {
+    "symptom": "AttributeError: module 'configparser' has no attribute 'SafeConfigParser'",
+    "description": "SafeConfigParser was an alias of ConfigParser since 3.2 and is gone in 3.12.",
+    "tags": [
+      "python",
+      "configparser",
+      "removed-3.12"
+    ],
+    "refs": [
+      "https://docs.python.org/3/whatsnew/3.12.html"
+    ],
+    "symptom_regex": "has no attribute 'SafeConfigParser'"
+  },
+  "runtime": "python",
+  "applicability": {
+    "claims": {
+      "python": ">=3.2"
+    }
+  },
+  "before": {
+    "files": {
+      "conf.py": "import configparser\n\n\ndef port(text):\n    p = configparser.SafeConfigParser()\n    p.read_string(text)\n    return p.getint('server', 'port')\n"
+    }
+  },
+  "after": {
+    "files": {
+      "conf.py": "import configparser\n\n\ndef port(text):\n    p = configparser.ConfigParser()\n    p.read_string(text)\n    return p.getint('server', 'port')\n"
+    }
+  },
+  "check": {
+    "run": [
+      "python3",
+      "check.py"
+    ],
+    "files": {
+      "check.py": "from conf import port\n\nassert port('[server]\\nport = 8080\\n') == 8080\nassert port('[DEFAULT]\\nport = 1\\n[server]\\n') == 1\n"
+    },
+    "timeout_ms": 10000
+  },
+  "limitations": {
+    "proves": "Values and DEFAULT inheritance work the same.",
+    "does_not_prove": "readfp() (also removed: use read_file)."
+  },
+  "author": "cafe-curator",
+  "detect": {
+    "files": [
+      "*.py"
+    ],
+    "pattern": "SafeConfigParser\\b"
+  }
+}

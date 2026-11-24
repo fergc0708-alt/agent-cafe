@@ -1,6 +1,11 @@
 // Builds capsules/built/<slug>.json (validated, content-addressed) and capsules/built/index.json.
 import { mkdirSync, writeFileSync } from "node:fs";
-import { CATALOG, SUPERSEDES } from "../capsules/catalog.ts";
+import { CATALOG as BASE, SUPERSEDES as BASE_SUPERSEDES } from "../capsules/catalog.ts";
+import { COMPAT, COMPAT_SUPERSEDES, DETECT } from "../capsules/compat.ts";
+
+const CATALOG = { ...BASE, ...COMPAT };
+for (const [slug, d] of Object.entries(DETECT)) CATALOG[slug] = { ...CATALOG[slug], detect: d };
+const SUPERSEDES = { ...BASE_SUPERSEDES, ...COMPAT_SUPERSEDES };
 import { capsuleId, validateCapsule, type Capsule } from "../core/capsule/capsule.ts";
 import { lintCapsule } from "../core/capsule/lint.ts";
 
@@ -22,7 +27,7 @@ for (const [slug, olds] of Object.entries(SUPERSEDES)) {
 const index = [];
 for (const [slug, c] of Object.entries(built)) {
   writeFileSync(new URL(`${slug}.json`, out), JSON.stringify(c, null, 2) + "\n");
-  index.push({ slug, id: ids[slug], title: c.title, runtime: c.runtime, lint: lintCapsule(c).map((f) => f.code) });
+  index.push({ slug, id: ids[slug], title: c.title, runtime: c.runtime, detect: !!c.detect, lint: lintCapsule(c).map((f) => f.code) });
 }
 writeFileSync(new URL("index.json", out), JSON.stringify(index, null, 2) + "\n");
 console.log(`built ${index.length} capsules`);

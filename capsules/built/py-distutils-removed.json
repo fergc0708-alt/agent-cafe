@@ -45,5 +45,12 @@
     "proves": "Numeric dotted versions compare correctly.",
     "does_not_prove": "Pre-releases (1.0rc1), epochs or local versions: use packaging.version for those."
   },
-  "author": "cafe-curator"
+  "author": "cafe-curator",
+  "detect": {
+    "files": [
+      "*.py"
+    ],
+    "pattern": "^\\s*(import\\s+distutils\\b|from\\s+distutils\\s+import)",
+    "note": "Hidden when setuptools is installed in the same environment (it ships a distutils shim)."
+  }
 }

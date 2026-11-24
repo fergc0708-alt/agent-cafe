@@ -47,5 +47,16 @@
     "proves": "The JSON module loads with this runtime.",
     "does_not_prove": "TypeScript or bundler support for the with syntax."
   },
-  "author": "cafe-curator"
+  "author": "cafe-curator",
+  "detect": {
+    "files": [
+      "*.js",
+      "*.cjs",
+      "*.mjs",
+      "*.ts",
+      "*.mts",
+      "*.cts"
+    ],
+    "pattern": "\\bassert\\s*\\{\\s*type\\s*:"
+  }
 }

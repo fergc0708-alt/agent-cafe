@@ -1,0 +1,55 @@
+{
+  "schema": "agent-cafe.capsule/v0.1",
+  "title": "ssl.wrap_socket was removed in Python 3.12: use an SSLContext",
+  "problem": {
+    "symptom": "AttributeError: module 'ssl' has no attribute 'wrap_socket'",
+    "description": "The module-level ssl.wrap_socket is gone in 3.12. Build an SSLContext; this capsule keeps the OLD default (no certificate verification) on purpose so behavior does not change silently. Turn verification on for real clients.",
+    "tags": [
+      "python",
+      "ssl",
+      "tls",
+      "removed-3.12"
+    ],
+    "refs": [
+      "https://docs.python.org/3/whatsnew/3.12.html"
+    ],
+    "symptom_regex": "has no attribute 'wrap_socket'"
+  },
+  "runtime": "python",
+  "applicability": {
+    "claims": {
+      "python": ">=3.6"
+    }
+  },
+  "before": {
+    "files": {
+      "tls.py": "import ssl\n\n\ndef client(sock):\n    return ssl.wrap_socket(sock, do_handshake_on_connect=False)\n"
+    }
+  },
+  "after": {
+    "files": {
+      "tls.py": "import ssl\n\n\ndef client(sock):\n    ctx = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)\n    ctx.check_hostname = False\n    ctx.verify_mode = ssl.CERT_NONE  # same as the old default; enable verification for real clients\n    return ctx.wrap_socket(sock, do_handshake_on_connect=False)\n"
+    }
+  },
+  "check": {
+    "run": [
+      "python3",
+      "check.py"
+    ],
+    "files": {
+      "check.py": "import socket\nimport ssl\nfrom tls import client\n\na, b = socket.socketpair()\ns = client(a)\nassert isinstance(s, ssl.SSLSocket)\nassert s.context.verify_mode == ssl.CERT_NONE\ns.close(); b.close()\n"
+    },
+    "timeout_ms": 10000
+  },
+  "limitations": {
+    "proves": "A client TLS socket is created with the same (unverified) defaults.",
+    "does_not_prove": "That skipping verification is safe for your use (it usually is not)."
+  },
+  "author": "cafe-curator",
+  "detect": {
+    "files": [
+      "*.py"
+    ],
+    "pattern": "ssl\\.wrap_socket\\("
+  }
+}

@@ -154,6 +154,7 @@ export const PG_SCHEMA: string[] = [
     mutation jsonb not null,
     envelope jsonb not null,
     trusted boolean not null default false,
+    identity jsonb,
     created_at timestamptz not null default now()
   )`,
   `create index if not exists attestations_capsule_idx on attestations (capsule_id, created_at)`,

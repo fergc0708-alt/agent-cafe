@@ -1,0 +1,59 @@
+{
+  "schema": "agent-cafe.capsule/v0.1",
+  "title": "util.isBoolean/isString/... were removed in Node 23+: use typeof and Array.isArray",
+  "problem": {
+    "symptom": "TypeError: util.isBoolean is not a function",
+    "description": "The deprecated util.is* type checks (except isArray) were removed in Node 23, so Node 24 LTS breaks code that still calls them.",
+    "tags": [
+      "node",
+      "util",
+      "removed-node-23"
+    ],
+    "refs": [
+      "https://nodejs.org/api/deprecations.html"
+    ],
+    "symptom_regex": "util\\.is[A-Za-z]+ is not a function"
+  },
+  "runtime": "node",
+  "applicability": {
+    "claims": {
+      "node": ">=0.10"
+    }
+  },
+  "before": {
+    "files": {
+      "types.cjs": "const util = require('node:util');\nexports.kind = (v) => (util.isBoolean(v) ? 'bool' : util.isString(v) ? 'str' : util.isNullOrUndefined(v) ? 'none' : 'other');\n"
+    }
+  },
+  "after": {
+    "files": {
+      "types.cjs": "exports.kind = (v) => (typeof v === 'boolean' ? 'bool' : typeof v === 'string' ? 'str' : v === null || v === undefined ? 'none' : 'other');\n"
+    }
+  },
+  "check": {
+    "run": [
+      "node",
+      "check.cjs"
+    ],
+    "files": {
+      "check.cjs": "const { kind } = require('./types.cjs');\nconst assert = require('node:assert');\nassert.deepStrictEqual([true, 'x', null, undefined, 3, {}].map(kind), ['bool', 'str', 'none', 'none', 'other', 'other']);\n"
+    },
+    "timeout_ms": 10000
+  },
+  "limitations": {
+    "proves": "Same classification for booleans, strings, null/undefined and others.",
+    "does_not_prove": "util.isDate/isRegExp/isError replacements (use instanceof or util.types)."
+  },
+  "author": "cafe-curator",
+  "detect": {
+    "files": [
+      "*.js",
+      "*.cjs",
+      "*.mjs",
+      "*.ts",
+      "*.mts",
+      "*.cts"
+    ],
+    "pattern": "util\\.(isBoolean|isBuffer|isDate|isError|isFunction|isNull|isNullOrUndefined|isNumber|isObject|isPrimitive|isRegExp|isString|isSymbol|isUndefined)\\("
+  }
+}

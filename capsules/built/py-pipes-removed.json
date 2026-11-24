@@ -1,0 +1,56 @@
+{
+  "schema": "agent-cafe.capsule/v0.1",
+  "title": "pipes was removed in Python 3.13: use shlex.quote",
+  "problem": {
+    "symptom": "ModuleNotFoundError: No module named 'pipes'",
+    "description": "pipes.quote was an alias of shlex.quote; the module is gone in 3.13 (PEP 594).",
+    "tags": [
+      "python",
+      "pipes",
+      "shlex",
+      "pep594",
+      "removed-3.13"
+    ],
+    "refs": [
+      "https://peps.python.org/pep-0594/"
+    ],
+    "symptom_regex": "No module named '?pipes"
+  },
+  "runtime": "python",
+  "applicability": {
+    "claims": {
+      "python": ">=3.3"
+    }
+  },
+  "before": {
+    "files": {
+      "shell.py": "import pipes\n\n\ndef cmd(path):\n    return 'cat ' + pipes.quote(path)\n"
+    }
+  },
+  "after": {
+    "files": {
+      "shell.py": "import shlex\n\n\ndef cmd(path):\n    return 'cat ' + shlex.quote(path)\n"
+    }
+  },
+  "check": {
+    "run": [
+      "python3",
+      "check.py"
+    ],
+    "files": {
+      "check.py": "from shell import cmd\n\nassert cmd('a b.txt') == \"cat 'a b.txt'\", cmd('a b.txt')\nassert cmd(\"it's\") == \"cat 'it'\\\"'\\\"'s'\", cmd(\"it's\")\nassert cmd('plain') == 'cat plain'\n"
+    },
+    "timeout_ms": 10000
+  },
+  "limitations": {
+    "proves": "Paths with spaces and quotes are quoted exactly as before.",
+    "does_not_prove": "Use of pipes.Template (no stdlib replacement; use subprocess pipelines)."
+  },
+  "author": "cafe-curator",
+  "detect": {
+    "files": [
+      "*.py"
+    ],
+    "pattern": "^\\s*(import\\s+pipes\\b|from\\s+pipes\\s+import)"
+  }
+}

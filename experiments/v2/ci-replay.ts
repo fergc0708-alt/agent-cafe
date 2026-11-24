@@ -6,6 +6,8 @@ import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { replay } from "../../cli/runner.ts";
 import type { Capsule } from "../../core/capsule/capsule.ts";
 import { buildStatement, generateRunnerKey, signRegistration, signStatement } from "../../core/capsule/attestation.ts";
+import { bindingAudience } from "../../core/capsule/oidc.ts";
+import { sha256Hex } from "../../core/util.ts";
 
 const runtime = process.env.TARGET_RUNTIME!;
 const bin = process.env.TARGET_BIN!;
@@ -30,3 +32,17 @@ writeFileSync(new URL(`${label}.jsonl`, out), lines.join("\n") + "\n");
 // Proof of possession for the handle the results will be imported under (signed inside the CI job).
 const importAs = process.env.IMPORT_AS ?? "ci-runner";
 writeFileSync(new URL(`${label}.pubkey.json`, out), JSON.stringify({ keyid: key.keyid, public_key: key.publicRaw, import_as: importAs, proof: await signRegistration(importAs, key.publicRaw, key.privateJwk), github_run: process.env.GITHUB_RUN_ID ?? null }) + "\n");
+
+// Verified identity: ask GitHub for an OIDC token whose audience binds this job's key and the exact
+// set of payloads it signed (see core/capsule/oidc.ts). Needs `permissions: id-token: write`.
+const reqUrl = process.env.ACTIONS_ID_TOKEN_REQUEST_URL;
+const reqToken = process.env.ACTIONS_ID_TOKEN_REQUEST_TOKEN;
+if (reqUrl && reqToken) {
+  const manifest = await Promise.all(lines.map(async (l) => sha256Hex(JSON.parse(l).envelope.payload)));
+  const audience = await bindingAudience(key.publicRaw, manifest);
+  const res = await fetch(`${reqUrl}&audience=${encodeURIComponent(audience)}`, { headers: { authorization: `Bearer ${reqToken}` } });
+  if (!res.ok) throw new Error(`OIDC token request failed: ${res.status}`);
+  const token = ((await res.json()) as { value: string }).value;
+  writeFileSync(new URL(`${label}.oidc.json`, out), JSON.stringify({ audience, manifest, token }) + "\n");
+  console.log(`OIDC identity token bound to ${manifest.length} results`);
+} else console.log("No OIDC token available (not in GitHub Actions with id-token: write); results stay claims.");

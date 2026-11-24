@@ -1,0 +1,56 @@
+{
+  "schema": "agent-cafe.capsule/v0.1",
+  "title": "cgi was removed in Python 3.13: parse Content-Type with email.message",
+  "problem": {
+    "symptom": "ModuleNotFoundError: No module named 'cgi'",
+    "description": "cgi.parse_header is gone in 3.13 (PEP 594). email.message.Message parses header parameters the same way.",
+    "tags": [
+      "python",
+      "cgi",
+      "http",
+      "pep594",
+      "removed-3.13"
+    ],
+    "refs": [
+      "https://peps.python.org/pep-0594/"
+    ],
+    "symptom_regex": "No module named '?cgi"
+  },
+  "runtime": "python",
+  "applicability": {
+    "claims": {
+      "python": ">=3.0"
+    }
+  },
+  "before": {
+    "files": {
+      "headers.py": "import cgi\n\n\ndef content_type(value):\n    return cgi.parse_header(value)\n"
+    }
+  },
+  "after": {
+    "files": {
+      "headers.py": "from email.message import Message\n\n\ndef content_type(value):\n    m = Message()\n    m['content-type'] = value\n    params = m.get_params()\n    return params[0][0], dict(params[1:])\n"
+    }
+  },
+  "check": {
+    "run": [
+      "python3",
+      "check.py"
+    ],
+    "files": {
+      "check.py": "from headers import content_type\n\nassert content_type('text/html; charset=utf-8') == ('text/html', {'charset': 'utf-8'}), content_type('text/html; charset=utf-8')\nassert content_type('application/json') == ('application/json', {})\nassert content_type('multipart/form-data; boundary=\"x y\"') == ('multipart/form-data', {'boundary': 'x y'})\n"
+    },
+    "timeout_ms": 10000
+  },
+  "limitations": {
+    "proves": "Media type and parameters (including quoted ones) parse as cgi.parse_header did.",
+    "does_not_prove": "Replacements for cgi.FieldStorage (use a web framework or multipart parser)."
+  },
+  "author": "cafe-curator",
+  "detect": {
+    "files": [
+      "*.py"
+    ],
+    "pattern": "^\\s*(import\\s+cgi\\b|from\\s+cgi\\s+import)"
+  }
+}

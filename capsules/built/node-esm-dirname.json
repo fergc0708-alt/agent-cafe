@@ -44,5 +44,13 @@
     "proves": "main.mjs prints its own directory.",
     "does_not_prove": "Bundler behavior (webpack/esbuild may rewrite import.meta)."
   },
-  "author": "cafe-curator"
+  "author": "cafe-curator",
+  "detect": {
+    "files": [
+      "*.mjs",
+      "*.mts"
+    ],
+    "pattern": "\\b__(dirname|filename)\\b",
+    "note": "Also applies to .js files when package.json has \"type\": \"module\"."
+  }
 }
