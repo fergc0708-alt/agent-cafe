@@ -1,0 +1,9 @@
+{
+ "_note": "Manual review of every raw hit near the ground truth (+-3 lines). false = the message is about something else (coincidence of position).",
+ "email2pdf2-versioneer-safeconfigparser|ruff": false,
+ "stackrox-workflow-distutils-find-executable|ruff": false,
+ "trafficserver-ssl-wrap-socket|ruff": false,
+ "awtk-distutils-strtobool|ruff": false,
+ "clickhouse-cityhash-cython-long|ruff": false,
+ "_lenient_cafe": ["awtk-distutils-strtobool"]
+}

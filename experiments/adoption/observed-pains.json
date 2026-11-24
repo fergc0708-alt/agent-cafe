@@ -1,0 +1,51 @@
+{
+ "counts": {
+  "CI matrix / declare support (no failure yet)": 44,
+  "runtime behavior / test failure": 19,
+  "dependencies / install / wheels / build": 36,
+  "removed stdlib module or API": 11,
+  "other": 17
+ },
+ "examples": {
+  "CI matrix / declare support (no failure yet)": [
+   "pedrobtmartins/catena-x-simplified: Support Python 3.13",
+   "ChiefGyk3D/scrum-around-and-find-out: flaky broker server test on Python 3.13",
+   "obielin/skillshield: Test on Python 3.13 and 3.14",
+   "AI21Labs/teel: Support Python 3.13 and 3.14",
+   "memtomem/memtomem-stm: CI: run the Windows test job on Python 3.13",
+   "NodeJSmith/otf-api: Add Python 3.13 and 3.14 to CI matrix and classifiers"
+  ],
+  "runtime behavior / test failure": [
+   "ni/nitypes-python: Documentation generation fails with Python 3.13",
+   "tarakanof/Unraid-MCP: test(schema-trim): size ratio test fails on Python 3.13",
+   "FoundationAgents/OpenManus: Supported Python 3.13 emits an unsupported-version warning on import",
+   "neuroinformatics-unit/fancylog: Multiprocessing logging fails on macOS python 3.13",
+   "WayfarerLabs/agentworks: Proxmox VE 8 default CA is rejected under Python 3.13's strict TLS ver",
+   "sunrise-org/sunrise: Tests: test_prebuilt_game SdkAssetTests.test_the_rust_reader_fixture_i"
+  ],
+  "dependencies / install / wheels / build": [
+   "Eigenstate/vmd-python: Build fails with GCC 15 (C23) and Python 3.13",
+   "dubidu22/sci2audio: ci: the fast suite never runs on Python 3.13, although requires-python",
+   "bio-learn/biolearn: pip install biolearn: seaborn and torch missing, and install fails on ",
+   "eclipse-volttron/volttron-core: Dependency ranges block installation on Python 3.13 to 3.15",
+   "aradmanamnaoon/PsyLex-Studio: CI: Python 3.13 dependency installation fails despite advertised suppo",
+   "astral-sh/uv: Universal Windows lock cannot sync on free-threaded Python 3.13"
+  ],
+  "removed stdlib module or API": [
+   "Bin-Cao/Bgolearn: bgolearn_ui.py fails on Python 3.13: the cgi module was removed",
+   "openbmc/openbmc-test-automation: ffdc: collect_ffdc.py fails to start on Python 3.13 (telnetlib removed",
+   "meta/openbmc: tools/rotate-password.py fails on Python 3.13 (crypt removed)",
+   "matthewkapfhammer/MotionBuilderSublime: telnetlib was removed in Python 3.13: plugin fails to load",
+   "emdashcodes/SublimeCloudup: Fails to load on Python 3.13+: bundled requests imports cgi",
+   "KunihikoKido/sublime-elasticsearch-client: Plugin fails to load on Python 3.13+: bundled requests imports cgi (re"
+  ],
+  "other": [
+   "mx-pycoder/pearback: Compatibility issues with Python 3.13 and macOS Tahoe",
+   "SumantxD/shrike: Test the Python recorder on Python 3.13",
+   "abhishek2x/bounded-execution: Add a Python 3.14+ interpreter-pool backend",
+   "testdrivenio/parallel-concurrent-examples-python: Python 3.14: fresh-process event-loop startup compatibility",
+   "alexsosn/ORAEC-TF: [P2] Test native Egyptian TF converter on Python 3.14 with real source",
+   "agustin18/fastapi-cache: test(compat): evaluate Python 3.14 for a new minor version, retain 0.3"
+  ]
+ }
+}

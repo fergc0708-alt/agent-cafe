@@ -55,21 +55,28 @@ def norm(root, p):
 
 
 # ---------- tools: each returns set of (file, line, msg) for a given version ----------
+SCOPE = []  # files touched by the fix, set per case
+
+
+def scoped(root, exts):
+    return [p for p in SCOPE if os.path.isfile(os.path.join(root, p)) and (exts is None or p.endswith(exts) or "." not in os.path.basename(p) or not p.endswith((".js", ".ts", ".py", ".cjs", ".mjs", ".md", ".txt", ".json", ".yml", ".yaml", ".toml", ".cfg", ".ac", ".in")))]
+
+
 def t_mypy(root, ver):
-    if not files(root, (".py",)):
+    fs = scoped(root, (".py",))
+    if not fs:
         return None
-    out = sh([f"{PY}/mypy", "--python-version", ver, "--no-incremental", "--follow-imports=silent", "--no-error-summary", "--hide-error-context", "--show-error-codes", "--cache-dir=/dev/null", "."], cwd=root)
+    out = sh([f"{PY}/mypy", "--python-version", ver, "--check-untyped-defs", "--no-incremental", "--follow-imports=silent", "--no-error-summary", "--hide-error-context", "--show-error-codes", "--cache-dir=/dev/null", *fs], cwd=root)
     if out == "__TIMEOUT__":
         return "timeout"
-    return {(norm(root, m[0]), int(m[1]), m[2]) for m in re.findall(r"^(.+?\.py):(\d+): error: (.*)$", out, re.M)}
+    return {(norm(root, m[0]), int(m[1]), m[2]) for m in re.findall(r"^(.+?):(\d+): error: (.*)$", out, re.M)}
 
 
 def t_pyright(root, ver):
-    if not files(root, (".py",)):
+    fs = scoped(root, (".py",))
+    if not fs:
         return None
-    cfg = os.path.join(WORK, f"pyright-{ver}.json")
-    json.dump({"pythonVersion": ver, "include": [root], "exclude": ["**/node_modules", "**/.git", "**/.venv"]}, open(cfg, "w"))
-    out = sh([f"{JS}/pyright", "-p", cfg, "--outputjson"], cwd=root)
+    out = sh([f"{JS}/pyright", "--pythonversion", ver, "--outputjson", *fs], cwd=root)
     if out == "__TIMEOUT__":
         return "timeout"
     try:
@@ -80,26 +87,28 @@ def t_pyright(root, ver):
 
 
 def t_pylint(root, ver):
-    fs = files(root, (".py",))
+    fs = scoped(root, (".py",))
     if not fs:
         return None
-    out = sh([f"{PY}/pylint", "--disable=all", "--enable=deprecated-module,deprecated-method,deprecated-argument,deprecated-class,deprecated-decorator,deprecated-attribute", f"--py-version={ver}", "--score=n", "--recursive=y", "."], cwd=root)
+    out = sh([f"{PY}/pylint", "--disable=all", "--enable=deprecated-module,deprecated-method,deprecated-argument,deprecated-class,deprecated-decorator,deprecated-attribute", f"--py-version={ver}", "--score=n", *fs], cwd=root)
     if out == "__TIMEOUT__":
         return "timeout"
-    return {(norm(root, m[0]), int(m[1]), m[2]) for m in re.findall(r"^(.+?\.py):(\d+):\d+: (W\d+.*)$", out, re.M)}
+    return {(norm(root, m[0]), int(m[1]), m[2]) for m in re.findall(r"^(.+?):(\d+):\d+: (W\d+.*)$", out, re.M)}
 
 
 def t_ruff(root, ver):
-    if not files(root, (".py",)):
+    fs = scoped(root, (".py",))
+    if not fs:
         return None
-    out = sh([f"{PY}/ruff", "check", "--isolated", "--select", "UP,PGH,PLW,PLE,DTZ,S", "--target-version", "py" + ver.replace(".", ""), "--output-format", "concise", "--exit-zero", "."], cwd=root)
-    return {(norm(root, m[0]), int(m[1]), m[2]) for m in re.findall(r"^(.+?\.py):(\d+):\d+: (.*)$", out, re.M)}
+    out = sh([f"{PY}/ruff", "check", "--isolated", "--select", "UP,PGH,PLW,PLE", "--target-version", "py" + ver.replace(".", ""), "--output-format", "concise", "--exit-zero", *fs], cwd=root)
+    return {(norm(root, m[0]), int(m[1]), m[2]) for m in re.findall(r"^(.+?):(\d+):\d+: (.*)$", out, re.M)}
 
 
 def t_vermin(root, ver):
-    if not files(root, (".py",)):
+    fs = scoped(root, (".py",))
+    if not fs:
         return None
-    out = sh([f"{PY}/vermin", "--no-tips", "--violations", f"-t={ver}-", "--no-parse-comments", "."], cwd=root)
+    out = sh([f"{PY}/vermin", "--no-tips", "--violations", f"-t={ver}-", "--no-parse-comments", *fs], cwd=root)
     return {(norm(root, m[0]), int(m[1]), m[2]) for m in re.findall(r"^!?(.+?\.py):(\d+):\d*:?\s*(.*)$", out, re.M)}
 
 
@@ -113,7 +122,7 @@ TYPES = {"16": "18", "18": "18", "20": "20", "21": "22", "22": "22", "23": "24",
 
 
 def t_tsc(root, ver):
-    fs = [f for f in files(root, (".js", ".cjs", ".mjs", ".ts", ".mts", ".cts")) if not f.endswith(".d.ts")][:1500]
+    fs = [f for f in scoped(root, (".js", ".cjs", ".mjs", ".ts", ".mts", ".cts")) if not f.endswith(".d.ts")]
     if not fs:
         return None
     tr = f"/tmp/types{TYPES.get(ver.split('.')[0], '24')}/node_modules/@types"
@@ -125,10 +134,11 @@ def t_tsc(root, ver):
 
 
 def t_eslint_n(root, ver):
-    if not files(root, (".js", ".cjs", ".mjs", ".ts")):
+    fs = scoped(root, (".js", ".cjs", ".mjs"))
+    if not fs:
         return None
     os.environ["NODE_TARGET"] = f">={ver if '.' in ver else ver + '.0.0'}"
-    out = sh([f"{JS}/eslint", "-c", "/tmp/jstools/eslint.config.mjs", "--no-config-lookup", "--no-ignore", "--format", "json", "--no-warn-ignored", "."], cwd=root)
+    out = sh([f"{JS}/eslint", "-c", "/tmp/jstools/eslint.config.mjs", "--no-config-lookup", "--no-ignore", "--format", "json", "--no-warn-ignored", *fs], cwd=root)
     try:
         d = json.loads(out[out.index("["):])
     except Exception:
@@ -147,9 +157,14 @@ def t_cafe(root, ver, runtime):
         bad = [v for v in f["verdicts"] if v["env"]["runtime"] == runtime and v["env"]["version"].startswith(ver) and v["status"] not in ("not_affected", "no_evidence")]
         if bad or f["scope"] == "code":
             res |= {(h["file"], h["line"], f["slug"]) for h in f["hits"]}
+    if os.environ.get("CAFE_LENIENT"):
+        for c in d.get("clear", []):
+            if c.get("conditional"):
+                res |= {(h["file"], h["line"], c["slug"] + " (conditional)") for h in c.get("hits", [])}
     return res
 
 
+ABSOLUTE = {"pylint", "ruff", "vermin", "eslint-plugin-n"}
 PY_TOOLS = {"cafe": None, "mypy": t_mypy, "pyright": t_pyright, "pylint": t_pylint, "ruff": t_ruff, "vermin": t_vermin}
 JS_TOOLS = {"cafe": None, "tsc+@types/node": t_tsc, "eslint-plugin-n": t_eslint_n}
 
@@ -162,6 +177,8 @@ def run_tool(name, fn, root, runtime, old, new):
     n = fn(root, new)
     if n is None or isinstance(n, str):
         return n
+    if name in ABSOLUTE:
+        return sorted(n)
     o = fn(root, old)
     if isinstance(o, str) or o is None:
         o = set()
@@ -185,7 +202,7 @@ def gt_lines(case):
                 out.append((x, None))
         elif isinstance(x, dict):
             f = x.get("file") or x.get("path")
-            ls = x.get("lines") or x.get("line") or []
+            ls = (x.get("lines") or x.get("line") or []) + list(x.get("insertions_after_line") or [])
             if isinstance(ls, (int, str)):
                 ls = [ls]
             got = False
@@ -217,11 +234,14 @@ def main():
         if cid in results and not os.environ.get("RERUN"):
             continue
         rt = c["runtime"]
-        new, old = str(c["breaks_on"]), str(c["works_on"])
         if rt == "python":
-            new, old = ".".join(new.split(".")[:2]), ".".join(old.split(".")[:2])
+            new = re.search(r"3\.\d+", str(c["breaks_on"]))[0]
+            m = re.search(r"3\.\d+", str(c["works_on"]))
+            old = m[0] if m and m[0] != new else f"3.{int(new.split('.')[1]) - 1}"  # unknown: previous minor
         else:
-            new, old = new.split(".")[0], old.split(".")[0]
+            new = re.search(r"\d+", str(c["breaks_on"]))[0]
+            m = re.search(r"\d+", str(c["works_on"]))
+            old = m[0] if m and m[0] != new else str(int(new) - 2)  # unknown: previous even major
         b, f = os.path.join(WORK, cid, "broken"), os.path.join(WORK, cid, "fixed")
         ok = fetch(c["repo"], c["broken_commit"], b) and fetch(c["repo"], c["fix_commit"], f)
         r = {"id": cid, "repo": c["repo"], "runtime": rt, "old": old, "new": new, "category": c.get("category"), "statically_visible": c.get("statically_visible"), "fetched": ok, "tools": {}}
@@ -231,6 +251,7 @@ def main():
             continue
         gt = gt_lines(c)
         touched = {g[0] for g in gt}
+        SCOPE[:] = sorted(touched)
         for name, fn in (PY_TOOLS if rt == "python" else JS_TOOLS).items():
             fb = run_tool(name, fn, b, rt, old, new)
             ff = run_tool(name, fn, f, rt, old, new)

@@ -1,0 +1,161 @@
+{
+ "cases": 32,
+ "python": 20,
+ "node": 12,
+ "statically_visible": 12,
+ "per_tool": {
+  "cafe": {
+   "cases": 32,
+   "tp": 4,
+   "tp_visible": 4,
+   "extra": 55,
+   "residual": 0,
+   "ran": 32
+  },
+  "mypy": {
+   "cases": 20,
+   "tp": 7,
+   "tp_visible": 6,
+   "extra": 3,
+   "residual": 3,
+   "ran": 18
+  },
+  "pyright": {
+   "cases": 20,
+   "tp": 6,
+   "tp_visible": 4,
+   "extra": 1,
+   "residual": 2,
+   "ran": 18
+  },
+  "pylint": {
+   "cases": 20,
+   "tp": 4,
+   "tp_visible": 4,
+   "extra": 9,
+   "residual": 5,
+   "ran": 18
+  },
+  "ruff": {
+   "cases": 20,
+   "tp": 1,
+   "tp_visible": 1,
+   "extra": 333,
+   "residual": 47,
+   "ran": 18
+  },
+  "vermin": {
+   "cases": 20,
+   "tp": 0,
+   "tp_visible": 0,
+   "extra": 1,
+   "residual": 1,
+   "ran": 18
+  },
+  "tsc+@types/node": {
+   "cases": 12,
+   "tp": 0,
+   "tp_visible": 0,
+   "extra": 0,
+   "residual": 0,
+   "ran": 7
+  },
+  "eslint-plugin-n": {
+   "cases": 12,
+   "tp": 0,
+   "tp_visible": 0,
+   "extra": 0,
+   "residual": 0,
+   "ran": 0
+  }
+ },
+ "detected_by": {
+  "email2pdf2-versioneer-safeconfigparser": [
+   "cafe",
+   "mypy",
+   "pyright",
+   "pylint"
+  ],
+  "stackrox-workflow-distutils-find-executable": [
+   "mypy",
+   "pylint"
+  ],
+  "stm32loader-mock-called-once-with": [
+   "ruff"
+  ],
+  "trafficserver-ssl-wrap-socket": [
+   "mypy",
+   "pyright"
+  ],
+  "awtk-distutils-strtobool": [
+   "mypy",
+   "pylint",
+   "cafe (environment-dependent flag)"
+  ],
+  "orange-widget-base-imp-load-source": [
+   "cafe",
+   "mypy",
+   "pyright",
+   "pylint"
+  ],
+  "safeeyes-inspect-getargspec": [
+   "cafe",
+   "mypy",
+   "pyright"
+  ],
+  "sumatra-default-getstate": [
+   "pyright"
+  ],
+  "oblique-random-sample-set": [
+   "mypy",
+   "pyright"
+  ],
+  "esa-cli-import-assert-json": [
+   "cafe"
+  ]
+ },
+ "any_free_tool": [
+  "awtk-distutils-strtobool",
+  "email2pdf2-versioneer-safeconfigparser",
+  "oblique-random-sample-set",
+  "orange-widget-base-imp-load-source",
+  "safeeyes-inspect-getargspec",
+  "stackrox-workflow-distutils-find-executable",
+  "stm32loader-mock-called-once-with",
+  "sumatra-default-getstate",
+  "trafficserver-ssl-wrap-socket"
+ ],
+ "cafe_strict": [
+  "email2pdf2-versioneer-safeconfigparser",
+  "esa-cli-import-assert-json",
+  "orange-widget-base-imp-load-source",
+  "safeeyes-inspect-getargspec"
+ ],
+ "cafe_only": [
+  "esa-cli-import-assert-json"
+ ],
+ "nobody": [
+  "bashhub-jsonpickle-pin",
+  "clickhouse-cityhash-cython-long",
+  "crackle-asynclocalstorage-node24",
+  "datalad-next-resolve-symlink-loop",
+  "guidance-dedent-fstring-ast",
+  "httptoolkit-ui-ts-webpack-config",
+  "insights-core-unicode-zero-width",
+  "kando-electron-forge-node23",
+  "kubeflow-frontend-minio-node22",
+  "langsmith-navigator-global",
+  "luigi-random-seed-tuple",
+  "meep-configure-distutils-sysconfig",
+  "nodejs-spanner-otel-context-manager",
+  "promplate-locals-pep667",
+  "radius-ts-node-generate-ext",
+  "shelljs-cmd-undefined-stdio",
+  "sonar-scanner-npm-eisdir",
+  "speedle-plus-email-address-indexerror",
+  "sphinx-js-jsdoc-util-isregexp",
+  "strictdoc-pybtex-pkg-resources",
+  "ttf2woff2-top-level-await-require",
+  "tutor-codejail-pkg-resources"
+ ]
+}

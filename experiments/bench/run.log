@@ -1,0 +1,32 @@
+email2pdf2-versioneer-safeconfigparser {'cafe': True, 'mypy': True, 'pyright': True, 'pylint': True, 'ruff': True, 'vermin': False}
+stackrox-workflow-distutils-find-executable {'cafe': False, 'mypy': True, 'pyright': False, 'pylint': True, 'ruff': True, 'vermin': False}
+speedle-plus-email-address-indexerror {'cafe': False, 'mypy': False, 'pyright': False, 'pylint': False, 'ruff': False, 'vermin': False}
+stm32loader-mock-called-once-with {'cafe': False, 'mypy': False, 'pyright': False, 'pylint': False, 'ruff': True, 'vermin': False}
+trafficserver-ssl-wrap-socket {'cafe': False, 'mypy': True, 'pyright': True, 'pylint': False, 'ruff': True, 'vermin': False}
+awtk-distutils-strtobool {'cafe': False, 'mypy': True, 'pyright': False, 'pylint': True, 'ruff': True, 'vermin': False}
+orange-widget-base-imp-load-source {'cafe': True, 'mypy': True, 'pyright': True, 'pylint': True, 'ruff': False, 'vermin': False}
+tutor-codejail-pkg-resources {'cafe': False, 'mypy': False, 'pyright': False, 'pylint': False, 'ruff': False, 'vermin': False}
+meep-configure-distutils-sysconfig {'cafe': False, 'mypy': 'n/a', 'pyright': 'n/a', 'pylint': 'n/a', 'ruff': 'n/a', 'vermin': 'n/a'}
+guidance-dedent-fstring-ast {'cafe': False, 'mypy': False, 'pyright': False, 'pylint': False, 'ruff': False, 'vermin': False}
+insights-core-unicode-zero-width {'cafe': False, 'mypy': False, 'pyright': False, 'pylint': False, 'ruff': False, 'vermin': False}
+strictdoc-pybtex-pkg-resources {'cafe': False, 'mypy': 'n/a', 'pyright': 'n/a', 'pylint': 'n/a', 'ruff': 'n/a', 'vermin': 'n/a'}
+promplate-locals-pep667 {'cafe': False, 'mypy': False, 'pyright': False, 'pylint': False, 'ruff': False, 'vermin': False}
+datalad-next-resolve-symlink-loop {'cafe': False, 'mypy': False, 'pyright': False, 'pylint': False, 'ruff': False, 'vermin': False}
+clickhouse-cityhash-cython-long {'cafe': False, 'mypy': False, 'pyright': False, 'pylint': False, 'ruff': True, 'vermin': False}
+luigi-random-seed-tuple {'cafe': False, 'mypy': False, 'pyright': False, 'pylint': False, 'ruff': False, 'vermin': False}
+safeeyes-inspect-getargspec {'cafe': True, 'mypy': True, 'pyright': True, 'pylint': False, 'ruff': False, 'vermin': False}
+sumatra-default-getstate {'cafe': False, 'mypy': False, 'pyright': True, 'pylint': False, 'ruff': False, 'vermin': False}
+oblique-random-sample-set {'cafe': False, 'mypy': True, 'pyright': True, 'pylint': False, 'ruff': False, 'vermin': False}
+bashhub-jsonpickle-pin {'cafe': False, 'mypy': False, 'pyright': False, 'pylint': False, 'ruff': False, 'vermin': False}
+esa-cli-import-assert-json {'cafe': True, 'tsc+@types/node': False, 'eslint-plugin-n': 'n/a'}
+shelljs-cmd-undefined-stdio {'cafe': False, 'tsc+@types/node': False, 'eslint-plugin-n': 'error'}
+nodejs-spanner-otel-context-manager {'cafe': False, 'tsc+@types/node': False, 'eslint-plugin-n': 'n/a'}
+kubeflow-frontend-minio-node22 {'cafe': False, 'tsc+@types/node': 'n/a', 'eslint-plugin-n': 'n/a'}
+langsmith-navigator-global {'cafe': False, 'tsc+@types/node': False, 'eslint-plugin-n': 'n/a'}
+sonar-scanner-npm-eisdir {'cafe': False, 'tsc+@types/node': False, 'eslint-plugin-n': 'n/a'}
+radius-ts-node-generate-ext {'cafe': False, 'tsc+@types/node': 'n/a', 'eslint-plugin-n': 'n/a'}
+ttf2woff2-top-level-await-require {'cafe': False, 'tsc+@types/node': False, 'eslint-plugin-n': 'n/a'}
+httptoolkit-ui-ts-webpack-config {'cafe': False, 'tsc+@types/node': 'n/a', 'eslint-plugin-n': 'n/a'}
+kando-electron-forge-node23 {'cafe': False, 'tsc+@types/node': 'n/a', 'eslint-plugin-n': 'n/a'}
+crackle-asynclocalstorage-node24 {'cafe': False, 'tsc+@types/node': False, 'eslint-plugin-n': 'n/a'}
+sphinx-js-jsdoc-util-isregexp {'cafe': False, 'tsc+@types/node': 'n/a', 'eslint-plugin-n': 'n/a'}

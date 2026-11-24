@@ -1,0 +1,130 @@
+{
+ "email2pdf2-versioneer-safeconfigparser": {
+  "near_gt": [],
+  "total": 0
+ },
+ "stackrox-workflow-distutils-find-executable": {
+  "near_gt": [],
+  "total": 0
+ },
+ "speedle-plus-email-address-indexerror": {
+  "near_gt": [],
+  "total": 0
+ },
+ "stm32loader-mock-called-once-with": {
+  "near_gt": [],
+  "total": 0
+ },
+ "trafficserver-ssl-wrap-socket": {
+  "near_gt": [],
+  "total": 0
+ },
+ "awtk-distutils-strtobool": {
+  "near_gt": [],
+  "total": 0
+ },
+ "orange-widget-base-imp-load-source": {
+  "near_gt": [],
+  "total": 0
+ },
+ "tutor-codejail-pkg-resources": {
+  "near_gt": [],
+  "total": 0
+ },
+ "meep-configure-distutils-sysconfig": {
+  "near_gt": [],
+  "total": 0
+ },
+ "guidance-dedent-fstring-ast": {
+  "near_gt": [],
+  "total": 0
+ },
+ "insights-core-unicode-zero-width": {
+  "near_gt": [],
+  "total": 0
+ },
+ "strictdoc-pybtex-pkg-resources": {
+  "near_gt": [],
+  "total": 0
+ },
+ "promplate-locals-pep667": {
+  "near_gt": [],
+  "total": 0
+ },
+ "datalad-next-resolve-symlink-loop": {
+  "near_gt": [],
+  "total": 0
+ },
+ "clickhouse-cityhash-cython-long": {
+  "near_gt": [],
+  "total": 0
+ },
+ "luigi-random-seed-tuple": {
+  "near_gt": [],
+  "total": 1
+ },
+ "safeeyes-inspect-getargspec": {
+  "near_gt": [],
+  "total": 5
+ },
+ "sumatra-default-getstate": {
+  "near_gt": [],
+  "total": 0
+ },
+ "oblique-random-sample-set": {
+  "near_gt": [],
+  "total": 0
+ },
+ "bashhub-jsonpickle-pin": {
+  "near_gt": [],
+  "total": 0
+ },
+ "esa-cli-import-assert-json": {
+  "near_gt": [],
+  "total": 0
+ },
+ "shelljs-cmd-undefined-stdio": {
+  "near_gt": [],
+  "total": 0
+ },
+ "nodejs-spanner-otel-context-manager": {
+  "near_gt": [],
+  "total": 0
+ },
+ "kubeflow-frontend-minio-node22": {
+  "near_gt": [],
+  "total": 0
+ },
+ "langsmith-navigator-global": {
+  "near_gt": [],
+  "total": 0
+ },
+ "sonar-scanner-npm-eisdir": {
+  "near_gt": [],
+  "total": 0
+ },
+ "radius-ts-node-generate-ext": {
+  "near_gt": [],
+  "total": 0
+ },
+ "ttf2woff2-top-level-await-require": {
+  "near_gt": [],
+  "total": 0
+ },
+ "httptoolkit-ui-ts-webpack-config": {
+  "near_gt": [],
+  "total": 0
+ },
+ "kando-electron-forge-node23": {
+  "near_gt": [],
+  "total": 0
+ },
+ "crackle-asynclocalstorage-node24": {
+  "near_gt": [],
+  "total": 0
+ },
+ "sphinx-js-jsdoc-util-isregexp": {
+  "near_gt": [],
+  "total": 0
+ }
+}

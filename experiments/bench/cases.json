@@ -1,0 +1,829 @@
+[
+  {
+    "id": "email2pdf2-versioneer-safeconfigparser",
+    "repo": "IMIO/email2pdf2",
+    "fix_commit": "6922fb7e2bd914f38fcdf429d8389a317397b2ec",
+    "broken_commit": "fed4d8b9228b21f1b4adf51ff185a611b50d20b6",
+    "url": "https://github.com/IMIO/email2pdf2/pull/5",
+    "runtime": "python",
+    "breaks_on": "3.12",
+    "works_on": "3.11",
+    "what_broke": "The bundled versioneer.py used configparser.SafeConfigParser and readfp, both removed in Python 3.12, so installing the package failed.",
+    "category": "api-removed",
+    "files_lines": [
+      {
+        "file": "versioneer.py",
+        "lines": [
+          "342",
+          "344"
+        ]
+      }
+    ],
+    "symptom": null,
+    "statically_visible": true,
+    "found_via_search": "q1"
+  },
+  {
+    "id": "stackrox-workflow-distutils-find-executable",
+    "repo": "stackrox/workflow",
+    "fix_commit": "46f0802267e8d81b794a0d1cdb91d38ec6d34641",
+    "broken_commit": "4e8520b1111738a47ddc7b0a2232a9e1eb4ebf1c",
+    "url": "https://github.com/stackrox/workflow/pull/119",
+    "runtime": "python",
+    "breaks_on": "3.12",
+    "works_on": "3.11",
+    "what_broke": "The roxhelp script imported find_executable from distutils.spawn, and distutils no longer exists in Python 3.12.",
+    "category": "stdlib-module-removed",
+    "files_lines": [
+      {
+        "file": "scripts/help",
+        "lines": [
+          "9"
+        ]
+      }
+    ],
+    "symptom": null,
+    "statically_visible": true,
+    "found_via_search": "q1"
+  },
+  {
+    "id": "speedle-plus-email-address-indexerror",
+    "repo": "teramoby/speedle-plus",
+    "fix_commit": "c46fbbf17194f0233262a2ae2b0efea194be5241",
+    "broken_commit": "779405c25f83934efc67b31816273c569a775a31",
+    "url": "https://github.com/teramoby/speedle-plus/pull/479",
+    "runtime": "python",
+    "breaks_on": "3.12 (3.12.3)",
+    "works_on": "unknown (PR says 3.12.16 does not reproduce)",
+    "what_broke": "A CI report script validated e-mail addresses with email.headerregistry.Address, whose local-part parser raised an uncaught IndexError on malformed input under Python 3.12.3.",
+    "category": "behavior-change",
+    "files_lines": [
+      {
+        "file": "scripts/ci/test_report.py",
+        "lines": [
+          "334",
+          "344"
+        ]
+      }
+    ],
+    "symptom": "IndexError from Python 3.12's local-part parser",
+    "statically_visible": false,
+    "found_via_search": "q1",
+    "notes": "Patch-release-specific: the PR reports CPython 3.12.16 did not reproduce; 3.12.3 did."
+  },
+  {
+    "id": "stm32loader-mock-called-once-with",
+    "repo": "florisla/stm32loader",
+    "fix_commit": "96f59b2984b0d0371b2da0360d6e8d94d0b39a68",
+    "broken_commit": "c56da3ddf552df033f5445963b0a0fce0259125f",
+    "url": "https://github.com/florisla/stm32loader/pull/79",
+    "runtime": "python",
+    "breaks_on": "3.12",
+    "works_on": "3.11",
+    "what_broke": "A unit test called mock.called_once_with (a typo for assert_called_once_with); since Python 3.12 unittest.mock raises AttributeError for such names, so the test suite failed.",
+    "category": "behavior-change",
+    "files_lines": [
+      {
+        "file": "tests/unit/test_bootloader.py",
+        "lines": [
+          "216"
+        ]
+      }
+    ],
+    "symptom": "AttributeError: 'called_once_with' is not a valid assertion.",
+    "statically_visible": true,
+    "found_via_search": "q4",
+    "notes": "Break is in the project's test code."
+  },
+  {
+    "id": "trafficserver-ssl-wrap-socket",
+    "repo": "apache/trafficserver",
+    "fix_commit": "5d4f975fa5934419c3ec6a9e43ba0d3eec316c73",
+    "broken_commit": "720bbea6b2d3285cdb547a4016740a1b92be17a6",
+    "url": "https://github.com/apache/trafficserver/pull/10247",
+    "runtime": "python",
+    "breaks_on": "3.12",
+    "works_on": "3.11",
+    "what_broke": "The autest microserver extension called ssl.wrap_socket, which was removed in Python 3.12.",
+    "category": "api-removed",
+    "files_lines": [
+      {
+        "file": "tests/gold_tests/autest-site/microserver.test.ext",
+        "lines": [
+          "127-129",
+          "141",
+          "144-145"
+        ],
+        "insertions_after_line": [
+          125
+        ]
+      }
+    ],
+    "symptom": null,
+    "statically_visible": true,
+    "found_via_search": "q4",
+    "notes": "Break is in test-harness code (an autest .ext Python file)."
+  },
+  {
+    "id": "awtk-distutils-strtobool",
+    "repo": "zlgopen/awtk",
+    "fix_commit": "cf9f76cf9dff4b7aa42a3df5ba9851709c4a2c57",
+    "broken_commit": "f5b18fba75304cf11e84a41b7cb4468fdca40661",
+    "url": "https://github.com/zlgopen/awtk/pull/867",
+    "runtime": "python",
+    "breaks_on": "3.12",
+    "works_on": "3.11",
+    "what_broke": "A SCons build script imported strtobool from distutils.util; with scons running on Python 3.12 the distutils package is missing.",
+    "category": "stdlib-module-removed",
+    "files_lines": [
+      {
+        "file": "scripts/compile_config.py",
+        "lines": [
+          "8"
+        ]
+      }
+    ],
+    "symptom": null,
+    "statically_visible": true,
+    "found_via_search": "q4",
+    "notes": "Fix also adds a new file scripts/utils.py with a strtobool replacement."
+  },
+  {
+    "id": "orange-widget-base-imp-load-source",
+    "repo": "biolab/orange-widget-base",
+    "fix_commit": "eebc02ebde70b6caa54f538e29ef10ff4fac27e9",
+    "broken_commit": "dae329dfbf34118cae8cb15f2a020e5ff14ce4db",
+    "url": "https://github.com/biolab/orange-widget-base/pull/264",
+    "runtime": "python",
+    "breaks_on": "3.12",
+    "works_on": "3.11",
+    "what_broke": "setup.py used imp.load_source to read the version file, and the imp module was removed in Python 3.12, so installing from sdist failed.",
+    "category": "stdlib-module-removed",
+    "files_lines": [
+      {
+        "file": "setup.py",
+        "lines": [
+          "122-123"
+        ]
+      }
+    ],
+    "symptom": null,
+    "statically_visible": true,
+    "found_via_search": "q4"
+  },
+  {
+    "id": "tutor-codejail-pkg-resources",
+    "repo": "eduNEXT/tutor-contrib-codejail",
+    "fix_commit": "e9d7710a725a2aca07b0ce6cd6c9964d2b588a2e",
+    "broken_commit": "4406c7c835e8509dcb9a084b7fa98d597183ef5b",
+    "url": "https://github.com/eduNEXT/tutor-contrib-codejail/pull/52",
+    "runtime": "python",
+    "breaks_on": "3.12",
+    "works_on": "3.11",
+    "what_broke": "The plugin imported pkg_resources (from setuptools) to locate its templates and patches, which is not available by default on Python 3.12; it was replaced with importlib_resources.",
+    "category": "build-or-packaging",
+    "files_lines": [
+      {
+        "file": "tutorcodejail/plugin.py",
+        "lines": [
+          "7",
+          "51-52",
+          "102",
+          "113-118"
+        ]
+      }
+    ],
+    "symptom": null,
+    "statically_visible": true,
+    "found_via_search": "q8",
+    "notes": "Squash commit also updates requirements files, setup.py tutor pin and CI; only plugin.py is recorded."
+  },
+  {
+    "id": "meep-configure-distutils-sysconfig",
+    "repo": "NanoComp/meep",
+    "fix_commit": "384d99f3350339b47bdfa47acb4938de390697cb",
+    "broken_commit": "98004f40d0daef35f0c4589d03facf71d8b5bf42",
+    "url": "https://github.com/NanoComp/meep/pull/3028",
+    "runtime": "python",
+    "breaks_on": "3.12",
+    "works_on": "3.11",
+    "what_broke": "configure.ac located the Python include directory with distutils.sysconfig.get_python_inc(), which fails on Python 3.12 because distutils was removed.",
+    "category": "stdlib-module-removed",
+    "files_lines": [
+      {
+        "file": "configure.ac",
+        "lines": [
+          "579"
+        ]
+      }
+    ],
+    "symptom": null,
+    "statically_visible": true,
+    "found_via_search": "q8",
+    "notes": "The Python snippet is embedded in an autoconf script."
+  },
+  {
+    "id": "guidance-dedent-fstring-ast",
+    "repo": "guidance-ai/guidance",
+    "fix_commit": "563371a08a5c201b15c79549a55c4459cc381617",
+    "broken_commit": "7bbeab24f6d08ad1c38caa234004547a5b20b0fc",
+    "url": "https://github.com/guidance-ai/guidance/pull/959",
+    "runtime": "python",
+    "breaks_on": "3.12",
+    "works_on": "3.11",
+    "what_broke": "The @guidance(dedent=True) decorator rewrote function source through the AST and relied on how multi-line f-strings were represented; Python 3.12's new f-string parsing (PEP 701) changed that, so dedenting stopped working (issue #942).",
+    "category": "behavior-change",
+    "files_lines": [
+      {
+        "file": "guidance/_utils.py",
+        "lines": [
+          "12",
+          "14-56",
+          "94",
+          "96-101",
+          "108-118",
+          "122-126",
+          "146"
+        ],
+        "insertions_after_line": [
+          57,
+          59
+        ]
+      }
+    ],
+    "symptom": null,
+    "statically_visible": false,
+    "found_via_search": "q8",
+    "notes": "Merge commit of 10 PR commits; broken = first parent."
+  },
+  {
+    "id": "insights-core-unicode-zero-width",
+    "repo": "RedHatInsights/insights-core",
+    "fix_commit": "c4467937f01d3db6a856055a084d5cd29efa0673",
+    "broken_commit": "f28e23823cdbbc400a3490321f243a028f78d137",
+    "url": "https://github.com/RedHatInsights/insights-core/pull/4342",
+    "runtime": "python",
+    "breaks_on": "3.12",
+    "works_on": "unknown",
+    "what_broke": "The playbook serializer did not correctly process zero-width Unicode characters (e.g. the zero-width joiner in emojis) on Python 3.12+, so signed playbook serialization/verification diverged.",
+    "category": "behavior-change",
+    "files_lines": [
+      {
+        "file": "insights/client/apps/ansible/playbook_verifier/serializer.py",
+        "lines": [],
+        "insertions_after_line": [
+          59
+        ]
+      }
+    ],
+    "symptom": null,
+    "statically_visible": false,
+    "found_via_search": "q8",
+    "notes": "PR text says the fix is 'mainly aimed for Python 3.12+' without naming the exact CPython change."
+  },
+  {
+    "id": "strictdoc-pybtex-pkg-resources",
+    "repo": "strictdoc-project/strictdoc",
+    "fix_commit": "8ead1e02a372966226cf48309c0cf68e792e344d",
+    "broken_commit": "7ac3f6092ce83df08e424cb1438f2818ed07e027",
+    "url": "https://github.com/strictdoc-project/strictdoc/pull/1439",
+    "runtime": "python",
+    "breaks_on": "3.12",
+    "works_on": "3.11",
+    "what_broke": "The pybtex dependency imports pkg_resources, which is not present on a fresh Python 3.12 environment, so strictdoc failed to run until setuptools was added as a dependency.",
+    "category": "build-or-packaging",
+    "files_lines": [
+      {
+        "file": "pyproject.toml",
+        "lines": [],
+        "insertions_after_line": [
+          77
+        ]
+      }
+    ],
+    "symptom": "ModuleNotFoundError: No module named 'pkg_resources'",
+    "statically_visible": false,
+    "found_via_search": "q8"
+  },
+  {
+    "id": "promplate-locals-pep667",
+    "repo": "promplate/core",
+    "fix_commit": "4fed982f6edc666edfcb63d2b59f48bf4e449a0c",
+    "broken_commit": "e7230bb0bcd71f58d4d4034f96b3c55ab17e82b7",
+    "url": "https://github.com/promplate/core/pull/14",
+    "runtime": "python",
+    "breaks_on": "3.13",
+    "works_on": "3.12",
+    "what_broke": "Template components forwarded context by evaluating locals(); with Python 3.13's new locals() semantics (PEP 667) outer names were no longer visible, so rendering raised NameError.",
+    "category": "behavior-change",
+    "files_lines": [
+      {
+        "file": "python/promplate/prompt/template.py",
+        "lines": [
+          "90"
+        ],
+        "insertions_after_line": [
+          5
+        ]
+      }
+    ],
+    "symptom": "NameError: name 'd' is not defined",
+    "statically_visible": false,
+    "found_via_search": "q5",
+    "notes": "PR head is not on the default branch; the fix commit is the equivalent commit on 'dev' with the same message ('fix: merge locals() with globals() to support Python 3.13'). Issue #13."
+  },
+  {
+    "id": "datalad-next-resolve-symlink-loop",
+    "repo": "datalad/datalad-next",
+    "fix_commit": "25ac6ef0fcd7b4b1e479d94fa5a8d8c001fc904c",
+    "broken_commit": "39a9d83be66ca2b7151d6178c833ff80d3ee3a0a",
+    "url": "https://github.com/datalad/datalad-next/pull/768",
+    "runtime": "python",
+    "breaks_on": "3.13",
+    "works_on": "3.12",
+    "what_broke": "A test expected Path.resolve() on a symlink loop to raise RuntimeError, but in Python 3.13 non-strict resolve no longer raises (strict mode raises OSError).",
+    "category": "behavior-change",
+    "files_lines": [
+      {
+        "file": "datalad_next/commands/tests/test_tree.py",
+        "lines": [
+          "789"
+        ]
+      }
+    ],
+    "symptom": null,
+    "statically_visible": false,
+    "found_via_search": "q5",
+    "notes": "PR head is not on the default branch; fix commit is the same-message commit on main. Break is in test code."
+  },
+  {
+    "id": "clickhouse-cityhash-cython-long",
+    "repo": "xzkostyan/clickhouse-cityhash",
+    "fix_commit": "fa821f495c7cd20a8e5870e8dda6a9ebc3142002",
+    "broken_commit": "bd5f3eb6f1390de468dde44fc7fe47f279c0bb6a",
+    "url": "https://github.com/xzkostyan/clickhouse-cityhash/pull/6",
+    "runtime": "python",
+    "breaks_on": "3.13",
+    "works_on": "3.12",
+    "what_broke": "Building the Cython extension for Python 3.13 failed because the .pyx source used the Python 2 builtin long(), which the Cython version needed for 3.13 no longer accepts.",
+    "category": "build-or-packaging",
+    "files_lines": [
+      {
+        "file": "src/cityhash.pyx",
+        "lines": [
+          "155",
+          "183"
+        ]
+      }
+    ],
+    "symptom": null,
+    "statically_visible": true,
+    "found_via_search": "q9"
+  },
+  {
+    "id": "luigi-random-seed-tuple",
+    "repo": "spotify/luigi",
+    "fix_commit": "9177eeea9e20762babb01a30008e47e8f679fd39",
+    "broken_commit": "07551b147ae75817718b485d38c45dae65b4633b",
+    "url": "https://github.com/spotify/luigi/pull/3204",
+    "runtime": "python",
+    "breaks_on": "3.11",
+    "works_on": "3.10",
+    "what_broke": "Worker processes seeded the RNG with a tuple via random.seed((pid, time)); Python 3.11 only accepts None/int/float/str/bytes seeds, so workers crashed (issue #3202).",
+    "category": "api-removed",
+    "files_lines": [
+      {
+        "file": "luigi/worker.py",
+        "lines": [
+          "173"
+        ]
+      }
+    ],
+    "symptom": "TypeError: The only supported seed types are:",
+    "statically_visible": true,
+    "found_via_search": "q6"
+  },
+  {
+    "id": "safeeyes-inspect-getargspec",
+    "repo": "slgobinath/safeeyes",
+    "fix_commit": "06d8f491c49613ad8dec3417be6b8ddc49abe46a",
+    "broken_commit": "682a027d0443f7627587a0710819aa0ca804b664",
+    "url": "https://github.com/slgobinath/safeeyes/pull/505",
+    "runtime": "python",
+    "breaks_on": "3.11",
+    "works_on": "3.10",
+    "what_broke": "Plugin loading called inspect.getargspec, which was removed in Python 3.11, so every plugin failed to load (issue #491).",
+    "category": "api-removed",
+    "files_lines": [
+      {
+        "file": "safeeyes/utility.py",
+        "lines": [
+          "669"
+        ]
+      }
+    ],
+    "symptom": "Error in loading the plugin: notification",
+    "statically_visible": true,
+    "found_via_search": "q10"
+  },
+  {
+    "id": "sumatra-default-getstate",
+    "repo": "open-research/sumatra",
+    "fix_commit": "2032010e7a5bf020a6554a6cb0e3517f29bd9b99",
+    "broken_commit": "2ff2a359e11712a7d17cf9346a0b676ab33e2074",
+    "url": "https://github.com/open-research/sumatra/pull/396",
+    "runtime": "python",
+    "breaks_on": "3.11",
+    "works_on": "3.10",
+    "what_broke": "Project.save() used hasattr(attr, '__getstate__') to decide how to serialise attributes; since Python 3.11 every object has a default __getstate__ that can return None, so calling .items() on it failed.",
+    "category": "behavior-change",
+    "files_lines": [
+      {
+        "file": "sumatra/projects.py",
+        "lines": [
+          "150-153"
+        ]
+      }
+    ],
+    "symptom": null,
+    "statically_visible": false,
+    "found_via_search": "q10"
+  },
+  {
+    "id": "oblique-random-sample-set",
+    "repo": "ambv/oblique",
+    "fix_commit": "c257e5c43be2c89cf7429e3d52ec5fb938e2fde6",
+    "broken_commit": "56e081a07c1e15d8eeb1f438e080b431a2b2334c",
+    "url": "https://github.com/ambv/oblique/pull/1",
+    "runtime": "python",
+    "breaks_on": "3.11",
+    "works_on": "3.10",
+    "what_broke": "main() passed a set to random.sample; Python 3.11 no longer converts sets automatically, so the CLI crashed.",
+    "category": "api-removed",
+    "files_lines": [
+      {
+        "file": "oblique/__init__.py",
+        "lines": [
+          "59"
+        ]
+      }
+    ],
+    "symptom": "TypeError: Population must be a sequence.",
+    "statically_visible": false,
+    "found_via_search": "q10",
+    "notes": "Merge commit of 2 PR commits (also adds CI/tox and refactors CLI defaults); only the random.sample hunk is recorded. The set comes from get_strategies() defined in the same file."
+  },
+  {
+    "id": "bashhub-jsonpickle-pin",
+    "repo": "rcaloras/bashhub-client",
+    "fix_commit": "95ca54b2f5f3a8fb646141dc7d31551c07d238ea",
+    "broken_commit": "be1c11506b2b2945bea31a732a075ed5aa5f133f",
+    "url": "https://github.com/rcaloras/bashhub-client/pull/127",
+    "runtime": "python",
+    "breaks_on": "3.11",
+    "works_on": "3.10",
+    "what_broke": "The pinned jsonpickle==2.0.0 misbehaved on Python 3.11 so commands were not serialised correctly and POST requests failed; the pin was bumped to 3.0.1.",
+    "category": "dependency-version",
+    "files_lines": [
+      {
+        "file": "setup.py",
+        "lines": [
+          "19"
+        ]
+      }
+    ],
+    "symptom": null,
+    "statically_visible": false,
+    "found_via_search": "q10"
+  },
+  {
+    "id": "esa-cli-import-assert-json",
+    "repo": "aliyun/alibabacloud-esa-cli",
+    "fix_commit": "f3873c09fb8b7f3a32a54505f469386dbbff1855",
+    "broken_commit": "c75344f1756719213c04fd15a89f52e1758dec28",
+    "url": "https://github.com/aliyun/alibabacloud-esa-cli/pull/2",
+    "runtime": "node",
+    "breaks_on": "22",
+    "works_on": "20 (inferred)",
+    "what_broke": "The CLI imported a JSON file with the import-assertion syntax (assert { type: 'json' }), which Node 22 no longer accepts, so the CLI failed on startup (issue #1).",
+    "category": "syntax-change",
+    "files_lines": [
+      {
+        "file": "src/i18n/index.ts",
+        "lines": [
+          "1"
+        ],
+        "insertions_after_line": [
+          3
+        ]
+      }
+    ],
+    "symptom": "SyntaxError: Unexpected identifier 'assert'",
+    "statically_visible": true,
+    "found_via_search": "n5",
+    "notes": "Merge commit of 3 PR commits; besides src/i18n/index.ts it moves getRoot/getDirName into src/utils/fileUtils/base.ts and adds src/utils/readJson.ts (refactor to avoid an import cycle). Only the line with the assertion is the root cause."
+  },
+  {
+    "id": "shelljs-cmd-undefined-stdio",
+    "repo": "shelljs/shelljs",
+    "fix_commit": "75d26de5b31f71bc8784e3d9329375e83c7b6d49",
+    "broken_commit": "8bc5833828927b217124a956c859ec2a966219c1",
+    "url": "https://github.com/shelljs/shelljs/pull/1219",
+    "runtime": "node",
+    "breaks_on": "22.10",
+    "works_on": "22.9.0",
+    "what_broke": "cmd() detected 'command not found' by checking that stdout/stderr were null, but from Node 22.10 they are undefined, so the detection failed.",
+    "category": "behavior-change",
+    "files_lines": [
+      {
+        "file": "src/cmd.js",
+        "lines": [
+          "20"
+        ],
+        "insertions_after_line": [
+          13,
+          18
+        ]
+      }
+    ],
+    "symptom": null,
+    "statically_visible": false,
+    "found_via_search": "n5",
+    "notes": "PR head is not on default branch; fix commit is the same-message commit on main. Fix also unpins Node 22.9.0 in CI and scripts/check-node-support.js (not recorded)."
+  },
+  {
+    "id": "nodejs-spanner-otel-context-manager",
+    "repo": "googleapis/nodejs-spanner",
+    "fix_commit": "e8cdbedd55f049b8c7766e97388ed045fedd1b4e",
+    "broken_commit": "192bf2bb603bca4ac481fcfd1f04974173adc6a1",
+    "url": "https://github.com/googleapis/nodejs-spanner/pull/2326",
+    "runtime": "node",
+    "breaks_on": "22",
+    "works_on": "unknown",
+    "what_broke": "OpenTelemetry trace-context propagation with async/await did not work in Node.js 22 because the code only installed a context manager when the active context was ROOT_CONTEXT, not when no context manager was registered.",
+    "category": "behavior-change",
+    "files_lines": [
+      {
+        "file": "src/instrument.ts",
+        "lines": [
+          "108-109"
+        ]
+      }
+    ],
+    "symptom": null,
+    "statically_visible": false,
+    "found_via_search": "n5"
+  },
+  {
+    "id": "kubeflow-frontend-minio-node22",
+    "repo": "kubeflow/pipelines",
+    "fix_commit": "533a3c6b667eb11b9cd7da2f6fe334252867fcc5",
+    "broken_commit": "682d3aca5fb92622fb6a1cd94e5984fea4d90471",
+    "url": "https://github.com/kubeflow/pipelines/pull/11524",
+    "runtime": "node",
+    "breaks_on": "22",
+    "works_on": "18 (base image was node:18.18.2)",
+    "what_broke": "The frontend server image build failed on Node 22 with minio ~7.0; minio was upgraded to ~8.0.3 (and the base image moved to Node 22).",
+    "category": "dependency-version",
+    "files_lines": [
+      {
+        "file": "frontend/server/package.json",
+        "lines": [
+          "14",
+          "26"
+        ]
+      }
+    ],
+    "symptom": null,
+    "statically_visible": false,
+    "found_via_search": "n5",
+    "notes": "Also changes frontend/Dockerfile base image and package-lock.json (not recorded)."
+  },
+  {
+    "id": "langsmith-navigator-global",
+    "repo": "langchain-ai/langsmith-sdk",
+    "fix_commit": "1025e2737b66c4ae90ba674746bfbb56d589cd24",
+    "broken_commit": "4b35715fae69a562fb783051495b383d474982ba",
+    "url": "https://github.com/langchain-ai/langsmith-sdk/pull/1784",
+    "runtime": "node",
+    "breaks_on": "21 (reported for 22)",
+    "works_on": "20",
+    "what_broke": "isJsDom() treated any global navigator whose userAgent contains 'Node.js' as JSDom; Node 21+ defines a global navigator, so it always returned true on recent Node.",
+    "category": "behavior-change",
+    "files_lines": [
+      {
+        "file": "js/src/utils/env.ts",
+        "lines": [
+          "25-27"
+        ]
+      }
+    ],
+    "symptom": null,
+    "statically_visible": false,
+    "found_via_search": "n5",
+    "notes": "Version bump lines in js/package.json and js/src/index.ts are not recorded."
+  },
+  {
+    "id": "sonar-scanner-npm-eisdir",
+    "repo": "SonarSource/sonar-scanner-npm",
+    "fix_commit": "a05a89f333d0090438397f53ec0d35dc47774423",
+    "broken_commit": "1e0107482e157ef9890d8fb182862e87bca03356",
+    "url": "https://github.com/SonarSource/sonar-scanner-npm/pull/177",
+    "runtime": "node",
+    "breaks_on": "23",
+    "works_on": "22 (inferred)",
+    "what_broke": "Archive extraction piped directory entries into fs.createWriteStream; Node 23 rejects a directory path there, so downloading/extracting the JRE crashed.",
+    "category": "behavior-change",
+    "files_lines": [
+      {
+        "file": "src/file.ts",
+        "lines": [
+          "20",
+          "65",
+          "68-71",
+          "73"
+        ]
+      }
+    ],
+    "symptom": "SystemError [ERR_FS_EISDIR]: Path is a directory",
+    "statically_visible": false,
+    "found_via_search": "n9",
+    "notes": "PR head is a later version-bump commit; fix commit is the PR's code commit 'SCANNPM-55 Fix Node 23+ compatibility...' on master."
+  },
+  {
+    "id": "radius-ts-node-generate-ext",
+    "repo": "radius-project/radius",
+    "fix_commit": "c889ccf2a1a5c044015b5a6c085d75248847e7da",
+    "broken_commit": "ac9314669d0d1d7871c3e86d6a3de8b64aa11a8e",
+    "url": "https://github.com/radius-project/radius/pull/9671",
+    "runtime": "node",
+    "breaks_on": "23",
+    "works_on": "22 (inferred)",
+    "what_broke": "An npm script ran 'ts-node src/cmd/generate' without the .ts extension, which throws on Node 23+.",
+    "category": "behavior-change",
+    "files_lines": [
+      {
+        "file": "hack/bicep-types-radius/src/generator/package.json",
+        "lines": [
+          "7"
+        ]
+      }
+    ],
+    "symptom": null,
+    "statically_visible": false,
+    "found_via_search": "n9"
+  },
+  {
+    "id": "ttf2woff2-top-level-await-require",
+    "repo": "nfroidure/ttf2woff2",
+    "fix_commit": "b0ce76d22fb1b436f7d6b16a40dd5ee464b66779",
+    "broken_commit": "040bc37afbb25d6c29cef5af95189b91b6263714",
+    "url": "https://github.com/nfroidure/ttf2woff2/pull/90",
+    "runtime": "node",
+    "breaks_on": "23 (23.1.0 reported)",
+    "works_on": "22 (inferred)",
+    "what_broke": "The module used top-level await to dynamically import its native/wasm backends; when loaded through require() on Node 23 this fails with 'unexpected top-level await' (issue #87).",
+    "category": "behavior-change",
+    "files_lines": [
+      {
+        "file": "src/index.ts",
+        "lines": [
+          "6",
+          "8-11",
+          "13",
+          "16-19",
+          "26",
+          "29-32"
+        ],
+        "insertions_after_line": [
+          3
+        ]
+      }
+    ],
+    "symptom": "Error: unexpected top-level await",
+    "statically_visible": false,
+    "found_via_search": "n9"
+  },
+  {
+    "id": "httptoolkit-ui-ts-webpack-config",
+    "repo": "httptoolkit/httptoolkit-ui",
+    "fix_commit": "fb4eb7657943c7aba032364ddd0264f0013a18b2",
+    "broken_commit": "0147fd8eac40a05da153c4ce2c6ada75246dcacf",
+    "url": "https://github.com/httptoolkit/httptoolkit-ui/pull/154",
+    "runtime": "node",
+    "breaks_on": "23",
+    "works_on": "22 (inferred)",
+    "what_broke": "Node 23+ tries to interpret .ts files itself, which broke loading the TypeScript webpack config files; the npm scripts now preload ts-node/register.",
+    "category": "behavior-change",
+    "files_lines": [
+      {
+        "file": "package.json",
+        "lines": [
+          "13-14",
+          "19"
+        ]
+      }
+    ],
+    "symptom": null,
+    "statically_visible": false,
+    "found_via_search": "n9"
+  },
+  {
+    "id": "kando-electron-forge-node23",
+    "repo": "kando-menu/kando",
+    "fix_commit": "39355efbc672cad67e4d3d11f0313eaf37e69b4c",
+    "broken_commit": "2203551b165993b5629d498f3edb3864a29a1155",
+    "url": "https://github.com/kando-menu/kando/pull/826",
+    "runtime": "node",
+    "breaks_on": "23",
+    "works_on": "22 (inferred)",
+    "what_broke": "electron-forge start/package/make/publish did not work on Node 23; the commit works around it by running the forge CLI entry points through tsx (citing electron/forge#3671).",
+    "category": "other",
+    "files_lines": [
+      {
+        "file": "package.json",
+        "lines": [
+          "9-12"
+        ],
+        "insertions_after_line": [
+          61
+        ]
+      }
+    ],
+    "symptom": null,
+    "statically_visible": false,
+    "found_via_search": "n9",
+    "notes": "Single workaround commit inside PR #826 (the PR also has a gcc-warning commit and a changelog commit). The underlying Node 23 change is not described in the commit."
+  },
+  {
+    "id": "crackle-asynclocalstorage-node24",
+    "repo": "seek-oss/crackle",
+    "fix_commit": "df3cfc33639c408f07244758b0a422715cf9b759",
+    "broken_commit": "09539dc9256e2df31c87e1dcefb94a3fbced3597",
+    "url": "https://github.com/seek-oss/crackle/pull/286",
+    "runtime": "node",
+    "breaks_on": "24",
+    "works_on": "unknown",
+    "what_broke": "Config was stored in an AsyncLocalStorage context that was not propagated across async boundaries under Node 24, so builds failed with 'config not set in context'; operations are now wrapped in context.run().",
+    "category": "behavior-change",
+    "files_lines": [
+      {
+        "file": "packages/core/src/entries/clean.ts",
+        "lines": [
+          "1",
+          "12",
+          "14-16",
+          "18"
+        ]
+      },
+      {
+        "file": "packages/core/src/entries/fix.ts",
+        "lines": [
+          "1",
+          "12-13",
+          "15",
+          "17-22",
+          "25",
+          "27-33"
+        ]
+      },
+      {
+        "file": "packages/core/src/entries/package.ts",
+        "lines": [
+          "5",
+          "108"
+        ]
+      }
+    ],
+    "symptom": "ERROR config not set in context",
+    "statically_visible": false,
+    "found_via_search": "n7",
+    "notes": "Linked issue #247 shows the error but does not state the Node version; Node 24 attribution comes from the PR title."
+  },
+  {
+    "id": "sphinx-js-jsdoc-util-isregexp",
+    "repo": "pyodide/sphinx-js",
+    "fix_commit": "42d5421b86cc505ae50ecc13f1a9af0f22ffbfaf",
+    "broken_commit": "437bc8cbe1aa1cff32847a5dea6635d550e40bc0",
+    "url": "https://github.com/pyodide/sphinx-js/pull/280",
+    "runtime": "node",
+    "breaks_on": "24 (reported)",
+    "works_on": "unknown",
+    "what_broke": "Tests installed jsdoc@4.0.0, which calls util.isRegExp, no longer available in recent Node; tests failed on Node 24 until jsdoc 4.0.4 was pinned.",
+    "category": "dependency-version",
+    "files_lines": [
+      {
+        "file": "noxfile.py",
+        "lines": [
+          "17",
+          "56",
+          "89"
+        ]
+      }
+    ],
+    "symptom": "TypeError: util.isRegExp is not a function",
+    "statically_visible": false,
+    "found_via_search": "n7",
+    "notes": "Project is a Python package; the breakage is in its Node toolchain (jsdoc) used by tests."
+  }
+]

@@ -1,0 +1,215 @@
+{
+ "_note": "Public issues opened Aug-Nov 2026 reporting a concrete Python 3.13/3.14 or Node 24/25 upgrade failure. Collected via GitHub issue search for PROBLEM INTERVIEWS. Nobody was contacted. Not users.",
+ "candidates": [
+  {
+   "repo": "ni/nitypes-python",
+   "issue": "https://github.com/ni/nitypes-python/issues/302",
+   "title": "Documentation generation fails with Python 3.13",
+   "opened": "2026-11-02",
+   "pain": "runtime behavior/test failure"
+  },
+  {
+   "repo": "Eigenstate/vmd-python",
+   "issue": "https://github.com/Eigenstate/vmd-python/issues/54",
+   "title": "Build fails with GCC 15 (C23) and Python 3.13",
+   "opened": "2026-11-14",
+   "pain": "dependencies/install/build"
+  },
+  {
+   "repo": "tarakanof/Unraid-MCP",
+   "issue": "https://github.com/tarakanof/Unraid-MCP/issues/205",
+   "title": "test(schema-trim): size ratio test fails on Python 3.13",
+   "opened": "2026-11-03",
+   "pain": "runtime behavior/test failure"
+  },
+  {
+   "repo": "Bin-Cao/Bgolearn",
+   "issue": "https://github.com/Bin-Cao/Bgolearn/issues/11",
+   "title": "bgolearn_ui.py fails on Python 3.13: the cgi module was removed",
+   "opened": "2026-11-15",
+   "pain": "removed stdlib module/API"
+  },
+  {
+   "repo": "FoundationAgents/OpenManus",
+   "issue": "https://github.com/FoundationAgents/OpenManus/issues/1484",
+   "title": "Supported Python 3.13 emits an unsupported-version warning on import",
+   "opened": "2026-11-23",
+   "pain": "runtime behavior/test failure"
+  },
+  {
+   "repo": "openbmc/openbmc-test-automation",
+   "issue": "https://github.com/openbmc/openbmc-test-automation/issues/2288",
+   "title": "ffdc: collect_ffdc.py fails to start on Python 3.13 (telnetlib removed)",
+   "opened": "2026-11-12",
+   "pain": "removed stdlib module/API"
+  },
+  {
+   "repo": "bio-learn/biolearn",
+   "issue": "https://github.com/bio-learn/biolearn/issues/224",
+   "title": "pip install biolearn: seaborn and torch missing, and install fails on Python 3.13 (ecos)",
+   "opened": "2026-11-22",
+   "pain": "dependencies/install/build"
+  },
+  {
+   "repo": "eclipse-volttron/volttron-core",
+   "issue": "https://github.com/eclipse-volttron/volttron-core/issues/382",
+   "title": "Dependency ranges block installation on Python 3.13 to 3.15",
+   "opened": "2026-11-22",
+   "pain": "dependencies/install/build"
+  },
+  {
+   "repo": "meta/openbmc",
+   "issue": "https://github.com/meta/openbmc/issues/311",
+   "title": "tools/rotate-password.py fails on Python 3.13 (crypt removed)",
+   "opened": "2026-10-27",
+   "pain": "removed stdlib module/API"
+  },
+  {
+   "repo": "matthewkapfhammer/MotionBuilderSublime",
+   "issue": "https://github.com/matthewkapfhammer/MotionBuilderSublime/issues/7",
+   "title": "telnetlib was removed in Python 3.13: plugin fails to load",
+   "opened": "2026-10-25",
+   "pain": "removed stdlib module/API"
+  },
+  {
+   "repo": "emdashcodes/SublimeCloudup",
+   "issue": "https://github.com/emdashcodes/SublimeCloudup/issues/1",
+   "title": "Fails to load on Python 3.13+: bundled requests imports cgi",
+   "opened": "2026-10-22",
+   "pain": "removed stdlib module/API"
+  },
+  {
+   "repo": "astral-sh/uv",
+   "issue": "https://github.com/astral-sh/uv/issues/23239",
+   "title": "Universal Windows lock cannot sync on free-threaded Python 3.13",
+   "opened": "2026-11-13",
+   "pain": "dependencies/install/build"
+  },
+  {
+   "repo": "coaxk/subbrainarr",
+   "issue": "https://github.com/coaxk/subbrainarr/issues/26",
+   "title": "Backend dependencies cannot install on Python 3.13",
+   "opened": "2026-10-21",
+   "pain": "dependencies/install/build"
+  },
+  {
+   "repo": "neuroinformatics-unit/fancylog",
+   "issue": "https://github.com/neuroinformatics-unit/fancylog/issues/106",
+   "title": "Multiprocessing logging fails on macOS python 3.13",
+   "opened": "2026-09-09",
+   "pain": "runtime behavior/test failure"
+  },
+  {
+   "repo": "KunihikoKido/sublime-elasticsearch-client",
+   "issue": "https://github.com/KunihikoKido/sublime-elasticsearch-client/issues/9",
+   "title": "Plugin fails to load on Python 3.13+: bundled requests imports cgi (removed)",
+   "opened": "2026-10-30",
+   "pain": "removed stdlib module/API"
+  },
+  {
+   "repo": "vektralabs/vektra-stack",
+   "issue": "https://github.com/vektralabs/vektra-stack/issues/161",
+   "title": "requires-python >=3.12 promises Python 3.13, which cannot be installed",
+   "opened": "2026-11-07",
+   "pain": "dependencies/install/build"
+  },
+  {
+   "repo": "stprnvsh/geoparquet-lod",
+   "issue": "https://github.com/stprnvsh/geoparquet-lod/issues/4",
+   "title": "Install fails on Python 3.13: python-geohash doesn't build",
+   "opened": "2026-09-25",
+   "pain": "dependencies/install/build"
+  },
+  {
+   "repo": "spacetx/starfish",
+   "issue": "https://github.com/spacetx/starfish/issues/2282",
+   "title": "fix: upgrade Sphinx to 7.x to restore Python 3.13+ docs build",
+   "opened": "2026-11-12",
+   "pain": "dependencies/install/build"
+  },
+  {
+   "repo": "mx-pycoder/pearback",
+   "issue": "https://github.com/mx-pycoder/pearback/issues/4",
+   "title": "Compatibility issues with Python 3.13 and macOS Tahoe",
+   "opened": "2026-11-02",
+   "pain": "runtime behavior/test failure"
+  },
+  {
+   "repo": "WayfarerLabs/agentworks",
+   "issue": "https://github.com/WayfarerLabs/agentworks/issues/951",
+   "title": "Proxmox VE 8 default CA is rejected under Python 3.13's strict TLS verification",
+   "opened": "2026-11-22",
+   "pain": "runtime behavior/test failure"
+  },
+  {
+   "repo": "mimers/ApkInstaller",
+   "issue": "https://github.com/mimers/ApkInstaller/issues/1",
+   "title": "Package fails to load on Python 3.13+: No module named telnetlib",
+   "opened": "2026-10-22",
+   "pain": "removed stdlib module/API"
+  },
+  {
+   "repo": "SumantxD/shrike",
+   "issue": "https://github.com/SumantxD/shrike/issues/1",
+   "title": "Test the Python recorder on Python 3.13",
+   "opened": "2026-10-11",
+   "pain": "runtime behavior/test failure"
+  },
+  {
+   "repo": "ICOS-Carbon-Portal/infrastructure",
+   "issue": "https://github.com/ICOS-Carbon-Portal/infrastructure/issues/118",
+   "title": "jusers.py imports spwd, which Python 3.13 removed",
+   "opened": "2026-10-18",
+   "pain": "removed stdlib module/API"
+  },
+  {
+   "repo": "feur25/Sera",
+   "issue": "https://github.com/feur25/Sera/issues/28",
+   "title": "Python 3.13 wheels need a pyo3 upgrade (0.21 tops out at 3.12)",
+   "opened": "2026-11-24",
+   "pain": "dependencies/install/build"
+  },
+  {
+   "repo": "JHCodeQuest/bookvox",
+   "issue": "https://github.com/JHCodeQuest/bookvox/issues/15",
+   "title": "Python 3.13+: kokoro and misaki cap Python below 3.13 (the code itself works on 3.13)",
+   "opened": "2026-10-20",
+   "pain": "dependencies/install/build"
+  },
+  {
+   "repo": "msqd/harp",
+   "issue": "https://github.com/msqd/harp/issues/1228",
+   "title": "Declared dependency floors do not install on Python 3.13",
+   "opened": "2026-10-17",
+   "pain": "dependencies/install/build"
+  },
+  {
+   "repo": "sunrise-org/sunrise",
+   "issue": "https://github.com/sunrise-org/sunrise/issues/4319",
+   "title": "Tests: test_prebuilt_game SdkAssetTests.test_the_rust_reader_fixture_is_what_pack_writes fails with Python 3.13",
+   "opened": "2026-11-22",
+   "pain": "runtime behavior/test failure"
+  },
+  {
+   "repo": "open-vela/nuttx",
+   "issue": "https://github.com/open-vela/nuttx/issues/425",
+   "title": "[BUG] tools/flash_writer.py fails on Python 3.13 (telnetlib removed), fixed upstream in apache/nuttx#20663",
+   "opened": "2026-11-16",
+   "pain": "removed stdlib module/API"
+  },
+  {
+   "repo": "xjsender/haoide",
+   "issue": "https://github.com/xjsender/haoide/issues/222",
+   "title": "Plugin does not load on Python 3.13+: bundled requests imports cgi",
+   "opened": "2026-10-30",
+   "pain": "removed stdlib module/API"
+  },
+  {
+   "repo": "sascha-wolf/sublime-SortLinesBySelection",
+   "issue": "https://github.com/sascha-wolf/sublime-SortLinesBySelection/issues/4",
+   "title": "morph argument raises KeyError on Python 3.13+ (exec and locals)",
+   "opened": "2026-10-26",
+   "pain": "runtime behavior/test failure"
+  }
+ ]
+}

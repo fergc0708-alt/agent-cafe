@@ -1,0 +1,2612 @@
+{
+ "email2pdf2-versioneer-safeconfigparser": {
+  "id": "email2pdf2-versioneer-safeconfigparser",
+  "repo": "IMIO/email2pdf2",
+  "runtime": "python",
+  "old": "3.11",
+  "new": "3.12",
+  "category": "api-removed",
+  "statically_visible": true,
+  "fetched": true,
+  "tools": {
+   "cafe": {
+    "detected": true,
+    "near_gt": [
+     [
+      "versioneer.py",
+      342,
+      "py-safeconfigparser"
+     ]
+    ],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   },
+   "mypy": {
+    "detected": true,
+    "near_gt": [
+     [
+      "versioneer.py",
+      342,
+      "Module has no attribute \"SafeConfigParser\"; maybe \"ConfigParser\" or \"RawConfigParser\"?  [attr-defined]"
+     ]
+    ],
+    "extra_broken": 3,
+    "extra_sample": [
+     [
+      "versioneer.py",
+      1503,
+      "Cannot find implementation or library stub for module named \"distutils.core\"  [import-not-found]"
+     ],
+     [
+      "versioneer.py",
+      1545,
+      "Cannot find implementation or library stub for module named \"distutils.command.build_py\"  [import-not-found]"
+     ],
+     [
+      "versioneer.py",
+      1626,
+      "Cannot find implementation or library stub for module named \"distutils.command.sdist\"  [import-not-found]"
+     ]
+    ],
+    "residual_fixed_touched": [
+     [
+      "versioneer.py",
+      1503,
+      "Cannot find implementation or library stub for module named \"distutils.core\"  [import-not-found]"
+     ],
+     [
+      "versioneer.py",
+      1545,
+      "Cannot find implementation or library stub for module named \"distutils.command.build_py\"  [import-not-found]"
+     ],
+     [
+      "versioneer.py",
+      1626,
+      "Cannot find implementation or library stub for module named \"distutils.command.sdist\"  [import-not-found]"
+     ]
+    ],
+    "residual_fixed_total": 3
+   },
+   "pyright": {
+    "detected": true,
+    "near_gt": [
+     [
+      "versioneer.py",
+      342,
+      "reportAttributeAccessIssue: \"SafeConfigParser\" is not a known attribute of module \"configparser\""
+     ]
+    ],
+    "extra_broken": 1,
+    "extra_sample": [
+     [
+      "versioneer.py",
+      1503,
+      "reportMissingImports: Import \"distutils.core\" could not be resolved"
+     ]
+    ],
+    "residual_fixed_touched": [
+     [
+      "versioneer.py",
+      1503,
+      "reportMissingImports: Import \"distutils.core\" could not be resolved"
+     ]
+    ],
+    "residual_fixed_total": 1
+   },
+   "pylint": {
+    "detected": true,
+    "near_gt": [
+     [
+      "versioneer.py",
+      342,
+      "W4904: Using deprecated class SafeConfigParser of module configparser (deprecated-class)"
+     ]
+    ],
+    "extra_broken": 3,
+    "extra_sample": [
+     [
+      "versioneer.py",
+      1503,
+      "W4901: Deprecated module 'distutils.core' (deprecated-module)"
+     ],
+     [
+      "versioneer.py",
+      1545,
+      "W4901: Deprecated module 'distutils.command.build_py' (deprecated-module)"
+     ],
+     [
+      "versioneer.py",
+      1626,
+      "W4901: Deprecated module 'distutils.command.sdist' (deprecated-module)"
+     ]
+    ],
+    "residual_fixed_touched": [
+     [
+      "versioneer.py",
+      1503,
+      "W4901: Deprecated module 'distutils.core' (deprecated-module)"
+     ],
+     [
+      "versioneer.py",
+      1545,
+      "W4901: Deprecated module 'distutils.command.build_py' (deprecated-module)"
+     ],
+     [
+      "versioneer.py",
+      1626,
+      "W4901: Deprecated module 'distutils.command.sdist' (deprecated-module)"
+     ]
+    ],
+    "residual_fixed_total": 3
+   },
+   "ruff": {
+    "detected": true,
+    "near_gt": [
+     [
+      "versioneer.py",
+      343,
+      "UP015 [*] Unnecessary mode argument"
+     ]
+    ],
+    "extra_broken": 62,
+    "extra_sample": [
+     [
+      "versioneer.py",
+      279,
+      "UP010 [*] Unnecessary `__future__` import `print_function` for target Python version"
+     ],
+     [
+      "versioneer.py",
+      328,
+      "UP031 Use format specifiers instead of percent format"
+     ],
+     [
+      "versioneer.py",
+      398,
+      "UP024 [*] Replace aliased errors with `OSError`"
+     ],
+     [
+      "versioneer.py",
+      403,
+      "UP031 Use format specifiers instead of percent format"
+     ],
+     [
+      "versioneer.py",
+      408,
+      "UP031 Use format specifiers instead of percent format"
+     ]
+    ],
+    "residual_fixed_touched": [
+     [
+      "versioneer.py",
+      279,
+      "UP010 [*] Unnecessary `__future__` import `print_function` for target Python version"
+     ],
+     [
+      "versioneer.py",
+      328,
+      "UP031 Use format specifiers instead of percent format"
+     ],
+     [
+      "versioneer.py",
+      343,
+      "UP015 [*] Unnecessary mode argument"
+     ],
+     [
+      "versioneer.py",
+      398,
+      "UP024 [*] Replace aliased errors with `OSError`"
+     ],
+     [
+      "versioneer.py",
+      403,
+      "UP031 Use format specifiers instead of percent format"
+     ]
+    ],
+    "residual_fixed_total": 63
+   },
+   "vermin": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 1,
+    "extra_sample": [
+     [
+      "versioneer.py",
+      564,
+      "SyntaxWarning: invalid escape sequence '\\s'"
+     ]
+    ],
+    "residual_fixed_touched": [
+     [
+      "versioneer.py",
+      564,
+      "SyntaxWarning: invalid escape sequence '\\s'"
+     ]
+    ],
+    "residual_fixed_total": 1
+   }
+  }
+ },
+ "stackrox-workflow-distutils-find-executable": {
+  "id": "stackrox-workflow-distutils-find-executable",
+  "repo": "stackrox/workflow",
+  "runtime": "python",
+  "old": "3.11",
+  "new": "3.12",
+  "category": "stdlib-module-removed",
+  "statically_visible": true,
+  "fetched": true,
+  "tools": {
+   "cafe": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   },
+   "mypy": {
+    "detected": true,
+    "near_gt": [
+     [
+      "scripts/help",
+      9,
+      "Cannot find implementation or library stub for module named \"distutils.spawn\"  [import-not-found]"
+     ]
+    ],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   },
+   "pyright": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   },
+   "pylint": {
+    "detected": true,
+    "near_gt": [
+     [
+      "scripts/help",
+      9,
+      "W4901: Deprecated module 'distutils.spawn' (deprecated-module)"
+     ]
+    ],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   },
+   "ruff": {
+    "detected": true,
+    "near_gt": [
+     [
+      "scripts/help",
+      6,
+      "UP010 [*] Unnecessary `__future__` import `print_function` for target Python version"
+     ],
+     [
+      "scripts/help",
+      12,
+      "UP032 [*] Use f-string instead of `format` call"
+     ]
+    ],
+    "extra_broken": 6,
+    "extra_sample": [
+     [
+      "scripts/help",
+      31,
+      "UP032 [*] Use f-string instead of `format` call"
+     ],
+     [
+      "scripts/help",
+      38,
+      "UP032 [*] Use f-string instead of `format` call"
+     ],
+     [
+      "scripts/help",
+      39,
+      "UP032 [*] Use f-string instead of `format` call"
+     ],
+     [
+      "scripts/help",
+      52,
+      "UP015 [*] Unnecessary mode argument"
+     ],
+     [
+      "scripts/help",
+      76,
+      "UP032 [*] Use f-string instead of `format` call"
+     ]
+    ],
+    "residual_fixed_touched": [
+     [
+      "scripts/help",
+      6,
+      "UP010 [*] Unnecessary `__future__` import `print_function` for target Python version"
+     ],
+     [
+      "scripts/help",
+      12,
+      "UP032 [*] Use f-string instead of `format` call"
+     ],
+     [
+      "scripts/help",
+      31,
+      "UP032 [*] Use f-string instead of `format` call"
+     ],
+     [
+      "scripts/help",
+      38,
+      "UP032 [*] Use f-string instead of `format` call"
+     ],
+     [
+      "scripts/help",
+      39,
+      "UP032 [*] Use f-string instead of `format` call"
+     ]
+    ],
+    "residual_fixed_total": 8
+   },
+   "vermin": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   }
+  }
+ },
+ "speedle-plus-email-address-indexerror": {
+  "id": "speedle-plus-email-address-indexerror",
+  "repo": "teramoby/speedle-plus",
+  "runtime": "python",
+  "old": "3.11",
+  "new": "3.12",
+  "category": "behavior-change",
+  "statically_visible": false,
+  "fetched": true,
+  "tools": {
+   "cafe": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 2,
+    "extra_sample": [
+     [
+      "benchmarks/private/benchmark-by-llm/build_report.py",
+      41,
+      "py-fromtimestamp-local-tz"
+     ],
+     [
+      "benchmarks/private/benchmark-by-llm/build_report.py",
+      42,
+      "py-fromtimestamp-local-tz"
+     ]
+    ],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 2
+   },
+   "mypy": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   },
+   "pyright": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   },
+   "pylint": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   },
+   "ruff": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   },
+   "vermin": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   }
+  }
+ },
+ "stm32loader-mock-called-once-with": {
+  "id": "stm32loader-mock-called-once-with",
+  "repo": "florisla/stm32loader",
+  "runtime": "python",
+  "old": "3.11",
+  "new": "3.12",
+  "category": "behavior-change",
+  "statically_visible": true,
+  "fetched": true,
+  "tools": {
+   "cafe": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   },
+   "mypy": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   },
+   "pyright": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   },
+   "pylint": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   },
+   "ruff": {
+    "detected": true,
+    "near_gt": [
+     [
+      "tests/unit/test_bootloader.py",
+      216,
+      "PGH005 Non-existent mock method: `called_once_with`"
+     ]
+    ],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   },
+   "vermin": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   }
+  }
+ },
+ "trafficserver-ssl-wrap-socket": {
+  "id": "trafficserver-ssl-wrap-socket",
+  "repo": "apache/trafficserver",
+  "runtime": "python",
+  "old": "3.11",
+  "new": "3.12",
+  "category": "api-removed",
+  "statically_visible": true,
+  "fetched": true,
+  "tools": {
+   "cafe": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 1,
+    "extra_sample": [
+     [
+      "tests/gold_tests/pluginTest/slice/slice_selfhealing.test.py",
+      407,
+      "py-fromtimestamp-local-tz"
+     ]
+    ],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 1
+   },
+   "mypy": {
+    "detected": true,
+    "near_gt": [
+     [
+      "tests/gold_tests/autest-site/microserver.test.ext",
+      127,
+      "Module has no attribute \"wrap_socket\"  [attr-defined]"
+     ],
+     [
+      "tests/gold_tests/autest-site/microserver.test.ext",
+      129,
+      "Module has no attribute \"wrap_socket\"  [attr-defined]"
+     ]
+    ],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   },
+   "pyright": {
+    "detected": true,
+    "near_gt": [
+     [
+      "tests/gold_tests/autest-site/microserver.test.ext",
+      127,
+      "reportAttributeAccessIssue: \"wrap_socket\" is not a known attribute of module \"ssl\""
+     ],
+     [
+      "tests/gold_tests/autest-site/microserver.test.ext",
+      129,
+      "reportAttributeAccessIssue: \"wrap_socket\" is not a known attribute of module \"ssl\""
+     ]
+    ],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   },
+   "pylint": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   },
+   "ruff": {
+    "detected": true,
+    "near_gt": [
+     [
+      "tests/gold_tests/autest-site/microserver.test.ext",
+      138,
+      "UP030 Use implicit references for positional format fields"
+     ],
+     [
+      "tests/gold_tests/autest-site/microserver.test.ext",
+      138,
+      "UP032 [*] Use f-string instead of `format` call"
+     ],
+     [
+      "tests/gold_tests/autest-site/microserver.test.ext",
+      144,
+      "UP030 Use implicit references for positional format fields"
+     ],
+     [
+      "tests/gold_tests/autest-site/microserver.test.ext",
+      144,
+      "UP032 [*] Use f-string instead of `format` call"
+     ]
+    ],
+    "extra_broken": 17,
+    "extra_sample": [
+     [
+      "tests/gold_tests/autest-site/microserver.test.ext",
+      86,
+      "UP015 [*] Unnecessary mode argument"
+     ],
+     [
+      "tests/gold_tests/autest-site/microserver.test.ext",
+      193,
+      "UP030 Use implicit references for positional format fields"
+     ],
+     [
+      "tests/gold_tests/autest-site/microserver.test.ext",
+      193,
+      "UP032 [*] Use f-string instead of `format` call"
+     ],
+     [
+      "tests/gold_tests/autest-site/microserver.test.ext",
+      196,
+      "UP030 Use implicit references for positional format fields"
+     ],
+     [
+      "tests/gold_tests/autest-site/microserver.test.ext",
+      196,
+      "UP032 [*] Use f-string instead of `format` call"
+     ]
+    ],
+    "residual_fixed_touched": [
+     [
+      "tests/gold_tests/autest-site/microserver.test.ext",
+      86,
+      "UP015 [*] Unnecessary mode argument"
+     ],
+     [
+      "tests/gold_tests/autest-site/microserver.test.ext",
+      140,
+      "UP030 Use implicit references for positional format fields"
+     ],
+     [
+      "tests/gold_tests/autest-site/microserver.test.ext",
+      140,
+      "UP032 [*] Use f-string instead of `format` call"
+     ],
+     [
+      "tests/gold_tests/autest-site/microserver.test.ext",
+      146,
+      "UP030 Use implicit references for positional format fields"
+     ],
+     [
+      "tests/gold_tests/autest-site/microserver.test.ext",
+      146,
+      "UP032 [*] Use f-string instead of `format` call"
+     ]
+    ],
+    "residual_fixed_total": 21
+   },
+   "vermin": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   }
+  }
+ },
+ "awtk-distutils-strtobool": {
+  "id": "awtk-distutils-strtobool",
+  "repo": "zlgopen/awtk",
+  "runtime": "python",
+  "old": "3.11",
+  "new": "3.12",
+  "category": "stdlib-module-removed",
+  "statically_visible": true,
+  "fetched": true,
+  "tools": {
+   "cafe": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 7,
+    "extra_sample": [
+     [
+      "3rd/gtest/googlemock/test/gmock_leak_test.py",
+      69,
+      "py-unittest-assertequals"
+     ],
+     [
+      "3rd/gtest/googlemock/test/gmock_leak_test.py",
+      74,
+      "py-unittest-assertequals"
+     ],
+     [
+      "3rd/gtest/googlemock/test/gmock_output_test.py",
+      164,
+      "py-unittest-assertequals"
+     ],
+     [
+      "3rd/gtest/googlemock/test/gmock_output_test.py",
+      168,
+      "py-unittest-assertequals"
+     ],
+     [
+      "3rd/gtest/googletest/test/gtest_break_on_failure_unittest.py",
+      142,
+      "py-unittest-assertequals"
+     ]
+    ],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 7
+   },
+   "mypy": {
+    "detected": true,
+    "near_gt": [
+     [
+      "scripts/compile_config.py",
+      8,
+      "Cannot find implementation or library stub for module named \"distutils.util\"  [import-not-found]"
+     ]
+    ],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   },
+   "pyright": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   },
+   "pylint": {
+    "detected": true,
+    "near_gt": [
+     [
+      "scripts/compile_config.py",
+      8,
+      "W4901: Deprecated module 'distutils.util' (deprecated-module)"
+     ]
+    ],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   },
+   "ruff": {
+    "detected": true,
+    "near_gt": [
+     [
+      "scripts/compile_config.py",
+      10,
+      "PLW0603 Using the global statement to update `COMPILE_CONFIG` is discouraged"
+     ],
+     [
+      "scripts/compile_config.py",
+      10,
+      "PLW0604 `global` at module level is redundant"
+     ]
+    ],
+    "extra_broken": 16,
+    "extra_sample": [
+     [
+      "scripts/compile_config.py",
+      13,
+      "PLW0603 Using the global statement to update `APP_ROOT` is discouraged"
+     ],
+     [
+      "scripts/compile_config.py",
+      13,
+      "PLW0604 `global` at module level is redundant"
+     ],
+     [
+      "scripts/compile_config.py",
+      16,
+      "PLW0603 Using the global statement to update `WIN32_RES` is discouraged"
+     ],
+     [
+      "scripts/compile_config.py",
+      16,
+      "PLW0604 `global` at module level is redundant"
+     ],
+     [
+      "scripts/compile_config.py",
+      20,
+      "PLW0602 Using global for `COMPILE_CONFIG` but no assignment is done"
+     ]
+    ],
+    "residual_fixed_touched": [
+     [
+      "scripts/compile_config.py",
+      10,
+      "PLW0603 Using the global statement to update `COMPILE_CONFIG` is discouraged"
+     ],
+     [
+      "scripts/compile_config.py",
+      10,
+      "PLW0604 `global` at module level is redundant"
+     ],
+     [
+      "scripts/compile_config.py",
+      13,
+      "PLW0603 Using the global statement to update `APP_ROOT` is discouraged"
+     ],
+     [
+      "scripts/compile_config.py",
+      13,
+      "PLW0604 `global` at module level is redundant"
+     ],
+     [
+      "scripts/compile_config.py",
+      16,
+      "PLW0603 Using the global statement to update `WIN32_RES` is discouraged"
+     ]
+    ],
+    "residual_fixed_total": 18
+   },
+   "vermin": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   }
+  }
+ },
+ "orange-widget-base-imp-load-source": {
+  "id": "orange-widget-base-imp-load-source",
+  "repo": "biolab/orange-widget-base",
+  "runtime": "python",
+  "old": "3.11",
+  "new": "3.12",
+  "category": "stdlib-module-removed",
+  "statically_visible": true,
+  "fetched": true,
+  "tools": {
+   "cafe": {
+    "detected": true,
+    "near_gt": [
+     [
+      "setup.py",
+      122,
+      "py-imp-removed"
+     ]
+    ],
+    "extra_broken": 2,
+    "extra_sample": [
+     [
+      "orangewidget/tests/base.py",
+      681,
+      "py-unittest-assertequals"
+     ],
+     [
+      "orangewidget/tests/base.py",
+      694,
+      "py-unittest-assertequals"
+     ]
+    ],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 2
+   },
+   "mypy": {
+    "detected": true,
+    "near_gt": [
+     [
+      "setup.py",
+      122,
+      "Cannot find implementation or library stub for module named \"imp\"  [import-not-found]"
+     ]
+    ],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   },
+   "pyright": {
+    "detected": true,
+    "near_gt": [
+     [
+      "setup.py",
+      122,
+      "reportMissingImports: Import \"imp\" could not be resolved"
+     ]
+    ],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   },
+   "pylint": {
+    "detected": true,
+    "near_gt": [
+     [
+      "setup.py",
+      122,
+      "W4901: Deprecated module 'imp' (deprecated-module)"
+     ]
+    ],
+    "extra_broken": 2,
+    "extra_sample": [
+     [
+      "pylintrc",
+      1,
+      "W0012: Unknown option value for '--disable', expected a valid pylint message and got 'long-suffix' (unknown-option-value)"
+     ],
+     [
+      "pylintrc",
+      1,
+      "W0012: Unknown option value for '--disable', expected a valid pylint message and got 'old-octal-literal' (unknown-option-value)"
+     ]
+    ],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 2
+   },
+   "ruff": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 1,
+    "extra_sample": [
+     [
+      "setup.py",
+      116,
+      "PLW0603 Using the global statement to update `FULLVERSION` is discouraged"
+     ]
+    ],
+    "residual_fixed_touched": [
+     [
+      "setup.py",
+      116,
+      "PLW0603 Using the global statement to update `FULLVERSION` is discouraged"
+     ]
+    ],
+    "residual_fixed_total": 1
+   },
+   "vermin": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   }
+  }
+ },
+ "tutor-codejail-pkg-resources": {
+  "id": "tutor-codejail-pkg-resources",
+  "repo": "eduNEXT/tutor-contrib-codejail",
+  "runtime": "python",
+  "old": "3.11",
+  "new": "3.12",
+  "category": "build-or-packaging",
+  "statically_visible": true,
+  "fetched": true,
+  "tools": {
+   "cafe": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   },
+   "mypy": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   },
+   "pyright": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   },
+   "pylint": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 2,
+    "extra_sample": [
+     [
+      "pylintrc",
+      1,
+      "W0012: Unknown option value for '--disable', expected a valid pylint message and got 'bad-builtin' (unknown-option-value)"
+     ],
+     [
+      "pylintrc",
+      1,
+      "W0012: Unknown option value for '--disable', expected a valid pylint message and got 'locally-enabled' (unknown-option-value)"
+     ]
+    ],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 2
+   },
+   "ruff": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   },
+   "vermin": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   }
+  }
+ },
+ "meep-configure-distutils-sysconfig": {
+  "id": "meep-configure-distutils-sysconfig",
+  "repo": "NanoComp/meep",
+  "runtime": "python",
+  "old": "3.11",
+  "new": "3.12",
+  "category": "stdlib-module-removed",
+  "statically_visible": true,
+  "fetched": true,
+  "tools": {
+   "cafe": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 1,
+    "extra_sample": [
+     [
+      "python/visualization.py",
+      116,
+      "py-getargspec"
+     ]
+    ],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 1
+   },
+   "mypy": {
+    "status": "n/a"
+   },
+   "pyright": {
+    "status": "n/a"
+   },
+   "pylint": {
+    "status": "n/a"
+   },
+   "ruff": {
+    "status": "n/a"
+   },
+   "vermin": {
+    "status": "n/a"
+   }
+  }
+ },
+ "guidance-dedent-fstring-ast": {
+  "id": "guidance-dedent-fstring-ast",
+  "repo": "guidance-ai/guidance",
+  "runtime": "python",
+  "old": "3.11",
+  "new": "3.12",
+  "category": "behavior-change",
+  "statically_visible": false,
+  "fetched": true,
+  "tools": {
+   "cafe": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   },
+   "mypy": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   },
+   "pyright": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   },
+   "pylint": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   },
+   "ruff": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   },
+   "vermin": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   }
+  }
+ },
+ "insights-core-unicode-zero-width": {
+  "id": "insights-core-unicode-zero-width",
+  "repo": "RedHatInsights/insights-core",
+  "runtime": "python",
+  "old": "3.11",
+  "new": "3.12",
+  "category": "behavior-change",
+  "statically_visible": false,
+  "fetched": true,
+  "tools": {
+   "cafe": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 7,
+    "extra_sample": [
+     [
+      "insights/client/connection.py",
+      523,
+      "py-utcnow-deprecated"
+     ],
+     [
+      "insights/client/connection.py",
+      525,
+      "py-utcnow-deprecated"
+     ],
+     [
+      "insights/parsers/audit_log.py",
+      47,
+      "py-fromtimestamp-local-tz"
+     ],
+     [
+      "insights/specs/datasources/malware_detection/__init__.py",
+      537,
+      "py-fromtimestamp-local-tz"
+     ],
+     [
+      "insights/specs/datasources/malware_detection/__init__.py",
+      560,
+      "py-fromtimestamp-local-tz"
+     ]
+    ],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 7
+   },
+   "mypy": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   },
+   "pyright": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   },
+   "pylint": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   },
+   "ruff": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 2,
+    "extra_sample": [
+     [
+      "insights/client/apps/ansible/playbook_verifier/serializer.py",
+      37,
+      "UP032 [*] Use f-string instead of `format` call"
+     ],
+     [
+      "insights/client/apps/ansible/playbook_verifier/serializer.py",
+      85,
+      "UP032 [*] Use f-string instead of `format` call"
+     ]
+    ],
+    "residual_fixed_touched": [
+     [
+      "insights/client/apps/ansible/playbook_verifier/serializer.py",
+      37,
+      "UP032 [*] Use f-string instead of `format` call"
+     ],
+     [
+      "insights/client/apps/ansible/playbook_verifier/serializer.py",
+      88,
+      "UP032 [*] Use f-string instead of `format` call"
+     ]
+    ],
+    "residual_fixed_total": 2
+   },
+   "vermin": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   }
+  }
+ },
+ "strictdoc-pybtex-pkg-resources": {
+  "id": "strictdoc-pybtex-pkg-resources",
+  "repo": "strictdoc-project/strictdoc",
+  "runtime": "python",
+  "old": "3.11",
+  "new": "3.12",
+  "category": "build-or-packaging",
+  "statically_visible": false,
+  "fetched": true,
+  "tools": {
+   "cafe": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 1,
+    "extra_sample": [
+     [
+      "strictdoc/helpers/file_modification_time.py",
+      7,
+      "py-fromtimestamp-local-tz"
+     ]
+    ],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 1
+   },
+   "mypy": {
+    "status": "n/a"
+   },
+   "pyright": {
+    "status": "n/a"
+   },
+   "pylint": {
+    "status": "n/a"
+   },
+   "ruff": {
+    "status": "n/a"
+   },
+   "vermin": {
+    "status": "n/a"
+   }
+  }
+ },
+ "promplate-locals-pep667": {
+  "id": "promplate-locals-pep667",
+  "repo": "promplate/core",
+  "runtime": "python",
+  "old": "3.12",
+  "new": "3.13",
+  "category": "behavior-change",
+  "statically_visible": false,
+  "fetched": true,
+  "tools": {
+   "cafe": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   },
+   "mypy": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   },
+   "pyright": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   },
+   "pylint": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   },
+   "ruff": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 3,
+    "extra_sample": [
+     [
+      "python/promplate/prompt/template.py",
+      47,
+      "PGH003 Use specific rule codes when ignoring type issues"
+     ],
+     [
+      "python/promplate/prompt/template.py",
+      214,
+      "UP036 Version block is outdated for minimum Python version"
+     ],
+     [
+      "python/promplate/prompt/template.py",
+      215,
+      "UP035 [*] Import from `typing` instead: `Self`"
+     ]
+    ],
+    "residual_fixed_touched": [
+     [
+      "python/promplate/prompt/template.py",
+      48,
+      "PGH003 Use specific rule codes when ignoring type issues"
+     ],
+     [
+      "python/promplate/prompt/template.py",
+      91,
+      "UP036 Version block is outdated for minimum Python version"
+     ],
+     [
+      "python/promplate/prompt/template.py",
+      216,
+      "UP036 Version block is outdated for minimum Python version"
+     ],
+     [
+      "python/promplate/prompt/template.py",
+      217,
+      "UP035 [*] Import from `typing` instead: `Self`"
+     ]
+    ],
+    "residual_fixed_total": 4
+   },
+   "vermin": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   }
+  }
+ },
+ "datalad-next-resolve-symlink-loop": {
+  "id": "datalad-next-resolve-symlink-loop",
+  "repo": "datalad/datalad-next",
+  "runtime": "python",
+  "old": "3.12",
+  "new": "3.13",
+  "category": "behavior-change",
+  "statically_visible": false,
+  "fetched": true,
+  "tools": {
+   "cafe": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 3,
+    "extra_sample": [
+     [
+      "datalad_next/commands/ls_file_collection.py",
+      445,
+      "py-fromtimestamp-local-tz"
+     ],
+     [
+      "datalad_next/patches/interface_base.py",
+      36,
+      "py-getargspec"
+     ],
+     [
+      "datalad_next/patches/interface_utils.py",
+      63,
+      "py-getargspec"
+     ]
+    ],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 3
+   },
+   "mypy": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   },
+   "pyright": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   },
+   "pylint": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   },
+   "ruff": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   },
+   "vermin": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   }
+  }
+ },
+ "clickhouse-cityhash-cython-long": {
+  "id": "clickhouse-cityhash-cython-long",
+  "repo": "xzkostyan/clickhouse-cityhash",
+  "runtime": "python",
+  "old": "3.12",
+  "new": "3.13",
+  "category": "build-or-packaging",
+  "statically_visible": true,
+  "fetched": true,
+  "tools": {
+   "cafe": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   },
+   "mypy": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   },
+   "pyright": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   },
+   "pylint": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   },
+   "ruff": {
+    "detected": true,
+    "near_gt": [
+     [
+      "src/cityhash.pyx",
+      152,
+      "invalid-syntax: Expected `,`, found identifier"
+     ],
+     [
+      "src/cityhash.pyx",
+      152,
+      "invalid-syntax: Expected an expression"
+     ],
+     [
+      "src/cityhash.pyx",
+      152,
+      "invalid-syntax: Expected an expression or a ')'"
+     ],
+     [
+      "src/cityhash.pyx",
+      155,
+      "invalid-syntax: Simple statements must be separated by newlines or semicolons"
+     ],
+     [
+      "src/cityhash.pyx",
+      158,
+      "invalid-syntax: Expected `,`, found identifier"
+     ]
+    ],
+    "extra_broken": 162,
+    "extra_sample": [
+     [
+      "src/cityhash.pyx",
+      17,
+      "invalid-syntax: Expected `,`, found `:`"
+     ],
+     [
+      "src/cityhash.pyx",
+      17,
+      "invalid-syntax: Expected `,`, found identifier"
+     ],
+     [
+      "src/cityhash.pyx",
+      17,
+      "invalid-syntax: Expected a module name"
+     ],
+     [
+      "src/cityhash.pyx",
+      17,
+      "invalid-syntax: Simple statements must be separated by newlines or semicolons"
+     ],
+     [
+      "src/cityhash.pyx",
+      17,
+      "invalid-syntax: Star import must be the only import"
+     ]
+    ],
+    "residual_fixed_touched": [
+     [
+      "src/cityhash.pyx",
+      17,
+      "invalid-syntax: Expected `,`, found `:`"
+     ],
+     [
+      "src/cityhash.pyx",
+      17,
+      "invalid-syntax: Expected `,`, found identifier"
+     ],
+     [
+      "src/cityhash.pyx",
+      17,
+      "invalid-syntax: Expected a module name"
+     ],
+     [
+      "src/cityhash.pyx",
+      17,
+      "invalid-syntax: Simple statements must be separated by newlines or semicolons"
+     ],
+     [
+      "src/cityhash.pyx",
+      17,
+      "invalid-syntax: Star import must be the only import"
+     ]
+    ],
+    "residual_fixed_total": 174
+   },
+   "vermin": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   }
+  }
+ },
+ "luigi-random-seed-tuple": {
+  "id": "luigi-random-seed-tuple",
+  "repo": "spotify/luigi",
+  "runtime": "python",
+  "old": "3.10",
+  "new": "3.11",
+  "category": "api-removed",
+  "statically_visible": true,
+  "fetched": true,
+  "tools": {
+   "cafe": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 5,
+    "extra_sample": [
+     [
+      "luigi/contrib/azureblob.py",
+      182,
+      "py-utcnow-deprecated"
+     ],
+     [
+      "luigi/contrib/kubernetes.py",
+      82,
+      "py-utcnow-deprecated"
+     ],
+     [
+      "luigi/contrib/presto.py",
+      107,
+      "py-getargspec"
+     ],
+     [
+      "luigi/parameter.py",
+      400,
+      "py-utcnow-deprecated"
+     ],
+     [
+      "luigi/tools/range.py",
+      219,
+      "py-utcnow-deprecated"
+     ]
+    ],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 5
+   },
+   "mypy": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   },
+   "pyright": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   },
+   "pylint": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   },
+   "ruff": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 29,
+    "extra_sample": [
+     [
+      "luigi/worker.py",
+      1,
+      "UP009 [*] UTF-8 encoding declaration is unnecessary"
+     ],
+     [
+      "luigi/worker.py",
+      122,
+      "UP008 [*] Use `super()` instead of `super(__class__, self)`"
+     ],
+     [
+      "luigi/worker.py",
+      188,
+      "UP031 Use format specifiers instead of percent format"
+     ],
+     [
+      "luigi/worker.py",
+      252,
+      "UP008 [*] Use `super()` instead of `super(__class__, self)`"
+     ],
+     [
+      "luigi/worker.py",
+      270,
+      "UP008 [*] Use `super()` instead of `super(__class__, self)`"
+     ]
+    ],
+    "residual_fixed_touched": [
+     [
+      "luigi/worker.py",
+      1,
+      "UP009 [*] UTF-8 encoding declaration is unnecessary"
+     ],
+     [
+      "luigi/worker.py",
+      122,
+      "UP008 [*] Use `super()` instead of `super(__class__, self)`"
+     ],
+     [
+      "luigi/worker.py",
+      188,
+      "UP031 Use format specifiers instead of percent format"
+     ],
+     [
+      "luigi/worker.py",
+      252,
+      "UP008 [*] Use `super()` instead of `super(__class__, self)`"
+     ],
+     [
+      "luigi/worker.py",
+      270,
+      "UP008 [*] Use `super()` instead of `super(__class__, self)`"
+     ]
+    ],
+    "residual_fixed_total": 29
+   },
+   "vermin": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   }
+  }
+ },
+ "safeeyes-inspect-getargspec": {
+  "id": "safeeyes-inspect-getargspec",
+  "repo": "slgobinath/safeeyes",
+  "runtime": "python",
+  "old": "3.10",
+  "new": "3.11",
+  "category": "api-removed",
+  "statically_visible": true,
+  "fetched": true,
+  "tools": {
+   "cafe": {
+    "detected": true,
+    "near_gt": [
+     [
+      "safeeyes/utility.py",
+      669,
+      "py-getargspec"
+     ]
+    ],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   },
+   "mypy": {
+    "detected": true,
+    "near_gt": [
+     [
+      "safeeyes/utility.py",
+      669,
+      "Module has no attribute \"getargspec\"  [attr-defined]"
+     ]
+    ],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   },
+   "pyright": {
+    "detected": true,
+    "near_gt": [
+     [
+      "safeeyes/utility.py",
+      669,
+      "reportAttributeAccessIssue: \"getargspec\" is not a known attribute of module \"inspect\""
+     ]
+    ],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   },
+   "pylint": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 2,
+    "extra_sample": [
+     [
+      "safeeyes/utility.py",
+      24,
+      "W4901: Deprecated module 'imp' (deprecated-module)"
+     ],
+     [
+      "safeeyes/utility.py",
+      36,
+      "W4901: Deprecated module 'distutils.version' (deprecated-module)"
+     ]
+    ],
+    "residual_fixed_touched": [
+     [
+      "safeeyes/utility.py",
+      24,
+      "W4901: Deprecated module 'imp' (deprecated-module)"
+     ],
+     [
+      "safeeyes/utility.py",
+      36,
+      "W4901: Deprecated module 'distutils.version' (deprecated-module)"
+     ]
+    ],
+    "residual_fixed_total": 2
+   },
+   "ruff": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 6,
+    "extra_sample": [
+     [
+      "safeeyes/utility.py",
+      224,
+      "UP034 [*] Avoid extraneous parentheses"
+     ],
+     [
+      "safeeyes/utility.py",
+      275,
+      "PLW0603 Using the global statement to update `DESKTOP_ENVIRONMENT` is discouraged"
+     ],
+     [
+      "safeeyes/utility.py",
+      304,
+      "PLW0603 Using the global statement to update `IS_WAYLAND` is discouraged"
+     ],
+     [
+      "safeeyes/utility.py",
+      415,
+      "UP031 Use format specifiers instead of percent format"
+     ],
+     [
+      "safeeyes/utility.py",
+      443,
+      "UP031 Use format specifiers instead of percent format"
+     ]
+    ],
+    "residual_fixed_touched": [
+     [
+      "safeeyes/utility.py",
+      224,
+      "UP034 [*] Avoid extraneous parentheses"
+     ],
+     [
+      "safeeyes/utility.py",
+      275,
+      "PLW0603 Using the global statement to update `DESKTOP_ENVIRONMENT` is discouraged"
+     ],
+     [
+      "safeeyes/utility.py",
+      304,
+      "PLW0603 Using the global statement to update `IS_WAYLAND` is discouraged"
+     ],
+     [
+      "safeeyes/utility.py",
+      415,
+      "UP031 Use format specifiers instead of percent format"
+     ],
+     [
+      "safeeyes/utility.py",
+      443,
+      "UP031 Use format specifiers instead of percent format"
+     ]
+    ],
+    "residual_fixed_total": 6
+   },
+   "vermin": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   }
+  }
+ },
+ "sumatra-default-getstate": {
+  "id": "sumatra-default-getstate",
+  "repo": "open-research/sumatra",
+  "runtime": "python",
+  "old": "3.10",
+  "new": "3.11",
+  "category": "behavior-change",
+  "statically_visible": false,
+  "fetched": true,
+  "tools": {
+   "cafe": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 4,
+    "extra_sample": [
+     [
+      "sumatra/datastore/archivingfs.py",
+      36,
+      "py-fromtimestamp-local-tz"
+     ],
+     [
+      "sumatra/datastore/filesystem.py",
+      33,
+      "py-fromtimestamp-local-tz"
+     ],
+     [
+      "sumatra/datastore/filesystem.py",
+      122,
+      "py-fromtimestamp-local-tz"
+     ],
+     [
+      "sumatra/datastore/mirroredfs.py",
+      36,
+      "py-fromtimestamp-local-tz"
+     ]
+    ],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 4
+   },
+   "mypy": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   },
+   "pyright": {
+    "detected": true,
+    "near_gt": [
+     [
+      "sumatra/projects.py",
+      152,
+      "reportAttributeAccessIssue: Cannot access attribute \"items\" for class \"object\""
+     ]
+    ],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [
+     [
+      "sumatra/projects.py",
+      156,
+      "reportAttributeAccessIssue: Cannot access attribute \"items\" for class \"object\""
+     ]
+    ],
+    "residual_fixed_total": 1
+   },
+   "pylint": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   },
+   "ruff": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 15,
+    "extra_sample": [
+     [
+      "sumatra/projects.py",
+      23,
+      "UP010 [*] Unnecessary `__future__` import `print_function` for target Python version"
+     ],
+     [
+      "sumatra/projects.py",
+      24,
+      "UP010 [*] Unnecessary `__future__` import `unicode_literals` for target Python version"
+     ],
+     [
+      "sumatra/projects.py",
+      27,
+      "UP029 Unnecessary builtin import: `str`"
+     ],
+     [
+      "sumatra/projects.py",
+      28,
+      "UP029 Unnecessary builtin import: `object`"
+     ],
+     [
+      "sumatra/projects.py",
+      73,
+      "UP004 [*] Class `Project` inherits from `object`"
+     ]
+    ],
+    "residual_fixed_touched": [
+     [
+      "sumatra/projects.py",
+      23,
+      "UP010 [*] Unnecessary `__future__` import `print_function` for target Python version"
+     ],
+     [
+      "sumatra/projects.py",
+      24,
+      "UP010 [*] Unnecessary `__future__` import `unicode_literals` for target Python version"
+     ],
+     [
+      "sumatra/projects.py",
+      27,
+      "UP029 Unnecessary builtin import: `str`"
+     ],
+     [
+      "sumatra/projects.py",
+      28,
+      "UP029 Unnecessary builtin import: `object`"
+     ],
+     [
+      "sumatra/projects.py",
+      73,
+      "UP004 [*] Class `Project` inherits from `object`"
+     ]
+    ],
+    "residual_fixed_total": 15
+   },
+   "vermin": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   }
+  }
+ },
+ "oblique-random-sample-set": {
+  "id": "oblique-random-sample-set",
+  "repo": "ambv/oblique",
+  "runtime": "python",
+  "old": "3.10",
+  "new": "3.11",
+  "category": "api-removed",
+  "statically_visible": false,
+  "fetched": true,
+  "tools": {
+   "cafe": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   },
+   "mypy": {
+    "detected": true,
+    "near_gt": [
+     [
+      "oblique/__init__.py",
+      59,
+      "Argument 1 has incompatible type \"set[str]\"; expected \"Sequence[Never]\"  [arg-type]"
+     ],
+     [
+      "oblique/__init__.py",
+      59,
+      "Need type annotation for \"koan\"  [var-annotated]"
+     ]
+    ],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   },
+   "pyright": {
+    "detected": true,
+    "near_gt": [
+     [
+      "oblique/__init__.py",
+      59,
+      "reportArgumentType: Argument of type \"set[str]\" cannot be assigned to parameter \"population\" of type \"Sequence[_T@sample]\" in function \"sample\""
+     ]
+    ],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   },
+   "pylint": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   },
+   "ruff": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   },
+   "vermin": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   }
+  }
+ },
+ "bashhub-jsonpickle-pin": {
+  "id": "bashhub-jsonpickle-pin",
+  "repo": "rcaloras/bashhub-client",
+  "runtime": "python",
+  "old": "3.10",
+  "new": "3.11",
+  "category": "dependency-version",
+  "statically_visible": false,
+  "fetched": true,
+  "tools": {
+   "cafe": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 2,
+    "extra_sample": [
+     [
+      "bashhub/bh.py",
+      111,
+      "py-fromtimestamp-local-tz"
+     ],
+     [
+      "bashhub/view/status.py",
+      18,
+      "py-fromtimestamp-local-tz"
+     ]
+    ],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 2
+   },
+   "mypy": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   },
+   "pyright": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   },
+   "pylint": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   },
+   "ruff": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   },
+   "vermin": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   }
+  }
+ },
+ "esa-cli-import-assert-json": {
+  "id": "esa-cli-import-assert-json",
+  "repo": "aliyun/alibabacloud-esa-cli",
+  "runtime": "node",
+  "old": "20",
+  "new": "22",
+  "category": "syntax-change",
+  "statically_visible": true,
+  "fetched": true,
+  "tools": {
+   "cafe": {
+    "detected": true,
+    "near_gt": [
+     [
+      "src/i18n/index.ts",
+      1,
+      "node-import-assert-to-with"
+     ]
+    ],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   },
+   "tsc+@types/node": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   },
+   "eslint-plugin-n": {
+    "status": "n/a"
+   }
+  }
+ },
+ "shelljs-cmd-undefined-stdio": {
+  "id": "shelljs-cmd-undefined-stdio",
+  "repo": "shelljs/shelljs",
+  "runtime": "node",
+  "old": "20",
+  "new": "22",
+  "category": "behavior-change",
+  "statically_visible": false,
+  "fetched": true,
+  "tools": {
+   "cafe": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   },
+   "tsc+@types/node": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   },
+   "eslint-plugin-n": {
+    "status": "error"
+   }
+  }
+ },
+ "nodejs-spanner-otel-context-manager": {
+  "id": "nodejs-spanner-otel-context-manager",
+  "repo": "googleapis/nodejs-spanner",
+  "runtime": "node",
+  "old": "20",
+  "new": "22",
+  "category": "behavior-change",
+  "statically_visible": false,
+  "fetched": true,
+  "tools": {
+   "cafe": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 4,
+    "extra_sample": [
+     [
+      "samples/resource/singer.js",
+      308,
+      "node-util-is-removed"
+     ],
+     [
+      "samples/resource/singer.js",
+      316,
+      "node-util-is-removed"
+     ],
+     [
+      "test/data/singer.js",
+      308,
+      "node-util-is-removed"
+     ],
+     [
+      "test/data/singer.js",
+      316,
+      "node-util-is-removed"
+     ]
+    ],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 4
+   },
+   "tsc+@types/node": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   },
+   "eslint-plugin-n": {
+    "status": "n/a"
+   }
+  }
+ },
+ "kubeflow-frontend-minio-node22": {
+  "id": "kubeflow-frontend-minio-node22",
+  "repo": "kubeflow/pipelines",
+  "runtime": "node",
+  "old": "18",
+  "new": "22",
+  "category": "dependency-version",
+  "statically_visible": false,
+  "fetched": true,
+  "tools": {
+   "cafe": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 5,
+    "extra_sample": [
+     [
+      "frontend/server/app.ts",
+      61,
+      "node-ts-parameter-properties"
+     ],
+     [
+      "frontend/server/src/generated/apis/auth/api.ts",
+      79,
+      "node-ts-parameter-properties"
+     ],
+     [
+      "frontend/server/src/generated/apisv2beta1/auth/api.ts",
+      79,
+      "node-ts-parameter-properties"
+     ],
+     [
+      "frontend/src/apis/experiment/api.ts",
+      79,
+      "node-ts-parameter-properties"
+     ],
+     [
+      "frontend/src/apis/filter/api.ts",
+      79,
+      "node-ts-parameter-properties"
+     ]
+    ],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 5
+   },
+   "tsc+@types/node": {
+    "status": "n/a"
+   },
+   "eslint-plugin-n": {
+    "status": "n/a"
+   }
+  }
+ },
+ "langsmith-navigator-global": {
+  "id": "langsmith-navigator-global",
+  "repo": "langchain-ai/langsmith-sdk",
+  "runtime": "node",
+  "old": "20",
+  "new": "21",
+  "category": "behavior-change",
+  "statically_visible": false,
+  "fetched": true,
+  "tools": {
+   "cafe": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   },
+   "tsc+@types/node": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   },
+   "eslint-plugin-n": {
+    "status": "n/a"
+   }
+  }
+ },
+ "sonar-scanner-npm-eisdir": {
+  "id": "sonar-scanner-npm-eisdir",
+  "repo": "SonarSource/sonar-scanner-npm",
+  "runtime": "node",
+  "old": "22",
+  "new": "23",
+  "category": "behavior-change",
+  "statically_visible": false,
+  "fetched": true,
+  "tools": {
+   "cafe": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   },
+   "tsc+@types/node": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   },
+   "eslint-plugin-n": {
+    "status": "n/a"
+   }
+  }
+ },
+ "radius-ts-node-generate-ext": {
+  "id": "radius-ts-node-generate-ext",
+  "repo": "radius-project/radius",
+  "runtime": "node",
+  "old": "22",
+  "new": "23",
+  "category": "behavior-change",
+  "statically_visible": false,
+  "fetched": true,
+  "tools": {
+   "cafe": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   },
+   "tsc+@types/node": {
+    "status": "n/a"
+   },
+   "eslint-plugin-n": {
+    "status": "n/a"
+   }
+  }
+ },
+ "ttf2woff2-top-level-await-require": {
+  "id": "ttf2woff2-top-level-await-require",
+  "repo": "nfroidure/ttf2woff2",
+  "runtime": "node",
+  "old": "22",
+  "new": "23",
+  "category": "behavior-change",
+  "statically_visible": false,
+  "fetched": true,
+  "tools": {
+   "cafe": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   },
+   "tsc+@types/node": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   },
+   "eslint-plugin-n": {
+    "status": "n/a"
+   }
+  }
+ },
+ "httptoolkit-ui-ts-webpack-config": {
+  "id": "httptoolkit-ui-ts-webpack-config",
+  "repo": "httptoolkit/httptoolkit-ui",
+  "runtime": "node",
+  "old": "22",
+  "new": "23",
+  "category": "behavior-change",
+  "statically_visible": false,
+  "fetched": true,
+  "tools": {
+   "cafe": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 2,
+    "extra_sample": [
+     [
+      "src/model/filters/search-filters.ts",
+      1420,
+      "node-ts-parameter-properties"
+     ],
+     [
+      "src/model/filters/search-filters.ts",
+      1497,
+      "node-ts-parameter-properties"
+     ]
+    ],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 2
+   },
+   "tsc+@types/node": {
+    "status": "n/a"
+   },
+   "eslint-plugin-n": {
+    "status": "n/a"
+   }
+  }
+ },
+ "kando-electron-forge-node23": {
+  "id": "kando-electron-forge-node23",
+  "repo": "kando-menu/kando",
+  "runtime": "node",
+  "old": "22",
+  "new": "23",
+  "category": "other",
+  "statically_visible": false,
+  "fetched": true,
+  "tools": {
+   "cafe": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 6,
+    "extra_sample": [
+     [
+      "eslint.config.mjs",
+      13,
+      "node-esm-dirname"
+     ],
+     [
+      "eslint.config.mjs",
+      14,
+      "node-esm-dirname"
+     ],
+     [
+      "eslint.config.mjs",
+      16,
+      "node-esm-dirname"
+     ],
+     [
+      "src/main/app.ts",
+      1345,
+      "node-dirent-path"
+     ],
+     [
+      "src/renderer/icon-themes/file-icon-theme.ts",
+      26,
+      "node-ts-parameter-properties"
+     ]
+    ],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 6
+   },
+   "tsc+@types/node": {
+    "status": "n/a"
+   },
+   "eslint-plugin-n": {
+    "status": "n/a"
+   }
+  }
+ },
+ "crackle-asynclocalstorage-node24": {
+  "id": "crackle-asynclocalstorage-node24",
+  "repo": "seek-oss/crackle",
+  "runtime": "node",
+  "old": "22",
+  "new": "24",
+  "category": "behavior-change",
+  "statically_visible": false,
+  "fetched": true,
+  "tools": {
+   "cafe": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 3,
+    "extra_sample": [
+     [
+      "eslint.config.mjs",
+      17,
+      "node-esm-dirname"
+     ],
+     [
+      "eslint.config.mjs",
+      18,
+      "node-esm-dirname"
+     ],
+     [
+      "eslint.config.mjs",
+      23,
+      "node-esm-dirname"
+     ]
+    ],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 3
+   },
+   "tsc+@types/node": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   },
+   "eslint-plugin-n": {
+    "status": "n/a"
+   }
+  }
+ },
+ "sphinx-js-jsdoc-util-isregexp": {
+  "id": "sphinx-js-jsdoc-util-isregexp",
+  "repo": "pyodide/sphinx-js",
+  "runtime": "node",
+  "old": "22",
+  "new": "24",
+  "category": "dependency-version",
+  "statically_visible": false,
+  "fetched": true,
+  "tools": {
+   "cafe": {
+    "detected": false,
+    "near_gt": [],
+    "extra_broken": 0,
+    "extra_sample": [],
+    "residual_fixed_touched": [],
+    "residual_fixed_total": 0
+   },
+   "tsc+@types/node": {
+    "status": "n/a"
+   },
+   "eslint-plugin-n": {
+    "status": "n/a"
+   }
+  }
+ }
+}
