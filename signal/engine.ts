@@ -39,6 +39,8 @@ export interface Report {
   evidence: { attribution: Attribution; date: string; source?: string; env?: string }[];
   verdict: "known_regression" | "single_report" | "likely_safe" | "mixed" | "insufficient_evidence";
   summary: string;
+  /** Some evidence comes from a stratified sample (public seed): raw counts over-represent failures. */
+  sampled: boolean;
 }
 
 const MIN_CAUSAL = 3;
@@ -220,11 +222,11 @@ function queryInner(index: Index, q: Query, opts: { base?: number }): Report {
   } else if (obsHigh) verdict = "mixed";
   else if (obsLow) verdict = "likely_safe";
   const pct = (x: number) => `${Math.round(x * 100)}%`;
-  const describe = (e: Estimate, what: string) => (e.owners ? `${what}: ${e.failures} of ${e.owners} owners failed (estimate ${pct(e.mean!)}, 90% interval ${pct(e.ci90![0])}–${pct(e.ci90![1])})` : `${what}: none`);
+  const describe = (e: Estimate, what: string, calibrated = true) => (e.owners ? `${what}: ${e.failures} of ${e.owners} owners failed${calibrated ? ` (estimate ${pct(e.mean!)}, 90% interval ${pct(e.ci90![0])}–${pct(e.ci90![1])})` : ""}` : `${what}: none`);
   const summary = [
     match === "none" ? "No other project has reported this update yet." : `Match: ${match.replace("_", " ")}.`,
     describe(causal, "Paired experiments (baseline vs update, same runner)"),
-    describe(observational, "CI status only (cannot separate the update from a red main or flaky tests)"),
+    describe(observational, "CI status only (cannot separate the update from a red main or flaky tests)", false),
     inconclusive ? `${inconclusive} owners inconclusive (baseline already red or flaky).` : "",
   ].filter(Boolean).join(" ");
   return {
@@ -232,6 +234,6 @@ function queryInner(index: Index, q: Query, opts: { base?: number }): Report {
     fingerprints: [...fp.entries()].map(([signature, s]) => ({ signature, owners: s.size })).sort((a, b) => b.owners - a.owners).slice(0, 5),
     environments, your_env_tested,
     evidence: hits.slice(0, 20).map((o) => ({ attribution: o.attribution, date: o.observed_at.slice(0, 10), ...(o.provenance.source_url ? { source: o.provenance.source_url } : {}), ...(o.env ? { env: `${o.env.runtime} ${o.env.runtime_version} ${o.env.os}` } : {}) })),
-    verdict, summary,
+    verdict, summary, sampled: hits.some((o) => o.weight !== undefined),
   };
 }

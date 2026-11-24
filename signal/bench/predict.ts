@@ -208,6 +208,25 @@ result.warnings = {
   own_history_over_50: warnings(test.filter((r) => r.f.own_history !== null), (r) => (r.f.own_history as number) > 0.5),
   semver_major: warnings(test, (r) => r.f.semver_major === 1),
 };
+// Adoption timing: can a warning arrive in time? For each target version with 5+ owners, the weighted share of PRs
+// opened more than 1 / 3 / 7 days after the first PR we saw for that target. (Within-week sampling keeps the newest
+// PRs, so late PRs are over-represented: this is an upper bound on how many adopters a warning could reach.)
+{
+  const byTarget = new Map<string, Row[]>();
+  for (const r of rows) (byTarget.get(`${r.pr.package}@${r.pr.to}`) ?? byTarget.set(`${r.pr.package}@${r.pr.to}`, []).get(`${r.pr.package}@${r.pr.to}`)!).push(r);
+  let W = 0; const late = { "1d": 0, "3d": 0, "7d": 0 };
+  let targets = 0;
+  for (const list of byTarget.values()) {
+    if (new Set(list.map((r) => r.pr.repo.split("/")[0])).size < 5) continue;
+    targets++;
+    const first = Math.min(...list.map((r) => Date.parse(r.pr.created_at)));
+    for (const r of list) {
+      const d = (Date.parse(r.pr.created_at) - first) / 86_400_000;
+      W += r.w; if (d > 1) late["1d"] += r.w; if (d > 3) late["3d"] += r.w; if (d > 7) late["7d"] += r.w;
+    }
+  }
+  result.adoption_timing = { targets, share_opened_after_first: { over_1_day: late["1d"] / W, over_3_days: late["3d"] / W, over_7_days: late["7d"] / W } };
+}
 // Same-week evidence, only on complete package-weeks (no sampling inside them), exact time cutoff.
 {
   EXACT_TIME = true;
@@ -220,4 +239,4 @@ result.warnings = {
   };
 }
 writeFileSync(outFile, JSON.stringify(result, null, 1));
-console.log(JSON.stringify({ same_week: result.same_week_complete_strata, n_test: result.n_test, coverage: result.coverage, auc: Object.fromEntries(Object.entries(result.auc).map(([k, v]: any) => [k, v.auc?.toFixed(3)])), head_to_head: result.head_to_head, models: { local: result.models.local_only.auc, plus_network: result.models.local_plus_network.auc, gain_ci90: result.models.network_auc_gain_ci90 } }, null, 1));
+console.log(JSON.stringify({ timing: result.adoption_timing, same_week: result.same_week_complete_strata, n_test: result.n_test, coverage: result.coverage, auc: Object.fromEntries(Object.entries(result.auc).map(([k, v]: any) => [k, v.auc?.toFixed(3)])), head_to_head: result.head_to_head, models: { local: result.models.local_only.auc, plus_network: result.models.local_plus_network.auc, gain_ci90: result.models.network_auc_gain_ci90 } }, null, 1));

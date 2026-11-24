@@ -1,0 +1,15 @@
+npm typescript
+npm vite
+npm vitest
+npm eslint
+npm prettier
+npm @types/node
+npm react
+npm next
+npm typescript-eslint
+npm @playwright/test
+npm tailwindcss
+npm turbo
+npm storybook
+npm @biomejs/biome
+npm globals

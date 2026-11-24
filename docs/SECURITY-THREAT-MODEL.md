@@ -119,3 +119,33 @@ tools, and the preview-digest set is bounded (256) so a long session cannot grow
 |---|---|---|
 | G4-1 | **The Action described the wrong toolchain.** Interpreter probes ran with a fixed system `PATH`, so after `setup-node 22` / `setup-python 3.13` the report said `node 24.22 · python 3.14` (the runner's defaults). Found by the new `remote-pinned` distribution job. Affected every CI user of 3.0 whose job installs its own runtimes; local users whose interpreter is not in `/usr/local/bin:/usr/bin:/bin` were affected too. | **FIXED**: bare names resolve on the caller's PATH before probing (`onCallerPath`); regression test. The pinned SHA in the README is moved to the fixed commit. |
 | G4-2 | Eval run 2: two agents rejected the `py-distutils-removed` fix (int tuples) because it crashes on `1.0rc1`, which `LooseVersion` handled. | OPEN: the capsule's `does_not_prove` already says so; the fix itself is weaker than what agents write unaided. |
+
+## Café Signal (GOAT 5): adversarial audit + independent review
+
+Two separate agents audited `signal/` (same model family as the author, so not fully independent). Findings were
+reproduced with proof-of-concept tests before being fixed. Regression tests: `tests/signal.test.ts` (29 tests).
+
+| id | finding | status |
+|---|---|---|
+| S1 | **Sybil + fabricated results.** Free GitHub orgs = free owners. With a 2-owner threshold, 2 fake orgs flipped a 30-owner red signal to `likely_safe`; 1 fake regression overrode 40 passing owners. | **MITIGATED, OPEN by nature.** Verdicts need ≥3 owners and an interval, a single regression is only `single_report`, and contradictions with a large opposite signal are `mixed`. Tokens are accepted from PR events only. A determined attacker with many orgs can still shift verdicts: the network must never gate merges (it does not). |
+| S2 / R11 | An exact-match record shadowed all same-target evidence. | **FIXED**: same-target evidence is pooled; exact matches are a label. |
+| S3 | Code under test (e.g. a malicious postinstall) could mint the job's OIDC tokens. | **FIXED for child processes**: `ACTIONS_ID_TOKEN_*` and runtime tokens are stripped from install/test env. **OPEN:** code in the same job can still tamper with files before the share step. Recommended: share from a separate job (documented). |
+| S4 | Token replay: one token for any content for 2 h; `exp` unchecked. | **FIXED**: the server recomputes the id from content, each `jti` is single-use, `exp` is required. |
+| S5 | A query token could be used to write (`id:"query"`). | **FIXED**: separate `obs:` / `query` audiences; ids must be 64-hex. |
+| S6 / R1 | No install command meant the baseline reused the update's `node_modules`, so a real regression was reported as "not the update's fault". | **FIXED**: install is required; the baseline runs in a fresh git worktree. |
+| S7 | Unvalidated fields were stored and rendered as markdown in other projects' PRs (phishing links). | **FIXED**: validation rebuilds the stored object from allow-listed, enum-checked fields, and all rendered evidence is escaped. |
+| S8 / S9 | A `null` body crashed `serve`; unbounded bodies. | **FIXED**: try/catch around the router, plain-object bodies, 64 KB streaming cap (server and `serve`). **OPEN:** the in-memory store has no eviction (self-host/dev only; no production store). |
+| S10 / R8 | Fingerprints leaked secrets, hosts, users and source lines. | **FIXED**: allow-list shaping (error type + lowercase words; everything else becomes `<id>`), tested against the audit's leak corpus. |
+| S11 | Private package names were shared by default; the id did not cover the redacted content. | **FIXED**: only the proposed update is shared by default, and the id is recomputed after redaction. |
+| S12–S14 | Non-idempotent scrub; tree not restored on one path; quadratic regexes. | **FIXED** (worktree baseline never touches the checkout; `[ \t]` regexes; size caps; line dedupe). |
+| S15 | `pull_request_target` would run fork code with secrets. | **FIXED**: the Action refuses it. |
+| R2 | The checkout was left on the old dependencies; Ctrl-C left files reverted. | **FIXED** (worktree). |
+| R3 | Monorepo with a root lockfile was silently skipped. | **FIXED**: lockfiles in ancestor directories count. |
+| R4 | `retries` -1/NaN gave `compatible` with zero tests run. | **FIXED**: clamped 0–3; no run → `error`; install failure → `error`. |
+| R5 | Python: `pip install` in a shared environment keeps packages the update added. | **OPEN**: use a per-side virtualenv in the install command (documented). |
+| R6 | The baseline used the moving base-branch tip. | **FIXED**: `--base auto` = first parent of the PR merge commit. |
+| R7 | A PR that also changes code made the baseline meaningless. | **FIXED**: downgraded to observational. |
+| R9 / R10 | Lockfiles with several versions or workspace/alias/patch entries produced invented transitions. | **FIXED** for npm (hoisted copy wins), pnpm (importers), yarn (aliases/patches). |
+| R12 | Prereleases were pooled with releases. | **FIXED** for semver-style tags. PEP 440 epochs: OPEN. |
+| R13–R16 | Environment grouping, owner namespaces, verdict ignoring the interval, unweighted seed. | **FIXED**. |
+| R17–R21 | Benchmark: newest-100 timing bias, label leakage, broken bootstrap RNG, duplicates, e2e without assertions. | **FIXED** where possible: earlier-weeks cutoff, mulberry32 clustered bootstrap, de-duplication, strict e2e. **Label leakage OPEN**: the label is the CI status at collection time, because per-repo check APIs are not reachable from this environment. |

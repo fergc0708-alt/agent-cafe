@@ -43,9 +43,11 @@ with open(out, "a") as f:
                 for it in d.get("items", []):
                     if it["html_url"] in seen: continue
                     body = it.get("body") or ""
-                    rows = [m for m in RE.findall(body) if m[1].replace("%2F", "/").lower() == pkg.lower()] or [m for m in MC.findall(body) if m[1].replace("%2F", "/").lower() == pkg.lower()]
+                    norm = lambda x: re.sub("%2f", "/", x, flags=re.I).lower()
+                    rows = [m for m in RE.findall(body) if norm(m[1]) == pkg.lower()] or [m for m in MC.findall(body) if norm(m[1]) == pkg.lower()]
                     if not rows: continue
                     ds, p, frm, to = rows[0]
+                    frm, to = frm.split("?")[0], to.split("?")[0]
                     rec = {"url": it["html_url"], "repo": it["repository_url"].split("repos/")[1], "number": it["number"], "title": it["title"], "ecosystem": ds, "package": pkg, "from": frm, "to": to, "ci": status, "state": it["state"], "merged_at": (it.get("pull_request") or {}).get("merged_at"), "created_at": it["created_at"], "closed_at": it["closed_at"], "mc_badge": bool(MC.search(body)), "multi_update": len(set(RE.findall(body))) > 1 or len(set(MC.findall(body))) > 1, "security": "[SECURITY]" in it["title"], "stratum": key}
                     seen.add(it["html_url"]); f.write(json.dumps(rec) + "\n"); f.flush(); n += 1
                 totals[key] = {"total": d.get("total_count", 0), "returned": len(d.get("items", [])), "kept": n}

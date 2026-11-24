@@ -49,8 +49,10 @@ export function renderReport(r: Report, title = "What other projects saw"): stri
   L.push(v, "", r.summary, "");
   L.push("| evidence | independent owners | failed | estimate | 90% interval |", "|---|---|---|---|---|");
   L.push(`| paired experiments (causal) | ${r.causal.owners} | ${r.causal.failures} | ${pct(r.causal.mean)} | ${r.causal.ci90 ? `${pct(r.causal.ci90[0])}–${pct(r.causal.ci90[1])}` : "–"} |`);
-  L.push(`| CI status only (not causal) | ${r.observational.owners} | ${r.observational.failures} | ${pct(r.observational.mean)} | ${r.observational.ci90 ? `${pct(r.observational.ci90[0])}–${pct(r.observational.ci90[1])}` : "–"} |`);
+  // CI-status-only estimates were measured to be miscalibrated (bench/RESULTS.md): counts only, no percentage.
+  L.push(`| CI status only (not causal) | ${r.observational.owners} | ${r.observational.failures} | not shown (uncalibrated) | – |`);
   L.push("", `Prior: ${r.causal.prior.from}. Match level: ${r.match}.`);
+  if (r.sampled) L.push("", "CI-status counts include the public seed, a stratified sample in which failures are over-represented: do not read them as a failure rate.");
   if (r.fingerprints.length) L.push("", "**Failure signatures** (normalized):", ...r.fingerprints.map((f) => `- ${md(f.signature)} (${f.owners} owners)`));
   if (r.environments.length) L.push("", `**Environments seen:** ${r.environments.map((e) => `${md(e.runtime)}/${md(e.os)}: ${e.failures}/${e.owners} failed`).join(" · ")}`);
   if (r.your_env_tested === false) L.push("", "Your runtime has **not** been observed for this update.");

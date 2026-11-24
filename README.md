@@ -20,16 +20,21 @@ BREAKS ON UPGRADE  Dirent.path was removed in Node 24: use dirent.parentPath (No
    → Breaks on node 24.22, but the known fix breaks node 20.0: you need a version-guarded fix, not this one as-is.
 ```
 
-Branch `goat/prove`. Not merged to `main`, not deployed, not published to npm.
+Branch `goat/signal`. Not merged to `main`, not deployed, not published to npm.
 
-> **Status (2026-11-24): development stopped, by our own measurement.** On 32 real upgrade breaks from public projects, `doctor` found 4, mypy alone 7, free tools together 9 ([benchmark](experiments/bench/RESULTS.md)); in a replicated controlled evaluation agents were not more successful with it, only slower ([eval](experiments/eval/RESULTS.md)). For static upgrade checks use `mypy --python-version X` / `pyright --pythonversion X` / `tsc` with `@types/node@N`, diffed against your current version. Reasoning in [docs/PRODUCT-DECISION.md](docs/PRODUCT-DECISION.md).
+> **Status (2026-11-24).** `cafe doctor` (below) was stopped by our own benchmark (see
+> [docs/PRODUCT-DECISION.md](docs/PRODUCT-DECISION.md)). The current work is **[Café Signal](signal/README.md)**: on a
+> Renovate/Dependabot PR it runs your tests with and without the update on the same runner and says whether the update
+> caused the failure, `main` was already red, or a test is flaky. Its cross-repository "network" was tested on 4,883
+> real PRs and does **not** predict better than existing indicators ([benchmark](signal/bench/RESULTS.md)); what works
+> is the local, paired attribution.
 
 ## Install and use (2 minutes)
 
 Requires Node ≥ 20 (the GitHub Action and the compiled CLI) and git. The sandboxed `replay`/`capture` need Linux with [bubblewrap](https://github.com/containers/bubblewrap) (`apt install bubblewrap`).
 
 ```bash
-git clone --depth 1 -b goat/prove https://github.com/fergc0708-alt/agent-cafe ~/.agent-cafe-cli
+git clone --depth 1 -b goat/signal https://github.com/fergc0708-alt/agent-cafe ~/.agent-cafe-cli
 alias cafe="node ~/.agent-cafe-cli/dist/cli/cafe.js"
 
 cd your-project
@@ -92,7 +97,7 @@ A **capsule** is a minimal broken program, its fix, and a check that must fail o
 
 ## Measured results (honest)
 
-- **Engine and evidence:** 63 automated tests (`npm test`), including OIDC forgery/replay attempts, the evidence semantics and its re-derivation from signatures, the scan, the MCP approval flow, and regressions for every reproduced red-team finding.
+- **Engine and evidence:** 92 automated tests (`npm test`), including OIDC forgery/replay attempts, the evidence semantics and its re-derivation from signatures, the scan, the MCP approval flow, and regressions for every reproduced red-team finding.
 - **Security audit:** two adversarial audits by separate agents (same model family, so not independent in the strong sense). The second found 1 critical, 5 high and 7 medium issues on this iteration (repository-shipped interpreters executed during `doctor`, planted local capsules, a green pass when a runtime was not evaluated, a circular evidence-integrity test, a broad OIDC policy, …); all critical/high and most medium ones are fixed with regression tests. See [docs/SECURITY-THREAT-MODEL.md](docs/SECURITY-THREAT-MODEL.md).
 - **Utility for agents:** a pre-registered controlled evaluation ([`experiments/eval`](experiments/eval/RESULTS.md)): 4 tasks × {with, without} × 2 repetitions, same model, hidden graders. **Both arms solved 8/8; the agents with Agent Café were slower (median 34 s vs 21 s on the wedge tasks).** The pre-registered success rule was not met. On these well-documented breaks the model already knows the fix. The evaluation also exposed two product defects (a detection rule that missed submodule imports; diagnose ruling out the right fix because it only checked the default runtime), both fixed afterwards. **A replication after the fixes (run 2) gave the same picture: 8/8 vs 8/8, +56% median time with Agent Café, and +52% on the task where no capsule applies.** Only one model family was available, so the cross-family run is still pending.
 - **Where it plausibly helps (not yet measured):** catching breaks before any agent or developer time is spent (the CI guard), breaks newer than the model's knowledge, environment traps that look fine locally (the distutils/setuptools case), and "this fix breaks your other supported version".

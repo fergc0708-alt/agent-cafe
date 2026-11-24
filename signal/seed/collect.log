@@ -1,0 +1,10 @@
+npm eslint failure 1 100 11755
+npm eslint failure 2 100 11755
+npm eslint failure 3 100 11755
+npm eslint success 1 100 69056
+npm eslint success 2 100 69056
+npm eslint success 3 100 69056
+npm prettier failure 1 100 6740
+npm prettier failure 2 100 6740
+npm prettier failure 3 100 6740
+npm prettier success 1 100 42644

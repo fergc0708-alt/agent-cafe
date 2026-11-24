@@ -1253,5 +1253,2995 @@
 "mend": "high",
 "dependabot": 88,
 "dependabot_raw": "88%"
+},
+"npm|@types/node|10.17.27|26.6.6": {
+"mend": "low",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|16.11.41|24.19.2": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|16.6.2|24.19.2": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|17.0.18|24.19.2": {
+"mend": "low",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|17.0.34|24.19.2": {
+"mend": "low",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|17.0.45|20.19.43": {
+"mend": "low",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|17.0.8|24.19.1": {
+"mend": "low",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|17.0.8|24.19.2": {
+"mend": "low",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|18.11.10|26.6.6": {
+"mend": "low",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|18.11.18|26.6.6": {
+"mend": "low",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|18.19.130|26.6.6": {
+"mend": "low",
+"dependabot": 83,
+"dependabot_raw": "83%"
+},
+"npm|@types/node|18.19.64|24.19.2": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|20.1.0|26.6.6": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|20.11.28|20.19.43": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|20.17.10|20.19.43": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|20.17.19|24.19.2": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|20.17.24|24.19.2": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|20.17.46|26.6.6": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|20.19.17|26.6.6": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|20.19.23|20.19.43": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|20.19.25|20.19.43": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|20.19.27|24.19.2": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|20.19.30|20.19.43": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|20.19.30|24.19.2": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|20.19.30|26.6.6": {
+"mend": "neutral",
+"dependabot": 100,
+"dependabot_raw": "100%"
+},
+"npm|@types/node|20.19.32|24.19.2": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|20.19.35|20.19.43": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|20.19.37|20.19.43": {
+"mend": "high",
+"dependabot": 89,
+"dependabot_raw": "89%"
+},
+"npm|@types/node|20.19.37|26.6.6": {
+"mend": "neutral",
+"dependabot": 69,
+"dependabot_raw": "69%"
+},
+"npm|@types/node|20.19.39|20.19.43": {
+"mend": "high",
+"dependabot": 100,
+"dependabot_raw": "100%"
+},
+"npm|@types/node|20.19.39|26.6.6": {
+"mend": "neutral",
+"dependabot": 69,
+"dependabot_raw": "69%"
+},
+"npm|@types/node|20.19.41|20.19.43": {
+"mend": "high",
+"dependabot": 88,
+"dependabot_raw": "88%"
+},
+"npm|@types/node|20.19.43|22.20.4": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|20.19.43|24.19.2": {
+"mend": "high",
+"dependabot": 100,
+"dependabot_raw": "100%"
+},
+"npm|@types/node|20.19.43|26.6.5": {
+"mend": "neutral",
+"dependabot": 82,
+"dependabot_raw": "82%"
+},
+"npm|@types/node|20.19.43|26.6.6": {
+"mend": "neutral",
+"dependabot": 82,
+"dependabot_raw": "82%"
+},
+"npm|@types/node|20.19.9|20.19.43": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|20.2.4|26.6.6": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|20.3.1|26.6.6": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|20.4.2|26.6.6": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|22.13.15|24.19.2": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|22.13.4|22.20.5": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|22.13.5|22.20.5": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|22.14.1|24.13.6": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|22.15.17|26.6.6": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|22.15.29|22.20.5": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|22.15.29|24.19.2": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|22.15.34|22.20.5": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|22.15.34|26.6.6": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|22.17.2|24.19.2": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|22.18.10|26.6.6": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|22.18.11|26.6.6": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|22.18.7|22.20.5": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|22.19.0|22.20.5": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|22.19.11|22.20.5": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|22.19.13|22.20.5": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|22.19.15|22.20.5": {
+"mend": "high",
+"dependabot": 90,
+"dependabot_raw": "90%"
+},
+"npm|@types/node|22.19.15|26.6.6": {
+"mend": "neutral",
+"dependabot": 79,
+"dependabot_raw": "79%"
+},
+"npm|@types/node|22.19.17|22.20.5": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|22.19.17|24.19.2": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|22.19.17|26.6.5": {
+"mend": "neutral",
+"dependabot": 80,
+"dependabot_raw": "80%"
+},
+"npm|@types/node|22.19.19|22.20.5": {
+"mend": "high",
+"dependabot": 100,
+"dependabot_raw": "100%"
+},
+"npm|@types/node|22.19.1|22.20.5": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|22.19.1|26.6.6": {
+"mend": "neutral",
+"dependabot": 83,
+"dependabot_raw": "83%"
+},
+"npm|@types/node|22.19.20|22.20.5": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|22.19.20|26.6.6": {
+"mend": "neutral",
+"dependabot": 100,
+"dependabot_raw": "100%"
+},
+"npm|@types/node|22.19.21|22.20.5": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|22.19.3|22.20.5": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|22.19.3|26.6.6": {
+"mend": "neutral",
+"dependabot": 78,
+"dependabot_raw": "78%"
+},
+"npm|@types/node|22.20.0|22.20.5": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|22.20.1|22.20.4": {
+"mend": "high",
+"dependabot": 86,
+"dependabot_raw": "86%"
+},
+"npm|@types/node|22.20.1|22.20.5": {
+"mend": "high",
+"dependabot": 84,
+"dependabot_raw": "84%"
+},
+"npm|@types/node|22.20.1|24.19.2": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|22.20.2|22.20.3": {
+"mend": "high",
+"dependabot": 90,
+"dependabot_raw": "90%"
+},
+"npm|@types/node|22.20.2|22.20.4": {
+"mend": "high",
+"dependabot": 77,
+"dependabot_raw": "77%"
+},
+"npm|@types/node|22.20.2|22.20.5": {
+"mend": "high",
+"dependabot": 85,
+"dependabot_raw": "85%"
+},
+"npm|@types/node|22.20.3|22.20.4": {
+"mend": "high",
+"dependabot": 90,
+"dependabot_raw": "90%"
+},
+"npm|@types/node|22.20.3|22.20.5": {
+"mend": "high",
+"dependabot": 82,
+"dependabot_raw": "82%"
+},
+"npm|@types/node|22.20.3|24.13.5": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|22.20.3|24.19.1": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|22.20.4|22.20.5": {
+"mend": "high",
+"dependabot": 88,
+"dependabot_raw": "88%"
+},
+"npm|@types/node|22.20.4|24.19.2": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|22.20.5|24.19.1": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|22.20.5|24.19.2": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|22.20.5|26.6.6": {
+"mend": "neutral",
+"dependabot": 79,
+"dependabot_raw": "79%"
+},
+"npm|@types/node|22.20.5|26.6.7": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|22.4.0|22.20.5": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|22.7.9|22.20.5": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|22.9.0|24.19.2": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|22.9.0|26.6.6": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|24.0.13|26.6.6": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|24.1.0|26.6.6": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|24.10.12|24.13.6": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|24.10.12|24.19.1": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|24.10.12|24.19.2": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|24.10.13|26.6.6": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|24.10.1|24.19.1": {
+"mend": "high",
+"dependabot": 67,
+"dependabot_raw": "67%"
+},
+"npm|@types/node|24.10.1|24.19.2": {
+"mend": "high",
+"dependabot": 100,
+"dependabot_raw": "100%"
+},
+"npm|@types/node|24.10.1|26.6.5": {
+"mend": "high",
+"dependabot": 79,
+"dependabot_raw": "79%"
+},
+"npm|@types/node|24.10.4|26.6.6": {
+"mend": "neutral",
+"dependabot": 78,
+"dependabot_raw": "78%"
+},
+"npm|@types/node|24.10.9|26.6.6": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|24.11.0|24.13.6": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|24.11.0|26.6.5": {
+"mend": "high",
+"dependabot": 80,
+"dependabot_raw": "80%"
+},
+"npm|@types/node|24.11.2|24.19.2": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|24.12.0|24.12.4": {
+"mend": "high",
+"dependabot": 90,
+"dependabot_raw": "90%"
+},
+"npm|@types/node|24.12.0|24.13.6": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|24.12.0|24.19.1": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|24.12.0|26.6.6": {
+"mend": "neutral",
+"dependabot": 86,
+"dependabot_raw": "86%"
+},
+"npm|@types/node|24.12.2|24.13.6": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|24.12.2|24.19.1": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|24.12.2|24.19.2": {
+"mend": "high",
+"dependabot": 86,
+"dependabot_raw": "86%"
+},
+"npm|@types/node|24.12.2|26.6.6": {
+"mend": "neutral",
+"dependabot": 89,
+"dependabot_raw": "89%"
+},
+"npm|@types/node|24.12.4|24.13.6": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|24.12.4|24.19.0": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|24.12.4|24.19.1": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|24.12.4|24.19.2": {
+"mend": "high",
+"dependabot": 100,
+"dependabot_raw": "100%"
+},
+"npm|@types/node|24.12.4|26.6.4": {
+"mend": "high",
+"dependabot": 100,
+"dependabot_raw": "100%"
+},
+"npm|@types/node|24.13.0|24.13.6": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|24.13.0|24.19.1": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|24.13.0|24.19.2": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|24.13.2|24.13.3": {
+"mend": "high",
+"dependabot": 88,
+"dependabot_raw": "88%"
+},
+"npm|@types/node|24.13.2|24.13.5": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|24.13.2|24.13.6": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|24.13.2|26.6.6": {
+"mend": "neutral",
+"dependabot": 77,
+"dependabot_raw": "77%"
+},
+"npm|@types/node|24.13.3|24.13.4": {
+"mend": "high",
+"dependabot": 88,
+"dependabot_raw": "88%"
+},
+"npm|@types/node|24.13.3|24.13.5": {
+"mend": "high",
+"dependabot": 87,
+"dependabot_raw": "87%"
+},
+"npm|@types/node|24.13.3|24.13.6": {
+"mend": "high",
+"dependabot": 91,
+"dependabot_raw": "91%"
+},
+"npm|@types/node|24.13.3|24.19.0": {
+"mend": "high",
+"dependabot": 87,
+"dependabot_raw": "87%"
+},
+"npm|@types/node|24.13.3|24.19.1": {
+"mend": "high",
+"dependabot": 82,
+"dependabot_raw": "82%"
+},
+"npm|@types/node|24.13.3|24.19.2": {
+"mend": "high",
+"dependabot": 84,
+"dependabot_raw": "84%"
+},
+"npm|@types/node|24.13.3|26.6.5": {
+"mend": "high",
+"dependabot": 79,
+"dependabot_raw": "79%"
+},
+"npm|@types/node|24.13.3|26.6.6": {
+"mend": "neutral",
+"dependabot": 76,
+"dependabot_raw": "76%"
+},
+"npm|@types/node|24.13.3|26.6.7": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|24.13.4|24.13.5": {
+"mend": "high",
+"dependabot": 94,
+"dependabot_raw": "94%"
+},
+"npm|@types/node|24.13.4|24.13.6": {
+"mend": "high",
+"dependabot": 90,
+"dependabot_raw": "90%"
+},
+"npm|@types/node|24.13.4|24.19.0": {
+"mend": "high",
+"dependabot": 87,
+"dependabot_raw": "87%"
+},
+"npm|@types/node|24.13.4|24.19.1": {
+"mend": "high",
+"dependabot": 81,
+"dependabot_raw": "81%"
+},
+"npm|@types/node|24.13.4|24.19.2": {
+"mend": "high",
+"dependabot": 89,
+"dependabot_raw": "89%"
+},
+"npm|@types/node|24.13.5|24.13.6": {
+"mend": "high",
+"dependabot": 95,
+"dependabot_raw": "95%"
+},
+"npm|@types/node|24.13.5|24.19.0": {
+"mend": "high",
+"dependabot": 79,
+"dependabot_raw": "79%"
+},
+"npm|@types/node|24.13.5|24.19.2": {
+"mend": "high",
+"dependabot": 71,
+"dependabot_raw": "71%"
+},
+"npm|@types/node|24.13.5|26.5.1": {
+"mend": "high",
+"dependabot": 78,
+"dependabot_raw": "78%"
+},
+"npm|@types/node|24.13.6|24.13.6": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|24.13.6|24.19.0": {
+"mend": "high",
+"dependabot": 90,
+"dependabot_raw": "90%"
+},
+"npm|@types/node|24.13.6|24.19.1": {
+"mend": "high",
+"dependabot": 85,
+"dependabot_raw": "85%"
+},
+"npm|@types/node|24.13.6|24.19.2": {
+"mend": "high",
+"dependabot": 92,
+"dependabot_raw": "92%"
+},
+"npm|@types/node|24.13.6|26.6.6": {
+"mend": "neutral",
+"dependabot": 74,
+"dependabot_raw": "74%"
+},
+"npm|@types/node|24.13.6|26.6.7": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|24.19.0|24.19.1": {
+"mend": "high",
+"dependabot": 88,
+"dependabot_raw": "88%"
+},
+"npm|@types/node|24.19.0|24.19.2": {
+"mend": "high",
+"dependabot": 93,
+"dependabot_raw": "93%"
+},
+"npm|@types/node|24.19.0|26.6.3": {
+"mend": "high",
+"dependabot": 90,
+"dependabot_raw": "90%"
+},
+"npm|@types/node|24.19.0|26.6.6": {
+"mend": "neutral",
+"dependabot": 78,
+"dependabot_raw": "78%"
+},
+"npm|@types/node|24.19.1|24.19.2": {
+"mend": "high",
+"dependabot": 90,
+"dependabot_raw": "90%"
+},
+"npm|@types/node|24.19.1|26.6.4": {
+"mend": "high",
+"dependabot": 85,
+"dependabot_raw": "85%"
+},
+"npm|@types/node|24.19.1|26.6.6": {
+"mend": "neutral",
+"dependabot": 81,
+"dependabot_raw": "81%"
+},
+"npm|@types/node|24.19.2|24.13.5": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|24.19.2|24.13.6": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|24.19.2|24.19.2": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|24.19.2|26.6.5": {
+"mend": "high",
+"dependabot": 89,
+"dependabot_raw": "89%"
+},
+"npm|@types/node|24.19.2|26.6.6": {
+"mend": "neutral",
+"dependabot": 81,
+"dependabot_raw": "81%"
+},
+"npm|@types/node|24.19.2|26.6.7": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|24.7.1|26.6.7": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|24.9.2|24.19.2": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|24.9.2|26.6.6": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|25.0.9|26.6.6": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|25.1.0|26.6.6": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|25.3.5|25.9.9": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|25.4.0|25.9.9": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|25.5.0|25.9.8": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|25.5.2|25.9.9": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|25.6.0|25.9.9": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|25.6.2|25.9.9": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|25.7.0|26.6.6": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|25.9.1|25.9.8": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|25.9.1|25.9.9": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|25.9.3|26.6.6": {
+"mend": "neutral",
+"dependabot": 81,
+"dependabot_raw": "81%"
+},
+"npm|@types/node|25.9.4|25.9.9": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|25.9.5|25.9.6": {
+"mend": "high",
+"dependabot": 95,
+"dependabot_raw": "95%"
+},
+"npm|@types/node|25.9.5|25.9.7": {
+"mend": "high",
+"dependabot": 63,
+"dependabot_raw": "63%"
+},
+"npm|@types/node|25.9.5|25.9.8": {
+"mend": "high",
+"dependabot": 88,
+"dependabot_raw": "88%"
+},
+"npm|@types/node|25.9.5|25.9.9": {
+"mend": "high",
+"dependabot": 88,
+"dependabot_raw": "88%"
+},
+"npm|@types/node|25.9.6|25.9.10": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|25.9.6|25.9.7": {
+"mend": "high",
+"dependabot": 81,
+"dependabot_raw": "81%"
+},
+"npm|@types/node|25.9.6|25.9.8": {
+"mend": "high",
+"dependabot": 89,
+"dependabot_raw": "89%"
+},
+"npm|@types/node|25.9.6|25.9.9": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|25.9.7|25.9.8": {
+"mend": "high",
+"dependabot": 92,
+"dependabot_raw": "92%"
+},
+"npm|@types/node|25.9.7|25.9.9": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|25.9.8|25.9.9": {
+"mend": "high",
+"dependabot": 79,
+"dependabot_raw": "79%"
+},
+"npm|@types/node|25.9.9|25.9.9": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|25.9.9|26.6.5": {
+"mend": "high",
+"dependabot": 80,
+"dependabot_raw": "80%"
+},
+"npm|@types/node|25.9.9|26.6.6": {
+"mend": "neutral",
+"dependabot": 76,
+"dependabot_raw": "76%"
+},
+"npm|@types/node|25.9.9|26.6.7": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|26.0.1|26.6.4": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|26.1.0|26.6.2": {
+"mend": "high",
+"dependabot": 76,
+"dependabot_raw": "76%"
+},
+"npm|@types/node|26.1.0|26.6.5": {
+"mend": "high",
+"dependabot": 80,
+"dependabot_raw": "80%"
+},
+"npm|@types/node|26.1.1|26.6.3": {
+"mend": "high",
+"dependabot": 81,
+"dependabot_raw": "81%"
+},
+"npm|@types/node|26.1.1|26.6.4": {
+"mend": "high",
+"dependabot": 79,
+"dependabot_raw": "79%"
+},
+"npm|@types/node|26.1.1|26.6.5": {
+"mend": "high",
+"dependabot": 76,
+"dependabot_raw": "76%"
+},
+"npm|@types/node|26.1.1|26.6.6": {
+"mend": "high",
+"dependabot": 80,
+"dependabot_raw": "80%"
+},
+"npm|@types/node|26.1.2|26.6.4": {
+"mend": "high",
+"dependabot": 81,
+"dependabot_raw": "81%"
+},
+"npm|@types/node|26.1.2|26.6.6": {
+"mend": "high",
+"dependabot": 82,
+"dependabot_raw": "82%"
+},
+"npm|@types/node|26.2.0|26.5.1": {
+"mend": "high",
+"dependabot": 88,
+"dependabot_raw": "88%"
+},
+"npm|@types/node|26.2.0|26.6.2": {
+"mend": "high",
+"dependabot": 87,
+"dependabot_raw": "87%"
+},
+"npm|@types/node|26.2.0|26.6.3": {
+"mend": "high",
+"dependabot": 86,
+"dependabot_raw": "86%"
+},
+"npm|@types/node|26.2.0|26.6.5": {
+"mend": "high",
+"dependabot": 86,
+"dependabot_raw": "86%"
+},
+"npm|@types/node|26.2.0|26.6.6": {
+"mend": "high",
+"dependabot": 88,
+"dependabot_raw": "88%"
+},
+"npm|@types/node|26.3.0|26.4.0": {
+"mend": "high",
+"dependabot": 95,
+"dependabot_raw": "95%"
+},
+"npm|@types/node|26.4.0|26.4.1": {
+"mend": "high",
+"dependabot": 89,
+"dependabot_raw": "89%"
+},
+"npm|@types/node|26.4.0|26.5.0": {
+"mend": "high",
+"dependabot": 88,
+"dependabot_raw": "88%"
+},
+"npm|@types/node|26.4.0|26.6.1": {
+"mend": "high",
+"dependabot": 86,
+"dependabot_raw": "86%"
+},
+"npm|@types/node|26.4.0|26.6.6": {
+"mend": "high",
+"dependabot": 82,
+"dependabot_raw": "82%"
+},
+"npm|@types/node|26.4.1|26.6.3": {
+"mend": "high",
+"dependabot": 89,
+"dependabot_raw": "89%"
+},
+"npm|@types/node|26.4.1|26.6.4": {
+"mend": "high",
+"dependabot": 85,
+"dependabot_raw": "85%"
+},
+"npm|@types/node|26.4.1|26.6.5": {
+"mend": "high",
+"dependabot": 85,
+"dependabot_raw": "85%"
+},
+"npm|@types/node|26.4.1|26.6.6": {
+"mend": "high",
+"dependabot": 82,
+"dependabot_raw": "82%"
+},
+"npm|@types/node|26.5.0|26.5.1": {
+"mend": "high",
+"dependabot": 94,
+"dependabot_raw": "94%"
+},
+"npm|@types/node|26.5.1|26.6.0": {
+"mend": "high",
+"dependabot": 95,
+"dependabot_raw": "95%"
+},
+"npm|@types/node|26.5.1|26.6.1": {
+"mend": "high",
+"dependabot": 94,
+"dependabot_raw": "94%"
+},
+"npm|@types/node|26.5.1|26.6.2": {
+"mend": "high",
+"dependabot": 95,
+"dependabot_raw": "95%"
+},
+"npm|@types/node|26.5.1|26.6.4": {
+"mend": "high",
+"dependabot": 82,
+"dependabot_raw": "82%"
+},
+"npm|@types/node|26.5.1|26.6.6": {
+"mend": "high",
+"dependabot": 81,
+"dependabot_raw": "81%"
+},
+"npm|@types/node|26.6.0|26.6.1": {
+"mend": "high",
+"dependabot": 95,
+"dependabot_raw": "95%"
+},
+"npm|@types/node|26.6.1|26.6.2": {
+"mend": "high",
+"dependabot": 96,
+"dependabot_raw": "96%"
+},
+"npm|@types/node|26.6.1|26.6.5": {
+"mend": "high",
+"dependabot": 85,
+"dependabot_raw": "85%"
+},
+"npm|@types/node|26.6.2|26.6.2": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|26.6.2|26.6.3": {
+"mend": "high",
+"dependabot": 93,
+"dependabot_raw": "93%"
+},
+"npm|@types/node|26.6.2|26.6.4": {
+"mend": "high",
+"dependabot": 88,
+"dependabot_raw": "88%"
+},
+"npm|@types/node|26.6.2|26.6.5": {
+"mend": "high",
+"dependabot": 85,
+"dependabot_raw": "85%"
+},
+"npm|@types/node|26.6.2|26.6.6": {
+"mend": "high",
+"dependabot": 84,
+"dependabot_raw": "84%"
+},
+"npm|@types/node|26.6.3|26.6.4": {
+"mend": "high",
+"dependabot": 90,
+"dependabot_raw": "90%"
+},
+"npm|@types/node|26.6.3|26.6.5": {
+"mend": "high",
+"dependabot": 86,
+"dependabot_raw": "86%"
+},
+"npm|@types/node|26.6.3|26.6.6": {
+"mend": "high",
+"dependabot": 85,
+"dependabot_raw": "85%"
+},
+"npm|@types/node|26.6.4|26.6.5": {
+"mend": "high",
+"dependabot": 95,
+"dependabot_raw": "95%"
+},
+"npm|@types/node|26.6.4|26.6.6": {
+"mend": "high",
+"dependabot": 85,
+"dependabot_raw": "85%"
+},
+"npm|@types/node|26.6.5|26.6.4": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|26.6.5|26.6.5": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|26.6.5|26.6.6": {
+"mend": "high",
+"dependabot": 86,
+"dependabot_raw": "86%"
+},
+"npm|@types/node|26.6.6|26.6.6": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|@types/node|6.0.48|6.14.13": {
+"mend": "low",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|eslint|10.0.0|10.15.0": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|eslint|10.0.2|10.11.0": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|eslint|10.0.3|10.12.0": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|eslint|10.0.3|10.15.0": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|eslint|10.10.0|10.11.0": {
+"mend": "high",
+"dependabot": 95,
+"dependabot_raw": "95%"
+},
+"npm|eslint|10.10.0|10.12.0": {
+"mend": "high",
+"dependabot": 80,
+"dependabot_raw": "80%"
+},
+"npm|eslint|10.10.0|10.14.0": {
+"mend": "high",
+"dependabot": 71,
+"dependabot_raw": "71%"
+},
+"npm|eslint|10.10.0|10.15.0": {
+"mend": "high",
+"dependabot": 79,
+"dependabot_raw": "79%"
+},
+"npm|eslint|10.11.0|10.12.0": {
+"mend": "high",
+"dependabot": 92,
+"dependabot_raw": "92%"
+},
+"npm|eslint|10.11.0|10.13.0": {
+"mend": "high",
+"dependabot": 87,
+"dependabot_raw": "87%"
+},
+"npm|eslint|10.11.0|10.14.0": {
+"mend": "high",
+"dependabot": 85,
+"dependabot_raw": "85%"
+},
+"npm|eslint|10.11.0|10.15.0": {
+"mend": "high",
+"dependabot": 72,
+"dependabot_raw": "72%"
+},
+"npm|eslint|10.12.0|10.13.0": {
+"mend": "high",
+"dependabot": 94,
+"dependabot_raw": "94%"
+},
+"npm|eslint|10.12.0|10.14.0": {
+"mend": "high",
+"dependabot": 77,
+"dependabot_raw": "77%"
+},
+"npm|eslint|10.12.0|10.15.0": {
+"mend": "high",
+"dependabot": 75,
+"dependabot_raw": "75%"
+},
+"npm|eslint|10.13.0|10.14.0": {
+"mend": "high",
+"dependabot": 91,
+"dependabot_raw": "91%"
+},
+"npm|eslint|10.13.0|10.15.0": {
+"mend": "high",
+"dependabot": 81,
+"dependabot_raw": "81%"
+},
+"npm|eslint|10.14.0|10.14.0": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|eslint|10.14.0|10.15.0": {
+"mend": "high",
+"dependabot": 96,
+"dependabot_raw": "96%"
+},
+"npm|eslint|10.15.0|10.15.0": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|eslint|10.2.0|10.15.0": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|eslint|10.2.1|10.11.0": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|eslint|10.2.1|10.12.0": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|eslint|10.3.0|10.15.0": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|eslint|10.4.0|10.13.0": {
+"mend": "high",
+"dependabot": 71,
+"dependabot_raw": "71%"
+},
+"npm|eslint|10.5.0|10.11.0": {
+"mend": "high",
+"dependabot": 94,
+"dependabot_raw": "94%"
+},
+"npm|eslint|10.6.0|10.13.0": {
+"mend": "high",
+"dependabot": 75,
+"dependabot_raw": "75%"
+},
+"npm|eslint|10.6.0|10.14.0": {
+"mend": "high",
+"dependabot": 50,
+"dependabot_raw": "50%"
+},
+"npm|eslint|10.6.0|10.15.0": {
+"mend": "high",
+"dependabot": 60,
+"dependabot_raw": "60%"
+},
+"npm|eslint|10.7.0|10.11.0": {
+"mend": "high",
+"dependabot": 87,
+"dependabot_raw": "87%"
+},
+"npm|eslint|10.7.0|10.12.0": {
+"mend": "high",
+"dependabot": 70,
+"dependabot_raw": "70%"
+},
+"npm|eslint|10.7.0|10.13.0": {
+"mend": "high",
+"dependabot": 91,
+"dependabot_raw": "91%"
+},
+"npm|eslint|10.7.0|10.14.0": {
+"mend": "high",
+"dependabot": 73,
+"dependabot_raw": "73%"
+},
+"npm|eslint|10.7.0|10.15.0": {
+"mend": "high",
+"dependabot": 86,
+"dependabot_raw": "86%"
+},
+"npm|eslint|10.8.0|10.13.0": {
+"mend": "high",
+"dependabot": 80,
+"dependabot_raw": "80%"
+},
+"npm|eslint|10.8.0|10.14.0": {
+"mend": "high",
+"dependabot": 77,
+"dependabot_raw": "77%"
+},
+"npm|eslint|10.8.0|10.9.0": {
+"mend": "high",
+"dependabot": 86,
+"dependabot_raw": "86%"
+},
+"npm|eslint|10.8.1|10.11.0": {
+"mend": "high",
+"dependabot": 87,
+"dependabot_raw": "87%"
+},
+"npm|eslint|10.8.1|10.12.0": {
+"mend": "high",
+"dependabot": 82,
+"dependabot_raw": "82%"
+},
+"npm|eslint|10.8.1|10.15.0": {
+"mend": "high",
+"dependabot": 87,
+"dependabot_raw": "87%"
+},
+"npm|eslint|10.9.0|10.11.0": {
+"mend": "high",
+"dependabot": 80,
+"dependabot_raw": "80%"
+},
+"npm|eslint|10.9.1|10.10.0": {
+"mend": "high",
+"dependabot": 96,
+"dependabot_raw": "96%"
+},
+"npm|eslint|10.9.1|10.11.0": {
+"mend": "high",
+"dependabot": 88,
+"dependabot_raw": "88%"
+},
+"npm|eslint|10.9.1|10.12.0": {
+"mend": "high",
+"dependabot": 74,
+"dependabot_raw": "74%"
+},
+"npm|eslint|10.9.1|10.13.0": {
+"mend": "high",
+"dependabot": 81,
+"dependabot_raw": "81%"
+},
+"npm|eslint|10.9.1|10.14.0": {
+"mend": "high",
+"dependabot": 85,
+"dependabot_raw": "85%"
+},
+"npm|eslint|10.9.1|10.15.0": {
+"mend": "high",
+"dependabot": 86,
+"dependabot_raw": "86%"
+},
+"npm|eslint|6.8.0|10.14.0": {
+"mend": "low",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|eslint|6.8.0|10.15.0": {
+"mend": "low",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|eslint|7.32.0|10.11.0": {
+"mend": "low",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|eslint|7.32.0|10.12.0": {
+"mend": "low",
+"dependabot": 50,
+"dependabot_raw": "50%"
+},
+"npm|eslint|7.32.0|10.13.0": {
+"mend": "low",
+"dependabot": 33,
+"dependabot_raw": "33%"
+},
+"npm|eslint|7.32.0|10.14.0": {
+"mend": "low",
+"dependabot": 50,
+"dependabot_raw": "50%"
+},
+"npm|eslint|7.32.0|10.15.0": {
+"mend": "low",
+"dependabot": 17,
+"dependabot_raw": "17%"
+},
+"npm|eslint|8.0.1|8.57.1": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|eslint|8.39.0|8.57.1": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|eslint|8.55.0|10.15.0": {
+"mend": "low",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|eslint|8.57.0|10.15.0": {
+"mend": "low",
+"dependabot": 15,
+"dependabot_raw": "15%"
+},
+"npm|eslint|8.57.1|10.10.0": {
+"mend": "low",
+"dependabot": 12,
+"dependabot_raw": "12%"
+},
+"npm|eslint|8.57.1|10.11.0": {
+"mend": "low",
+"dependabot": 14,
+"dependabot_raw": "14%"
+},
+"npm|eslint|8.57.1|10.12.0": {
+"mend": "low",
+"dependabot": 18,
+"dependabot_raw": "18%"
+},
+"npm|eslint|8.57.1|10.13.0": {
+"mend": "low",
+"dependabot": 23,
+"dependabot_raw": "23%"
+},
+"npm|eslint|8.57.1|10.14.0": {
+"mend": "low",
+"dependabot": 17,
+"dependabot_raw": "17%"
+},
+"npm|eslint|8.57.1|10.15.0": {
+"mend": "low",
+"dependabot": 14,
+"dependabot_raw": "14%"
+},
+"npm|eslint|8.57.1|9.39.5": {
+"mend": "low",
+"dependabot": 60,
+"dependabot_raw": "60%"
+},
+"npm|eslint|8.7.0|8.57.1": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|eslint|9.11.0|10.14.0": {
+"mend": "low",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|eslint|9.17.0|9.39.5": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|eslint|9.20.1|9.39.5": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|eslint|9.27.0|10.15.0": {
+"mend": "low",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|eslint|9.27.0|9.39.5": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|eslint|9.32.0|9.39.5": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|eslint|9.34.0|9.39.5": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|eslint|9.35.0|10.15.0": {
+"mend": "low",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|eslint|9.37.0|10.15.0": {
+"mend": "low",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|eslint|9.38.0|10.15.0": {
+"mend": "low",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|eslint|9.39.0|9.39.5": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|eslint|9.39.1|10.13.0": {
+"mend": "low",
+"dependabot": 29,
+"dependabot_raw": "29%"
+},
+"npm|eslint|9.39.1|10.15.0": {
+"mend": "low",
+"dependabot": 44,
+"dependabot_raw": "44%"
+},
+"npm|eslint|9.39.2|10.13.0": {
+"mend": "low",
+"dependabot": 32,
+"dependabot_raw": "32%"
+},
+"npm|eslint|9.39.2|10.14.0": {
+"mend": "low",
+"dependabot": 25,
+"dependabot_raw": "25%"
+},
+"npm|eslint|9.39.2|10.15.0": {
+"mend": "low",
+"dependabot": 19,
+"dependabot_raw": "19%"
+},
+"npm|eslint|9.39.2|9.39.5": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|eslint|9.39.3|10.11.0": {
+"mend": "low",
+"dependabot": 26,
+"dependabot_raw": "26%"
+},
+"npm|eslint|9.39.3|9.39.5": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|eslint|9.39.4|10.11.0": {
+"mend": "low",
+"dependabot": 26,
+"dependabot_raw": "26%"
+},
+"npm|eslint|9.39.4|10.12.0": {
+"mend": "low",
+"dependabot": 42,
+"dependabot_raw": "42%"
+},
+"npm|eslint|9.39.4|10.13.0": {
+"mend": "low",
+"dependabot": 44,
+"dependabot_raw": "44%"
+},
+"npm|eslint|9.39.4|10.14.0": {
+"mend": "low",
+"dependabot": 54,
+"dependabot_raw": "54%"
+},
+"npm|eslint|9.39.4|10.15.0": {
+"mend": "low",
+"dependabot": 52,
+"dependabot_raw": "52%"
+},
+"npm|eslint|9.39.4|9.39.5": {
+"mend": "high",
+"dependabot": 90,
+"dependabot_raw": "90%"
+},
+"npm|eslint|9.39.5|10.10.0": {
+"mend": "low",
+"dependabot": 28,
+"dependabot_raw": "28%"
+},
+"npm|eslint|9.39.5|10.11.0": {
+"mend": "low",
+"dependabot": 28,
+"dependabot_raw": "28%"
+},
+"npm|eslint|9.39.5|10.12.0": {
+"mend": "low",
+"dependabot": 43,
+"dependabot_raw": "43%"
+},
+"npm|eslint|9.39.5|10.13.0": {
+"mend": "low",
+"dependabot": 50,
+"dependabot_raw": "50%"
+},
+"npm|eslint|9.39.5|10.14.0": {
+"mend": "low",
+"dependabot": 54,
+"dependabot_raw": "54%"
+},
+"npm|eslint|9.39.5|10.15.0": {
+"mend": "low",
+"dependabot": 58,
+"dependabot_raw": "58%"
+},
+"npm|next|13.2.4|15.5.24": {
+"mend": "low",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|next|15.5.21|15.5.24": {
+"mend": "high",
+"dependabot": 62,
+"dependabot_raw": "62%"
+},
+"npm|next|16.0.7|16.3.3": {
+"mend": "neutral",
+"dependabot": 70,
+"dependabot_raw": "70%"
+},
+"npm|next|16.2.11|16.3.3": {
+"mend": "neutral",
+"dependabot": 49,
+"dependabot_raw": "49%"
+},
+"npm|next|16.3.2|16.3.3": {
+"mend": "neutral",
+"dependabot": 86,
+"dependabot_raw": "86%"
+},
+"npm|next|16.3.3|16.3.4": {
+"mend": "high",
+"dependabot": 93,
+"dependabot_raw": "93%"
+},
+"npm|next|16.3.8|16.4.6": {
+"mend": "high",
+"dependabot": 51,
+"dependabot_raw": "51%"
+},
+"npm|vitest|0.22.1|3.2.6": {
+"mend": "low",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|vitest|0.28.5|3.2.6": {
+"mend": "low",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|vitest|0.32.4|3.2.6": {
+"mend": "low",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|vitest|0.34.6|3.2.6": {
+"mend": "low",
+"dependabot": 59,
+"dependabot_raw": "59%"
+},
+"npm|vitest|1.5.0|1.6.1": {
+"mend": "high",
+"dependabot": 63,
+"dependabot_raw": "63%"
+},
+"npm|vitest|1.5.0|5.0.5": {
+"mend": "low",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|vitest|1.6.1|3.2.6": {
+"mend": "low",
+"dependabot": 70,
+"dependabot_raw": "70%"
+},
+"npm|vitest|1.6.1|4.1.11": {
+"mend": "low",
+"dependabot": 38,
+"dependabot_raw": "38%"
+},
+"npm|vitest|1.6.1|5.0.5": {
+"mend": "low",
+"dependabot": 17,
+"dependabot_raw": "17%"
+},
+"npm|vitest|1.6.1|5.1.1": {
+"mend": "low",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|vitest|2.1.8|5.0.5": {
+"mend": "low",
+"dependabot": 29,
+"dependabot_raw": "29%"
+},
+"npm|vitest|2.1.9|4.1.11": {
+"mend": "low",
+"dependabot": 55,
+"dependabot_raw": "55%"
+},
+"npm|vitest|2.1.9|5.0.5": {
+"mend": "low",
+"dependabot": 40,
+"dependabot_raw": "40%"
+},
+"npm|vitest|2.1.9|5.1.0": {
+"mend": "low",
+"dependabot": 39,
+"dependabot_raw": "39%"
+},
+"npm|vitest|2.1.9|5.1.1": {
+"mend": "low",
+"dependabot": 46,
+"dependabot_raw": "46%"
+},
+"npm|vitest|3.0.3|3.2.7": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|vitest|3.0.3|5.0.5": {
+"mend": "low",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|vitest|3.0.9|4.1.11": {
+"mend": "low",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|vitest|3.1.3|4.1.11": {
+"mend": "low",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|vitest|3.1.4|3.2.7": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|vitest|3.1.4|4.1.11": {
+"mend": "low",
+"dependabot": 57,
+"dependabot_raw": "57%"
+},
+"npm|vitest|3.2.2|4.1.11": {
+"mend": "low",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|vitest|3.2.4|3.2.7": {
+"mend": "high",
+"dependabot": 67,
+"dependabot_raw": "67%"
+},
+"npm|vitest|3.2.4|4.1.11": {
+"mend": "low",
+"dependabot": 60,
+"dependabot_raw": "60%"
+},
+"npm|vitest|3.2.4|5.0.5": {
+"mend": "low",
+"dependabot": 38,
+"dependabot_raw": "38%"
+},
+"npm|vitest|3.2.6|3.2.7": {
+"mend": "high",
+"dependabot": 59,
+"dependabot_raw": "59%"
+},
+"npm|vitest|3.2.6|4.1.11": {
+"mend": "low",
+"dependabot": 51,
+"dependabot_raw": "51%"
+},
+"npm|vitest|3.2.7|4.1.0": {
+"mend": "low",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|vitest|3.2.7|4.1.11": {
+"mend": "low",
+"dependabot": 59,
+"dependabot_raw": "59%"
+},
+"npm|vitest|3.2.7|5.0.1": {
+"mend": "low",
+"dependabot": 53,
+"dependabot_raw": "53%"
+},
+"npm|vitest|3.2.7|5.0.2": {
+"mend": "low",
+"dependabot": 46,
+"dependabot_raw": "46%"
+},
+"npm|vitest|3.2.7|5.0.5": {
+"mend": "low",
+"dependabot": 45,
+"dependabot_raw": "45%"
+},
+"npm|vitest|3.2.7|5.1.0": {
+"mend": "low",
+"dependabot": 52,
+"dependabot_raw": "52%"
+},
+"npm|vitest|3.2.7|5.1.1": {
+"mend": "low",
+"dependabot": 54,
+"dependabot_raw": "54%"
+},
+"npm|vitest|4.0.15|4.1.11": {
+"mend": "high",
+"dependabot": 75,
+"dependabot_raw": "75%"
+},
+"npm|vitest|4.0.16|4.1.11": {
+"mend": "high",
+"dependabot": 57,
+"dependabot_raw": "57%"
+},
+"npm|vitest|4.0.16|5.0.5": {
+"mend": "low",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|vitest|4.0.18|4.1.11": {
+"mend": "high",
+"dependabot": 70,
+"dependabot_raw": "70%"
+},
+"npm|vitest|4.0.18|5.1.1": {
+"mend": "low",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|vitest|4.0.6|4.1.11": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|vitest|4.0.9|4.1.11": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|vitest|4.1.0|4.1.11": {
+"mend": "high",
+"dependabot": 75,
+"dependabot_raw": "75%"
+},
+"npm|vitest|4.1.10|4.1.11": {
+"mend": "high",
+"dependabot": 84,
+"dependabot_raw": "84%"
+},
+"npm|vitest|4.1.10|4.1.12": {
+"mend": "high",
+"dependabot": 56,
+"dependabot_raw": "56%"
+},
+"npm|vitest|4.1.10|5.1.0": {
+"mend": "low",
+"dependabot": 36,
+"dependabot_raw": "36%"
+},
+"npm|vitest|4.1.11|4.1.11": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|vitest|4.1.11|4.1.12": {
+"mend": "high",
+"dependabot": 86,
+"dependabot_raw": "86%"
+},
+"npm|vitest|4.1.11|5.0.0": {
+"mend": "low",
+"dependabot": 58,
+"dependabot_raw": "58%"
+},
+"npm|vitest|4.1.11|5.0.1": {
+"mend": "low",
+"dependabot": 46,
+"dependabot_raw": "46%"
+},
+"npm|vitest|4.1.11|5.0.2": {
+"mend": "low",
+"dependabot": 55,
+"dependabot_raw": "55%"
+},
+"npm|vitest|4.1.11|5.0.3": {
+"mend": "low",
+"dependabot": 44,
+"dependabot_raw": "44%"
+},
+"npm|vitest|4.1.11|5.0.4": {
+"mend": "low",
+"dependabot": 59,
+"dependabot_raw": "59%"
+},
+"npm|vitest|4.1.11|5.0.5": {
+"mend": "low",
+"dependabot": 48,
+"dependabot_raw": "48%"
+},
+"npm|vitest|4.1.11|5.1.0": {
+"mend": "low",
+"dependabot": 44,
+"dependabot_raw": "44%"
+},
+"npm|vitest|4.1.11|5.1.1": {
+"mend": "low",
+"dependabot": 45,
+"dependabot_raw": "45%"
+},
+"npm|vitest|4.1.12|5.0.5": {
+"mend": "low",
+"dependabot": 56,
+"dependabot_raw": "56%"
+},
+"npm|vitest|4.1.12|5.1.0": {
+"mend": "low",
+"dependabot": 55,
+"dependabot_raw": "55%"
+},
+"npm|vitest|4.1.12|5.1.1": {
+"mend": "low",
+"dependabot": 50,
+"dependabot_raw": "50%"
+},
+"npm|vitest|4.1.2|4.1.11": {
+"mend": "high",
+"dependabot": 75,
+"dependabot_raw": "75%"
+},
+"npm|vitest|4.1.3|4.1.11": {
+"mend": "high",
+"dependabot": 86,
+"dependabot_raw": "86%"
+},
+"npm|vitest|4.1.4|4.1.11": {
+"mend": "high",
+"dependabot": 73,
+"dependabot_raw": "73%"
+},
+"npm|vitest|4.1.5|4.1.11": {
+"mend": "high",
+"dependabot": 75,
+"dependabot_raw": "75%"
+},
+"npm|vitest|4.1.5|4.1.12": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|vitest|4.1.6|5.0.1": {
+"mend": "low",
+"dependabot": 14,
+"dependabot_raw": "14%"
+},
+"npm|vitest|4.1.7|4.1.11": {
+"mend": "high",
+"dependabot": 71,
+"dependabot_raw": "71%"
+},
+"npm|vitest|4.1.7|4.1.12": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|vitest|4.1.7|5.0.3": {
+"mend": "low",
+"dependabot": 13,
+"dependabot_raw": "13%"
+},
+"npm|vitest|4.1.8|4.1.11": {
+"mend": "high",
+"dependabot": 67,
+"dependabot_raw": "67%"
+},
+"npm|vitest|4.1.9|4.1.11": {
+"mend": "high",
+"dependabot": 70,
+"dependabot_raw": "70%"
+},
+"npm|vitest|4.1.9|4.1.12": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|vitest|5.0.0|5.0.1": {
+"mend": "high",
+"dependabot": 95,
+"dependabot_raw": "95%"
+},
+"npm|vitest|5.0.0|5.0.2": {
+"mend": "high",
+"dependabot": 78,
+"dependabot_raw": "78%"
+},
+"npm|vitest|5.0.0|5.0.3": {
+"mend": "high",
+"dependabot": 68,
+"dependabot_raw": "68%"
+},
+"npm|vitest|5.0.0|5.0.5": {
+"mend": "high",
+"dependabot": 70,
+"dependabot_raw": "70%"
+},
+"npm|vitest|5.0.0|5.1.0": {
+"mend": "high",
+"dependabot": 85,
+"dependabot_raw": "85%"
+},
+"npm|vitest|5.0.0|5.1.1": {
+"mend": "high",
+"dependabot": 64,
+"dependabot_raw": "64%"
+},
+"npm|vitest|5.0.1|5.0.1": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|vitest|5.0.1|5.0.2": {
+"mend": "high",
+"dependabot": 89,
+"dependabot_raw": "89%"
+},
+"npm|vitest|5.0.1|5.0.3": {
+"mend": "high",
+"dependabot": 82,
+"dependabot_raw": "82%"
+},
+"npm|vitest|5.0.1|5.0.5": {
+"mend": "high",
+"dependabot": 74,
+"dependabot_raw": "74%"
+},
+"npm|vitest|5.0.1|5.1.0": {
+"mend": "high",
+"dependabot": 67,
+"dependabot_raw": "67%"
+},
+"npm|vitest|5.0.1|5.1.1": {
+"mend": "high",
+"dependabot": 89,
+"dependabot_raw": "89%"
+},
+"npm|vitest|5.0.2|5.0.3": {
+"mend": "high",
+"dependabot": 90,
+"dependabot_raw": "90%"
+},
+"npm|vitest|5.0.2|5.0.4": {
+"mend": "high",
+"dependabot": 68,
+"dependabot_raw": "68%"
+},
+"npm|vitest|5.0.2|5.0.5": {
+"mend": "high",
+"dependabot": 77,
+"dependabot_raw": "77%"
+},
+"npm|vitest|5.0.2|5.1.0": {
+"mend": "high",
+"dependabot": 76,
+"dependabot_raw": "76%"
+},
+"npm|vitest|5.0.2|5.1.1": {
+"mend": "high",
+"dependabot": 75,
+"dependabot_raw": "75%"
+},
+"npm|vitest|5.0.3|5.0.3": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|vitest|5.0.3|5.0.4": {
+"mend": "high",
+"dependabot": 91,
+"dependabot_raw": "91%"
+},
+"npm|vitest|5.0.3|5.0.5": {
+"mend": "high",
+"dependabot": 87,
+"dependabot_raw": "87%"
+},
+"npm|vitest|5.0.3|5.1.0": {
+"mend": "high",
+"dependabot": 84,
+"dependabot_raw": "84%"
+},
+"npm|vitest|5.0.3|5.1.1": {
+"mend": "high",
+"dependabot": 74,
+"dependabot_raw": "74%"
+},
+"npm|vitest|5.0.4|5.0.5": {
+"mend": "high",
+"dependabot": 93,
+"dependabot_raw": "93%"
+},
+"npm|vitest|5.0.4|5.1.0": {
+"mend": "high",
+"dependabot": 85,
+"dependabot_raw": "85%"
+},
+"npm|vitest|5.0.4|5.1.1": {
+"mend": "high",
+"dependabot": 83,
+"dependabot_raw": "83%"
+},
+"npm|vitest|5.0.5|5.0.5": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|vitest|5.0.5|5.1.0": {
+"mend": "high",
+"dependabot": 87,
+"dependabot_raw": "87%"
+},
+"npm|vitest|5.0.5|5.1.1": {
+"mend": "high",
+"dependabot": 80,
+"dependabot_raw": "80%"
+},
+"npm|vitest|5.1.0|5.1.0": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|vitest|5.1.0|5.1.1": {
+"mend": "high",
+"dependabot": 89,
+"dependabot_raw": "89%"
+},
+"npm|vite|8.0.1|8.1.6": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|vite|8.3.2|8.3.8": {
+"mend": "high",
+"dependabot": 60,
+"dependabot_raw": "60%"
+},
+"pypi|pytest|5.4.1|5.4.3": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"pypi|pytest|5.4.1|9.1.1": {
+"mend": "low",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"pypi|pytest|5.4.3|9.0.3": {
+"mend": "low",
+"dependabot": 75,
+"dependabot_raw": "75%"
+},
+"pypi|pytest|6.1.2|9.2.0": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"pypi|pytest|6.2.4|6.2.5": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"pypi|pytest|6.2.4|9.0.3": {
+"mend": "neutral",
+"dependabot": 36,
+"dependabot_raw": "36%"
+},
+"pypi|pytest|6.2.5|9.0.3": {
+"mend": "neutral",
+"dependabot": 84,
+"dependabot_raw": "84%"
+},
+"pypi|pytest|7.1.2|9.0.3": {
+"mend": "low",
+"dependabot": 57,
+"dependabot_raw": "57%"
+},
+"pypi|pytest|7.2.0|7.4.4": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"pypi|pytest|7.3.1|9.0.3": {
+"mend": "low",
+"dependabot": 54,
+"dependabot_raw": "54%"
+},
+"pypi|pytest|7.4.0|9.0.3": {
+"mend": "low",
+"dependabot": 61,
+"dependabot_raw": "61%"
+},
+"pypi|pytest|7.4.2|7.4.4": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"pypi|pytest|7.4.2|9.0.3": {
+"mend": "low",
+"dependabot": 63,
+"dependabot_raw": "63%"
+},
+"pypi|pytest|7.4.3|9.0.3": {
+"mend": "low",
+"dependabot": 80,
+"dependabot_raw": "80%"
+},
+"pypi|pytest|7.4.3|9.1.1": {
+"mend": "low",
+"dependabot": 80,
+"dependabot_raw": "80%"
+},
+"pypi|pytest|7.4.3|9.2.0": {
+"mend": "low",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"pypi|pytest|7.4.4|9.1.1": {
+"mend": "low",
+"dependabot": 77,
+"dependabot_raw": "77%"
+},
+"pypi|pytest|8.0.0|8.4.2": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"pypi|pytest|8.0.0|9.1.1": {
+"mend": "neutral",
+"dependabot": 86,
+"dependabot_raw": "86%"
+},
+"pypi|pytest|8.3.3|9.2.0": {
+"mend": "neutral",
+"dependabot": 68,
+"dependabot_raw": "68%"
+},
+"pypi|pytest|8.3.4|8.4.2": {
+"mend": "high",
+"dependabot": 83,
+"dependabot_raw": "83%"
+},
+"pypi|pytest|8.3.4|9.0.3": {
+"mend": "neutral",
+"dependabot": 76,
+"dependabot_raw": "76%"
+},
+"pypi|pytest|8.3.4|9.1.1": {
+"mend": "neutral",
+"dependabot": 73,
+"dependabot_raw": "73%"
+},
+"pypi|pytest|8.3.5|9.2.0": {
+"mend": "neutral",
+"dependabot": 68,
+"dependabot_raw": "68%"
+},
+"pypi|pytest|8.4.2|9.2.0": {
+"mend": "neutral",
+"dependabot": 69,
+"dependabot_raw": "69%"
+},
+"pypi|pytest|9.0.0|9.0.3": {
+"mend": "high",
+"dependabot": 39,
+"dependabot_raw": "39%"
+},
+"pypi|pytest|9.0.0|9.2.0": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"pypi|pytest|9.0.1|9.0.3": {
+"mend": "high",
+"dependabot": 89,
+"dependabot_raw": "89%"
+},
+"pypi|pytest|9.0.1|9.1.1": {
+"mend": "high",
+"dependabot": 63,
+"dependabot_raw": "63%"
+},
+"pypi|pytest|9.0.2|9.2.0": {
+"mend": "neutral",
+"dependabot": 71,
+"dependabot_raw": "71%"
+},
+"pypi|pytest|9.0.3|9.2.0": {
+"mend": "neutral",
+"dependabot": 69,
+"dependabot_raw": "69%"
+},
+"pypi|pytest|9.1.0|9.2.0": {
+"mend": "neutral",
+"dependabot": 100,
+"dependabot_raw": "100%"
+},
+"pypi|pytest|9.1.1|8.4.2": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"pypi|pytest|9.1.1|9.1.1": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"pypi|pytest|9.1.1|9.2.0": {
+"mend": "neutral",
+"dependabot": 80,
+"dependabot_raw": "80%"
+},
+"pypi|pytest|9.2.0|9.2.0": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"pypi|ruff|0.11.9|0.17.4": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"pypi|ruff|0.12.11|0.17.0": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"pypi|ruff|0.12.12|0.17.0": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"pypi|ruff|0.13.0|0.17.3": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"pypi|ruff|0.13.3|0.16.10": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"pypi|ruff|0.14.0|0.17.0": {
+"mend": "neutral",
+"dependabot": 57,
+"dependabot_raw": "57%"
+},
+"pypi|ruff|0.14.0|0.17.5": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"pypi|ruff|0.14.14|0.16.7": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"pypi|ruff|0.14.2|0.17.2": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"pypi|ruff|0.14.2|0.17.5": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"pypi|ruff|0.14.3|0.17.0": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"pypi|ruff|0.14.8|0.17.4": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"pypi|ruff|0.14.8|0.17.6": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"pypi|ruff|0.15.10|0.17.5": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"pypi|ruff|0.15.11|0.16.10": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"pypi|ruff|0.15.12|0.15.22": {
+"mend": "high",
+"dependabot": 88,
+"dependabot_raw": "88%"
+},
+"pypi|ruff|0.15.12|0.16.10": {
+"mend": "high",
+"dependabot": 29,
+"dependabot_raw": "29%"
+},
+"pypi|ruff|0.15.12|0.17.4": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"pypi|ruff|0.15.12|0.17.5": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"pypi|ruff|0.15.13|0.17.4": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"pypi|ruff|0.15.15|0.17.4": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"pypi|ruff|0.15.16|0.16.10": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"pypi|ruff|0.15.16|0.17.1": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"pypi|ruff|0.15.17|0.17.5": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"pypi|ruff|0.15.20|0.17.5": {
+"mend": "neutral",
+"dependabot": 29,
+"dependabot_raw": "29%"
+},
+"pypi|ruff|0.15.21|0.17.5": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"pypi|ruff|0.15.22|0.16.10": {
+"mend": "high",
+"dependabot": 28,
+"dependabot_raw": "28%"
+},
+"pypi|ruff|0.15.22|0.16.9": {
+"mend": "high",
+"dependabot": 30,
+"dependabot_raw": "30%"
+},
+"pypi|ruff|0.15.22|0.17.0": {
+"mend": "neutral",
+"dependabot": 26,
+"dependabot_raw": "26%"
+},
+"pypi|ruff|0.15.22|0.17.3": {
+"mend": "neutral",
+"dependabot": 20,
+"dependabot_raw": "20%"
+},
+"pypi|ruff|0.15.22|0.17.4": {
+"mend": "neutral",
+"dependabot": 30,
+"dependabot_raw": "30%"
+},
+"pypi|ruff|0.15.22|0.17.5": {
+"mend": "neutral",
+"dependabot": 18,
+"dependabot_raw": "18%"
+},
+"pypi|ruff|0.15.22|0.17.6": {
+"mend": "neutral",
+"dependabot": 27,
+"dependabot_raw": "27%"
+},
+"pypi|ruff|0.15.4|0.17.6": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"pypi|ruff|0.16.0|0.16.10": {
+"mend": "high",
+"dependabot": 78,
+"dependabot_raw": "78%"
+},
+"pypi|ruff|0.16.0|0.17.0": {
+"mend": "neutral",
+"dependabot": 74,
+"dependabot_raw": "74%"
+},
+"pypi|ruff|0.16.0|0.17.1": {
+"mend": "neutral",
+"dependabot": 71,
+"dependabot_raw": "71%"
+},
+"pypi|ruff|0.16.10|0.17.0": {
+"mend": "neutral",
+"dependabot": 82,
+"dependabot_raw": "82%"
+},
+"pypi|ruff|0.16.10|0.17.1": {
+"mend": "neutral",
+"dependabot": 81,
+"dependabot_raw": "81%"
+},
+"pypi|ruff|0.16.10|0.17.2": {
+"mend": "high",
+"dependabot": 58,
+"dependabot_raw": "58%"
+},
+"pypi|ruff|0.16.10|0.17.3": {
+"mend": "neutral",
+"dependabot": 70,
+"dependabot_raw": "70%"
+},
+"pypi|ruff|0.16.10|0.17.4": {
+"mend": "neutral",
+"dependabot": 64,
+"dependabot_raw": "64%"
+},
+"pypi|ruff|0.16.10|0.17.5": {
+"mend": "neutral",
+"dependabot": 68,
+"dependabot_raw": "68%"
+},
+"pypi|ruff|0.16.1|0.16.10": {
+"mend": "high",
+"dependabot": 81,
+"dependabot_raw": "81%"
+},
+"pypi|ruff|0.16.1|0.17.0": {
+"mend": "neutral",
+"dependabot": 77,
+"dependabot_raw": "77%"
+},
+"pypi|ruff|0.16.1|0.17.1": {
+"mend": "neutral",
+"dependabot": 75,
+"dependabot_raw": "75%"
+},
+"pypi|ruff|0.16.1|0.17.6": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"pypi|ruff|0.16.3|0.16.10": {
+"mend": "high",
+"dependabot": 73,
+"dependabot_raw": "73%"
+},
+"pypi|ruff|0.16.3|0.17.5": {
+"mend": "neutral",
+"dependabot": 63,
+"dependabot_raw": "63%"
+},
+"pypi|ruff|0.16.3|0.17.6": {
+"mend": "neutral",
+"dependabot": 83,
+"dependabot_raw": "83%"
+},
+"pypi|ruff|0.16.4|0.16.7": {
+"mend": "neutral",
+"dependabot": 86,
+"dependabot_raw": "86%"
+},
+"pypi|ruff|0.16.4|0.16.8": {
+"mend": "neutral",
+"dependabot": 86,
+"dependabot_raw": "86%"
+},
+"pypi|ruff|0.16.4|0.16.9": {
+"mend": "high",
+"dependabot": 82,
+"dependabot_raw": "82%"
+},
+"pypi|ruff|0.16.4|0.17.2": {
+"mend": "high",
+"dependabot": 71,
+"dependabot_raw": "71%"
+},
+"pypi|ruff|0.16.4|0.17.4": {
+"mend": "neutral",
+"dependabot": 50,
+"dependabot_raw": "50%"
+},
+"pypi|ruff|0.16.5|0.16.6": {
+"mend": "neutral",
+"dependabot": 90,
+"dependabot_raw": "90%"
+},
+"pypi|ruff|0.16.5|0.16.7": {
+"mend": "neutral",
+"dependabot": 87,
+"dependabot_raw": "87%"
+},
+"pypi|ruff|0.16.5|0.16.8": {
+"mend": "neutral",
+"dependabot": 86,
+"dependabot_raw": "86%"
+},
+"pypi|ruff|0.16.5|0.17.0": {
+"mend": "neutral",
+"dependabot": 84,
+"dependabot_raw": "84%"
+},
+"pypi|ruff|0.16.5|0.17.2": {
+"mend": "high",
+"dependabot": 45,
+"dependabot_raw": "45%"
+},
+"pypi|ruff|0.16.5|0.17.3": {
+"mend": "neutral",
+"dependabot": 50,
+"dependabot_raw": "50%"
+},
+"pypi|ruff|0.16.6|0.16.10": {
+"mend": "high",
+"dependabot": 82,
+"dependabot_raw": "82%"
+},
+"pypi|ruff|0.16.6|0.16.7": {
+"mend": "neutral",
+"dependabot": 91,
+"dependabot_raw": "91%"
+},
+"pypi|ruff|0.16.6|0.16.9": {
+"mend": "high",
+"dependabot": 84,
+"dependabot_raw": "84%"
+},
+"pypi|ruff|0.16.6|0.17.0": {
+"mend": "neutral",
+"dependabot": 81,
+"dependabot_raw": "81%"
+},
+"pypi|ruff|0.16.6|0.17.2": {
+"mend": "high",
+"dependabot": 56,
+"dependabot_raw": "56%"
+},
+"pypi|ruff|0.16.6|0.17.4": {
+"mend": "neutral",
+"dependabot": 58,
+"dependabot_raw": "58%"
+},
+"pypi|ruff|0.16.6|0.17.5": {
+"mend": "neutral",
+"dependabot": 57,
+"dependabot_raw": "57%"
+},
+"pypi|ruff|0.16.7|0.16.10": {
+"mend": "high",
+"dependabot": 74,
+"dependabot_raw": "74%"
+},
+"pypi|ruff|0.16.7|0.16.7": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"pypi|ruff|0.16.7|0.16.8": {
+"mend": "neutral",
+"dependabot": 89,
+"dependabot_raw": "89%"
+},
+"pypi|ruff|0.16.7|0.16.9": {
+"mend": "high",
+"dependabot": 89,
+"dependabot_raw": "89%"
+},
+"pypi|ruff|0.16.7|0.17.1": {
+"mend": "neutral",
+"dependabot": 74,
+"dependabot_raw": "74%"
+},
+"pypi|ruff|0.16.8|0.16.10": {
+"mend": "high",
+"dependabot": 77,
+"dependabot_raw": "77%"
+},
+"pypi|ruff|0.16.8|0.16.9": {
+"mend": "high",
+"dependabot": 88,
+"dependabot_raw": "88%"
+},
+"pypi|ruff|0.16.8|0.17.0": {
+"mend": "neutral",
+"dependabot": 71,
+"dependabot_raw": "71%"
+},
+"pypi|ruff|0.16.8|0.17.2": {
+"mend": "high",
+"dependabot": 74,
+"dependabot_raw": "74%"
+},
+"pypi|ruff|0.16.8|0.17.4": {
+"mend": "neutral",
+"dependabot": 54,
+"dependabot_raw": "54%"
+},
+"pypi|ruff|0.16.8|0.17.5": {
+"mend": "neutral",
+"dependabot": 57,
+"dependabot_raw": "57%"
+},
+"pypi|ruff|0.16.8|0.17.6": {
+"mend": "neutral",
+"dependabot": 68,
+"dependabot_raw": "68%"
+},
+"pypi|ruff|0.16.9|0.16.10": {
+"mend": "high",
+"dependabot": 85,
+"dependabot_raw": "85%"
+},
+"pypi|ruff|0.16.9|0.17.0": {
+"mend": "neutral",
+"dependabot": 81,
+"dependabot_raw": "81%"
+},
+"pypi|ruff|0.16.9|0.17.2": {
+"mend": "high",
+"dependabot": 75,
+"dependabot_raw": "75%"
+},
+"pypi|ruff|0.16.9|0.17.3": {
+"mend": "neutral",
+"dependabot": 78,
+"dependabot_raw": "78%"
+},
+"pypi|ruff|0.16.9|0.17.4": {
+"mend": "neutral",
+"dependabot": 71,
+"dependabot_raw": "71%"
+},
+"pypi|ruff|0.16.9|0.17.5": {
+"mend": "neutral",
+"dependabot": 64,
+"dependabot_raw": "64%"
+},
+"pypi|ruff|0.16.9|0.17.6": {
+"mend": "neutral",
+"dependabot": 68,
+"dependabot_raw": "68%"
+},
+"pypi|ruff|0.17.0|0.17.0": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"pypi|ruff|0.17.0|0.17.1": {
+"mend": "neutral",
+"dependabot": 88,
+"dependabot_raw": "88%"
+},
+"pypi|ruff|0.17.0|0.17.3": {
+"mend": "neutral",
+"dependabot": 75,
+"dependabot_raw": "75%"
+},
+"pypi|ruff|0.17.0|0.17.6": {
+"mend": "neutral",
+"dependabot": 90,
+"dependabot_raw": "90%"
+},
+"pypi|ruff|0.17.1|0.17.1": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"pypi|ruff|0.17.1|0.17.2": {
+"mend": "high",
+"dependabot": 86,
+"dependabot_raw": "86%"
+},
+"pypi|ruff|0.17.1|0.17.3": {
+"mend": "neutral",
+"dependabot": 80,
+"dependabot_raw": "80%"
+},
+"pypi|ruff|0.17.1|0.17.4": {
+"mend": "neutral",
+"dependabot": 82,
+"dependabot_raw": "82%"
+},
+"pypi|ruff|0.17.1|0.17.6": {
+"mend": "neutral",
+"dependabot": 76,
+"dependabot_raw": "76%"
+},
+"pypi|ruff|0.17.2|0.17.2": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"pypi|ruff|0.17.2|0.17.3": {
+"mend": "neutral",
+"dependabot": 87,
+"dependabot_raw": "87%"
+},
+"pypi|ruff|0.17.2|0.17.4": {
+"mend": "neutral",
+"dependabot": 86,
+"dependabot_raw": "86%"
+},
+"pypi|ruff|0.17.2|0.17.5": {
+"mend": "neutral",
+"dependabot": 80,
+"dependabot_raw": "80%"
+},
+"pypi|ruff|0.17.3|0.17.2": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"pypi|ruff|0.17.3|0.17.3": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"pypi|ruff|0.17.3|0.17.4": {
+"mend": "neutral",
+"dependabot": 82,
+"dependabot_raw": "82%"
+},
+"pypi|ruff|0.17.3|0.17.5": {
+"mend": "neutral",
+"dependabot": 81,
+"dependabot_raw": "81%"
+},
+"pypi|ruff|0.17.3|0.17.6": {
+"mend": "neutral",
+"dependabot": 84,
+"dependabot_raw": "84%"
+},
+"pypi|ruff|0.17.4|0.17.4": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"pypi|ruff|0.17.4|0.17.5": {
+"mend": "neutral",
+"dependabot": 85,
+"dependabot_raw": "85%"
+},
+"pypi|ruff|0.17.4|0.17.6": {
+"mend": "neutral",
+"dependabot": 84,
+"dependabot_raw": "84%"
+},
+"pypi|ruff|0.17.5|0.17.6": {
+"mend": "neutral",
+"dependabot": 89,
+"dependabot_raw": "89%"
+},
+"pypi|ruff|0.3.7|0.17.3": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"pypi|ruff|0.4.10|0.17.1": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"pypi|ruff|0.4.10|0.17.4": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"pypi|ruff|0.4.10|0.17.5": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"pypi|ruff|0.4.3|0.17.3": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"pypi|ruff|0.6.0|0.17.2": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"pypi|ruff|0.6.9|0.16.8": {
+"mend": "neutral",
+"dependabot": 50,
+"dependabot_raw": "50%"
+},
+"pypi|ruff|0.6.9|0.17.0": {
+"mend": "neutral",
+"dependabot": 67,
+"dependabot_raw": "67%"
 }
 }

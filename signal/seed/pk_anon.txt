@@ -1,0 +1,15 @@
+pypi pytest
+pypi ruff
+pypi mypy
+pypi django
+pypi fastapi
+pypi pydantic
+pypi boto3
+pypi pre-commit
+npm zod
+npm axios
+npm esbuild
+npm jest
+npm webpack
+npm @tanstack/react-query
+npm lint-staged

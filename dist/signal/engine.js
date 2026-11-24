@@ -216,11 +216,11 @@ function queryInner(index, q, opts) {
     else if (obsLow)
         verdict = "likely_safe";
     const pct = (x) => `${Math.round(x * 100)}%`;
-    const describe = (e, what) => (e.owners ? `${what}: ${e.failures} of ${e.owners} owners failed (estimate ${pct(e.mean)}, 90% interval ${pct(e.ci90[0])}–${pct(e.ci90[1])})` : `${what}: none`);
+    const describe = (e, what, calibrated = true) => (e.owners ? `${what}: ${e.failures} of ${e.owners} owners failed${calibrated ? ` (estimate ${pct(e.mean)}, 90% interval ${pct(e.ci90[0])}–${pct(e.ci90[1])})` : ""}` : `${what}: none`);
     const summary = [
         match === "none" ? "No other project has reported this update yet." : `Match: ${match.replace("_", " ")}.`,
         describe(causal, "Paired experiments (baseline vs update, same runner)"),
-        describe(observational, "CI status only (cannot separate the update from a red main or flaky tests)"),
+        describe(observational, "CI status only (cannot separate the update from a red main or flaky tests)", false),
         inconclusive ? `${inconclusive} owners inconclusive (baseline already red or flaky).` : "",
     ].filter(Boolean).join(" ");
     return {
@@ -228,6 +228,6 @@ function queryInner(index, q, opts) {
         fingerprints: [...fp.entries()].map(([signature, s]) => ({ signature, owners: s.size })).sort((a, b) => b.owners - a.owners).slice(0, 5),
         environments, your_env_tested,
         evidence: hits.slice(0, 20).map((o) => ({ attribution: o.attribution, date: o.observed_at.slice(0, 10), ...(o.provenance.source_url ? { source: o.provenance.source_url } : {}), ...(o.env ? { env: `${o.env.runtime} ${o.env.runtime_version} ${o.env.os}` } : {}) })),
-        verdict, summary,
+        verdict, summary, sampled: hits.some((o) => o.weight !== undefined),
     };
 }

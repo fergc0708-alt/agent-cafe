@@ -1,0 +1,221 @@
+{
+ "split": "2026-10-19",
+ "n_total": 4883,
+ "n_train": 2760,
+ "n_test": 2123,
+ "test_failure_share_sampled": 0.4992934526613283,
+ "test_failure_share_weighted": 0.1550623064095852,
+ "owners": 2087,
+ "repositories": 3180,
+ "coverage": {
+  "any_other_owner": 0.9943476212906265,
+  "5+_other_owners": 0.9288742345737164,
+  "exact_transition": 0.0018841262364578427,
+  "mend_badge": 1,
+  "dependabot_score": 0.9251059821008007,
+  "own_history": 0.3113518605746585
+ },
+ "auc": {
+  "network": {
+   "n": 2123,
+   "auc": 0.6136185827105763,
+   "ci90": [
+    0.5856826302049357,
+    0.6420176748575619
+   ]
+  },
+  "network_exact_only": {
+   "n": 4,
+   "auc": 0,
+   "ci90": null
+  },
+  "own_history": {
+   "n": 661,
+   "auc": 0.9099856546441659,
+   "ci90": [
+    0.8812743654969034,
+    0.9331702099853844
+   ]
+  },
+  "semver_major": {
+   "n": 2123,
+   "auc": 0.675069770818588,
+   "ci90": [
+    0.6510454790236858,
+    0.6986257354148225
+   ]
+  },
+  "package_base": {
+   "n": 2123,
+   "auc": 0.6209943694691855,
+   "ci90": [
+    0.5932769994680509,
+    0.6483299780652115
+   ]
+  },
+  "mend": {
+   "n": 2123,
+   "auc": 0.6796323741623216,
+   "ci90": [
+    0.6515206477347785,
+    0.7056570858817024
+   ]
+  },
+  "dependabot": {
+   "n": 1964,
+   "auc": 0.7046868814883437,
+   "ci90": [
+    0.6763604705747666,
+    0.7324395288182999
+   ]
+  }
+ },
+ "head_to_head": {
+  "n": 633,
+  "network": 0.539245021299751,
+  "own_history": 0.9154506706431735,
+  "mend": 0.5669959042625553,
+  "dependabot": 0.6150832408396483,
+  "semver_major": 0.6111515304699708
+ },
+ "models": {
+  "local_only": {
+   "features": "own history + its size + semver major",
+   "auc": 0.777330789050718,
+   "ci90": [
+    0.7519715465265769,
+    0.7981080330860099
+   ],
+   "brier": 0.11448216084288977
+  },
+  "local_plus_network": {
+   "features": "+ network estimate (other owners, earlier only)",
+   "auc": 0.7792395671777749,
+   "ci90": [
+    0.7557160520075393,
+    0.801228376660431
+   ],
+   "brier": 0.11143711805861507,
+   "coefficients": [
+    0.1562573041494097,
+    1.103114004793381,
+    -1.5380186422786566,
+    1.6317307174337368,
+    0.3665938313162851
+   ]
+  },
+  "network_auc_gain_ci90": [
+   -0.008066529074060913,
+   0.012657685904057914
+  ]
+ },
+ "calibration_network": [
+  {
+   "bin": "0.0-0.2",
+   "n": 1033,
+   "predicted": 0.1398861621218859,
+   "observed": 0.11383604276187692
+  },
+  {
+   "bin": "0.2-0.4",
+   "n": 571,
+   "predicted": 0.3115350939595004,
+   "observed": 0.10041165259402024
+  },
+  {
+   "bin": "0.4-0.6",
+   "n": 412,
+   "predicted": 0.4927932389479382,
+   "observed": 0.4002881070164719
+  },
+  {
+   "bin": "0.6-0.8",
+   "n": 107,
+   "predicted": 0.6363018556618082,
+   "observed": 0.1521537298931231
+  },
+  {
+   "bin": "0.8-1.0",
+   "n": 0,
+   "predicted": null,
+   "observed": null
+  }
+ ],
+ "brier": {
+  "network": 0.14950216816217812,
+  "base_rate": 0.13274103522037706
+ },
+ "warnings": {
+  "network_verdict": {
+   "warned_share": 0.00022061391951269088,
+   "precision": 1,
+   "recall": 0.0014227436997483844,
+   "false_warnings_per_100_upgrades": 0
+  },
+  "network_estimate_over_50": {
+   "warned_share": 0.10448724626845969,
+   "precision": 0.2934318651313433,
+   "recall": 0.19772624479095877,
+   "false_warnings_per_100_upgrades": 7.382735871346759
+  },
+  "mend_low": {
+   "warned_share": 0.17804837028276263,
+   "precision": 0.3912508078795511,
+   "recall": 0.4492488879325886,
+   "false_warnings_per_100_upgrades": 10.838680156799432
+  },
+  "dependabot_under_80": {
+   "warned_share": 0.31503155412411105,
+   "precision": 0.288791374931437,
+   "recall": 0.617663441300138,
+   "false_warnings_per_100_upgrades": 22.405315846182166
+  },
+  "own_history_over_50": {
+   "warned_share": 0.1863088898162739,
+   "precision": 0.4764414826041409,
+   "recall": 0.8068430588057672,
+   "false_warnings_per_100_upgrades": 9.754360612987684
+  },
+  "semver_major": {
+   "warned_share": 0.27462143264228384,
+   "precision": 0.32210891184849755,
+   "recall": 0.5704675293880023,
+   "false_warnings_per_100_upgrades": 18.616342180360235
+  }
+ },
+ "adoption_timing": {
+  "targets": 72,
+  "share_opened_after_first": {
+   "over_1_day": 0.9755714900555229,
+   "over_3_days": 0.8847414059117381,
+   "over_7_days": 0.8560107998011074
+  }
+ },
+ "same_week_complete_strata": {
+  "n": 0,
+  "failures": 0,
+  "coverage_any_other_owner_same_target": 0,
+  "auc": {
+   "network": {
+    "n": 0,
+    "auc": null,
+    "ci90": null
+   },
+   "own_history": {
+    "n": 0,
+    "auc": null,
+    "ci90": null
+   },
+   "semver_major": {
+    "n": 0,
+    "auc": null,
+    "ci90": null
+   },
+   "package_base": {
+    "n": 0,
+    "auc": null,
+    "ci90": null
+   }
+  }
+ }
+}

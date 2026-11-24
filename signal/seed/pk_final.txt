@@ -3,8 +3,8 @@ npm vite
 npm vitest
 npm eslint
 npm @types/node
+pypi pytest
+pypi ruff
 npm next
 npm typescript-eslint
 npm @playwright/test
-pypi pytest
-pypi ruff
