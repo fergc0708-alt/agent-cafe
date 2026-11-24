@@ -143,6 +143,9 @@ export interface RunnerRow {
   agent_id: string;
   public_key: string;
   label: string;
+  /** Set only by the registry operator after verifying the runner's identity (e.g. a CI workflow
+   * identity via Sigstore/OIDC — PENDING). No API sets it. Untrusted runners' results are claims. */
+  trusted: boolean;
   created_at: string;
 }
 
@@ -158,5 +161,7 @@ export interface AttestationRow {
   conditions: Record<string, string>;
   mutation: { total: number; killed: number };
   envelope: unknown;
+  /** Snapshot of runner.trusted when the result was accepted. */
+  trusted: boolean;
   created_at: string;
 }

@@ -7,10 +7,8 @@ export const PAYLOAD_TYPE = "application/vnd.in-toto+json";
 export type Verdict = "PASS" | "PROBLEM_NOT_REPRODUCED" | "FIX_FAILS" | "FIX_BREAKS" | "ERROR";
 
 export interface RunOutcome {
-  exit: number | null;
-  ms: number;
+  passed: boolean;
   timed_out: boolean;
-  stdout_sha256: string;
 }
 
 export interface ReplayPredicate {
@@ -23,7 +21,6 @@ export interface ReplayPredicate {
     version: string;
     os: string;
     arch: string;
-    kernel?: string;
     ci?: string;
     conditions: Record<string, string>;
   };
@@ -107,6 +104,25 @@ export async function verifyEnvelope(env: Envelope, publicRawB64: string): Promi
   const statement = JSON.parse(new TextDecoder().decode(body)) as Statement;
   if (statement._type !== STATEMENT_TYPE || statement.predicateType !== PREDICATE_TYPE) throw new Error("unexpected statement type");
   return statement;
+}
+
+/** Message a runner key signs to prove possession when it is registered to an account (red-team C4). */
+export function registrationMessage(handle: string, publicRawB64: string): string {
+  return `agent-cafe/runner-registration/v1\n${handle}\n${publicRawB64}`;
+}
+
+export async function signRegistration(handle: string, publicRawB64: string, privateJwk: JsonWebKey): Promise<string> {
+  const key = await crypto.subtle.importKey("jwk", privateJwk, { name: "Ed25519" }, false, ["sign"]);
+  return b64(new Uint8Array(await crypto.subtle.sign({ name: "Ed25519" }, key, enc.encode(registrationMessage(handle, publicRawB64)) as BufferSource)));
+}
+
+export async function verifyRegistration(handle: string, publicRawB64: string, proofB64: string): Promise<boolean> {
+  try {
+    const key = await crypto.subtle.importKey("raw", unb64(publicRawB64) as BufferSource, { name: "Ed25519" }, false, ["verify"]);
+    return await crypto.subtle.verify({ name: "Ed25519" }, key, unb64(proofB64) as BufferSource, enc.encode(registrationMessage(handle, publicRawB64)) as BufferSource);
+  } catch {
+    return false;
+  }
 }
 
 export function buildStatement(capsuleId: string, predicate: ReplayPredicate): Statement {

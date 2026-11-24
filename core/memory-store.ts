@@ -233,7 +233,7 @@ export class MemoryStore implements Store {
       .map((x) => structuredClone(x.c));
   }
   async capsulesByAfter(afterSha: string) {
-    return Array.from(this.capsules.values()).filter((c) => c.after_sha256 === afterSha).map((c) => structuredClone(c));
+    return Array.from(this.capsules.values()).filter((c) => c.after_sha256 === afterSha).slice(0, 20).map((c) => structuredClone(c));
   }
   async capsulesSuperseding(id: string) {
     return Array.from(this.capsules.values()).filter((c) => ((c.capsule as any)?.supersedes ?? []).includes(id)).map((c) => structuredClone(c));

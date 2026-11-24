@@ -6,7 +6,7 @@
 import { readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { replay } from "../../cli/runner.ts";
 import type { Capsule } from "../../core/capsule/capsule.ts";
-import { buildStatement, generateRunnerKey, signStatement } from "../../core/capsule/attestation.ts";
+import { buildStatement, generateRunnerKey, signRegistration, signStatement } from "../../core/capsule/attestation.ts";
 import { handle } from "../../core/handler.ts";
 import { MemoryStore } from "../../core/memory-store.ts";
 
@@ -23,7 +23,7 @@ const curator = await reg("cafe-curator");
 const checker = await reg("indep-checker");
 const runner = await reg("local-runner-1");
 const key = await generateRunnerKey();
-await call("POST", "/api/v1/runners", { public_key: key.publicRaw }, runner);
+await call("POST", "/api/v1/runners", { public_key: key.publicRaw, proof: await signRegistration("local-runner-1", key.publicRaw, key.privateJwk) }, runner);
 
 const dir = new URL("./indep-checks/", import.meta.url);
 const BINS: Record<string, Record<string, string>> = { python: { python3: "/usr/bin/python3.13" }, node: { node: "/opt/node22/bin/node" }, bash: { bash: "/bin/bash" } };
@@ -44,8 +44,8 @@ for (const f of readdirSync(dir).sort()) {
     await call("POST", `/api/v1/capsules/${s.json.id}/attestations`, await signStatement(buildStatement(s.json.id, r.predicate), key.privateJwk, key.keyid), runner);
   }
   const v = await call("GET", `/api/v1/capsules/${ids[0]}`);
-  rows.push({ slug, original_check: verdicts[0], independent_check: verdicts[1], level: v.json.evidence.level });
+  rows.push({ slug, original_check: verdicts[0], independent_check: verdicts[1], verified_level: v.json.evidence.level, level: v.json.evidence.claimed.level });
 }
 const out = { caveat: "Independent checks were written by a Claude subagent that did not see the original checks; the original checks were also written by Claude. Same model family => correlated blind spots; this is author independence, not model independence.", rows };
-writeFileSync(new URL("./results/E-independent-checks.json", import.meta.url), JSON.stringify(out, null, 2) + "\n");
-for (const r of rows) console.log(r.slug.padEnd(28), "orig:", r.original_check.padEnd(10), "indep:", r.independent_check.padEnd(10), r.level);
+writeFileSync(new URL(`./${process.env.RESULTS_DIR ?? "results"}/E-independent-checks.json`, import.meta.url), JSON.stringify(out, null, 2) + "\n");
+for (const r of rows) console.log(r.slug.padEnd(28), "orig:", r.original_check.padEnd(10), "indep:", r.independent_check.padEnd(10), "claimed:", r.level, "verified:", r.verified_level);

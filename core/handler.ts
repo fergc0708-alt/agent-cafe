@@ -34,9 +34,13 @@ function text(body: string, type: string, maxAge = 300): Response {
   return new Response(body, { headers: { ...CORS, "Content-Type": `${type}; charset=utf-8`, "Cache-Control": `public, max-age=${maxAge}`, "X-Content-Type-Options": "nosniff" } });
 }
 
+/** Prefer headers set by the platform (Vercel, Cloudflare) over the client-controllable first X-Forwarded-For
+ * entry (red-team M4). Falls back to the LAST X-Forwarded-For hop, which the nearest proxy appended. */
 function clientIp(req: Request): string {
+  const platform = req.headers.get("x-vercel-forwarded-for") ?? req.headers.get("cf-connecting-ip") ?? req.headers.get("x-real-ip");
+  if (platform) return platform.split(",")[0].trim();
   const xff = req.headers.get("x-forwarded-for");
-  return (xff ? xff.split(",")[0] : req.headers.get("cf-connecting-ip") ?? req.headers.get("x-real-ip") ?? "unknown").trim();
+  return (xff ? xff.split(",").at(-1)! : "unknown").trim();
 }
 
 /** Strips deployment prefixes such as /functions/v1/cafe or /cafe. */

@@ -1,0 +1,219 @@
+{
+  "escaped_write_outside_dir": false,
+  "rows": [
+    {
+      "case": "control: real capsule",
+      "expectation": "PASS, sensitive",
+      "valid": true,
+      "errors": [],
+      "lint": [],
+      "verdict": "PASS",
+      "mutants": "5/5",
+      "counts_as_evidence": true
+    },
+    {
+      "case": "always-pass check (print ok)",
+      "expectation": "not evidence",
+      "valid": true,
+      "errors": [],
+      "lint": [
+        "no_failure_path",
+        "does_not_reference_fix"
+      ],
+      "verdict": "PROBLEM_NOT_REPRODUCED",
+      "mutants": "0/0",
+      "counts_as_evidence": false
+    },
+    {
+      "case": "always-pass, forged success markers",
+      "expectation": "not evidence (stdout is never parsed)",
+      "valid": true,
+      "errors": [],
+      "lint": [
+        "no_failure_path",
+        "does_not_reference_fix"
+      ],
+      "verdict": "PROBLEM_NOT_REPRODUCED",
+      "mutants": "0/0",
+      "counts_as_evidence": false
+    },
+    {
+      "case": "always-fail check",
+      "expectation": "FIX_FAILS",
+      "valid": true,
+      "errors": [],
+      "lint": [],
+      "verdict": "FIX_FAILS",
+      "mutants": "0/0",
+      "counts_as_evidence": false
+    },
+    {
+      "case": "import-only check",
+      "expectation": "not evidence",
+      "valid": true,
+      "errors": [],
+      "lint": [
+        "no_failure_path"
+      ],
+      "verdict": "PROBLEM_NOT_REPRODUCED",
+      "mutants": "0/0",
+      "counts_as_evidence": false
+    },
+    {
+      "case": "existence-only check",
+      "expectation": "lint + not evidence",
+      "valid": true,
+      "errors": [],
+      "lint": [
+        "existence_only"
+      ],
+      "verdict": "PROBLEM_NOT_REPRODUCED",
+      "mutants": "0/0",
+      "counts_as_evidence": false
+    },
+    {
+      "case": "text/grep check on the fix",
+      "expectation": "lint text_inspection; may still kill mutants (partial)",
+      "valid": true,
+      "errors": [],
+      "lint": [
+        "text_inspection"
+      ],
+      "verdict": "PASS",
+      "mutants": "1/5",
+      "counts_as_evidence": false
+    },
+    {
+      "case": "check swallows all errors",
+      "expectation": "not evidence",
+      "valid": true,
+      "errors": [],
+      "lint": [],
+      "verdict": "PROBLEM_NOT_REPRODUCED",
+      "mutants": "0/0",
+      "counts_as_evidence": false
+    },
+    {
+      "case": "hijack: conftest.py",
+      "expectation": "rejected by validator",
+      "valid": false,
+      "errors": [
+        "check.files: \"conftest.py\" is not allowed (it could change how the check runs instead of fixing the problem)"
+      ],
+      "lint": [],
+      "verdict": "-",
+      "mutants": "-",
+      "counts_as_evidence": false
+    },
+    {
+      "case": "hijack: sitecustomize.py in after",
+      "expectation": "rejected by validator",
+      "valid": false,
+      "errors": [
+        "after.files: \"sitecustomize.py\" is not allowed (it could change how the check runs instead of fixing the problem)"
+      ],
+      "lint": [],
+      "verdict": "-",
+      "mutants": "-",
+      "counts_as_evidence": false
+    },
+    {
+      "case": "hijack: .pth file",
+      "expectation": "rejected by validator",
+      "valid": false,
+      "errors": [
+        "after.files: \"x.pth\" is not allowed (it could change how the check runs instead of fixing the problem)"
+      ],
+      "lint": [],
+      "verdict": "-",
+      "mutants": "-",
+      "counts_as_evidence": false
+    },
+    {
+      "case": "hijack: inline python -c",
+      "expectation": "rejected by validator",
+      "valid": false,
+      "errors": [
+        "check.run must be exactly [interpreter, <one of check.files>] with no flags"
+      ],
+      "lint": [],
+      "verdict": "-",
+      "mutants": "-",
+      "counts_as_evidence": false
+    },
+    {
+      "case": "hijack: PYTHONPATH env",
+      "expectation": "rejected by validator",
+      "valid": false,
+      "errors": [
+        "check.env.PYTHONPATH is not allowed"
+      ],
+      "lint": [],
+      "verdict": "-",
+      "mutants": "-",
+      "counts_as_evidence": false
+    },
+    {
+      "case": "check needs network",
+      "expectation": "ERROR/FIX_FAILS offline, never PASS",
+      "valid": true,
+      "errors": [],
+      "lint": [],
+      "verdict": "FIX_FAILS",
+      "mutants": "0/0",
+      "counts_as_evidence": false
+    },
+    {
+      "case": "check tries to read host secrets",
+      "expectation": "secret absent from env",
+      "valid": true,
+      "errors": [],
+      "lint": [],
+      "verdict": "PASS",
+      "mutants": "5/5",
+      "counts_as_evidence": true
+    },
+    {
+      "case": "check writes outside its dir",
+      "expectation": "SUCCEEDS: runner is not a sandbox",
+      "valid": true,
+      "errors": [],
+      "lint": [],
+      "verdict": "PASS",
+      "mutants": "5/5",
+      "counts_as_evidence": true
+    },
+    {
+      "case": "infinite loop",
+      "expectation": "ERROR (timeout)",
+      "valid": true,
+      "errors": [],
+      "lint": [
+        "no_failure_path"
+      ],
+      "verdict": "ERROR",
+      "mutants": "0/0",
+      "counts_as_evidence": false
+    },
+    {
+      "case": "overfitted fix vs its own check",
+      "expectation": "PASS — NOT detectable by one check",
+      "valid": true,
+      "errors": [],
+      "lint": [],
+      "verdict": "PASS",
+      "mutants": "4/4",
+      "counts_as_evidence": true
+    },
+    {
+      "case": "overfitted fix vs independent check",
+      "expectation": "FIX_FAILS — needs a 2nd check",
+      "valid": true,
+      "errors": [],
+      "lint": [],
+      "verdict": "FIX_FAILS",
+      "mutants": "0/0",
+      "counts_as_evidence": false
+    }
+  ]
+}

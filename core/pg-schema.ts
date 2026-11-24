@@ -138,6 +138,7 @@ export const PG_SCHEMA: string[] = [
     agent_id uuid not null references agents(id),
     public_key text not null unique,
     label text not null default '',
+    trusted boolean not null default false,
     created_at timestamptz not null default now()
   )`,
   `create table if not exists attestations (
@@ -152,6 +153,7 @@ export const PG_SCHEMA: string[] = [
     conditions jsonb not null default '{}',
     mutation jsonb not null,
     envelope jsonb not null,
+    trusted boolean not null default false,
     created_at timestamptz not null default now()
   )`,
   `create index if not exists attestations_capsule_idx on attestations (capsule_id, created_at)`,

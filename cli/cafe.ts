@@ -15,10 +15,10 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import os from "node:os";
 import { join } from "node:path";
 import { createInterface } from "node:readline/promises";
-import { capsuleId, validateCapsule, type Capsule } from "../core/capsule/capsule.ts";
+import { capsuleId, validateCapsule, type Capsule, type FileMap } from "../core/capsule/capsule.ts";
 import { lintCapsule } from "../core/capsule/lint.ts";
-import { buildStatement, generateRunnerKey, signStatement, type Envelope } from "../core/capsule/attestation.ts";
-import { replay, runtimeVersion } from "./runner.ts";
+import { buildStatement, generateRunnerKey, signRegistration, signStatement, type Envelope } from "../core/capsule/attestation.ts";
+import { replay, runtimeVersion, type Isolation } from "./runner.ts";
 
 export const CAFE_URL = (process.env.CAFE_URL ?? "https://agent-cafe.vercel.app").replace(/\/+$/, "");
 const HOME = process.env.CAFE_HOME ?? join(os.homedir(), ".agent-cafe");
@@ -59,6 +59,8 @@ export async function loadCapsule(ref: string): Promise<Capsule> {
   else throw new Error(`not a file or capsule id: ${ref}`);
   const v = validateCapsule(raw);
   if (!v.ok) throw new Error("invalid capsule:\n- " + v.errors.join("\n- "));
+  // Content addressing: what the registry served must be exactly what was asked for (red-team H1).
+  if (/^[0-9a-f]{64}$/.test(ref) && (await capsuleId(v.capsule!)) !== ref) throw new Error("the registry returned a capsule whose hash does not match the requested id");
   return v.capsule!;
 }
 
@@ -69,7 +71,8 @@ function flags(argv: string[]) {
   const f = new Set<string>();
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
-    if (a === "--bin" || a === "--set") {
+    if (a === "--isolation") f.add("isolation=" + (argv[++i] ?? ""));
+    else if (a === "--bin" || a === "--set") {
       const [k, ...rest] = (argv[++i] ?? "").split("=");
       (a === "--bin" ? bins : conditions)[k] = rest.join("=");
     } else if (a.startsWith("--")) f.add(a.slice(2));
@@ -78,21 +81,30 @@ function flags(argv: string[]) {
   return { pos, bins, conditions, f };
 }
 
-/** What a replay will execute, for the human (or agent) to review before consenting. */
-export function describeReplay(c: Capsule): string {
-  const lines = [
+/** What a replay will execute: EVERY file that can run (before, after, check), plus a digest the
+ * consent is bound to. A capsule's fix files execute too, so showing only the check is not enough. */
+export function describeReplay(c: Capsule, isolation: Isolation = "sandbox"): string {
+  const iso =
+    isolation === "sandbox" ? "bubblewrap sandbox: no network, read-only filesystem, home hidden" : isolation === "net-only" ? "NO SANDBOX: network cut only, the code can read and write your files" : "NO ISOLATION AT ALL";
+  const section = (name: string, files: FileMap) => [`== ${name} ==`, ...Object.entries(files).map(([p, s]) => `--- ${p}\n${s}`)];
+  return [
     `Capsule: ${c.title}`,
-    `Runs: ${c.check.run.join(" ")} (timeout ${c.check.timeout_ms} ms), 2 + mutant runs, network cut when possible`,
-    `Check files:`,
-    ...Object.entries(c.check.files).map(([p, s]) => `--- ${p}\n${s}`),
-    `Fix files (after): ${Object.keys(c.after.files).join(", ")}`,
-  ];
-  return lines.join("\n");
+    `Runs: ${c.check.run.join(" ")} on the BEFORE files, the AFTER files and up to 8 mutants (timeout ${c.check.timeout_ms} ms each)`,
+    `Isolation: ${iso}`,
+    ...section("before (executes)", c.before.files),
+    ...section("after (executes)", c.after.files),
+    ...section("check (executes)", c.check.files),
+  ].join("\n");
 }
 
-export async function signedReplay(c: Capsule, bins: Record<string, string>, conditions: Record<string, string>, isolate: boolean) {
+/** Digest a user/agent must echo back to consent to exactly this code. */
+export function replayDigest(c: Capsule): Promise<string> {
+  return capsuleId(c);
+}
+
+export async function signedReplay(c: Capsule, bins: Record<string, string>, conditions: Record<string, string>, isolation: Isolation) {
   const key = await ensureKey();
-  const res = await replay(c, { bins, conditions, isolate, keyid: key.keyid });
+  const res = await replay(c, { bins, conditions, isolation, keyid: key.keyid });
   const id = await capsuleId(c);
   const envelope: Envelope = await signStatement(buildStatement(id, res.predicate), key.privateJwk, key.keyid);
   return { ...res, envelope };
@@ -131,15 +143,17 @@ async function main() {
     }
     case "replay": {
       const c = await loadCapsule(pos[0]);
+      const isoFlag = [...f].find((x) => x.startsWith("isolation="))?.slice(10);
+      const isolation: Isolation = f.has("no-isolate") ? "none" : isoFlag === "none" || isoFlag === "net-only" || isoFlag === "sandbox" ? isoFlag : "sandbox";
       if (!f.has("yes")) {
-        console.error(describeReplay(c));
+        console.error(describeReplay(c, isolation));
         if (!process.stdin.isTTY) throw new Error("Refusing to run untrusted code without --yes (non-interactive).");
         const rl = createInterface({ input: process.stdin, output: process.stderr });
         const ans = await rl.question("\nRun this code on this machine? [y/N] ");
         rl.close();
         if (!/^y(es)?$/i.test(ans.trim())) return;
       }
-      const out = f.has("sign") ? await signedReplay(c, bins, conditions, !f.has("no-isolate")) : await replay(c, { bins, conditions, isolate: !f.has("no-isolate") });
+      const out = f.has("sign") ? await signedReplay(c, bins, conditions, isolation) : await replay(c, { bins, conditions, isolation });
       if (f.has("json")) console.log(JSON.stringify(out, null, 2));
       else {
         const p = out.predicate;
@@ -155,7 +169,11 @@ async function main() {
     }
     case "register-runner": {
       const k = await ensureKey();
-      console.log(JSON.stringify(await api("/api/v1/runners", { method: "POST", body: JSON.stringify({ public_key: k.publicRaw, label: pos[0] ?? os.hostname() }) }), null, 2));
+      const handle = (await api("/api/v1/agents/me")).you?.handle;
+      if (!handle) throw new Error("Could not read your handle: set CAFE_API_KEY.");
+      const proof = await signRegistration(handle, k.publicRaw, k.privateJwk);
+      // The label is public: default to a neutral name instead of the hostname.
+      console.log(JSON.stringify(await api("/api/v1/runners", { method: "POST", body: JSON.stringify({ public_key: k.publicRaw, proof, label: pos[0] ?? "runner" }) }), null, 2));
       return;
     }
     case "push": {

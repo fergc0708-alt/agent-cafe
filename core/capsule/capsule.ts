@@ -12,7 +12,8 @@ export type FileMap = Record<string, string>;
 export interface Capsule {
   schema: string;
   title: string;
-  problem: { symptom: string; description: string; tags: string[]; refs: string[] };
+  /** symptom_regex (optional): the BEFORE run's output must match it, tying the failure to the stated symptom. */
+  problem: { symptom: string; description: string; tags: string[]; refs: string[]; symptom_regex?: string };
   runtime: Runtime;
   /** Author's claim of where the fix applies, e.g. {"node": ">=20.11"}. Evidence may contradict it. */
   applicability: { claims: Record<string, string>; conditions?: Record<string, string>; notes?: string };
@@ -28,7 +29,10 @@ export interface Capsule {
 const INTERPRETERS = new Set(["node", "python3", "python", "bash", "sh", "bun"]);
 const ENV_ALLOW = new Set(["TZ", "LANG", "LC_ALL", "PYTHONWARNINGS", "PYTHONUTF8", "PYTHONDONTWRITEBYTECODE"]);
 // Files that let a "solution" hijack the check instead of fixing the problem.
-const FORBIDDEN_FILE = /(^|\/)(conftest\.py|sitecustomize\.py|usercustomize\.py|pytest\.ini|tox\.ini|setup\.cfg|\.pythonrc|\.npmrc|\.noderc|bunfig\.toml|\.env)$|\.pth$|(^|\/)node_modules\/|(^|\/)__pycache__\//;
+// Case-insensitive: on macOS/Windows "Conftest.py" is the same file as "conftest.py".
+const FORBIDDEN_FILE = /(^|\/)(conftest\.py|sitecustomize\.py|usercustomize\.py|pytest\.ini|tox\.ini|setup\.cfg|pyproject\.toml|setup\.py|\.pythonrc|\.pythonstartup|\.npmrc|\.noderc|\.yarnrc(\.yml)?|bunfig\.toml|deno\.jsonc?|\.env[^/]*)$|\.(pth|pyc|pyo|so|dylib|dll|node)$|(^|\/)node_modules\/|(^|\/)__pycache__\//i;
+// Python files named like stdlib modules shadow them for the check (red-team C3/E: a "fix" that adds json.py).
+const PY_STDLIB = new Set("abc antigravity argparse array ast asynchat asyncio asyncore atexit audioop base64 bdb binascii bisect builtins bz2 cProfile calendar cgi cgitb chunk cmath cmd code codecs codeop collections colorsys compileall concurrent configparser contextlib contextvars copy copyreg crypt csv ctypes curses dataclasses datetime dbm decimal difflib dis distutils doctest email encodings ensurepip enum errno faulthandler fcntl filecmp fileinput fnmatch fractions ftplib functools gc genericpath getopt getpass gettext glob graphlib grp gzip hashlib heapq hmac html http idlelib imaplib imghdr importlib inspect io ipaddress itertools json keyword linecache locale logging lzma mailbox mailcap marshal math mimetypes mmap modulefinder msilib msvcrt multiprocessing netrc nis nntplib nt ntpath nturl2path numbers opcode operator optparse os ossaudiodev pathlib pdb pickle pickletools pipes pkgutil platform plistlib poplib posix posixpath pprint profile pstats pty pwd py_compile pyclbr pydoc pydoc_data pyexpat queue quopri random re readline reprlib resource rlcompleter runpy sched secrets select selectors shelve shlex shutil signal site smtpd smtplib sndhdr socket socketserver spwd sqlite3 sre_compile sre_constants sre_parse ssl stat statistics string stringprep struct subprocess sunau symtable sys sysconfig syslog tabnanny tarfile telnetlib tempfile termios textwrap this threading time timeit tkinter token tokenize tomllib trace traceback tracemalloc tty turtle turtledemo types typing unicodedata unittest urllib uu uuid venv warnings wave weakref webbrowser winreg winsound wsgiref xdrlib xml xmlrpc zipapp zipfile zipimport zlib zoneinfo".split(" "));
 const MAX_FILE = 64_000;
 const MAX_TOTAL = 256_000;
 const MAX_FILES = 20;
@@ -60,7 +64,8 @@ function checkFiles(section: string, files: unknown, errors: string[]): FileMap 
       errors.push(`${section}.files: unsafe path "${path}"`);
       continue;
     }
-    if (FORBIDDEN_FILE.test(path)) {
+    const top = path.split("/")[0].replace(/\.py$/, "");
+    if (FORBIDDEN_FILE.test(path) || ((path.endsWith(".py") || !path.includes(".")) && PY_STDLIB.has(top.toLowerCase()))) {
       errors.push(`${section}.files: "${path}" is not allowed (it could change how the check runs instead of fixing the problem)`);
       continue;
     }
@@ -83,6 +88,18 @@ export function validateCapsule(input: unknown): ValidationResult {
   const description = str(p.description, 4000);
   if (!symptom) errors.push("problem.symptom is required (the error message or observable failure)");
   if (!description) errors.push("problem.description is required");
+  let symptomRegex: string | undefined;
+  if (p.symptom_regex !== undefined) {
+    if (typeof p.symptom_regex !== "string" || p.symptom_regex.length > 200) errors.push("problem.symptom_regex must be a string <= 200 chars");
+    else {
+      try {
+        new RegExp(p.symptom_regex);
+        symptomRegex = p.symptom_regex;
+      } catch {
+        errors.push("problem.symptom_regex is not a valid regular expression");
+      }
+    }
+  }
   const tags = Array.isArray(p.tags) ? p.tags.filter((t: unknown) => typeof t === "string").slice(0, 10) : [];
   const refs = Array.isArray(p.refs) ? p.refs.filter((r: unknown) => typeof r === "string" && /^https:\/\//.test(r)).slice(0, 10) : [];
   if (!RUNTIMES.includes(o.runtime)) errors.push(`runtime must be one of ${RUNTIMES.join(", ")}`);
@@ -90,6 +107,14 @@ export function validateCapsule(input: unknown): ValidationResult {
   for (const [k, v] of Object.entries(o.applicability?.claims ?? {})) {
     if (typeof v === "string" && /^[a-z0-9]+$/.test(k) && /^[<>=0-9. ]+$/.test(v)) claims[k] = v.trim();
     else errors.push(`applicability.claims.${k} must look like ">=20.11 <25"`);
+  }
+  let conditions: Record<string, string> | undefined;
+  if (o.applicability?.conditions !== undefined) {
+    const raw = o.applicability.conditions;
+    const ok = raw && typeof raw === "object" && !Array.isArray(raw) && Object.keys(raw).length <= 10 &&
+      Object.entries(raw).every(([k, v]) => /^[A-Za-z0-9_]{1,40}$/.test(k) && typeof v === "string" && v.length <= 200);
+    if (ok) conditions = raw as Record<string, string>;
+    else errors.push("applicability.conditions must be a flat object of <= 10 string values");
   }
   const before = checkFiles("before", o.before?.files, errors);
   const after = checkFiles("after", o.after?.files, errors);
@@ -99,10 +124,9 @@ export function validateCapsule(input: unknown): ValidationResult {
     errors.push("check.run must be a non-empty array of strings");
   } else if (!INTERPRETERS.has(run[0])) {
     errors.push(`check.run[0] must be an interpreter: ${[...INTERPRETERS].join(", ")}`);
-  } else if (run[0] === "sh" || run[0] === "bash") {
-    if (run[1] === "-c") errors.push("check.run must execute a check file, not an inline -c command");
-  } else if (run.includes("-c") || run.includes("-e") || run.includes("--eval")) {
-    errors.push("check.run must execute a check file, not inline code");
+  } else if (run.length !== 2 || !(run[1] in checkF)) {
+    // Exactly [interpreter, check file]: no flags, no -c/-e/-p/--eval/--import/-m (red-team L1, C3/F).
+    errors.push("check.run must be exactly [interpreter, <one of check.files>] with no flags");
   }
   for (const name of Object.keys(checkF)) {
     if (name in before || name in after) errors.push(`check file "${name}" collides with a before/after file`);
@@ -126,11 +150,11 @@ export function validateCapsule(input: unknown): ValidationResult {
   const capsule: Capsule = {
     schema: CAPSULE_SCHEMA,
     title: title!,
-    problem: { symptom: symptom!, description: description!, tags, refs },
+    problem: { symptom: symptom!, description: description!, tags, refs, ...(symptomRegex ? { symptom_regex: symptomRegex } : {}) },
     runtime: o.runtime,
     applicability: {
       claims,
-      ...(o.applicability?.conditions ? { conditions: o.applicability.conditions } : {}),
+      ...(conditions ? { conditions } : {}),
       ...(typeof o.applicability?.notes === "string" ? { notes: o.applicability.notes.slice(0, 1000) } : {}),
     },
     before: { files: before },

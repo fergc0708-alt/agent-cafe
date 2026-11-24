@@ -14,6 +14,8 @@ export interface AttestationRecord {
   conditions: Record<string, string>;
   mutation: { total: number; killed: number };
   created_at: string;
+  /** Result came from a runner whose identity the registry verified. */
+  trusted?: boolean;
 }
 
 export type EvidenceLevel = "draft" | "author_observed" | "runner_replayed" | "cross_runner_reproduced" | "independent_check_confirmed";
@@ -49,9 +51,9 @@ export interface EvidenceSummary {
 
 const STALE_DAYS = 90;
 
-/** A PASS counts only if the check killed at least one mutant of the fix. */
-export function sensitivePass(a: AttestationRecord): boolean {
-  return a.verdict === "PASS" && a.mutation.total > 0 && a.mutation.killed > 0;
+/** A PASS counts only if the check caught at least half of the line-deletion mutants of the fix. */
+export function sensitivePass(a: Pick<AttestationRecord, "verdict" | "mutation">): boolean {
+  return a.verdict === "PASS" && a.mutation.total > 0 && a.mutation.killed > 0 && a.mutation.killed * 2 >= a.mutation.total;
 }
 
 function verGreater(a: string, b: string): boolean {
@@ -101,9 +103,10 @@ export function summarize(
   if (level !== "draft" && level !== "author_observed" && opts.siblingIndependentPass) level = "independent_check_confirmed";
   // A check that inspects source text or file existence can kill mutants without testing behavior
   // (Experiment B). Server-side lint caps such capsules: they never rise above runner_replayed.
-  const weak = (opts.lint ?? []).filter((c) => c === "text_inspection" || c === "existence_only");
+  const WEAK = ["text_inspection", "existence_only", "no_failure_path", "does_not_reference_fix", "no_before_state"];
+  const weak = (opts.lint ?? []).filter((c) => WEAK.includes(c));
   if (weak.length) {
-    flags.push(`weak_check: the check looks at ${weak.includes("text_inspection") ? "source text" : "file existence"}, not behavior; level capped`);
+    flags.push(`weak_check: static analysis of the check found ${weak.join(", ")}; level capped`);
     if (level === "cross_runner_reproduced" || level === "independent_check_confirmed") level = "runner_replayed";
   }
 
@@ -161,4 +164,35 @@ export function summarize(
   if (nrEnvs.length) parts.push(`problem not reproduced on ${nrEnvs.map((e) => e.env_key).join("; ")}`);
   parts.push(level === "independent_check_confirmed" ? "checked by two independent tests" : "the only check is the author's");
   return { level, meaning: LEVEL_MEANING[level], flags, environments, regressions, contradictions, statement: parts.join(". ") + "." };
+}
+
+export interface EvidenceView extends EvidenceSummary {
+  /** Number of distinct VERIFIED runners behind `level`. */
+  verified_runners: number;
+  /** Everything signed by registered keys, verified or not. Keys are free: these are claims. */
+  claimed: EvidenceSummary & { note: string };
+}
+
+/**
+ * `level`/`flags` use ONLY results from runners the registry verified (red-team C1/H2: a signature
+ * proves who holds a key, not that the run happened, and keys are free). Self-reported results are
+ * still shown, under `claimed`, so negative data is not lost — but they never move the main level.
+ */
+export function evidenceView(
+  atts: AttestationRecord[],
+  opts: { authorOwnerId: string; claims: Record<string, string>; siblingVerifiedPass: boolean; siblingClaimedPass: boolean; lint: string[]; now?: Date },
+): EvidenceView {
+  const verifiedAtts = atts.filter((a) => a.trusted);
+  const verified = summarize(verifiedAtts, { ...opts, siblingIndependentPass: opts.siblingVerifiedPass });
+  const claimed = summarize(atts, { ...opts, siblingIndependentPass: opts.siblingClaimedPass });
+  if (!verifiedAtts.length) verified.statement = "No result from a verified runner yet. See `claimed` for self-reported results.";
+  return {
+    ...verified,
+    verified_runners: new Set(verifiedAtts.map((a) => a.runner_id)).size,
+    claimed: {
+      ...claimed,
+      meaning: "Self-reported, not verified: " + claimed.meaning,
+      note: "Signed by registered keys. A signature identifies the key holder; it does not prove the run happened, and one operator can hold many keys and accounts.",
+    },
+  };
 }

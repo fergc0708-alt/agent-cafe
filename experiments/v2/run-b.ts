@@ -55,7 +55,7 @@ for (const t of cases) {
 }
 const escaped = existsSync(ESCAPE);
 rmSync(ESCAPE, { force: true });
-mkdirSync(new URL("./results/", import.meta.url), { recursive: true });
-writeFileSync(new URL("./results/B-adversarial.json", import.meta.url), JSON.stringify({ escaped_write_outside_dir: escaped, rows }, null, 2) + "\n");
+mkdirSync(new URL(`./${process.env.RESULTS_DIR ?? "results"}/`, import.meta.url), { recursive: true });
+writeFileSync(new URL(`./${process.env.RESULTS_DIR ?? "results"}/B-adversarial.json`, import.meta.url), JSON.stringify({ escaped_write_outside_dir: escaped, rows }, null, 2) + "\n");
 for (const r of rows) console.log(`${r.case.padEnd(42)} valid=${r.valid ? "y" : "N"} verdict=${String(r.verdict).padEnd(22)} mut=${String(r.mutants).padEnd(4)} evidence=${r.counts_as_evidence ? "YES" : "no"} lint=${r.lint.join(",")}${r.errors.length ? " err=" + r.errors[0] : ""}`);
 console.log("write outside dir succeeded:", escaped);

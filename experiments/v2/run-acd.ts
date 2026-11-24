@@ -5,11 +5,11 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { replay } from "../../cli/runner.ts";
 import type { Capsule } from "../../core/capsule/capsule.ts";
-import { buildStatement, generateRunnerKey, signStatement } from "../../core/capsule/attestation.ts";
+import { buildStatement, generateRunnerKey, signRegistration, signStatement } from "../../core/capsule/attestation.ts";
 import { handle } from "../../core/handler.ts";
 import { MemoryStore } from "../../core/memory-store.ts";
 
-const OUT = new URL("./results/", import.meta.url);
+const OUT = new URL(`./${process.env.RESULTS_DIR ?? "results"}/`, import.meta.url);
 mkdirSync(OUT, { recursive: true });
 const built = new URL("../../capsules/built/", import.meta.url);
 const index = JSON.parse(readFileSync(new URL("index.json", built), "utf8")) as { slug: string; id: string }[];
@@ -46,7 +46,7 @@ for (const { slug } of index) {
   if (r.status !== 201) throw new Error(`submit ${slug}: ${r.status} ${JSON.stringify(r.json)}`);
 }
 const key = await generateRunnerKey();
-const rr = await call("POST", "/api/v1/runners", { public_key: key.publicRaw, label: "experiment matrix (this machine)" }, runnerAgent);
+const rr = await call("POST", "/api/v1/runners", { public_key: key.publicRaw, proof: await signRegistration("local-runner-1", key.publicRaw, key.privateJwk), label: "experiment matrix (this machine)" }, runnerAgent);
 if (rr.status !== 201) throw new Error("runner " + JSON.stringify(rr.json));
 
 // ---------- Experiment A: symptom -> search -> fetch -> replay ----------
@@ -102,13 +102,14 @@ for (const { slug, id } of index) {
 writeFileSync(new URL("C-matrix.json", OUT), JSON.stringify(cRows, null, 2) + "\n");
 writeFileSync(new URL("C-attestations.jsonl", OUT), envelopes.map((e) => JSON.stringify(e)).join("\n") + "\n");
 writeFileSync(new URL("runner-public-key.json", OUT), JSON.stringify({ keyid: key.keyid, public_key_ed25519_raw_b64: key.publicRaw, note: "Ephemeral key generated for this run; private key was never written to disk." }, null, 2) + "\n");
+writeFileSync(new URL("runner-registration-proof.json", OUT), JSON.stringify({ handle: "local-runner-1", proof: await signRegistration("local-runner-1", key.publicRaw, key.privateJwk) }, null, 2) + "\n");
 
 // ---------- Experiment D: what the registry concludes ----------
 const dRows = [];
 for (const { slug, id } of index) {
   const v = await call("GET", `/api/v1/capsules/${id}`);
   const e = v.json.evidence;
-  dRows.push({ slug, level: e.level, flags: e.flags, regressions: e.regressions, contradictions: e.contradictions, superseded_by: (v.json.superseded_by ?? []).map((x: any) => index.find((i) => i.id === x.id)?.slug) });
+  dRows.push({ slug, verified_level: e.level, level: e.claimed.level, flags: e.claimed.flags, regressions: e.claimed.regressions, contradictions: e.claimed.contradictions, superseded_by: (v.json.superseded_by ?? []).map((x: any) => index.find((i) => i.id === x.id)?.slug) });
 }
 writeFileSync(new URL("D-evidence.json", OUT), JSON.stringify(dRows, null, 2) + "\n");
 

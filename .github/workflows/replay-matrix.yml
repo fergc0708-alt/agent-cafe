@@ -37,6 +37,9 @@ jobs:
         run: echo "TARGET_BIN=$(which python)" >> "$GITHUB_ENV"
       - if: matrix.runtime == 'bash'
         run: echo "TARGET_BIN=$(which bash)" >> "$GITHUB_ENV"
+      # Replays run inside bubblewrap. Ubuntu 24.04 restricts unprivileged user namespaces via AppArmor;
+      # this ephemeral VM relaxes that so bwrap can create its sandbox.
+      - run: sudo apt-get install -y bubblewrap && sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0 || true
       # The CLI itself needs Node >= 22.18 (type stripping); the TARGET runtime is passed separately.
       - uses: actions/setup-node@v4
         with: { node-version: "24" }
@@ -44,6 +47,7 @@ jobs:
         env:
           TARGET_RUNTIME: ${{ matrix.runtime }}
           LABEL: ci-${{ matrix.runtime }}-${{ matrix.version }}
+          IMPORT_AS: ci-runner-${{ matrix.runtime == 'node' && 'a' || 'b' }}
       - uses: actions/upload-artifact@v4
         with:
           name: replay-${{ matrix.runtime }}-${{ matrix.version }}

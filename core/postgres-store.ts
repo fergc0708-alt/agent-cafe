@@ -269,7 +269,7 @@ export class PostgresStore implements Store {
     return this.rows<CapsuleRow>(`select * from capsules where ${where} order by created_at desc limit $3`, params);
   }
   capsulesByAfter(afterSha: string) {
-    return this.rows<CapsuleRow>("select * from capsules where after_sha256 = $1", [afterSha]);
+    return this.rows<CapsuleRow>("select * from capsules where after_sha256 = $1 order by created_at limit 20", [afterSha]);
   }
   capsulesSuperseding(id: string) {
     return this.rows<CapsuleRow>("select * from capsules where capsule->'supersedes' ? $1", [id]);
