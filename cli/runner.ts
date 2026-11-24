@@ -50,11 +50,20 @@ export function isolationAvailable(mode: Isolation): boolean {
   return available[mode]!;
 }
 
+/** Absolute path of a bare command name on the CALLER's PATH (e.g. the python that actions/setup-python put first).
+ * Probes and checks run with a fixed minimal PATH, so a bare name would otherwise resolve to the system copy. */
+export function onCallerPath(name: string): string {
+  if (name.includes("/")) return name;
+  const r = spawnSync("sh", ["-c", 'command -v "$1"', "sh", name], { encoding: "utf8", env: process.env });
+  const p = (r.stdout ?? "").trim();
+  return p.startsWith("/") ? p : name;
+}
+
 export function resolveBin(name: string, bins: Record<string, string>): string {
   if (bins[name]) return bins[name];
-  if (name === "python") return bins.python3 ?? "python3";
+  if (name === "python") return bins.python3 ?? onCallerPath("python3");
   if (name === "node") return process.execPath;
-  return name;
+  return onCallerPath(name);
 }
 
 function materialize(files: FileMap, check: FileMap): string {
@@ -145,6 +154,7 @@ export function mutantsOf(c: Capsule, max: number): { file: string; mutation: st
  * (interpreters from PATH or typed by the user) run; everything else returns null.
  */
 export function probe(bin: string, args: string[], opts: { allowUnsandboxed: boolean }): string | null {
+  bin = onCallerPath(bin);
   if (bin.includes("/") && !existsSync(bin)) return null;
   const env = { PATH: "/usr/local/bin:/usr/bin:/bin", LANG: "C.UTF-8", HOME: "/nonexistent" } as unknown as NodeJS.ProcessEnv;
   if (isolationAvailable("sandbox")) {

@@ -5,6 +5,7 @@ import os from "node:os";
 import { join } from "node:path";
 import { buildFinding, evaluate, matchError, type EvidenceRow, type IndexEntry, type TargetEnv } from "../core/doctor/match.ts";
 import { loadIndex, scanProject, doctor } from "../cli/doctor.ts";
+import { fingerprint } from "../cli/fingerprint.ts";
 import { buildCandidate, capture } from "../cli/capture.ts";
 import { isolationAvailable } from "../cli/runner.ts";
 import { handleMessage } from "../cli/mcp.ts";
@@ -208,5 +209,24 @@ describe("red-team 3.0 regressions", () => {
     const p2 = JSON.parse((await call({ name: "py-pipes-removed", bins: { python3: "/usr/bin/python3" } })).content[0].text);
     expect(p1.confirm_digest).not.toBe(p2.confirm_digest);
     expect((await call({ name: "f".repeat(64) })).isError).toBe(true);
+  });
+});
+
+describe("GOAT 4 regressions", () => {
+  // Found by the remote-pinned Action job: setup-python put 3.13 first on PATH, but probes ran with a fixed
+  // system PATH and reported the runner's default python instead (the report described the wrong toolchain).
+  it("probes the python that is first on the caller's PATH, not the system one", async () => {
+    if (!isolationAvailable("sandbox")) return;
+    const bin = mkdtempSync(join(os.tmpdir(), "cafe-path-"));
+    symlinkSync("/usr/bin/python3.11", join(bin, "python3"));
+    const old = process.env.PATH;
+    process.env.PATH = `${bin}:${old}`;
+    try {
+      const proj = mkdtempSync(join(os.tmpdir(), "cafe-proj-"));
+      const fp = await fingerprint(proj);
+      expect(fp.runtimes.find((r: { runtime: string }) => r.runtime === "python")?.version).toMatch(/^3\.11\./);
+    } finally {
+      process.env.PATH = old;
+    }
   });
 });

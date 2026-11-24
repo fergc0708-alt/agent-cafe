@@ -25,14 +25,23 @@ export function isolationAvailable(mode) {
     }
     return available[mode];
 }
+/** Absolute path of a bare command name on the CALLER's PATH (e.g. the python that actions/setup-python put first).
+ * Probes and checks run with a fixed minimal PATH, so a bare name would otherwise resolve to the system copy. */
+export function onCallerPath(name) {
+    if (name.includes("/"))
+        return name;
+    const r = spawnSync("sh", ["-c", 'command -v "$1"', "sh", name], { encoding: "utf8", env: process.env });
+    const p = (r.stdout ?? "").trim();
+    return p.startsWith("/") ? p : name;
+}
 export function resolveBin(name, bins) {
     if (bins[name])
         return bins[name];
     if (name === "python")
-        return bins.python3 ?? "python3";
+        return bins.python3 ?? onCallerPath("python3");
     if (name === "node")
         return process.execPath;
-    return name;
+    return onCallerPath(name);
 }
 function materialize(files, check) {
     const dir = mkdtempSync(join(os.tmpdir(), "cafe-replay-"));
@@ -118,6 +127,7 @@ export function mutantsOf(c, max) {
  * (interpreters from PATH or typed by the user) run; everything else returns null.
  */
 export function probe(bin, args, opts) {
+    bin = onCallerPath(bin);
     if (bin.includes("/") && !existsSync(bin))
         return null;
     const env = { PATH: "/usr/local/bin:/usr/bin:/bin", LANG: "C.UTF-8", HOME: "/nonexistent" };

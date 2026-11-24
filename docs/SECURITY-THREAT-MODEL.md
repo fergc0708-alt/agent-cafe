@@ -112,3 +112,10 @@ tools, and the preview-digest set is bounded (256) so a long session cannot grow
   whether a path exists. Same privilege as the agent's own shell.
 - On macOS/Windows there is no bubblewrap: `cafe_replay`/`cafe_capture` refuse to run instead of running unsandboxed
   (fail closed); doctor's non-PATH interpreter probes are skipped and the environment is reported NOT EVALUATED.
+
+## Defects found while proving the product (GOAT 4)
+
+| id | finding | status |
+|---|---|---|
+| G4-1 | **The Action described the wrong toolchain.** Interpreter probes ran with a fixed system `PATH`, so after `setup-node 22` / `setup-python 3.13` the report said `node 24.22 · python 3.14` (the runner's defaults). Found by the new `remote-pinned` distribution job. Affected every CI user of 3.0 whose job installs its own runtimes; local users whose interpreter is not in `/usr/local/bin:/usr/bin:/bin` were affected too. | **FIXED**: bare names resolve on the caller's PATH before probing (`onCallerPath`); regression test. The pinned SHA in the README is moved to the fixed commit. |
+| G4-2 | Eval run 2: two agents rejected the `py-distutils-removed` fix (int tuples) because it crashes on `1.0rc1`, which `LooseVersion` handled. | OPEN: the capsule's `does_not_prove` already says so; the fix itself is weaker than what agents write unaided. |

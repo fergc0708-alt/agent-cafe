@@ -1,0 +1,26 @@
+name: Feedback from a real project
+description: You ran cafe doctor / the Action on your project. Tell us what it got right or wrong.
+labels: ["feedback"]
+body:
+  - type: markdown
+    attributes:
+      value: Please do not paste secrets or private code. File paths and the tool's own output are enough.
+  - type: input
+    id: project
+    attributes: { label: Project (public URL, or "private") }
+  - type: dropdown
+    id: how
+    attributes: { label: How did you run it?, options: [CLI, GitHub Action, MCP in a coding agent] }
+    validations: { required: true }
+  - type: textarea
+    id: output
+    attributes: { label: What it reported (paste the summary), render: text }
+  - type: dropdown
+    id: verdict
+    attributes:
+      label: Was it right?
+      options: ["Found a real break I did not know about", "Found a real break I already knew", "False alarm", "Missed a break I hit", "Not useful for another reason"]
+    validations: { required: true }
+  - type: textarea
+    id: other
+    attributes: { label: "Did mypy/pyright, tsc or your test suite on the new version already catch it?" }
