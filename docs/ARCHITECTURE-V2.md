@@ -14,8 +14,8 @@ Legend: **IMPLEMENTED** · **TESTED** · **EXPERIMENTAL** · **PENDING**
  │   runner (cli/runner.ts) │          │ POST /api/v1/capsules                    │
  │   ├ materialize in tmp   │          │ POST /api/v1/runners       (pub keys)    │
  │   ├ before / after / mut │  signed  │ POST /api/v1/capsules/:id/attestations   │
- │   ├ unshare -rn (no net) │ ───────► │   verify DSSE · bind check digest ·      │
- │   └ sign DSSE (Ed25519)  │  result  │   aggregate → level + flags              │
+ │   ├ bubblewrap sandbox   │ ───────► │   verify DSSE · bind check digest ·      │
+ │   └ sign DSSE (Ed25519)  │  result  │   verified level + claimed level         │
  └──────────────────────────┘          │ remote MCP (/mcp): search_capsules,      │
    GitHub Actions (user's CI) ───────► │   get_capsule (read-only)                │
                                        └──────────────────────────────────────────┘
@@ -27,7 +27,7 @@ Legend: **IMPLEMENTED** · **TESTED** · **EXPERIMENTAL** · **PENDING**
 |---|---|---|
 | Capsule schema, canonical id, validator (forbidden files, interpreter + env allowlists, sizes, paths) | `core/capsule/capsule.ts` | IMPLEMENTED, TESTED |
 | Static lint for vacuous checks | `core/capsule/lint.ts` | IMPLEMENTED, TESTED (heuristic) |
-| Local runner: before/after/mutants, verdicts, timeouts, network cut | `cli/runner.ts` | IMPLEMENTED, TESTED |
+| Local runner: before/after/mutants, verdicts, timeouts; bubblewrap sandbox by default, fails closed | `cli/runner.ts` | IMPLEMENTED, TESTED (Linux only) |
 | in-toto Statement v1 + DSSE + Ed25519 (WebCrypto, no deps) | `core/capsule/attestation.ts` | IMPLEMENTED, TESTED |
 | Evidence aggregation (levels, flags, regressions, contradictions) | `core/capsule/evidence.ts` | IMPLEMENTED, TESTED |
 | Registry service + routes | `core/capsule/service.ts`, `core/handler.ts` | IMPLEMENTED, TESTED (memory + real Postgres via PGlite) |
@@ -37,14 +37,14 @@ Legend: **IMPLEMENTED** · **TESTED** · **EXPERIMENTAL** · **PENDING**
 | Remote MCP read tools `search_capsules`, `get_capsule` | `core/mcp.ts` | IMPLEMENTED |
 | Curated catalog (24 capsules, JS/TS + Python + bash) | `capsules/catalog.ts` → `capsules/built/` | IMPLEMENTED, TESTED (Experiment C) |
 | CI replay matrix (Node 20.10/20.18/22.11/22, Python 3.10/3.12/3.13) | `.github/workflows/replay-matrix.yml`, `experiments/v2/ci-replay.ts` | IMPLEMENTED; results in VALIDATION-PLAN.md |
-| Real sandbox for replay (E2B / Firecracker / gVisor) | — | PENDING (not built on purpose; see SECURITY-THREAT-MODEL.md) |
-| Sigstore keyless / GitHub OIDC attestations | — | PENDING |
+| Sandbox for replay on macOS/Windows, or hosted (E2B / Firecracker) | — | PENDING (we wrap bubblewrap on Linux; we do not build isolation) |
+| Verified runner identities (Sigstore keyless / GitHub OIDC) — the only path to a non-`draft` verified level | — | PENDING |
 | Deployment of v2 to production | — | PENDING (needs Fer's authorization + DB migration) |
 
 ## Data model (Postgres)
 
 - `capsules(id sha256 pk, slug, title, runtime, author_id, after_sha256, check_sha256, capsule jsonb, created_at)` — immutable; a change is a new capsule with `supersedes`.
-- `runners(id = keyid, owner_id, public_key, label, created_at)` — max 5 per account.
+- `runners(id = keyid, agent_id, public_key, label, trusted, created_at)` — max 5 per account; registered with proof of possession; `trusted` set only by the operator.
 - `attestations(id, capsule_id, runner_id, owner_id, verdict, env_key, runtime, version, conditions jsonb, mutation jsonb, envelope jsonb, created_at)` — the full signed envelope is kept so anyone can re-verify offline.
 
 `after_sha256` is what links sibling capsules (same fix, different checks) for the independent-check level.
@@ -60,4 +60,4 @@ The product is not any single capsule; it is the table that accumulates: **capsu
 
 - **...run replays on our server?** Mandate forbids it, and a safe multi-tenant sandbox (Firecracker/gVisor) is a product in itself (E2B, Daytona, Vercel Sandbox exist). If hosted replay is ever needed, rent one of those; do not build isolation.
 - **...use votes/reputation?** Stack Overflow for Agents and cq (Mozilla) already do confidence/reputation; votes from correlated models are not verification. Our differentiator is executed, environment-scoped, falsifiable evidence.
-- **...Docker in the CLI?** Optional future; Docker alone is not a strong boundary for hostile code, and requiring it kills adoption. The CLI tells the user it is *not* a sandbox.
+- **...Docker in the CLI?** Docker alone is not a strong boundary for hostile code and requiring it kills adoption. On Linux we wrap bubblewrap (unprivileged, used by Flatpak); elsewhere the user must opt out explicitly or use a VM.

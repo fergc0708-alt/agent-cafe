@@ -1,6 +1,8 @@
 # Validation plan and results so far
 
-Every number below comes from a script in `experiments/v2/` and a file in `experiments/v2/results/`. Nothing here is simulated unless it says **SYNTHETIC**. Previous experiments (E1, E1b, E2, E4 in `experiments/`) are kept unchanged.
+Every number below comes from a script in `experiments/v2/` and its result files. Nothing here is simulated unless it says **SYNTHETIC**. Previous experiments (E1, E1b, E2, E4 in `experiments/`) are kept unchanged and were re-run (identical outputs).
+
+**Two runs.** `results/` is the first run (before the red-team audit, network-only isolation). `results-run2/` is the re-run after the red-team fixes (bubblewrap sandbox locally and in CI, proof-of-possession keys, verified/claimed split). **All 184 capsule × environment verdicts are identical between the two runs** (checked cell by cell). Numbers below are from run 2 unless stated.
 
 ## The thesis being tested
 
@@ -17,7 +19,7 @@ It is **refuted** if: (a) agents solve these problems equally well without it (n
 - Caveat: 24 capsules is a toy index; ranking quality at scale is unknown.
 
 ### B — anti-vacuity and abuse (IMPLEMENTED, TESTED) · `run-b.ts` · `results/B-adversarial.json`
-19 adversarial variants of a real capsule.
+19 adversarial variants of a real capsule. The red team then found more (canary exports, tautologies, stdlib shadowing, pytest plugins, inline flags); see SECURITY-THREAT-MODEL.md. Some are fixed, and same-author tautologies remain possible.
 
 | attack | outcome |
 |---|---|
@@ -28,9 +30,9 @@ It is **refuted** if: (a) agents solve these problems equally well without it (n
 | check needs network | `FIX_FAILS` offline (never a false PASS) |
 | check reads host secrets | env is scrubbed: the secret was not visible |
 | infinite loop | `ERROR` (timeout) |
-| **text/grep check** | **PASS, 2/6 mutants killed → counted as evidence.** Partial detection. Fixed after the run: server-side lint now caps such capsules at `runner_replayed` (`weak_check`). |
+| **text/grep check** | run 1: PASS, 2/6 mutants killed → **counted as evidence**. Run 2 (≥ 50% kill threshold, no empty-file mutant): PASS 1/5 → **not evidence**, plus lint `text_inspection` caps the level. |
 | **overfitted fix (hardcodes the check's inputs)** | **PASS 5/5 against its own check.** Not detectable by one check. A blind independent check (E) caught it. |
-| **check writes outside its temp dir** | **succeeded.** The runner is not a sandbox; documented, not fixed. |
+| **check writes outside its temp dir** | run 1: **succeeded on the host**. Run 2: the write lands in the sandbox's throwaway tmpfs; the host file never appears. |
 
 ### C — compatibility matrix (IMPLEMENTED, TESTED) · `run-acd.ts`, `summarize.py` · `results/C-matrix.md`
 **184 signed runs** (104 local + 80 GitHub Actions): 138 PASS, 32 PROBLEM_NOT_REPRODUCED, 14 FIX_FAILS, 0 ERROR. Runtimes: Node 20.10, 20.18, 22.11, 22.23, 24.22, Bun 1.4.4, Python 3.10–3.13 (system and clean venv), bash 5.2, plus timezone conditions.
@@ -47,8 +49,8 @@ Both planted "OLD" capsules were caught with no human input:
 - `node-json-import-assert-OLD`: `regressed` (Node 20.18 → 22.11, only visible after the CI runs) + `contradicted`; `superseded_by: node-json-import-with`.
 
 ### E — independence (IMPLEMENTED, TESTED, with caveats) · `run-e.ts`, `run-e-ci.ts` · `results/E-*.json`
-- **Runner diversity:** 8 GitHub Actions jobs generated their own keys; **184/184 signatures verified offline**, 0 rejected; after merging, 23 capsules at `cross_runner_reproduced`, 1 at `runner_replayed`. **Caveat, stated before running:** the local machine and the CI jobs belong to the same operator, so this is the Sybil problem in action: it proves machine diversity, not operator independence.
-- **Verifier independence:** a separate subagent wrote checks for 7 capsules seeing only the problem text and the fixed code. All 7 pass and catch all mutants → `independent_check_confirmed`. The blind check for `py-mutable-default` **failed the overfitted fix** from B (exit 1). **Caveat:** both check authors are Claude models (correlated blind spots), so this is author independence, not model independence. The subagent could technically read the repo; it reported it did not.
+- **Runner diversity:** 8 GitHub Actions jobs (run 2: inside bubblewrap) generated their own keys and signed proofs of possession; **184/184 signatures verified offline**, 0 rejected. Claimed levels: 23 capsules at `cross_runner_reproduced`, 1 at `runner_replayed`. **Verified levels: 24/24 `draft`**, because no runner identity is verified yet. That is the correct answer: the local machine and the CI jobs belong to the same operator, so this proves machine diversity, not operator independence (the Sybil problem the red team exploited).
+- **Verifier independence:** a separate subagent wrote checks for 7 capsules seeing only the problem text and the fixed code. All 7 pass and catch all mutants → claimed `independent_check_confirmed` (verified: `draft`, same reason as above). The blind check for `py-mutable-default` **failed the overfitted fix** from B (exit 1). **Caveat:** both check authors are Claude models (correlated blind spots), so this is author independence, not model independence. The subagent could technically read the repo; it reported it did not.
 
 ### F — utility pilot (EXPERIMENTAL, inconclusive) · `F-preregistration.md`, `grade-f.ts`, `F-results.json`
 Pre-registered before launch. 3 tasks × {control, café} × n=1, graded by the capsule check on both target runtimes (agents never saw the grader).
@@ -64,7 +66,7 @@ Per the pre-registered rule this is **inconclusive** (n=1, ceiling effect). Dire
 - ≥ 5 external users replaying or submitting capsules; retention.
 - Monetization conversations.
 - Utility on problems outside the model's knowledge (the only case where F could plausibly win).
-- Sybil-resistant identities for runners.
+- Verified runner identities (Sigstore / GitHub OIDC). Without them no capsule can have a verified level above `draft`.
 
 ## 14-day plan (metrics fixed now, not to be moved after seeing results)
 
@@ -76,4 +78,4 @@ Per the pre-registered rule this is **inconclusive** (n=1, ceiling effect). Dire
 | 6–12 | Outreach: 30 maintainers / agent-tool builders (Cursor/Cline/Aider plugin authors, CI-heavy OSS) ; offer "replay your breaking-change fixes in CI". | ≥ 5 external users who replay or submit; ≥ 2 return in week 2 |
 | 10–14 | 5 monetization conversations (teams with private toolchains: "private capsule registry + CI runners"). | ≥ 1 says they would pay / pilot |
 
-**Final gate (from the mandate):** MVP with CLI + MCP ✔ · ≥ 20 capsules ✔ (24) · no votes in evidence ✔ · trivial-check detection ✔ (partial: grep checks capped, overfit needs a 2nd check) · multi-environment results ✔ · comparison with/without ✔ (pilot, inconclusive) · **≥ 5 external users ✘ · retention ✘ · monetization conversations ✘ · utility target ✘ (not met in the pilot).**
+**Final gate (from the mandate):** MVP with CLI + MCP ✔ · ≥ 20 capsules ✔ (24) · no votes in evidence ✔ · trivial-check detection ✔ (partial: same-author tautologies and overfits need an independent check) · verified evidence ✘ (no verified runners yet) · multi-environment results ✔ · comparison with/without ✔ (pilot, inconclusive) · **≥ 5 external users ✘ · retention ✘ · monetization conversations ✘ · utility target ✘ (not met in the pilot).**

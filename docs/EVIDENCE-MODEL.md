@@ -29,11 +29,19 @@ A capsule never claims "this fix is correct for your code". It claims a reproduc
 | `FIX_BREAKS` | passes | fails | the fix makes things worse here |
 | `ERROR` | — | timeout/crash | no conclusion |
 
-The runner never parses stdout (exit codes only), so forged success markers do nothing (Experiment B).
+The runner never parses stdout (exit codes only), so forged success markers do nothing (Experiment B). Published predicates are coarse on purpose: `passed` / `timed_out` per run, no exit codes, timings, output hashes or kernel version (these were a covert channel; see SECURITY-THREAT-MODEL.md C2).
 
-**Mutation sensitivity.** After a `PASS`, the runner deletes lines of the changed files (up to 8) and also empties them; each mutant is re-checked. A `PASS` counts as evidence only if **at least one mutant is caught** (`sensitivePass`). A check that passes whatever you do to the fix is flagged `insensitive_check`. This caught a weak check in our own catalog (`node-esm-dirname`: `realpathSync("")` resolves to the current dir, so an empty fix "passed"; fixed in the catalog).
+If the capsule declares `problem.symptom_regex`, the *before* run's output must match it, otherwise the verdict is `PROBLEM_NOT_REPRODUCED`: the check must fail **for the stated reason**.
+
+**Mutation sensitivity.** After a `PASS`, the runner deletes lines of the changed files (up to 8 mutants); each mutant is re-checked. A `PASS` counts as evidence only if **at least half of the mutants are caught** (`sensitivePass`). An earlier version also emptied the file and needed only one kill; the red team showed that almost any check kills the empty file, so it was removed. A check that passes whatever you do to the fix is flagged `insensitive_check`. This caught a weak check in our own catalog (`node-esm-dirname`: `realpathSync("")` resolves to the current dir, so an empty fix "passed"; fixed in the catalog).
 
 ## 3. Evidence levels (aggregate over signed attestations) — IMPLEMENTED, TESTED
+
+**Verified vs claimed.** Every capsule view has two summaries:
+- `evidence.level` / `evidence.flags`: computed **only from runners the registry verified** (`runner.trusted`, set by the operator after verifying an identity; there is no API for it). Verification of CI identities via Sigstore/GitHub OIDC is PENDING, so **today every capsule's verified level is `draft`**.
+- `evidence.claimed`: the same computation over every signed result from any registered key, labeled "self-reported, not verified". Kept because negative results matter, but it never moves the main level. The red team showed one operator with free accounts and keys can produce any claimed level.
+
+The levels below apply to both summaries.
 
 | level | requires | what it does NOT mean |
 |---|---|---|
@@ -54,7 +62,7 @@ The mandate's proposed taxonomy had `platform_replayed`. We dropped it on purpos
 | `regressed` | same runtime + same conditions: sensitive PASS at version *a*, FIX_FAILS/FIX_BREAKS at a higher version *b* |
 | `contradicted` | FIX_FAILS/FIX_BREAKS at a version **inside the author's claimed range** |
 | `stale` | newest sensitive PASS older than 90 days |
-| `weak_check` | server-side lint says the check inspects source text or file existence; level is **capped at `runner_replayed`** (added after Experiment B showed a grep check can kill mutants without testing behavior) |
+| `weak_check` | server-side lint finds `text_inspection`, `existence_only`, `no_failure_path`, `does_not_reference_fix` or `no_before_state`; level is **capped at `runner_replayed`** (added after Experiment B and the red team) |
 
 Negative results are first-class data: a `FIX_FAILS` on Python 3.13 is as useful to the next agent as a `PASS` on 3.12.
 
@@ -63,9 +71,11 @@ Negative results are first-class data: a `FIX_FAILS` on Python 3.13 is as useful
 1. DSSE signature (Ed25519) over the in-toto Statement, against a key **registered by the caller's account** (`403` otherwise).
 2. Subject and `predicate.capsule_id` equal the capsule being attested.
 3. `predicate.check_sha256` equals the stored capsule's check digest (results about another check are rejected).
-4. Verdict enum, mutation counts sane (`killed ≤ total ≤ 64`), version format, conditions sanitized.
+4. Verdict enum, mutation counts sane (`killed ≤ total ≤ 100`), version format, conditions sanitized.
+5. The runner key was registered with **proof of possession** (a signature over the account handle), so nobody can claim someone else's published key.
+6. The payload was not submitted before, and `started_at` is within the last 7 days.
 
-**What it cannot verify:** that the runner actually ran the check. A signature proves *who* says it, not that it is *true* ("never trust a result because it is signed"). This is why levels count **distinct accounts/keys** and why the only level that adds a *different judgement* is the independent check. Sybil resistance is PENDING and is the main open risk (see SECURITY-THREAT-MODEL.md).
+**What it cannot verify:** that the runner actually ran the check. A signature proves *who* says it, not that it is *true* ("never trust a result because it is signed"). This is why only verified runners move the main level, and why the only level that adds a *different judgement* is the independent check. Runner identity verification is PENDING and is the main open risk (see SECURITY-THREAT-MODEL.md).
 
 ## 6. LLM judgement is not evidence
 

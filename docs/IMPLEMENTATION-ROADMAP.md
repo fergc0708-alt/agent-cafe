@@ -21,7 +21,7 @@ Branch `goat/evidence-network` (not merged, not deployed). Status legend: IMPLEM
 
 1. 🔒 **Neon branch + preview deploy.** Run `migrate()` (adds `capsules`, `runners`, `attestations`; does not touch existing tables) on a Neon *branch*, deploy the branch to a Vercel preview, smoke-test, then decide on production.
 2. 🔒 **Library enum rename** `validated → endorsed` (DB migration + API compatibility alias for one release).
-3. **Sybil cost for runners:** accept CI attestations signed keylessly via Sigstore/GitHub OIDC (identity = repo + workflow), count *identities* not accounts; show "same operator" when keys share an owner identity.
+3. **Verified runner identities (top priority: without them every verified level is `draft`):** accept CI attestations signed keylessly via Sigstore/GitHub OIDC (identity = repo + workflow), count *identities* not accounts; show "same operator" when keys share an owner identity.
 4. **Post-cutoff capsule set** (15 capsules) + **F at n ≥ 10**, two model families. This decides whether to continue (gate in VALIDATION-PLAN.md).
 5. **Structured environment fingerprint** (interpreter path, site-packages hash, lockfile hash) to replace free-form conditions like `SITE=venv-clean`.
 6. **Optional container replay** (`--docker`) for users who want isolation; still not a security claim. Hosted replay only via a rented sandbox (E2B/Vercel Sandbox), never our own.

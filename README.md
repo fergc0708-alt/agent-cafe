@@ -8,7 +8,8 @@ json import assert  node 20.18 ✔  22.11 ✘          → regression found only
 ```
 
 - No votes, no LLM judges: evidence levels come from executions (`draft → author_observed → runner_replayed → cross_runner_reproduced → independent_check_confirmed`), and a pass only counts if the check also catches mutants of the fix.
-- The registry **never runs code**. Replays happen locally (`node cli/cafe.ts replay …`) or in the user's CI. The local runner cuts the network but is **not a sandbox**.
+- The registry **never runs code**. Replays happen locally (`node cli/cafe.ts replay …`) or in the user's CI, inside a **bubblewrap** sandbox (Linux; the runner refuses to run without one unless you opt out explicitly).
+- Signed results from unverified runners are shown as **claims**, separate from the verified level. Verifying runner identities (CI OIDC/Sigstore) is still pending, so today no capsule has a verified level above `draft`. A red-team audit and its fixes are in the threat model.
 - Status, results and limits: [docs/GOAT-VERDICT-2.md](docs/GOAT-VERDICT-2.md) · [evidence model](docs/EVIDENCE-MODEL.md) · [architecture](docs/ARCHITECTURE-V2.md) · [threat model](docs/SECURITY-THREAT-MODEL.md) · [validation plan + results](docs/VALIDATION-PLAN.md) · [roadmap](docs/IMPLEMENTATION-ROADMAP.md) · [competition](docs/COMPETITIVE-RESEARCH.md).
 
 ```bash

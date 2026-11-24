@@ -4,7 +4,9 @@ Date: 2026-11-24 · Branch: `goat/evidence-network` (not merged, not deployed) �
 
 ## Veredicto (en castellano, para Fer)
 
-**Construido y medido:** el núcleo técnico de la tesis funciona y es honesto. Las cápsulas se reproducen. Las firmas se verifican. El sistema detecta solo las regresiones, los chequeos vacíos y las afirmaciones del autor que la ejecución contradice. Corrimos 184 ejecuciones reales firmadas, en la máquina local y en 8 máquinas de GitHub Actions. Todos los números vienen de scripts que se pueden volver a correr.
+**Construido y medido:** el núcleo técnico funciona. Las cápsulas se reproducen. Las firmas se verifican. El sistema detecta solo las regresiones, los chequeos vacíos y las afirmaciones del autor que la ejecución contradice. Corrimos 184 ejecuciones reales firmadas, en la máquina local y en 8 máquinas de GitHub Actions, dos veces: antes y después del red team, con veredictos idénticos celda por celda.
+
+**Lo que rompió el red team, y es central:** con cuentas y claves gratis, una sola persona podía fabricar el nivel de evidencia más alto sin ejecutar nada. Lo corregí. Ahora el nivel principal cuenta solo runners con identidad verificada, y lo autodeclarado se muestra aparte como "claimed". Pero todavía no existe ningún runner verificado (falta Sigstore/OIDC de CI), así que **hoy ninguna cápsula tiene evidencia verificada por encima de `draft`**. Lo que hay son afirmaciones firmadas.
 
 **No probado, y es lo que importa:** que le sirva a alguien. En el piloto de utilidad (F), los agentes resolvieron igual de bien sin el café (3/3 contra 3/3), y con el café gastaron un poco más (unos 7% más de tokens y unos 16% más de tiempo). Con n=1 no concluye nada, pero apunta hacia un lado claro: **en problemas conocidos, el modelo no nos necesita.** Tampoco hay usuarios externos, retención ni conversaciones de venta. Eso no se puede hacer desde esta sesión.
 
@@ -18,7 +20,7 @@ Date: 2026-11-24 · Branch: `goat/evidence-network` (not merged, not deployed) �
 |---|---|---|
 | Fixes can be packaged so anyone can replay them | **TESTED** | 24 capsules, 184 runs, 3 runtimes, 10 interpreter versions |
 | Evidence can be made hard to fake *by bad checks* | **TESTED, partial** | B: vacuous/forged/hijack cases caught; grep checks capped; overfit needs a second check |
-| Evidence can be made hard to fake *by bad actors* | **NOT solved** | one operator produced `cross_runner_reproduced` (E); Sybil resistance PENDING |
+| Evidence can be made hard to fake *by bad actors* | **NOT solved** | the red team forged the top level with 2 free accounts; fixed by not counting unverified runners, which leaves 0 verified evidence until runner identities exist |
 | The matrix tells agents something text cannot | **TESTED** | version-scoped and condition-scoped results (require(esm), distutils + site-packages, TZ), 2 regressions found automatically |
 | It makes agents better | **NOT shown** | F pilot: no gain, slight cost, n=1, ceiling effect |
 | People will use / pay for it | **NOT tested** | 0 external users, 0 sales conversations |
@@ -26,9 +28,9 @@ Date: 2026-11-24 · Branch: `goat/evidence-network` (not merged, not deployed) �
 ## What was built (IMPLEMENTED / TESTED / EXPERIMENTAL / PENDING)
 
 See ARCHITECTURE-V2.md for the component table. In short:
-- **IMPLEMENTED + TESTED:** capsule schema and validator, lint, local runner with mutation sensitivity, DSSE/in-toto/Ed25519 attestations, evidence levels and flags, registry API on memory and real Postgres, remote MCP read tools, 24 capsules, CI replay matrix. 41 automated tests.
+- **IMPLEMENTED + TESTED:** capsule schema and validator, lint, local runner with mutation sensitivity inside a bubblewrap sandbox (fails closed), DSSE/in-toto/Ed25519 attestations with proof-of-possession key registration, verified-vs-claimed evidence levels and flags, registry API on memory and real Postgres, remote MCP read tools, 24 capsules, CI replay matrix. 44 automated tests, including regression tests for the red-team findings.
 - **EXPERIMENTAL:** CLI and local MCP (`cafe_replay` with confirm gate), server-side `weak_check` cap, free-form environment conditions.
-- **PENDING:** production DB migration and deploy (needs authorization), Sybil-resistant runner identity (Sigstore/OIDC), real sandbox for replays, structured environment fingerprint, `upstream_backed` level, cross-model-family independent checks, external users, monetization.
+- **PENDING:** production DB migration and deploy (needs authorization), verified runner identity (Sigstore/OIDC), sandbox on macOS/Windows, structured environment fingerprint, `upstream_backed` level, cross-model-family independent checks, external users, monetization.
 
 ## Autopsy of v1 experiments (E1, E1b, E2, E4)
 
@@ -42,27 +44,45 @@ Kept unchanged in `experiments/` and **re-run on 2026-11-24**: E2 and E4 regener
 | exp | question | result |
 |---|---|---|
 | A | Can an agent go from a pasted error to a replayed fix? | 9/10 rank-1 hits; 9/10 replayed PASS; the miss was an environment trap, not a search miss |
-| B | Can bad checks fake evidence? | 16/19 handled; 3 holes: grep check (now capped), overfit (needs a 2nd check), runner writes outside its dir (not a sandbox) |
+| B | Can bad checks fake evidence? | run 1: 16/19 handled. Run 2: grep check no longer counts and writes outside the dir are contained; overfit still needs a 2nd check. The red team found more same-author tricks: some fixed, tautologies remain |
 | C | Does the matrix carry information? | 184 runs: 138 PASS / 32 not reproduced / 14 fix fails; version- and condition-scoped behavior visible |
 | D | Are regressions detected automatically? | both planted OLD capsules flagged `regressed` + `contradicted` + `superseded_by` |
-| E | Independence | 184/184 signatures verified across 9 keys; blind independent checks: 7/7 confirmed and one caught the overfit; **same operator / same model family caveats** |
+| E | Independence | 184/184 signatures verified across 9 keys; blind independent checks 7/7, and one caught the overfit. Claimed levels are high; **verified levels 24/24 `draft`** (same operator, no verified identity; same model family) |
 | F | Utility | inconclusive pilot, no gain, slight cost |
 
 ## Red team
 
-An independent auditor agent attacked the implementation without editing it. Findings and the fixes applied are in SECURITY-THREAT-MODEL.md §Red team.
+An independent auditor agent attacked the implementation without editing it and reproduced 13 of 16 findings against the real code (4 critical, 4 high, 4 medium, 4 low).
+
+- **Fixed and re-verified with the same exploit scripts:**
+  - forged levels (main level now counts verified runners only);
+  - key squatting (proof of possession: 0/104 envelopes stolen);
+  - malicious fix files on the user's machine (bubblewrap sandbox, fails closed, full disclosure, coarse predicates: no home, SSH or key read, no persistence, no leak);
+  - grief negatives;
+  - foreign `supersedes`;
+  - duplicate and replayed envelopes;
+  - injection in capsule text;
+  - inline-flag and stdlib-shadowing hijacks;
+  - registry code swap in MCP.
+- **Still open:**
+  - same-author tautological checks;
+  - a model can self-confirm in MCP (the client's approval UI is the human gate);
+  - no sandbox on macOS/Windows;
+  - no verified runners.
+
+Details: SECURITY-THREAT-MODEL.md. The auditor's sharpest point, which I agree with: **without trusted runners, accumulated attestations are claims, and the real asset is the curated reproduction (before/after/check) plus search. That is content, about as defensible as a good answer with a test attached.** The moat only appears if verified runners (CI identities, or a rented sandbox that re-executes) produce the matrix.
 
 ## Ten risks (audited)
 
 | # | risk | status after this work |
 |---|---|---|
 | 1 | No utility on problems models already know | **confirmed by F (pilot)**; pivot the wedge to post-cutoff/private |
-| 2 | Sybil: one operator fakes multi-runner evidence | **confirmed (E)**; PENDING Sigstore/OIDC identities |
+| 2 | Sybil: one operator fakes multi-runner evidence | **confirmed (E + red team)**; neutralized by verified-only levels, which leaves 0 verified evidence until Sigstore/OIDC identities exist |
 | 3 | Vacuous checks | mostly mitigated (F2P + mutants + lint + validator) |
 | 4 | Overfitted fixes | only mitigated by independent checks |
-| 5 | Running strangers' code on users' machines | **open**; confirm gates + docs; real sandbox PENDING |
+| 5 | Running strangers' code on users' machines | **mitigated on Linux** (bubblewrap, fails closed, full disclosure); open on macOS/Windows |
 | 6 | Environment non-hermeticity (same version, different result) | **confirmed (distutils)**; condition keys, fingerprint PENDING |
 | 7 | Cold start / coverage (Dependabot scores are mostly missing) | open; curated seed only |
-| 8 | Incumbents (cq, SO for Agents, Context7) add replay | open; moat = accumulated negative data, weak today |
+| 8 | Incumbents (cq, SO for Agents, Context7) add replay | open; with no verified runners there is no moat beyond curated content |
 | 9 | Correlated model judgement in "independent" checks | open; documented caveat |
 | 10 | Privacy leaks when publishing capsules/results | mitigated: nothing uploads without an explicit confirm showing what leaves |

@@ -1,8 +1,9 @@
 """Builds results/C-matrix.md (capsule x environment table) from results/C-matrix.json. Run: python3 experiments/v2/summarize.py"""
 import json, os, collections
-here = os.path.dirname(os.path.abspath(__file__))
-rows = json.load(open(os.path.join(here, "results/C-matrix.json")))
-ci_path = os.path.join(here, "results/E-ci-merged.json")
+here = os.path.join(os.path.dirname(os.path.abspath(__file__)), "")
+RD = os.environ.get("RESULTS_DIR", "results")
+rows = json.load(open(os.path.join(here, RD + "/C-matrix.json")))
+ci_path = os.path.join(here, RD + "/E-ci-merged.json")
 if os.path.exists(ci_path):
     rows += [{**r, "env": r["env"].replace(" (ci)", "") + " [CI]"} for r in json.load(open(ci_path))["ci_runs"]]
 ab = {"PASS": "P", "PROBLEM_NOT_REPRODUCED": "nr", "FIX_FAILS": "FAIL", "FIX_BREAKS": "BRK", "ERROR": "ERR"}
@@ -29,5 +30,5 @@ for g, cs in groups.items():
     out.append("")
 cnt = collections.Counter(r["verdict"] for r in rows)
 out.append(f"Totals: {len(rows)} runs — " + ", ".join(f"{k} {v}" for k, v in cnt.most_common()))
-open(os.path.join(here, "results/C-matrix.md"), "w").write("\n".join(out) + "\n")
+open(os.path.join(here, RD + "/C-matrix.md"), "w").write("\n".join(out) + "\n")
 print("\n".join(out))
