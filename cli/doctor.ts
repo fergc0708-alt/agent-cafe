@@ -199,7 +199,7 @@ export async function diagnose(projectDir: string, error: string, targets: strin
         rejected.push({ slug: m.entry.slug, why: `looks similar, but no tested ${rt} version is affected by it, so it is probably not your cause` });
         continue;
       }
-      matches.push({ ...f, match: `${m.why}. Your default ${f.verdicts.map((v) => `${v.env.runtime} ${v.env.version}`).join(", ")} is NOT affected, but it breaks on ${rt} ${broken.join(", ")}: if the failing process runs one of those, this is it (pass --${rt === "node" ? "node" : "python"} <path> to check that interpreter)`, score: Math.round(m.score * 0.6) });
+      matches.push({ ...f, action: `If the failing process runs ${rt} ${broken.join(" or ")}: apply the fix (cafe show ${m.entry.slug}). Your default runtime is not affected.`, match: `${m.why}. Your default ${f.verdicts.map((v) => `${v.env.runtime} ${v.env.version}`).join(", ")} is NOT affected, but it breaks on ${rt} ${broken.join(", ")}: if the failing process runs one of those, this is it (pass --${rt === "node" ? "node" : "python"} <path> to check that interpreter)`, score: Math.round(m.score * 0.6) });
       continue;
     }
     if (!f.verdicts.length) {

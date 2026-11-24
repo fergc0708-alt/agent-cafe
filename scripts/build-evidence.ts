@@ -19,7 +19,7 @@ export const TRUST_POLICY: TrustPolicy = {
 };
 
 const root = new URL("../", import.meta.url);
-const dir = new URL(`${process.argv[2] ?? "experiments/v2/results-run3"}/`, root);
+const dir = new URL(`${process.argv[2] ?? "experiments/v2/results-run4"}/`, root);
 const built = new URL("capsules/built/", root);
 const index = JSON.parse(readFileSync(new URL("index.json", built), "utf8")) as { slug: string; id: string }[];
 const slugById = new Map(index.map((i) => [i.id, i.slug]));

@@ -68,7 +68,10 @@ function condClass(k: string, v: string | undefined): string | undefined {
 
 export function conditionsCompatible(row: Record<string, string>, env: Record<string, string>): boolean {
   for (const [k, v] of Object.entries(row)) {
-    if (k === "SITE" && v === "venv-clean" && env.SITE === undefined) return false;
+    // A row that records a site setup only speaks for environments known to have the same setup.
+    if (k === "SITE" && env.SITE === undefined) return false;
+    if (k === "SITE" && ((v === "venv-clean" || v === "no-distutils") !== (env.SITE === "venv-clean" || env.SITE === "no-distutils"))) return false;
+    if (k === "SITE") continue;
     if (env[k] === undefined) continue; // env does not know: the row still informs, but see `exact`
     if (condClass(k, v) !== condClass(k, env[k])) return false;
   }

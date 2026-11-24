@@ -1,0 +1,1578 @@
+[
+  {
+    "slug": "node-require-esm",
+    "env": "node 22.23.5 linux-x64",
+    "verdict": "PROBLEM_NOT_REPRODUCED",
+    "mutants": "0/0",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "node-require-esm",
+    "env": "node 24.22.3 linux-x64",
+    "verdict": "PROBLEM_NOT_REPRODUCED",
+    "mutants": "0/0",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "node-require-esm",
+    "env": "bun 1.4.4 linux-x64",
+    "verdict": "PROBLEM_NOT_REPRODUCED",
+    "mutants": "0/0",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "node-esm-dirname",
+    "env": "node 22.23.5 linux-x64",
+    "verdict": "PASS",
+    "mutants": "1/1",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "node-esm-dirname",
+    "env": "node 24.22.3 linux-x64",
+    "verdict": "PASS",
+    "mutants": "1/1",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "node-esm-dirname",
+    "env": "bun 1.4.4 linux-x64",
+    "verdict": "PROBLEM_NOT_REPRODUCED",
+    "mutants": "0/0",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "node-ts-parameter-properties",
+    "env": "node 22.23.5 linux-x64",
+    "verdict": "PASS",
+    "mutants": "6/8",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "node-ts-parameter-properties",
+    "env": "node 24.22.3 linux-x64",
+    "verdict": "PASS",
+    "mutants": "6/8",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "node-ts-parameter-properties",
+    "env": "bun 1.4.4 linux-x64",
+    "verdict": "PROBLEM_NOT_REPRODUCED",
+    "mutants": "0/0",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "node-ts-import-extension",
+    "env": "node 22.23.5 linux-x64",
+    "verdict": "PASS",
+    "mutants": "2/2",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "node-ts-import-extension",
+    "env": "node 24.22.3 linux-x64",
+    "verdict": "PASS",
+    "mutants": "2/2",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "node-ts-import-extension",
+    "env": "bun 1.4.4 linux-x64",
+    "verdict": "PROBLEM_NOT_REPRODUCED",
+    "mutants": "0/0",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "node-import-assert-to-with",
+    "env": "node 22.23.5 linux-x64",
+    "verdict": "PASS",
+    "mutants": "2/2",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "node-import-assert-to-with",
+    "env": "node 24.22.3 linux-x64",
+    "verdict": "PASS",
+    "mutants": "2/2",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "node-import-assert-to-with",
+    "env": "bun 1.4.4 linux-x64",
+    "verdict": "PROBLEM_NOT_REPRODUCED",
+    "mutants": "0/0",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "node-json-import-assert-OLD",
+    "env": "node 22.23.5 linux-x64",
+    "verdict": "FIX_FAILS",
+    "mutants": "0/0",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "node-json-import-assert-OLD",
+    "env": "node 24.22.3 linux-x64",
+    "verdict": "FIX_FAILS",
+    "mutants": "0/0",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "node-json-import-assert-OLD",
+    "env": "bun 1.4.4 linux-x64",
+    "verdict": "PROBLEM_NOT_REPRODUCED",
+    "mutants": "0/0",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "node-json-import-with",
+    "env": "node 22.23.5 linux-x64",
+    "verdict": "PASS",
+    "mutants": "2/2",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "node-json-import-with",
+    "env": "node 24.22.3 linux-x64",
+    "verdict": "PASS",
+    "mutants": "2/2",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "node-json-import-with",
+    "env": "bun 1.4.4 linux-x64",
+    "verdict": "PROBLEM_NOT_REPRODUCED",
+    "mutants": "0/0",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "node-cjs-top-level-await",
+    "env": "node 22.23.5 linux-x64",
+    "verdict": "PASS",
+    "mutants": "3/3",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "node-cjs-top-level-await",
+    "env": "node 24.22.3 linux-x64",
+    "verdict": "PASS",
+    "mutants": "3/3",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "node-cjs-top-level-await",
+    "env": "bun 1.4.4 linux-x64",
+    "verdict": "PROBLEM_NOT_REPRODUCED",
+    "mutants": "0/0",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "node-structuredclone-dates",
+    "env": "node 22.23.5 linux-x64",
+    "verdict": "PASS",
+    "mutants": "1/1",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "node-structuredclone-dates",
+    "env": "node 24.22.3 linux-x64",
+    "verdict": "PASS",
+    "mutants": "1/1",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "node-structuredclone-dates",
+    "env": "bun 1.4.4 linux-x64",
+    "verdict": "PASS",
+    "mutants": "1/1",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "node-sort-mutates",
+    "env": "node 22.23.5 linux-x64",
+    "verdict": "PASS",
+    "mutants": "1/1",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "node-sort-mutates",
+    "env": "node 24.22.3 linux-x64",
+    "verdict": "PASS",
+    "mutants": "1/1",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "node-sort-mutates",
+    "env": "bun 1.4.4 linux-x64",
+    "verdict": "PASS",
+    "mutants": "1/1",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "node-money-cents",
+    "env": "node 22.23.5 linux-x64",
+    "verdict": "PASS",
+    "mutants": "3/3",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "node-money-cents",
+    "env": "node 24.22.3 linux-x64",
+    "verdict": "PASS",
+    "mutants": "3/3",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "node-money-cents",
+    "env": "bun 1.4.4 linux-x64",
+    "verdict": "PASS",
+    "mutants": "3/3",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "node-bigint-json",
+    "env": "node 22.23.5 linux-x64",
+    "verdict": "PASS",
+    "mutants": "1/1",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "node-bigint-json",
+    "env": "node 24.22.3 linux-x64",
+    "verdict": "PASS",
+    "mutants": "1/1",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "node-bigint-json",
+    "env": "bun 1.4.4 linux-x64",
+    "verdict": "PASS",
+    "mutants": "1/1",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-fromisoformat-z",
+    "env": "python 3.11.18 linux-x64",
+    "verdict": "PROBLEM_NOT_REPRODUCED",
+    "mutants": "0/0",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-fromisoformat-z",
+    "env": "python 3.12.3 linux-x64",
+    "verdict": "PROBLEM_NOT_REPRODUCED",
+    "mutants": "0/0",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-fromisoformat-z",
+    "env": "python 3.13.18 linux-x64",
+    "verdict": "PROBLEM_NOT_REPRODUCED",
+    "mutants": "0/0",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-fromisoformat-z",
+    "env": "python 3.11.18 linux-x64 [SITE=venv-clean]",
+    "verdict": "PROBLEM_NOT_REPRODUCED",
+    "mutants": "0/0",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-fromisoformat-z",
+    "env": "python 3.12.3 linux-x64 [SITE=venv-clean]",
+    "verdict": "PROBLEM_NOT_REPRODUCED",
+    "mutants": "0/0",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-fromisoformat-z",
+    "env": "python 3.13.18 linux-x64 [SITE=venv-clean]",
+    "verdict": "PROBLEM_NOT_REPRODUCED",
+    "mutants": "0/0",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-utcnow-deprecated",
+    "env": "python 3.11.18 linux-x64",
+    "verdict": "PASS",
+    "mutants": "3/3",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-utcnow-deprecated",
+    "env": "python 3.12.3 linux-x64",
+    "verdict": "PASS",
+    "mutants": "3/3",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-utcnow-deprecated",
+    "env": "python 3.13.18 linux-x64",
+    "verdict": "PASS",
+    "mutants": "3/3",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-utcnow-deprecated",
+    "env": "python 3.11.18 linux-x64 [SITE=venv-clean]",
+    "verdict": "PASS",
+    "mutants": "3/3",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-utcnow-deprecated",
+    "env": "python 3.12.3 linux-x64 [SITE=venv-clean]",
+    "verdict": "PASS",
+    "mutants": "3/3",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-utcnow-deprecated",
+    "env": "python 3.13.18 linux-x64 [SITE=venv-clean]",
+    "verdict": "PASS",
+    "mutants": "3/3",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-distutils-removed",
+    "env": "python 3.11.18 linux-x64",
+    "verdict": "PROBLEM_NOT_REPRODUCED",
+    "mutants": "0/0",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-distutils-removed",
+    "env": "python 3.12.3 linux-x64",
+    "verdict": "PROBLEM_NOT_REPRODUCED",
+    "mutants": "0/0",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-distutils-removed",
+    "env": "python 3.13.18 linux-x64",
+    "verdict": "PROBLEM_NOT_REPRODUCED",
+    "mutants": "0/0",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-distutils-removed",
+    "env": "python 3.11.18 linux-x64 [SITE=venv-clean]",
+    "verdict": "PROBLEM_NOT_REPRODUCED",
+    "mutants": "0/0",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-distutils-removed",
+    "env": "python 3.12.3 linux-x64 [SITE=venv-clean]",
+    "verdict": "PASS",
+    "mutants": "4/4",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-distutils-removed",
+    "env": "python 3.13.18 linux-x64 [SITE=venv-clean]",
+    "verdict": "PASS",
+    "mutants": "4/4",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-csv-utf8-bom",
+    "env": "python 3.11.18 linux-x64",
+    "verdict": "PASS",
+    "mutants": "4/4",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-csv-utf8-bom",
+    "env": "python 3.12.3 linux-x64",
+    "verdict": "PASS",
+    "mutants": "4/4",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-csv-utf8-bom",
+    "env": "python 3.13.18 linux-x64",
+    "verdict": "PASS",
+    "mutants": "4/4",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-csv-utf8-bom",
+    "env": "python 3.11.18 linux-x64 [SITE=venv-clean]",
+    "verdict": "PASS",
+    "mutants": "4/4",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-csv-utf8-bom",
+    "env": "python 3.12.3 linux-x64 [SITE=venv-clean]",
+    "verdict": "PASS",
+    "mutants": "4/4",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-csv-utf8-bom",
+    "env": "python 3.13.18 linux-x64 [SITE=venv-clean]",
+    "verdict": "PASS",
+    "mutants": "4/4",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-mutable-default",
+    "env": "python 3.11.18 linux-x64",
+    "verdict": "PASS",
+    "mutants": "5/5",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-mutable-default",
+    "env": "python 3.12.3 linux-x64",
+    "verdict": "PASS",
+    "mutants": "5/5",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-mutable-default",
+    "env": "python 3.13.18 linux-x64",
+    "verdict": "PASS",
+    "mutants": "5/5",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-mutable-default",
+    "env": "python 3.11.18 linux-x64 [SITE=venv-clean]",
+    "verdict": "PASS",
+    "mutants": "5/5",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-mutable-default",
+    "env": "python 3.12.3 linux-x64 [SITE=venv-clean]",
+    "verdict": "PASS",
+    "mutants": "5/5",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-mutable-default",
+    "env": "python 3.13.18 linux-x64 [SITE=venv-clean]",
+    "verdict": "PASS",
+    "mutants": "5/5",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-lstrip-is-not-removeprefix",
+    "env": "python 3.11.18 linux-x64",
+    "verdict": "PASS",
+    "mutants": "2/2",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-lstrip-is-not-removeprefix",
+    "env": "python 3.12.3 linux-x64",
+    "verdict": "PASS",
+    "mutants": "2/2",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-lstrip-is-not-removeprefix",
+    "env": "python 3.13.18 linux-x64",
+    "verdict": "PASS",
+    "mutants": "2/2",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-lstrip-is-not-removeprefix",
+    "env": "python 3.11.18 linux-x64 [SITE=venv-clean]",
+    "verdict": "PASS",
+    "mutants": "2/2",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-lstrip-is-not-removeprefix",
+    "env": "python 3.12.3 linux-x64 [SITE=venv-clean]",
+    "verdict": "PASS",
+    "mutants": "2/2",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-lstrip-is-not-removeprefix",
+    "env": "python 3.13.18 linux-x64 [SITE=venv-clean]",
+    "verdict": "PASS",
+    "mutants": "2/2",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-sqlite-injection",
+    "env": "python 3.11.18 linux-x64",
+    "verdict": "PASS",
+    "mutants": "2/2",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-sqlite-injection",
+    "env": "python 3.12.3 linux-x64",
+    "verdict": "PASS",
+    "mutants": "2/2",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-sqlite-injection",
+    "env": "python 3.13.18 linux-x64",
+    "verdict": "PASS",
+    "mutants": "2/2",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-sqlite-injection",
+    "env": "python 3.11.18 linux-x64 [SITE=venv-clean]",
+    "verdict": "PASS",
+    "mutants": "2/2",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-sqlite-injection",
+    "env": "python 3.12.3 linux-x64 [SITE=venv-clean]",
+    "verdict": "PASS",
+    "mutants": "2/2",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-sqlite-injection",
+    "env": "python 3.13.18 linux-x64 [SITE=venv-clean]",
+    "verdict": "PASS",
+    "mutants": "2/2",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-fromtimestamp-local-tz",
+    "env": "python 3.11.18 linux-x64 [TZ=America/Argentina/Buenos_Aires]",
+    "verdict": "PASS",
+    "mutants": "3/3",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-fromtimestamp-local-tz",
+    "env": "python 3.11.18 linux-x64 [TZ=UTC]",
+    "verdict": "PROBLEM_NOT_REPRODUCED",
+    "mutants": "0/0",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-fromtimestamp-local-tz",
+    "env": "python 3.12.3 linux-x64 [TZ=America/Argentina/Buenos_Aires]",
+    "verdict": "PASS",
+    "mutants": "3/3",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-fromtimestamp-local-tz",
+    "env": "python 3.12.3 linux-x64 [TZ=UTC]",
+    "verdict": "PROBLEM_NOT_REPRODUCED",
+    "mutants": "0/0",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-fromtimestamp-local-tz",
+    "env": "python 3.13.18 linux-x64 [TZ=America/Argentina/Buenos_Aires]",
+    "verdict": "PASS",
+    "mutants": "3/3",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-fromtimestamp-local-tz",
+    "env": "python 3.13.18 linux-x64 [TZ=UTC]",
+    "verdict": "PROBLEM_NOT_REPRODUCED",
+    "mutants": "0/0",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-fromtimestamp-local-tz",
+    "env": "python 3.11.18 linux-x64 [SITE=venv-clean,TZ=America/Argentina/Buenos_Aires]",
+    "verdict": "PASS",
+    "mutants": "3/3",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-fromtimestamp-local-tz",
+    "env": "python 3.11.18 linux-x64 [SITE=venv-clean,TZ=UTC]",
+    "verdict": "PROBLEM_NOT_REPRODUCED",
+    "mutants": "0/0",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-fromtimestamp-local-tz",
+    "env": "python 3.12.3 linux-x64 [SITE=venv-clean,TZ=America/Argentina/Buenos_Aires]",
+    "verdict": "PASS",
+    "mutants": "3/3",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-fromtimestamp-local-tz",
+    "env": "python 3.12.3 linux-x64 [SITE=venv-clean,TZ=UTC]",
+    "verdict": "PROBLEM_NOT_REPRODUCED",
+    "mutants": "0/0",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-fromtimestamp-local-tz",
+    "env": "python 3.13.18 linux-x64 [SITE=venv-clean,TZ=America/Argentina/Buenos_Aires]",
+    "verdict": "PASS",
+    "mutants": "3/3",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-fromtimestamp-local-tz",
+    "env": "python 3.13.18 linux-x64 [SITE=venv-clean,TZ=UTC]",
+    "verdict": "PROBLEM_NOT_REPRODUCED",
+    "mutants": "0/0",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-imghdr-OLD",
+    "env": "python 3.11.18 linux-x64",
+    "verdict": "PASS",
+    "mutants": "3/3",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-imghdr-OLD",
+    "env": "python 3.12.3 linux-x64",
+    "verdict": "PASS",
+    "mutants": "3/3",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-imghdr-OLD",
+    "env": "python 3.13.18 linux-x64",
+    "verdict": "FIX_FAILS",
+    "mutants": "0/0",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-imghdr-OLD",
+    "env": "python 3.11.18 linux-x64 [SITE=venv-clean]",
+    "verdict": "PASS",
+    "mutants": "3/3",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-imghdr-OLD",
+    "env": "python 3.12.3 linux-x64 [SITE=venv-clean]",
+    "verdict": "PASS",
+    "mutants": "3/3",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-imghdr-OLD",
+    "env": "python 3.13.18 linux-x64 [SITE=venv-clean]",
+    "verdict": "FIX_FAILS",
+    "mutants": "0/0",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-png-magic-bytes",
+    "env": "python 3.11.18 linux-x64",
+    "verdict": "PASS",
+    "mutants": "4/4",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-png-magic-bytes",
+    "env": "python 3.12.3 linux-x64",
+    "verdict": "PASS",
+    "mutants": "4/4",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-png-magic-bytes",
+    "env": "python 3.13.18 linux-x64",
+    "verdict": "PASS",
+    "mutants": "4/4",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-png-magic-bytes",
+    "env": "python 3.11.18 linux-x64 [SITE=venv-clean]",
+    "verdict": "PASS",
+    "mutants": "4/4",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-png-magic-bytes",
+    "env": "python 3.12.3 linux-x64 [SITE=venv-clean]",
+    "verdict": "PASS",
+    "mutants": "4/4",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-png-magic-bytes",
+    "env": "python 3.13.18 linux-x64 [SITE=venv-clean]",
+    "verdict": "PASS",
+    "mutants": "4/4",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "bash-pipefail",
+    "env": "bash 5.2.21 linux-x64",
+    "verdict": "PASS",
+    "mutants": "2/3",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "bash-read-raw",
+    "env": "bash 5.2.21 linux-x64",
+    "verdict": "PASS",
+    "mutants": "3/3",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-imghdr-removed",
+    "env": "python 3.11.18 linux-x64",
+    "verdict": "PROBLEM_NOT_REPRODUCED",
+    "mutants": "0/0",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-imghdr-removed",
+    "env": "python 3.12.3 linux-x64",
+    "verdict": "PROBLEM_NOT_REPRODUCED",
+    "mutants": "0/0",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-imghdr-removed",
+    "env": "python 3.13.18 linux-x64",
+    "verdict": "PASS",
+    "mutants": "4/4",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-imghdr-removed",
+    "env": "python 3.11.18 linux-x64 [SITE=venv-clean]",
+    "verdict": "PROBLEM_NOT_REPRODUCED",
+    "mutants": "0/0",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-imghdr-removed",
+    "env": "python 3.12.3 linux-x64 [SITE=venv-clean]",
+    "verdict": "PROBLEM_NOT_REPRODUCED",
+    "mutants": "0/0",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-imghdr-removed",
+    "env": "python 3.13.18 linux-x64 [SITE=venv-clean]",
+    "verdict": "PASS",
+    "mutants": "4/4",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-pipes-removed",
+    "env": "python 3.11.18 linux-x64",
+    "verdict": "PROBLEM_NOT_REPRODUCED",
+    "mutants": "0/0",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-pipes-removed",
+    "env": "python 3.12.3 linux-x64",
+    "verdict": "PROBLEM_NOT_REPRODUCED",
+    "mutants": "0/0",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-pipes-removed",
+    "env": "python 3.13.18 linux-x64",
+    "verdict": "PASS",
+    "mutants": "3/3",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-pipes-removed",
+    "env": "python 3.11.18 linux-x64 [SITE=venv-clean]",
+    "verdict": "PROBLEM_NOT_REPRODUCED",
+    "mutants": "0/0",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-pipes-removed",
+    "env": "python 3.12.3 linux-x64 [SITE=venv-clean]",
+    "verdict": "PROBLEM_NOT_REPRODUCED",
+    "mutants": "0/0",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-pipes-removed",
+    "env": "python 3.13.18 linux-x64 [SITE=venv-clean]",
+    "verdict": "PASS",
+    "mutants": "3/3",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-cgi-parse-header",
+    "env": "python 3.11.18 linux-x64",
+    "verdict": "PROBLEM_NOT_REPRODUCED",
+    "mutants": "0/0",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-cgi-parse-header",
+    "env": "python 3.12.3 linux-x64",
+    "verdict": "PROBLEM_NOT_REPRODUCED",
+    "mutants": "0/0",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-cgi-parse-header",
+    "env": "python 3.13.18 linux-x64",
+    "verdict": "PASS",
+    "mutants": "6/6",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-cgi-parse-header",
+    "env": "python 3.11.18 linux-x64 [SITE=venv-clean]",
+    "verdict": "PROBLEM_NOT_REPRODUCED",
+    "mutants": "0/0",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-cgi-parse-header",
+    "env": "python 3.12.3 linux-x64 [SITE=venv-clean]",
+    "verdict": "PROBLEM_NOT_REPRODUCED",
+    "mutants": "0/0",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-cgi-parse-header",
+    "env": "python 3.13.18 linux-x64 [SITE=venv-clean]",
+    "verdict": "PASS",
+    "mutants": "6/6",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-unittest-makesuite",
+    "env": "python 3.11.18 linux-x64",
+    "verdict": "PROBLEM_NOT_REPRODUCED",
+    "mutants": "0/0",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-unittest-makesuite",
+    "env": "python 3.12.3 linux-x64",
+    "verdict": "PROBLEM_NOT_REPRODUCED",
+    "mutants": "0/0",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-unittest-makesuite",
+    "env": "python 3.13.18 linux-x64",
+    "verdict": "PASS",
+    "mutants": "8/8",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-unittest-makesuite",
+    "env": "python 3.11.18 linux-x64 [SITE=venv-clean]",
+    "verdict": "PROBLEM_NOT_REPRODUCED",
+    "mutants": "0/0",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-unittest-makesuite",
+    "env": "python 3.12.3 linux-x64 [SITE=venv-clean]",
+    "verdict": "PROBLEM_NOT_REPRODUCED",
+    "mutants": "0/0",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-unittest-makesuite",
+    "env": "python 3.13.18 linux-x64 [SITE=venv-clean]",
+    "verdict": "PASS",
+    "mutants": "8/8",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-typing-io",
+    "env": "python 3.11.18 linux-x64",
+    "verdict": "PROBLEM_NOT_REPRODUCED",
+    "mutants": "0/0",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-typing-io",
+    "env": "python 3.12.3 linux-x64",
+    "verdict": "PROBLEM_NOT_REPRODUCED",
+    "mutants": "0/0",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-typing-io",
+    "env": "python 3.13.18 linux-x64",
+    "verdict": "PASS",
+    "mutants": "3/3",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-typing-io",
+    "env": "python 3.11.18 linux-x64 [SITE=venv-clean]",
+    "verdict": "PROBLEM_NOT_REPRODUCED",
+    "mutants": "0/0",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-typing-io",
+    "env": "python 3.12.3 linux-x64 [SITE=venv-clean]",
+    "verdict": "PROBLEM_NOT_REPRODUCED",
+    "mutants": "0/0",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-typing-io",
+    "env": "python 3.13.18 linux-x64 [SITE=venv-clean]",
+    "verdict": "PASS",
+    "mutants": "3/3",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-uu-removed",
+    "env": "python 3.11.18 linux-x64",
+    "verdict": "PROBLEM_NOT_REPRODUCED",
+    "mutants": "0/0",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-uu-removed",
+    "env": "python 3.12.3 linux-x64",
+    "verdict": "PROBLEM_NOT_REPRODUCED",
+    "mutants": "0/0",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-uu-removed",
+    "env": "python 3.13.18 linux-x64",
+    "verdict": "PASS",
+    "mutants": "7/7",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-uu-removed",
+    "env": "python 3.11.18 linux-x64 [SITE=venv-clean]",
+    "verdict": "PROBLEM_NOT_REPRODUCED",
+    "mutants": "0/0",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-uu-removed",
+    "env": "python 3.12.3 linux-x64 [SITE=venv-clean]",
+    "verdict": "PROBLEM_NOT_REPRODUCED",
+    "mutants": "0/0",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-uu-removed",
+    "env": "python 3.13.18 linux-x64 [SITE=venv-clean]",
+    "verdict": "PASS",
+    "mutants": "7/7",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-imp-removed",
+    "env": "python 3.11.18 linux-x64",
+    "verdict": "PROBLEM_NOT_REPRODUCED",
+    "mutants": "0/0",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-imp-removed",
+    "env": "python 3.12.3 linux-x64",
+    "verdict": "PASS",
+    "mutants": "7/8",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-imp-removed",
+    "env": "python 3.13.18 linux-x64",
+    "verdict": "PASS",
+    "mutants": "7/8",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-imp-removed",
+    "env": "python 3.11.18 linux-x64 [SITE=venv-clean]",
+    "verdict": "PROBLEM_NOT_REPRODUCED",
+    "mutants": "0/0",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-imp-removed",
+    "env": "python 3.12.3 linux-x64 [SITE=venv-clean]",
+    "verdict": "PASS",
+    "mutants": "7/8",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-imp-removed",
+    "env": "python 3.13.18 linux-x64 [SITE=venv-clean]",
+    "verdict": "PASS",
+    "mutants": "7/8",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-unittest-assertequals",
+    "env": "python 3.11.18 linux-x64",
+    "verdict": "PROBLEM_NOT_REPRODUCED",
+    "mutants": "0/0",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-unittest-assertequals",
+    "env": "python 3.12.3 linux-x64",
+    "verdict": "PASS",
+    "mutants": "8/8",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-unittest-assertequals",
+    "env": "python 3.13.18 linux-x64",
+    "verdict": "PASS",
+    "mutants": "8/8",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-unittest-assertequals",
+    "env": "python 3.11.18 linux-x64 [SITE=venv-clean]",
+    "verdict": "PROBLEM_NOT_REPRODUCED",
+    "mutants": "0/0",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-unittest-assertequals",
+    "env": "python 3.12.3 linux-x64 [SITE=venv-clean]",
+    "verdict": "PASS",
+    "mutants": "8/8",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-unittest-assertequals",
+    "env": "python 3.13.18 linux-x64 [SITE=venv-clean]",
+    "verdict": "PASS",
+    "mutants": "8/8",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-safeconfigparser",
+    "env": "python 3.11.18 linux-x64",
+    "verdict": "PROBLEM_NOT_REPRODUCED",
+    "mutants": "0/0",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-safeconfigparser",
+    "env": "python 3.12.3 linux-x64",
+    "verdict": "PASS",
+    "mutants": "5/5",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-safeconfigparser",
+    "env": "python 3.13.18 linux-x64",
+    "verdict": "PASS",
+    "mutants": "5/5",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-safeconfigparser",
+    "env": "python 3.11.18 linux-x64 [SITE=venv-clean]",
+    "verdict": "PROBLEM_NOT_REPRODUCED",
+    "mutants": "0/0",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-safeconfigparser",
+    "env": "python 3.12.3 linux-x64 [SITE=venv-clean]",
+    "verdict": "PASS",
+    "mutants": "5/5",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-safeconfigparser",
+    "env": "python 3.13.18 linux-x64 [SITE=venv-clean]",
+    "verdict": "PASS",
+    "mutants": "5/5",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-ssl-wrap-socket",
+    "env": "python 3.11.18 linux-x64",
+    "verdict": "PROBLEM_NOT_REPRODUCED",
+    "mutants": "0/0",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-ssl-wrap-socket",
+    "env": "python 3.12.3 linux-x64",
+    "verdict": "PASS",
+    "mutants": "6/6",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-ssl-wrap-socket",
+    "env": "python 3.13.18 linux-x64",
+    "verdict": "PASS",
+    "mutants": "6/6",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-ssl-wrap-socket",
+    "env": "python 3.11.18 linux-x64 [SITE=venv-clean]",
+    "verdict": "PROBLEM_NOT_REPRODUCED",
+    "mutants": "0/0",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-ssl-wrap-socket",
+    "env": "python 3.12.3 linux-x64 [SITE=venv-clean]",
+    "verdict": "PASS",
+    "mutants": "6/6",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-ssl-wrap-socket",
+    "env": "python 3.13.18 linux-x64 [SITE=venv-clean]",
+    "verdict": "PASS",
+    "mutants": "6/6",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-locale-format",
+    "env": "python 3.11.18 linux-x64",
+    "verdict": "PROBLEM_NOT_REPRODUCED",
+    "mutants": "0/0",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-locale-format",
+    "env": "python 3.12.3 linux-x64",
+    "verdict": "PASS",
+    "mutants": "3/3",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-locale-format",
+    "env": "python 3.13.18 linux-x64",
+    "verdict": "PASS",
+    "mutants": "3/3",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-locale-format",
+    "env": "python 3.11.18 linux-x64 [SITE=venv-clean]",
+    "verdict": "PROBLEM_NOT_REPRODUCED",
+    "mutants": "0/0",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-locale-format",
+    "env": "python 3.12.3 linux-x64 [SITE=venv-clean]",
+    "verdict": "PASS",
+    "mutants": "3/3",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-locale-format",
+    "env": "python 3.13.18 linux-x64 [SITE=venv-clean]",
+    "verdict": "PASS",
+    "mutants": "3/3",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-getargspec",
+    "env": "python 3.11.18 linux-x64",
+    "verdict": "PASS",
+    "mutants": "3/3",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-getargspec",
+    "env": "python 3.12.3 linux-x64",
+    "verdict": "PASS",
+    "mutants": "3/3",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-getargspec",
+    "env": "python 3.13.18 linux-x64",
+    "verdict": "PASS",
+    "mutants": "3/3",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-getargspec",
+    "env": "python 3.11.18 linux-x64 [SITE=venv-clean]",
+    "verdict": "PASS",
+    "mutants": "3/3",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-getargspec",
+    "env": "python 3.12.3 linux-x64 [SITE=venv-clean]",
+    "verdict": "PASS",
+    "mutants": "3/3",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-getargspec",
+    "env": "python 3.13.18 linux-x64 [SITE=venv-clean]",
+    "verdict": "PASS",
+    "mutants": "3/3",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-asyncio-coroutine",
+    "env": "python 3.11.18 linux-x64",
+    "verdict": "PASS",
+    "mutants": "3/4",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-asyncio-coroutine",
+    "env": "python 3.12.3 linux-x64",
+    "verdict": "PASS",
+    "mutants": "3/4",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-asyncio-coroutine",
+    "env": "python 3.13.18 linux-x64",
+    "verdict": "PASS",
+    "mutants": "3/4",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-asyncio-coroutine",
+    "env": "python 3.11.18 linux-x64 [SITE=venv-clean]",
+    "verdict": "PASS",
+    "mutants": "3/4",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-asyncio-coroutine",
+    "env": "python 3.12.3 linux-x64 [SITE=venv-clean]",
+    "verdict": "PASS",
+    "mutants": "3/4",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "py-asyncio-coroutine",
+    "env": "python 3.13.18 linux-x64 [SITE=venv-clean]",
+    "verdict": "PASS",
+    "mutants": "3/4",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "node-util-is-removed",
+    "env": "node 22.23.5 linux-x64",
+    "verdict": "PROBLEM_NOT_REPRODUCED",
+    "mutants": "0/0",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "node-util-is-removed",
+    "env": "node 24.22.3 linux-x64",
+    "verdict": "PASS",
+    "mutants": "1/1",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "node-util-is-removed",
+    "env": "bun 1.4.4 linux-x64",
+    "verdict": "PROBLEM_NOT_REPRODUCED",
+    "mutants": "0/0",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "node-util-log",
+    "env": "node 22.23.5 linux-x64",
+    "verdict": "PROBLEM_NOT_REPRODUCED",
+    "mutants": "0/0",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "node-util-log",
+    "env": "node 24.22.3 linux-x64",
+    "verdict": "PASS",
+    "mutants": "1/1",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "node-util-log",
+    "env": "bun 1.4.4 linux-x64",
+    "verdict": "FIX_FAILS",
+    "mutants": "0/0",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "node-dirent-path",
+    "env": "node 22.23.5 linux-x64",
+    "verdict": "PROBLEM_NOT_REPRODUCED",
+    "mutants": "0/0",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "node-dirent-path",
+    "env": "node 24.22.3 linux-x64",
+    "verdict": "PASS",
+    "mutants": "3/3",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "node-dirent-path",
+    "env": "bun 1.4.4 linux-x64",
+    "verdict": "PROBLEM_NOT_REPRODUCED",
+    "mutants": "0/0",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "node-zlib-bytesread",
+    "env": "node 22.23.5 linux-x64",
+    "verdict": "PROBLEM_NOT_REPRODUCED",
+    "mutants": "0/0",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "node-zlib-bytesread",
+    "env": "node 24.22.3 linux-x64",
+    "verdict": "PASS",
+    "mutants": "2/2",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "node-zlib-bytesread",
+    "env": "bun 1.4.4 linux-x64",
+    "verdict": "PROBLEM_NOT_REPRODUCED",
+    "mutants": "0/0",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "node-crypto-createcipher",
+    "env": "node 22.23.5 linux-x64",
+    "verdict": "PASS",
+    "mutants": "4/4",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "node-crypto-createcipher",
+    "env": "node 24.22.3 linux-x64",
+    "verdict": "PASS",
+    "mutants": "4/4",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  },
+  {
+    "slug": "node-crypto-createcipher",
+    "env": "bun 1.4.4 linux-x64",
+    "verdict": "PASS",
+    "mutants": "4/4",
+    "lint": [],
+    "isolation": "bubblewrap (no network, read-only fs, hidden home)"
+  }
+]

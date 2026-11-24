@@ -117,7 +117,9 @@ export async function fingerprint(projectDir: string, bins: Record<string, strin
   if (tz) conditions.TZ = tz;
   else missing.push("time zone unknown");
   const pyInfo = runtimes.find((r) => r.runtime === "python");
-  if (pyInfo && pyInfo.details.system_site_packages === false && pyInfo.details.setuptools === false) conditions.SITE = "venv-clean";
+  // Same vocabulary as the runner records in evidence (cli/runner.ts pythonSite).
+  if (pyInfo?.details.distutils === "setuptools-shim") conditions.SITE = "setuptools-shim";
+  else if (pyInfo && pyInfo.details.distutils === "missing") conditions.SITE = pyInfo.details.kind === "venv" ? "venv-clean" : "no-distutils";
   if (!lockfiles.length && kinds.length) missing.push("no lockfile: dependency versions are unknown");
   missing.push("native dependencies and compiler toolchains are not fingerprinted yet");
 

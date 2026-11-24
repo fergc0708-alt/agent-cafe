@@ -132,6 +132,18 @@ export function mutantsOf(c: Capsule, max: number): { file: string; mutation: st
   return out;
 }
 
+const siteCache = new Map<string, string | null>();
+/** Python environment fact that changes behavior (Experiment C): is distutils absent (clean venv) or
+ *  provided by setuptools' shim? Recorded in every Python result so evidence is not ambiguous. */
+export function pythonSite(bin: string): string | null {
+  if (siteCache.has(bin)) return siteCache.get(bin)!;
+  const probe = "import importlib.util, sys, sysconfig\ns = importlib.util.find_spec('distutils')\nstd = sysconfig.get_paths()['stdlib']\nprint('distutils-stdlib' if s and (s.origin or '').startswith(std) else ('setuptools-shim' if s else ('venv-clean' if sys.prefix != sys.base_prefix else 'no-distutils')))";
+  const r = spawnSync(bin, ["-I", "-c", probe], { encoding: "utf8", timeout: 5000 });
+  const v = r.status === 0 ? r.stdout.trim() : null;
+  siteCache.set(bin, v);
+  return v;
+}
+
 export function runtimeVersion(c: Capsule, bins: Record<string, string>): string {
   const bin = resolveBin(c.check.run[0], bins);
   const r = spawnSync(bin, ["--version"], { encoding: "utf8", timeout: 5000 });
@@ -176,7 +188,8 @@ export async function replay(c: Capsule, opts: ReplayOptions = {}): Promise<Repl
   const binName = basename(resolveBin(c.check.run[0], bins));
   const runtime = /^bun/.test(binName) ? "bun" : c.runtime;
   const version = runtimeVersion(c, bins);
-  const conditions = { ...(c.check.env ?? {}), ...(opts.conditions ?? {}) };
+  const site = c.runtime === "python" ? pythonSite(resolveBin(c.check.run[0], bins)) : null;
+  const conditions: Record<string, string> = { ...(c.check.env ?? {}), ...(opts.conditions ?? {}), ...(site && site !== "distutils-stdlib" ? { SITE: site } : {}) };
   const condStr = Object.keys(conditions).sort().map((k) => `${k}=${conditions[k]}`).join(",");
   const predicate: ReplayPredicate = {
     verdict,

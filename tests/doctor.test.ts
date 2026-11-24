@@ -44,6 +44,10 @@ describe("compatibility engine", async () => {
     expect(evaluate(e, env("3.12.0", "installed", { TZ: "Europe/Madrid" })).status).toBe("affected_fix_verified");
     expect(evaluate(e, env("3.12.0", "installed", { TZ: "Etc/UTC" })).status).toBe("not_affected");
     expect(evaluate(entry([row("3.12.1", "PASS", "verified", { SITE: "venv-clean" })]), env("3.12.0")).status).toBe("no_evidence");
+    // the same version gives opposite answers depending on setuptools' distutils shim
+    const site = entry([row("3.12.1", "PASS", "verified", { SITE: "no-distutils" }), row("3.12.1", "PROBLEM_NOT_REPRODUCED", "verified", { SITE: "setuptools-shim" })]);
+    expect(evaluate(site, env("3.12.0", "installed", { SITE: "setuptools-shim" })).status).toBe("not_affected");
+    expect(evaluate(site, env("3.12.0", "installed", { SITE: "venv-clean" })).status).toBe("affected_fix_verified");
   });
   it("a fix that breaks an older supported version is reported as such", () => {
     const e = entry([row("3.12.1", "PASS"), row("3.10.1", "FIX_BREAKS")]);
@@ -101,7 +105,7 @@ describe("bundled evidence is real", () => {
     expect(verified.length).toBeGreaterThan(100);
   });
   it("the CI envelopes behind them carry valid signatures by the bound keys", async () => {
-    const dir = new URL("../experiments/v2/results-run3/ci/", import.meta.url);
+    const dir = new URL("../experiments/v2/results-run4/ci/", import.meta.url);
     const job = JSON.parse(readFileSync(new URL("ci-python-3.13.pubkey.json", dir), "utf8"));
     const first = JSON.parse(readFileSync(new URL("ci-python-3.13.jsonl", dir), "utf8").split("\n")[0]);
     expect((await verifyEnvelope(first.envelope, job.public_key)).predicate.env.version).toMatch(/^3\.13\./);

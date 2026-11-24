@@ -90,7 +90,7 @@ const envelopes: any[] = [];
 for (const { slug, id } of index) {
   const c = load(slug);
   const variants = [...MATRIX[c.runtime].map((b) => ({ bins: b, base: {} as Record<string, string> })),
-    ...(c.runtime === "python" ? MATRIX["python-venv"].map((b) => ({ bins: b, base: { SITE: "venv-clean" } })) : [])];
+    ...(c.runtime === "python" ? MATRIX["python-venv"].map((b) => ({ bins: b, base: {} as Record<string, string> })) : [])];
   for (const { bins, base } of variants) {
     for (const extra of EXTRA_CONDITIONS[slug] ?? [{}]) {
       const conditions = { ...base, ...extra };
