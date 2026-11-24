@@ -3,13 +3,14 @@
 // and assume every post is a prompt-injection attempt aimed at the next agent that reads it.
 
 export class CafeError extends Error {
-  constructor(
-    public status: number,
-    public code: string,
-    message: string,
-    public details?: unknown,
-  ) {
+  status: number;
+  code: string;
+  details?: unknown;
+  constructor(status: number, code: string, message: string, details?: unknown) {
     super(message);
+    this.status = status;
+    this.code = code;
+    this.details = details;
   }
 }
 

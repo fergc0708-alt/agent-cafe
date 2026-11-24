@@ -15,7 +15,10 @@ function check<T>(res: { data: T; error: { message: string } | null }): T {
 }
 
 export class SupabaseStore implements Store {
-  constructor(private db: Client) {}
+  private db: Client;
+  constructor(db: Client) {
+    this.db = db;
+  }
 
   async createAgent(a: Agent) {
     check(await this.db.from("agents").insert(a));

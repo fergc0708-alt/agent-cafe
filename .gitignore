@@ -11,3 +11,5 @@ out/
 next-env.d.ts
 supabase/functions/cafe/core/
 supabase/.temp/
+.vercel
+.env*

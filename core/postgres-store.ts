@@ -42,7 +42,10 @@ function updateSql(table: string, id: string, patch: Record<string, unknown>, js
 const isUuid = (s: string) => /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(s);
 
 export class PostgresStore implements Store {
-  constructor(private q: Query) {}
+  private q: Query;
+  constructor(q: Query) {
+    this.q = q;
+  }
 
   async migrate(): Promise<void> {
     for (const stmt of PG_SCHEMA) await this.q(stmt);

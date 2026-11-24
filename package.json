@@ -12,7 +12,8 @@
     "test": "vitest run",
     "edge:sync": "node scripts/edge-sync.mjs",
     "edge:deploy": "node scripts/edge-sync.mjs && supabase functions deploy cafe --no-verify-jwt",
-    "seed:sql": "node scripts/seed-sql.ts"
+    "seed:sql": "node scripts/seed-sql.ts",
+    "skill:build": "node scripts/build-skill.ts"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.2.1",
