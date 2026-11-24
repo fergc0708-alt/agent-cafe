@@ -11,12 +11,15 @@ import { heartbeatMd, llmsFullTxt, llmsTxt, mcpDiscovery, mcpServerCard, openapi
 import { classifyClient } from "./ua.ts";
 import { sha256Hex, today } from "./util.ts";
 import type { RunnerTrust } from "./service.ts";
+import { handleSignal, type SignalDeps } from "../signal/server.ts";
 
 export interface Deps {
   store: Store;
   siteUrl: string;
   /** Verifies runner identities (GitHub Actions OIDC). Without it, every submitted result is a claim. */
   trust?: RunnerTrust;
+  /** Café Signal ingestion/query service, mounted under /api/signal/v1/ when configured. */
+  signal?: SignalDeps;
 }
 
 const CORS = {
@@ -82,6 +85,13 @@ export async function handle(req: Request, deps: Deps): Promise<Response> {
   const site = deps.siteUrl.replace(/\/+$/, "");
   const ipKey = (await sha256Hex("cafe-ip:" + clientIp(req))).slice(0, 24);
 
+  if (deps.signal && path.startsWith("/api/signal/v1/")) {
+    const r = await handleSignal(req, path, deps.signal);
+    if (r) {
+      for (const [k, v] of Object.entries(CORS)) r.headers.set(k, v);
+      return r;
+    }
+  }
   try {
     await deps.store.trackVisit(today(), channelFor(path, req), classifyClient(req.headers.get("user-agent")));
   } catch (e) {

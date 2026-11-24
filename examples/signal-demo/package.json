@@ -1,0 +1,8 @@
+{
+  "name": "signal-demo",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Tiny project used to demonstrate Café Signal on a real breaking update (chalk 4 -> 5 is ESM-only).",
+  "scripts": { "test": "node test.js" },
+  "dependencies": { "chalk": "4.1.2" }
+}

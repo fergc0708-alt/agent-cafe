@@ -1,0 +1,85 @@
+name: Café Signal
+description: On a dependency-update PR, runs your tests with and without the update on the same runner, tells you whether the update caused the failure (or main was already red / a test is flaky), and shows what other projects saw for the same update. Uploads nothing unless you opt in.
+branding:
+  icon: activity
+  color: orange
+inputs:
+  test:
+    description: Test command (e.g. "npm test", "pytest -q")
+    required: true
+  install:
+    description: Install command run before tests on each side (e.g. "npm ci", "pip install -r requirements.txt")
+    default: ""
+  working-directory:
+    description: Project directory inside the repository (monorepo sub-project)
+    default: "."
+  retries:
+    description: Re-runs of a failing side before calling it a failure (flakiness check)
+    default: "1"
+  fail-on-regression:
+    description: Fail this job only when the update is shown to cause the failure
+    default: "false"
+  share:
+    description: "Opt in: send the sanitized observation (preview it in the job log) to the endpoint. Needs permissions: id-token: write"
+    default: "false"
+  share-public:
+    description: Make a public repository's observation visible to other owners (otherwise it stays in your organization)
+    default: "false"
+  endpoint:
+    description: Café Signal service URL (self-hosted or shared). Empty = use the public seed bundled with the action, offline.
+    default: ""
+  private-packages:
+    description: Comma-separated package patterns that must never leave the runner (e.g. "@acme/*,internal-*")
+    default: ""
+outputs:
+  attribution:
+    description: regression | compatible | baseline_red | upgrade_fixes | unstable | observational_fail | observational_pass
+    value: ${{ steps.run.outputs.attribution }}
+  observation:
+    description: Path of the local observation JSON
+    value: ${{ steps.run.outputs.observation }}
+runs:
+  using: composite
+  steps:
+    - id: run
+      shell: bash
+      env:
+        SIGNAL_TEST: ${{ inputs.test }}
+        SIGNAL_INSTALL: ${{ inputs.install }}
+        SIGNAL_RETRIES: ${{ inputs.retries }}
+        SIGNAL_FAIL: ${{ inputs.fail-on-regression }}
+        SIGNAL_ENDPOINT: ${{ inputs.endpoint }}
+        SIGNAL_DIR: ${{ github.action_path }}
+        SIGNAL_WD: ${{ inputs.working-directory }}
+      run: |
+        set -euo pipefail
+        command -v node >/dev/null || { echo "::error::Café Signal needs node >= 20 on PATH"; exit 1; }
+        if [ -z "${GITHUB_BASE_REF:-}" ]; then echo "::notice::Café Signal runs on pull_request events only"; exit 0; fi
+        git fetch --no-tags --depth=1 origin "+refs/heads/${GITHUB_BASE_REF}:refs/remotes/origin/${GITHUB_BASE_REF}" >/dev/null 2>&1 || true
+        obs="$RUNNER_TEMP/cafe-signal-observation.json"
+        args=(signal run --test "$SIGNAL_TEST" --retries "$SIGNAL_RETRIES" --out "$obs" --base "origin/${GITHUB_BASE_REF}" --dir "$SIGNAL_WD")
+        [ -n "$SIGNAL_INSTALL" ] && args+=(--install "$SIGNAL_INSTALL")
+        [ -n "$SIGNAL_ENDPOINT" ] && args+=(--endpoint "$SIGNAL_ENDPOINT")
+        [ "$SIGNAL_FAIL" = "true" ] && args+=(--fail-on-regression)
+        set +e
+        node "$SIGNAL_DIR/../dist/cli/cafe.js" "${args[@]}"
+        code=$?
+        set -e
+        if [ -f "$obs" ]; then
+          echo "observation=$obs" >> "$GITHUB_OUTPUT"
+          echo "attribution=$(node -e 'console.log(require(process.argv[1]).attribution)' "$obs")" >> "$GITHUB_OUTPUT"
+        fi
+        exit $code
+    - if: inputs.share == 'true' && inputs.endpoint != '' && steps.run.outputs.observation != ''
+      shell: bash
+      env:
+        SIGNAL_DIR: ${{ github.action_path }}
+        SIGNAL_ENDPOINT: ${{ inputs.endpoint }}
+        SIGNAL_PRIVATE: ${{ inputs.private-packages }}
+        SIGNAL_PUBLIC: ${{ inputs.share-public }}
+        OBS: ${{ steps.run.outputs.observation }}
+      run: |
+        set -euo pipefail
+        node "$SIGNAL_DIR/../dist/cli/cafe.js" signal preview "$OBS" --private-packages "$SIGNAL_PRIVATE"
+        extra=(); [ "$SIGNAL_PUBLIC" = "true" ] && extra+=(--public)
+        node "$SIGNAL_DIR/../dist/cli/cafe.js" signal share "$OBS" --endpoint "$SIGNAL_ENDPOINT" --private-packages "$SIGNAL_PRIVATE" "${extra[@]}"

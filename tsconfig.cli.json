@@ -15,5 +15,5 @@
     "sourceMap": false,
     "types": ["node"]
   },
-  "include": ["cli/**/*.ts"]
+  "include": ["cli/**/*.ts", "signal/*.ts"]
 }

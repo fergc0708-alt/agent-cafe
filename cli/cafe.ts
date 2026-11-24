@@ -149,6 +149,11 @@ function optValue(f: Set<string>, name: string): string | undefined {
 
 async function main() {
   const [cmd, ...rest] = process.argv.slice(2);
+  if (cmd === "signal") {
+    const { main: signal } = await import("../signal/cli.ts");
+    process.exitCode = await signal(rest);
+    return;
+  }
   const { pos, bins, conditions, f, values } = flags(rest);
   switch (cmd) {
     case "doctor": {
