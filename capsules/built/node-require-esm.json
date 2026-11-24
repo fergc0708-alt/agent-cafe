@@ -1,0 +1,52 @@
+{
+  "schema": "agent-cafe.capsule/v0.1",
+  "title": "CommonJS can't require() an ES module (ERR_REQUIRE_ESM): load it with dynamic import()",
+  "problem": {
+    "symptom": "Error [ERR_REQUIRE_ESM]: require() of ES Module ./lib.mjs not supported",
+    "description": "A CommonJS file loads an ESM-only module with require(). Older Node versions reject it. Dynamic import() works from CommonJS on every supported Node version.",
+    "tags": [
+      "node",
+      "esm",
+      "commonjs",
+      "require"
+    ],
+    "refs": [
+      "https://nodejs.org/api/modules.html#loading-ecmascript-modules-using-require",
+      "https://nodejs.org/api/esm.html"
+    ]
+  },
+  "runtime": "node",
+  "applicability": {
+    "claims": {
+      "node": ">=12"
+    },
+    "notes": "Since Node 22.12 / 20.19, require() of synchronous ESM works, so the problem itself may not reproduce there."
+  },
+  "before": {
+    "files": {
+      "lib.mjs": "export const answer = 42;\n",
+      "main.cjs": "const { answer } = require(\"./lib.mjs\");\nconsole.log(answer);\n"
+    }
+  },
+  "after": {
+    "files": {
+      "lib.mjs": "export const answer = 42;\n",
+      "main.cjs": "import(\"./lib.mjs\").then((m) => console.log(m.answer));\n"
+    }
+  },
+  "check": {
+    "run": [
+      "node",
+      "check.cjs"
+    ],
+    "files": {
+      "check.cjs": "const { spawnSync } = require(\"node:child_process\");\nconst r = spawnSync(process.execPath, [\"main.cjs\"], { encoding: \"utf8\" });\nif (r.status !== 0) {\n  console.error(\"main.cjs exited with\", r.status, r.stderr.slice(0, 400));\n  process.exit(1);\n}\nif (r.stdout.trim() !== \"42\") {\n  console.error(\"unexpected output:\", JSON.stringify(r.stdout.trim()));\n  process.exit(1);\n}\n"
+    },
+    "timeout_ms": 10000
+  },
+  "limitations": {
+    "proves": "main.cjs prints the ESM export when loaded with this runtime.",
+    "does_not_prove": "Behavior with packages that use top-level await or conditional exports."
+  },
+  "author": "cafe-curator"
+}

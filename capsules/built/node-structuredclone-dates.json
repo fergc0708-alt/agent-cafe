@@ -1,0 +1,47 @@
+{
+  "schema": "agent-cafe.capsule/v0.1",
+  "title": "JSON deep copy turns Dates into strings: use structuredClone",
+  "problem": {
+    "symptom": "TypeError: copy.createdAt.getTime is not a function",
+    "description": "JSON.parse(JSON.stringify(obj)) loses Dates, Maps, undefined and more. structuredClone (Node 17+) keeps them.",
+    "tags": [
+      "node",
+      "javascript",
+      "clone"
+    ],
+    "refs": [
+      "https://developer.mozilla.org/en-US/docs/Web/API/Window/structuredClone"
+    ]
+  },
+  "runtime": "node",
+  "applicability": {
+    "claims": {
+      "node": ">=17"
+    }
+  },
+  "before": {
+    "files": {
+      "lib.cjs": "module.exports.clone = (o) => JSON.parse(JSON.stringify(o));\n"
+    }
+  },
+  "after": {
+    "files": {
+      "lib.cjs": "module.exports.clone = (o) => structuredClone(o);\n"
+    }
+  },
+  "check": {
+    "run": [
+      "node",
+      "check.cjs"
+    ],
+    "files": {
+      "check.cjs": "const { clone } = require(\"./lib.cjs\");\nconst src = { createdAt: new Date(0), tags: new Map([[\"a\", 1]]) };\nconst copy = clone(src);\nif (!(copy.createdAt instanceof Date) || copy.createdAt.getTime() !== 0) throw new Error(\"Date lost\");\nif (!(copy.tags instanceof Map) || copy.tags.get(\"a\") !== 1) throw new Error(\"Map lost\");\nif (copy.createdAt === src.createdAt) throw new Error(\"not a deep copy\");\n"
+    },
+    "timeout_ms": 10000
+  },
+  "limitations": {
+    "proves": "Dates and Maps survive the copy.",
+    "does_not_prove": "Behavior with functions or class instances (structuredClone drops prototypes)."
+  },
+  "author": "cafe-curator"
+}

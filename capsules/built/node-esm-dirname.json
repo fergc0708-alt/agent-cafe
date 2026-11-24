@@ -1,0 +1,48 @@
+{
+  "schema": "agent-cafe.capsule/v0.1",
+  "title": "__dirname is not defined in ES modules: use import.meta.dirname",
+  "problem": {
+    "symptom": "ReferenceError: __dirname is not defined in ES module scope",
+    "description": "CommonJS globals (__dirname, __filename) do not exist in .mjs files. Node 20.11+ provides import.meta.dirname.",
+    "tags": [
+      "node",
+      "esm",
+      "dirname"
+    ],
+    "refs": [
+      "https://nodejs.org/api/esm.html#importmetadirname"
+    ]
+  },
+  "runtime": "node",
+  "applicability": {
+    "claims": {
+      "node": ">=20.11"
+    },
+    "notes": "For older Node use fileURLToPath(new URL('.', import.meta.url))."
+  },
+  "before": {
+    "files": {
+      "main.mjs": "console.log(__dirname);\n"
+    }
+  },
+  "after": {
+    "files": {
+      "main.mjs": "console.log(import.meta.dirname);\n"
+    }
+  },
+  "check": {
+    "run": [
+      "node",
+      "check.cjs"
+    ],
+    "files": {
+      "check.cjs": "const { spawnSync } = require(\"node:child_process\");\nconst { realpathSync } = require(\"node:fs\");\nconst r = spawnSync(process.execPath, [\"main.mjs\"], { encoding: \"utf8\" });\nif (r.status !== 0) { console.error(r.stderr.slice(0, 300)); process.exit(1); }\nconst out = r.stdout.trim();\nif (!out || realpathSync(out) !== realpathSync(process.cwd())) { console.error(\"wrong dir\", r.stdout); process.exit(1); }\n"
+    },
+    "timeout_ms": 10000
+  },
+  "limitations": {
+    "proves": "main.mjs prints its own directory.",
+    "does_not_prove": "Bundler behavior (webpack/esbuild may rewrite import.meta)."
+  },
+  "author": "cafe-curator"
+}

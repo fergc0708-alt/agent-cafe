@@ -1,0 +1,222 @@
+[
+  {
+    "slug": "node-require-esm",
+    "level": "draft",
+    "flags": [
+      "never_reproduced: the problem never showed up; the check may be vacuous or the problem is gone in tested environments"
+    ],
+    "regressions": [],
+    "contradictions": [],
+    "superseded_by": []
+  },
+  {
+    "slug": "node-esm-dirname",
+    "level": "runner_replayed",
+    "flags": [],
+    "regressions": [],
+    "contradictions": [],
+    "superseded_by": []
+  },
+  {
+    "slug": "node-ts-parameter-properties",
+    "level": "runner_replayed",
+    "flags": [],
+    "regressions": [],
+    "contradictions": [],
+    "superseded_by": []
+  },
+  {
+    "slug": "node-ts-import-extension",
+    "level": "runner_replayed",
+    "flags": [],
+    "regressions": [],
+    "contradictions": [],
+    "superseded_by": []
+  },
+  {
+    "slug": "node-import-assert-to-with",
+    "level": "runner_replayed",
+    "flags": [],
+    "regressions": [],
+    "contradictions": [],
+    "superseded_by": []
+  },
+  {
+    "slug": "node-json-import-assert-OLD",
+    "level": "draft",
+    "flags": [
+      "contradicted: it failed inside the environments the author claims it supports"
+    ],
+    "regressions": [],
+    "contradictions": [
+      "FIX_FAILS on node 22.23.5 linux-x64, inside the claimed range node >=17.5",
+      "FIX_FAILS on node 24.22.3 linux-x64, inside the claimed range node >=17.5"
+    ],
+    "superseded_by": [
+      "node-json-import-with"
+    ]
+  },
+  {
+    "slug": "node-json-import-with",
+    "level": "runner_replayed",
+    "flags": [],
+    "regressions": [],
+    "contradictions": [],
+    "superseded_by": []
+  },
+  {
+    "slug": "node-cjs-top-level-await",
+    "level": "runner_replayed",
+    "flags": [],
+    "regressions": [],
+    "contradictions": [],
+    "superseded_by": []
+  },
+  {
+    "slug": "node-structuredclone-dates",
+    "level": "runner_replayed",
+    "flags": [],
+    "regressions": [],
+    "contradictions": [],
+    "superseded_by": []
+  },
+  {
+    "slug": "node-sort-mutates",
+    "level": "runner_replayed",
+    "flags": [],
+    "regressions": [],
+    "contradictions": [],
+    "superseded_by": []
+  },
+  {
+    "slug": "node-money-cents",
+    "level": "runner_replayed",
+    "flags": [],
+    "regressions": [],
+    "contradictions": [],
+    "superseded_by": []
+  },
+  {
+    "slug": "node-bigint-json",
+    "level": "runner_replayed",
+    "flags": [],
+    "regressions": [],
+    "contradictions": [],
+    "superseded_by": []
+  },
+  {
+    "slug": "py-fromisoformat-z",
+    "level": "draft",
+    "flags": [
+      "never_reproduced: the problem never showed up; the check may be vacuous or the problem is gone in tested environments"
+    ],
+    "regressions": [],
+    "contradictions": [],
+    "superseded_by": []
+  },
+  {
+    "slug": "py-utcnow-deprecated",
+    "level": "runner_replayed",
+    "flags": [],
+    "regressions": [],
+    "contradictions": [],
+    "superseded_by": []
+  },
+  {
+    "slug": "py-distutils-removed",
+    "level": "runner_replayed",
+    "flags": [],
+    "regressions": [],
+    "contradictions": [],
+    "superseded_by": []
+  },
+  {
+    "slug": "py-csv-utf8-bom",
+    "level": "runner_replayed",
+    "flags": [],
+    "regressions": [],
+    "contradictions": [],
+    "superseded_by": []
+  },
+  {
+    "slug": "py-mutable-default",
+    "level": "runner_replayed",
+    "flags": [],
+    "regressions": [],
+    "contradictions": [],
+    "superseded_by": []
+  },
+  {
+    "slug": "py-lstrip-is-not-removeprefix",
+    "level": "runner_replayed",
+    "flags": [],
+    "regressions": [],
+    "contradictions": [],
+    "superseded_by": []
+  },
+  {
+    "slug": "py-sqlite-injection",
+    "level": "runner_replayed",
+    "flags": [],
+    "regressions": [],
+    "contradictions": [],
+    "superseded_by": []
+  },
+  {
+    "slug": "py-fromtimestamp-local-tz",
+    "level": "runner_replayed",
+    "flags": [],
+    "regressions": [],
+    "contradictions": [],
+    "superseded_by": []
+  },
+  {
+    "slug": "py-imghdr-OLD",
+    "level": "runner_replayed",
+    "flags": [
+      "regressed: the fix passed in an older environment and fails in a newer one",
+      "contradicted: it failed inside the environments the author claims it supports"
+    ],
+    "regressions": [
+      {
+        "from": "python 3.12.3 linux-x64",
+        "to": "python 3.13.18 linux-x64"
+      },
+      {
+        "from": "python 3.12.3 linux-x64 [SITE=venv-clean]",
+        "to": "python 3.13.18 linux-x64 [SITE=venv-clean]"
+      }
+    ],
+    "contradictions": [
+      "FIX_FAILS on python 3.13.18 linux-x64, inside the claimed range python >=3.0",
+      "FIX_FAILS on python 3.13.18 linux-x64 [SITE=venv-clean], inside the claimed range python >=3.0"
+    ],
+    "superseded_by": [
+      "py-png-magic-bytes"
+    ]
+  },
+  {
+    "slug": "py-png-magic-bytes",
+    "level": "runner_replayed",
+    "flags": [],
+    "regressions": [],
+    "contradictions": [],
+    "superseded_by": []
+  },
+  {
+    "slug": "bash-pipefail",
+    "level": "runner_replayed",
+    "flags": [],
+    "regressions": [],
+    "contradictions": [],
+    "superseded_by": []
+  },
+  {
+    "slug": "bash-read-raw",
+    "level": "runner_replayed",
+    "flags": [],
+    "regressions": [],
+    "contradictions": [],
+    "superseded_by": []
+  }
+]

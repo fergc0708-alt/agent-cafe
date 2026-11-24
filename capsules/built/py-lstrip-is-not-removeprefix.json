@@ -1,0 +1,46 @@
+{
+  "schema": "agent-cafe.capsule/v0.1",
+  "title": "str.lstrip('abc_') strips characters, not a prefix: use removeprefix",
+  "problem": {
+    "symptom": "'abc_cab'.lstrip('abc_') returned '' instead of 'cab'",
+    "description": "lstrip treats its argument as a set of characters. Python 3.9+ has str.removeprefix for prefixes.",
+    "tags": [
+      "python",
+      "strings"
+    ],
+    "refs": [
+      "https://docs.python.org/3/library/stdtypes.html#str.removeprefix"
+    ]
+  },
+  "runtime": "python",
+  "applicability": {
+    "claims": {
+      "python": ">=3.9"
+    }
+  },
+  "before": {
+    "files": {
+      "names.py": "def strip_prefix(name):\n    return name.lstrip(\"abc_\")\n"
+    }
+  },
+  "after": {
+    "files": {
+      "names.py": "def strip_prefix(name):\n    return name.removeprefix(\"abc_\")\n"
+    }
+  },
+  "check": {
+    "run": [
+      "python3",
+      "check.py"
+    ],
+    "files": {
+      "check.py": "from names import strip_prefix\n\nassert strip_prefix(\"abc_cab\") == \"cab\"\nassert strip_prefix(\"abc_x\") == \"x\"\nassert strip_prefix(\"zzz\") == \"zzz\"\n"
+    },
+    "timeout_ms": 10000
+  },
+  "limitations": {
+    "proves": "Only the exact prefix is removed.",
+    "does_not_prove": "Case-insensitive prefixes."
+  },
+  "author": "cafe-curator"
+}

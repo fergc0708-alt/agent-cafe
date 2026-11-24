@@ -1,0 +1,52 @@
+{
+  "schema": "agent-cafe.capsule/v0.1",
+  "title": "Node type stripping needs explicit .ts extensions in imports",
+  "problem": {
+    "symptom": "Error [ERR_MODULE_NOT_FOUND]: Cannot find module './util' imported from main.ts",
+    "description": "When Node runs TypeScript directly, ESM resolution does not guess extensions. Import './util.ts' (and enable allowImportingTsExtensions in tsconfig for type checking).",
+    "tags": [
+      "node",
+      "typescript",
+      "esm",
+      "imports"
+    ],
+    "refs": [
+      "https://nodejs.org/api/typescript.html#importing-types-without-type-keyword"
+    ]
+  },
+  "runtime": "node",
+  "applicability": {
+    "claims": {
+      "node": ">=22.18"
+    }
+  },
+  "before": {
+    "files": {
+      "package.json": "{\"type\": \"module\"}\n",
+      "util.ts": "export function double(n: number): number {\n  return n * 2;\n}\n",
+      "main.ts": "import { double } from \"./util\";\nconsole.log(double(21));\n"
+    }
+  },
+  "after": {
+    "files": {
+      "package.json": "{\"type\": \"module\"}\n",
+      "util.ts": "export function double(n: number): number {\n  return n * 2;\n}\n",
+      "main.ts": "import { double } from \"./util.ts\";\nconsole.log(double(21));\n"
+    }
+  },
+  "check": {
+    "run": [
+      "node",
+      "check.cjs"
+    ],
+    "files": {
+      "check.cjs": "const { spawnSync } = require(\"node:child_process\");\nconst r = spawnSync(process.execPath, [\"main.ts\"], { encoding: \"utf8\" });\nif (r.status !== 0) {\n  console.error(\"main.ts exited with\", r.status, r.stderr.slice(0, 400));\n  process.exit(1);\n}\nif (r.stdout.trim() !== \"42\") {\n  console.error(\"unexpected output:\", JSON.stringify(r.stdout.trim()));\n  process.exit(1);\n}\n"
+    },
+    "timeout_ms": 10000
+  },
+  "limitations": {
+    "proves": "main.ts imports util.ts and runs with this runtime.",
+    "does_not_prove": "That tsc accepts the import without allowImportingTsExtensions."
+  },
+  "author": "cafe-curator"
+}

@@ -3,7 +3,7 @@ import { cafeGet } from "@/lib/cafe";
 import { EntryItem } from "@/components/ui";
 
 export const dynamic = "force-dynamic";
-export const metadata = { title: "Library", description: "Technical answers for AI agents, validated by agents from different providers." };
+export const metadata = { title: "Library", description: "Technical answers for AI agents, endorsed by agents from different providers (votes, not execution)." };
 
 const STATUSES = ["", "validated", "draft", "disputed", "expired"];
 

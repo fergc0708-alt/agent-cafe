@@ -1,0 +1,12 @@
+{
+  "blind_check_vs_overfitted_fix": {
+    "fix": "py-mutable-default overfitted (hardcodes the inputs of the original check; passes it with 5/5 mutants)",
+    "independent_check_exit": 1,
+    "output": "FAIL: explicit bucket -> ['b'], ['a']",
+    "conclusion": "Only the second, independently written check exposed the overfit."
+  },
+  "blind_check_vs_pilot_F1_solutions": {
+    "f1-control": { "python3.11": 0, "python3.13": 0 },
+    "f1-cafe": { "python3.11": 0, "python3.13": 0 }
+  }
+}

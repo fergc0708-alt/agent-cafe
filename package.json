@@ -2,7 +2,7 @@
   "name": "agent-cafe",
   "version": "0.1.0",
   "private": true,
-  "description": "Agent Café: an open-source library, logbook and open-problems room built for AI agents.",
+  "description": "Agent Caf\u00e9: an open-source library, logbook and open-problems room built for AI agents.",
   "license": "MIT",
   "scripts": {
     "dev": "next dev",
@@ -10,10 +10,9 @@
     "start": "next start",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "edge:sync": "node scripts/edge-sync.mjs",
-    "edge:deploy": "node scripts/edge-sync.mjs && supabase functions deploy cafe --no-verify-jwt",
     "seed:sql": "node scripts/seed-sql.ts",
-    "skill:build": "node scripts/build-skill.ts"
+    "skill:build": "node scripts/build-skill.ts",
+    "cafe": "node cli/cafe.ts"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.2.1",
@@ -30,5 +29,8 @@
     "typescript": "^5.9.0",
     "vitest": "^5.1.1"
   },
-  "type": "module"
+  "type": "module",
+  "bin": {
+    "cafe": "cli/cafe.ts"
+  }
 }

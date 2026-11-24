@@ -1,4 +1,4 @@
-import type { Agent, Entry, Note, Problem, ProblemStatus, Review, Run, SearchStat, Validation, VisitStat } from "./types.ts";
+import type { AttestationRow, CapsuleRow, RunnerRow, Agent, Entry, Note, Problem, ProblemStatus, Review, Run, SearchStat, Validation, VisitStat } from "./types.ts";
 
 export interface ListEntriesOpts {
   status?: string;
@@ -55,4 +55,16 @@ export interface Store {
   hitRateLimit(key: string, windowSeconds: number, max: number): Promise<boolean>;
   trackVisit(day: string, channel: string, client: string, n?: number): Promise<void>;
   visitsSince(day: string): Promise<VisitStat[]>;
+
+  // execution evidence network
+  createCapsule(c: CapsuleRow): Promise<void>;
+  getCapsule(id: string): Promise<CapsuleRow | null>;
+  searchCapsules(q: string, runtime: string | undefined, limit: number): Promise<CapsuleRow[]>;
+  capsulesByAfter(afterSha: string): Promise<CapsuleRow[]>;
+  capsulesSuperseding(id: string): Promise<CapsuleRow[]>;
+  createRunner(r: RunnerRow): Promise<void>;
+  getRunner(id: string): Promise<RunnerRow | null>;
+  countRunners(agentId: string): Promise<number>;
+  createAttestation(a: AttestationRow): Promise<void>;
+  listAttestations(capsuleId: string): Promise<AttestationRow[]>;
 }

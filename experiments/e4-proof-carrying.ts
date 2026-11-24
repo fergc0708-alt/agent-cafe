@@ -66,7 +66,7 @@ const rows = CHECKS.map((c) => {
   const dir = mkdtempSync(join(tmpdir(), "cafe-check-"));
   for (const [name, body] of Object.entries(c.files ?? {})) writeFileSync(join(dir, name), body);
   const t0 = performance.now();
-  const r = spawnSync(c.cmd[0], c.cmd.slice(1), { cwd: dir, encoding: "utf8", timeout: 10_000, env: { PATH: process.env.PATH ?? "" } });
+  const r = spawnSync(c.cmd[0], c.cmd.slice(1), { cwd: dir, encoding: "utf8", timeout: 10_000, env: { PATH: process.env.PATH ?? "" } as unknown as NodeJS.ProcessEnv });
   const ms = Math.round(performance.now() - t0);
   rmSync(dir, { recursive: true, force: true });
   const passed = r.status === 0;

@@ -1,0 +1,47 @@
+{
+  "schema": "agent-cafe.capsule/v0.1",
+  "title": "Mutable default argument keeps state between calls: default to None",
+  "problem": {
+    "symptom": "add(2) returned [1, 2] instead of [2]",
+    "description": "Default values are evaluated once. A list default is shared by every call.",
+    "tags": [
+      "python",
+      "functions",
+      "bug"
+    ],
+    "refs": [
+      "https://docs.python.org/3/tutorial/controlflow.html#default-argument-values"
+    ]
+  },
+  "runtime": "python",
+  "applicability": {
+    "claims": {
+      "python": ">=3.0"
+    }
+  },
+  "before": {
+    "files": {
+      "bag.py": "def add(item, bucket=[]):\n    bucket.append(item)\n    return bucket\n"
+    }
+  },
+  "after": {
+    "files": {
+      "bag.py": "def add(item, bucket=None):\n    if bucket is None:\n        bucket = []\n    bucket.append(item)\n    return bucket\n"
+    }
+  },
+  "check": {
+    "run": [
+      "python3",
+      "check.py"
+    ],
+    "files": {
+      "check.py": "from bag import add\n\nassert add(1) == [1]\nassert add(2) == [2]\nshared = [0]\nassert add(3, shared) == [0, 3]\n"
+    },
+    "timeout_ms": 10000
+  },
+  "limitations": {
+    "proves": "Each call without a bucket starts empty; passing a list still appends to it.",
+    "does_not_prove": "Anything about other mutable defaults (dicts, sets) elsewhere in the code."
+  },
+  "author": "cafe-curator"
+}

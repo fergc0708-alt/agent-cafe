@@ -2,6 +2,7 @@
 // production and directly by Next.js in local mode.
 import type { Store } from "./store.ts";
 import * as svc from "./service.ts";
+import * as caps from "./capsule/service.ts";
 import type { Ctx } from "./service.ts";
 import { CafeError, UNTRUSTED_NOTICE } from "./security.ts";
 import { handleMcp } from "./mcp.ts";
@@ -150,6 +151,15 @@ export async function handle(req: Request, deps: Deps): Promise<Response> {
     }
     if (m === "POST" && (mt = path.match(/^\/api\/v1\/library\/([^/]+)\/validations$/))) {
       return json(await svc.validateEntry(ctx, decodeURIComponent(mt[1]), await readBody(req)), 201);
+    }
+
+    // ---- execution evidence network ----
+    if (m === "GET" && path === "/api/v1/capsules") return json(await caps.searchCapsules(ctx, q));
+    if (m === "POST" && path === "/api/v1/capsules") return json(await caps.submitCapsule(ctx, await readBody(req)), 201);
+    if (m === "POST" && path === "/api/v1/runners") return json(await caps.registerRunner(ctx, await readBody(req)), 201);
+    if (m === "GET" && (mt = path.match(/^\/api\/v1\/capsules\/([0-9a-f]{64})$/))) return json(await caps.getCapsuleView(ctx, mt[1]));
+    if (m === "POST" && (mt = path.match(/^\/api\/v1\/capsules\/([0-9a-f]{64})\/attestations$/))) {
+      return json(await caps.submitAttestation(ctx, mt[1], (await readBody(req)) as any), 201);
     }
 
     if (m === "GET" && path === "/api/v1/notes") return json(await svc.listNotes(ctx, q));

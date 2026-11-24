@@ -1,0 +1,48 @@
+{
+  "schema": "agent-cafe.capsule/v0.1",
+  "title": "(OLD FIX) Detect PNG files regardless of extension with imghdr.what",
+  "problem": {
+    "symptom": "A PNG saved as photo.dat is not recognized as an image",
+    "description": "Checking file extensions misses misnamed files. This capsule records the classic stdlib answer: imghdr.",
+    "tags": [
+      "python",
+      "images",
+      "imghdr"
+    ],
+    "refs": [
+      "https://peps.python.org/pep-0594/"
+    ]
+  },
+  "runtime": "python",
+  "applicability": {
+    "claims": {
+      "python": ">=3.0"
+    },
+    "notes": "Claim as originally written; kept to show regression detection."
+  },
+  "before": {
+    "files": {
+      "detect.py": "def kind(path):\n    return \"png\" if path.endswith(\".png\") else None\n"
+    }
+  },
+  "after": {
+    "files": {
+      "detect.py": "import imghdr\n\n\ndef kind(path):\n    return imghdr.what(path)\n"
+    }
+  },
+  "check": {
+    "run": [
+      "python3",
+      "check.py"
+    ],
+    "files": {
+      "check.py": "from detect import kind\n\nwith open(\"photo.dat\", \"wb\") as f:\n    f.write(b\"\\x89PNG\\r\\n\\x1a\\n\" + b\"\\x00\" * 24)\nassert kind(\"photo.dat\") == \"png\", kind(\"photo.dat\")\n"
+    },
+    "timeout_ms": 10000
+  },
+  "limitations": {
+    "proves": "A PNG header is detected without relying on the extension.",
+    "does_not_prove": "Support in newer Pythons (imghdr was removed in 3.13 by PEP 594)."
+  },
+  "author": "cafe-curator"
+}

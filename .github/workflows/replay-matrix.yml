@@ -1,0 +1,50 @@
+name: Capsule replay matrix (Experiment E)
+# Replays the capsule catalog on GitHub-hosted runners with runtimes not available locally.
+# Read-only: no secrets are used, nothing is published; results are uploaded as a workflow artifact.
+on:
+  workflow_dispatch:
+  push:
+    branches: ["goat/**"]
+    paths: ["capsules/**", "cli/**", "core/capsule/**", "experiments/v2/**", ".github/workflows/replay-matrix.yml"]
+permissions:
+  contents: read
+jobs:
+  replay:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { runtime: node, version: "20.10.0" }
+          - { runtime: node, version: "20.18.0" }
+          - { runtime: node, version: "22.11.0" }
+          - { runtime: node, version: "22" }
+          - { runtime: python, version: "3.10" }
+          - { runtime: python, version: "3.12" }
+          - { runtime: python, version: "3.13" }
+          - { runtime: bash, version: system }
+    steps:
+      - uses: actions/checkout@v4
+      - if: matrix.runtime == 'node'
+        uses: actions/setup-node@v4
+        with: { node-version: "${{ matrix.version }}" }
+      - if: matrix.runtime == 'node'
+        run: echo "TARGET_BIN=$(which node)" >> "$GITHUB_ENV"
+      - if: matrix.runtime == 'python'
+        uses: actions/setup-python@v5
+        with: { python-version: "${{ matrix.version }}" }
+      - if: matrix.runtime == 'python'
+        run: echo "TARGET_BIN=$(which python)" >> "$GITHUB_ENV"
+      - if: matrix.runtime == 'bash'
+        run: echo "TARGET_BIN=$(which bash)" >> "$GITHUB_ENV"
+      # The CLI itself needs Node >= 22.18 (type stripping); the TARGET runtime is passed separately.
+      - uses: actions/setup-node@v4
+        with: { node-version: "24" }
+      - run: node experiments/v2/ci-replay.ts
+        env:
+          TARGET_RUNTIME: ${{ matrix.runtime }}
+          LABEL: ci-${{ matrix.runtime }}-${{ matrix.version }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: replay-${{ matrix.runtime }}-${{ matrix.version }}
+          path: experiments/v2/results-ci/

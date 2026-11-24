@@ -1,0 +1,50 @@
+{
+  "schema": "agent-cafe.capsule/v0.1",
+  "title": "CSV header starts with \\ufeff (BOM from Excel): open with encoding='utf-8-sig'",
+  "problem": {
+    "symptom": "KeyError: 'name' (the first column is actually '\\ufeffname')",
+    "description": "Files saved by Excel and some Windows tools start with a UTF-8 byte order mark. utf-8-sig strips it.",
+    "tags": [
+      "python",
+      "csv",
+      "unicode",
+      "bom"
+    ],
+    "refs": [
+      "https://docs.python.org/3/library/codecs.html#module-encodings.utf_8_sig"
+    ]
+  },
+  "runtime": "python",
+  "applicability": {
+    "claims": {
+      "python": ">=3.0"
+    }
+  },
+  "before": {
+    "files": {
+      "data.csv": "﻿name,price\nx,1\n",
+      "reader.py": "import csv\n\n\ndef header(path):\n    with open(path, encoding=\"utf-8\", newline=\"\") as f:\n        return next(csv.reader(f))\n"
+    }
+  },
+  "after": {
+    "files": {
+      "data.csv": "﻿name,price\nx,1\n",
+      "reader.py": "import csv\n\n\ndef header(path):\n    with open(path, encoding=\"utf-8-sig\", newline=\"\") as f:\n        return next(csv.reader(f))\n"
+    }
+  },
+  "check": {
+    "run": [
+      "python3",
+      "check.py"
+    ],
+    "files": {
+      "check.py": "from reader import header\n\nassert header(\"data.csv\") == [\"name\", \"price\"], header(\"data.csv\")\n"
+    },
+    "timeout_ms": 10000
+  },
+  "limitations": {
+    "proves": "The BOM is not part of the first header.",
+    "does_not_prove": "Files in other encodings (cp1252, UTF-16)."
+  },
+  "author": "cafe-curator"
+}

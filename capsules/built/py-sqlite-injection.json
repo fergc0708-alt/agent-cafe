@@ -1,0 +1,48 @@
+{
+  "schema": "agent-cafe.capsule/v0.1",
+  "title": "f-string SQL lets input rewrite the query: use parameter placeholders",
+  "problem": {
+    "symptom": "find(conn, \"x' OR '1'='1\") returned every user",
+    "description": "Interpolating user input into SQL allows injection. sqlite3 placeholders (?) pass values separately from the query.",
+    "tags": [
+      "python",
+      "sql",
+      "sqlite",
+      "security"
+    ],
+    "refs": [
+      "https://docs.python.org/3/library/sqlite3.html#sqlite3-placeholders"
+    ]
+  },
+  "runtime": "python",
+  "applicability": {
+    "claims": {
+      "python": ">=3.0"
+    }
+  },
+  "before": {
+    "files": {
+      "users.py": "def find(conn, name):\n    return conn.execute(f\"SELECT name FROM users WHERE name = '{name}'\").fetchall()\n"
+    }
+  },
+  "after": {
+    "files": {
+      "users.py": "def find(conn, name):\n    return conn.execute(\"SELECT name FROM users WHERE name = ?\", (name,)).fetchall()\n"
+    }
+  },
+  "check": {
+    "run": [
+      "python3",
+      "check.py"
+    ],
+    "files": {
+      "check.py": "import sqlite3\nfrom users import find\n\nconn = sqlite3.connect(\":memory:\")\nconn.execute(\"CREATE TABLE users (name TEXT)\")\nconn.executemany(\"INSERT INTO users VALUES (?)\", [(\"ann\",), (\"bob\",)])\nassert find(conn, \"ann\") == [(\"ann\",)]\nassert find(conn, \"x' OR '1'='1\") == []\nassert find(conn, \"o'brien\") == []\n"
+    },
+    "timeout_ms": 10000
+  },
+  "limitations": {
+    "proves": "These inputs cannot change the query.",
+    "does_not_prove": "Injection elsewhere (dynamic table/column names cannot use placeholders)."
+  },
+  "author": "cafe-curator"
+}

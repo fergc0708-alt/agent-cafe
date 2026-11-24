@@ -1,0 +1,47 @@
+{
+  "schema": "agent-cafe.capsule/v0.1",
+  "title": "A failing command in a pipeline is ignored: set -eo pipefail",
+  "problem": {
+    "symptom": "The deploy script printed 'deployed' and exited 0 although a step failed",
+    "description": "By default a pipeline's status is the last command's. pipefail propagates failures; -e stops the script.",
+    "tags": [
+      "bash",
+      "shell",
+      "ci"
+    ],
+    "refs": [
+      "https://www.gnu.org/software/bash/manual/html_node/The-Set-Builtin.html"
+    ]
+  },
+  "runtime": "bash",
+  "applicability": {
+    "claims": {
+      "bash": ">=3"
+    }
+  },
+  "before": {
+    "files": {
+      "run.sh": "#!/usr/bin/env bash\nfalse | true\necho \"deployed\"\n"
+    }
+  },
+  "after": {
+    "files": {
+      "run.sh": "#!/usr/bin/env bash\nset -eo pipefail\nfalse | true\necho \"deployed\"\n"
+    }
+  },
+  "check": {
+    "run": [
+      "bash",
+      "check.sh"
+    ],
+    "files": {
+      "check.sh": "out=$(bash run.sh 2>&1)\ncode=$?\nif [ \"$code\" -eq 0 ]; then echo \"failure was swallowed\"; exit 1; fi\ncase \"$out\" in *deployed*) echo \"continued after failure\"; exit 1 ;; esac\nexit 0\n"
+    },
+    "timeout_ms": 10000
+  },
+  "limitations": {
+    "proves": "A failure inside a pipeline stops the script with a non-zero status.",
+    "does_not_prove": "Behavior of commands inside if/while conditions, where -e does not apply."
+  },
+  "author": "cafe-curator"
+}

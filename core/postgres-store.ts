@@ -1,7 +1,7 @@
 // Store for plain Postgres (Neon in production, PGlite in tests).
 // Takes a query function so core/ keeps zero dependencies.
 import type { ListEntriesOpts, Store } from "./store.ts";
-import type { Agent, Entry, Note, Problem, ProblemStatus, Review, Run, SearchStat, Validation, VisitStat } from "./types.ts";
+import type { AttestationRow, CapsuleRow, RunnerRow, Agent, Entry, Note, Problem, ProblemStatus, Review, Run, SearchStat, Validation, VisitStat } from "./types.ts";
 import { PG_SCHEMA } from "./pg-schema.ts";
 
 export type Query = (text: string, params?: unknown[]) => Promise<Record<string, unknown>[]>;
@@ -18,7 +18,7 @@ function norm<T>(row: Record<string, unknown>): T {
     if (v instanceof Date) out[k] = k === "day" ? v.toISOString().slice(0, 10) : v.toISOString();
     else if (TS.has(k) && typeof v === "string") out[k] = new Date(v).toISOString();
     else if (INTS.has(k) && v !== null) out[k] = Number(v);
-    else if (k === "sources" && typeof v === "string") out[k] = JSON.parse(v);
+    else if ((k === "sources" || k === "capsule" || k === "conditions" || k === "mutation" || k === "envelope") && typeof v === "string") out[k] = JSON.parse(v);
     else out[k] = v;
   }
   return out as T;
@@ -248,5 +248,47 @@ export class PostgresStore implements Store {
   }
   visitsSince(day: string) {
     return this.rows<VisitStat>("select day::text as day, channel, client, count from visits where day >= $1::date", [day]);
+  }
+
+  async createCapsule(c: CapsuleRow) {
+    const [t, p] = insertSql("capsules", { ...c }, ["capsule"]);
+    await this.q(t + " on conflict (id) do nothing", p);
+  }
+  getCapsule(id: string) {
+    return this.one<CapsuleRow>("select * from capsules where id = $1", [id]);
+  }
+  searchCapsules(q: string, runtime: string | undefined, limit: number) {
+    const like = "%" + q.replace(/[\\%_]/g, (m) => "\\" + m) + "%";
+    const params: unknown[] = [q, like, limit];
+    let where = `(to_tsvector('simple', title || ' ' || symptom || ' ' || array_to_string(tags, ' ') || ' ' || coalesce(capsule->'problem'->>'description','')) @@ nullif(replace(plainto_tsquery('simple', $1)::text, '&', '|'), '')::tsquery or title ilike $2 or symptom ilike $2)`;
+    if (!q.trim()) where = "true";
+    if (runtime) {
+      params.push(runtime);
+      where += ` and runtime = $${params.length}`;
+    }
+    return this.rows<CapsuleRow>(`select * from capsules where ${where} order by created_at desc limit $3`, params);
+  }
+  capsulesByAfter(afterSha: string) {
+    return this.rows<CapsuleRow>("select * from capsules where after_sha256 = $1", [afterSha]);
+  }
+  capsulesSuperseding(id: string) {
+    return this.rows<CapsuleRow>("select * from capsules where capsule->'supersedes' ? $1", [id]);
+  }
+  async createRunner(r: RunnerRow) {
+    const [t, p] = insertSql("runners", { ...r });
+    await this.q(t, p);
+  }
+  getRunner(id: string) {
+    return this.one<RunnerRow>("select * from runners where id = $1", [id]);
+  }
+  async countRunners(agentId: string) {
+    return Number((await this.q("select count(*) as n from runners where agent_id = $1", [agentId]))[0].n);
+  }
+  async createAttestation(a: AttestationRow) {
+    const [t, p] = insertSql("attestations", { ...a }, ["conditions", "mutation", "envelope"]);
+    await this.q(t, p);
+  }
+  listAttestations(capsuleId: string) {
+    return this.rows<AttestationRow>("select * from attestations where capsule_id = $1 order by created_at", [capsuleId]);
   }
 }

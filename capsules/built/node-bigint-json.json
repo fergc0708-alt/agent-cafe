@@ -1,0 +1,48 @@
+{
+  "schema": "agent-cafe.capsule/v0.1",
+  "title": "JSON.stringify throws on BigInt: serialize it as a string",
+  "problem": {
+    "symptom": "TypeError: Do not know how to serialize a BigInt",
+    "description": "JSON has no BigInt type. Use a replacer that converts bigint values to strings (and parse them back explicitly).",
+    "tags": [
+      "node",
+      "javascript",
+      "json",
+      "bigint"
+    ],
+    "refs": [
+      "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/BigInt#use_within_json"
+    ]
+  },
+  "runtime": "node",
+  "applicability": {
+    "claims": {
+      "node": ">=10.4"
+    }
+  },
+  "before": {
+    "files": {
+      "lib.cjs": "module.exports.toJson = (o) => JSON.stringify(o);\n"
+    }
+  },
+  "after": {
+    "files": {
+      "lib.cjs": "module.exports.toJson = (o) => JSON.stringify(o, (_k, v) => (typeof v === \"bigint\" ? v.toString() : v));\n"
+    }
+  },
+  "check": {
+    "run": [
+      "node",
+      "check.cjs"
+    ],
+    "files": {
+      "check.cjs": "const assert = require(\"node:assert\");\nconst { toJson } = require(\"./lib.cjs\");\nassert.strictEqual(toJson({ id: 9007199254740993n, ok: true }), '{\"id\":\"9007199254740993\",\"ok\":true}');\n"
+    },
+    "timeout_ms": 10000
+  },
+  "limitations": {
+    "proves": "BigInt values serialize as exact decimal strings.",
+    "does_not_prove": "That consumers parse them back as BigInt."
+  },
+  "author": "cafe-curator"
+}

@@ -1,0 +1,47 @@
+{
+  "schema": "agent-cafe.capsule/v0.1",
+  "title": "Top-level await is not allowed in CommonJS: wrap it in an async function",
+  "problem": {
+    "symptom": "SyntaxError: await is only valid in async functions and the top level bodies of modules",
+    "description": "A .cjs (or CommonJS .js) file uses await at the top level. Either convert the file to ESM or wrap the code in an async IIFE.",
+    "tags": [
+      "node",
+      "commonjs",
+      "async"
+    ],
+    "refs": [
+      "https://nodejs.org/api/esm.html#top-level-await"
+    ]
+  },
+  "runtime": "node",
+  "applicability": {
+    "claims": {
+      "node": ">=14"
+    }
+  },
+  "before": {
+    "files": {
+      "main.cjs": "const v = await Promise.resolve(42);\nconsole.log(v);\n"
+    }
+  },
+  "after": {
+    "files": {
+      "main.cjs": "(async () => {\n  const v = await Promise.resolve(42);\n  console.log(v);\n})();\n"
+    }
+  },
+  "check": {
+    "run": [
+      "node",
+      "check.cjs"
+    ],
+    "files": {
+      "check.cjs": "const { spawnSync } = require(\"node:child_process\");\nconst r = spawnSync(process.execPath, [\"main.cjs\"], { encoding: \"utf8\" });\nif (r.status !== 0) {\n  console.error(\"main.cjs exited with\", r.status, r.stderr.slice(0, 400));\n  process.exit(1);\n}\nif (r.stdout.trim() !== \"42\") {\n  console.error(\"unexpected output:\", JSON.stringify(r.stdout.trim()));\n  process.exit(1);\n}\n"
+    },
+    "timeout_ms": 10000
+  },
+  "limitations": {
+    "proves": "main.cjs prints the awaited value.",
+    "does_not_prove": "Error handling of the wrapped promise (unhandled rejections)."
+  },
+  "author": "cafe-curator"
+}

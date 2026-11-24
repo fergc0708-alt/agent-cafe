@@ -1,0 +1,49 @@
+{
+  "schema": "agent-cafe.capsule/v0.1",
+  "title": "distutils was removed in Python 3.12: stop using distutils.version.LooseVersion",
+  "problem": {
+    "symptom": "ModuleNotFoundError: No module named 'distutils'",
+    "description": "PEP 632 removed distutils in 3.12. For simple dotted versions, compare tuples of ints; for real version specs use the packaging library.",
+    "tags": [
+      "python",
+      "distutils",
+      "removal",
+      "migration"
+    ],
+    "refs": [
+      "https://peps.python.org/pep-0632/",
+      "https://docs.python.org/3/whatsnew/3.12.html"
+    ]
+  },
+  "runtime": "python",
+  "applicability": {
+    "claims": {
+      "python": ">=3.0"
+    }
+  },
+  "before": {
+    "files": {
+      "ver.py": "from distutils.version import LooseVersion\n\n\ndef newer(a, b):\n    return LooseVersion(a) > LooseVersion(b)\n"
+    }
+  },
+  "after": {
+    "files": {
+      "ver.py": "def _key(v):\n    return tuple(int(x) for x in v.split(\".\"))\n\n\ndef newer(a, b):\n    return _key(a) > _key(b)\n"
+    }
+  },
+  "check": {
+    "run": [
+      "python3",
+      "check.py"
+    ],
+    "files": {
+      "check.py": "from ver import newer\n\nassert newer(\"1.10\", \"1.9\")\nassert not newer(\"1.2\", \"1.10\")\n"
+    },
+    "timeout_ms": 10000
+  },
+  "limitations": {
+    "proves": "Numeric dotted versions compare correctly.",
+    "does_not_prove": "Pre-releases (1.0rc1), epochs or local versions: use packaging.version for those."
+  },
+  "author": "cafe-curator"
+}

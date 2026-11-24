@@ -1,6 +1,6 @@
-// In-memory store for local development and tests. Production uses supabase-store.ts.
+// In-memory store for local development and tests. Production uses postgres-store.ts.
 import type { ListEntriesOpts, Store } from "./store.ts";
-import type { Agent, Entry, Note, Problem, ProblemStatus, Review, Run, SearchStat, Validation, VisitStat } from "./types.ts";
+import type { AttestationRow, CapsuleRow, RunnerRow, Agent, Entry, Note, Problem, ProblemStatus, Review, Run, SearchStat, Validation, VisitStat } from "./types.ts";
 import { tokenize } from "./util.ts";
 
 export class MemoryStore implements Store {
@@ -14,6 +14,9 @@ export class MemoryStore implements Store {
   searches = new Map<string, SearchStat>();
   rate = new Map<string, { count: number; resetAt: number }>();
   visits = new Map<string, VisitStat>();
+  capsules = new Map<string, CapsuleRow>();
+  runners = new Map<string, RunnerRow>();
+  attestations: AttestationRow[] = [];
 
   async createAgent(a: Agent) {
     for (const x of this.agents.values()) if (x.handle === a.handle) throw new Error("duplicate handle");
@@ -207,5 +210,49 @@ export class MemoryStore implements Store {
   }
   async visitsSince(day: string) {
     return Array.from(this.visits.values()).filter((v) => v.day >= day);
+  }
+
+  async createCapsule(c: CapsuleRow) {
+    if (!this.capsules.has(c.id)) this.capsules.set(c.id, structuredClone(c));
+  }
+  async getCapsule(id: string) {
+    const c = this.capsules.get(id);
+    return c ? structuredClone(c) : null;
+  }
+  async searchCapsules(q: string, runtime: string | undefined, limit: number) {
+    const terms = tokenize(q);
+    return Array.from(this.capsules.values())
+      .filter((c) => !runtime || c.runtime === runtime)
+      .map((c) => {
+        const hay = `${c.title} ${c.symptom} ${c.tags.join(" ")} ${(c.capsule as any)?.problem?.description ?? ""}`.toLowerCase();
+        return { c, score: terms.filter((t) => hay.includes(t)).length };
+      })
+      .filter((x) => !terms.length || x.score > 0)
+      .sort((a, b) => b.score - a.score || b.c.created_at.localeCompare(a.c.created_at))
+      .slice(0, limit)
+      .map((x) => structuredClone(x.c));
+  }
+  async capsulesByAfter(afterSha: string) {
+    return Array.from(this.capsules.values()).filter((c) => c.after_sha256 === afterSha).map((c) => structuredClone(c));
+  }
+  async capsulesSuperseding(id: string) {
+    return Array.from(this.capsules.values()).filter((c) => ((c.capsule as any)?.supersedes ?? []).includes(id)).map((c) => structuredClone(c));
+  }
+  async createRunner(r: RunnerRow) {
+    if (this.runners.has(r.id)) throw new Error("duplicate runner");
+    this.runners.set(r.id, { ...r });
+  }
+  async getRunner(id: string) {
+    const r = this.runners.get(id);
+    return r ? { ...r } : null;
+  }
+  async countRunners(agentId: string) {
+    return Array.from(this.runners.values()).filter((r) => r.agent_id === agentId).length;
+  }
+  async createAttestation(a: AttestationRow) {
+    this.attestations.push(structuredClone(a));
+  }
+  async listAttestations(capsuleId: string) {
+    return this.attestations.filter((a) => a.capsule_id === capsuleId).map((a) => structuredClone(a));
   }
 }

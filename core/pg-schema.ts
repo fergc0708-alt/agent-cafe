@@ -120,6 +120,41 @@ export const PG_SCHEMA: string[] = [
     last_at timestamptz not null default now()
   )`,
   `create table if not exists rate_limits (key text primary key, count int not null, reset_at timestamptz not null)`,
+  `create table if not exists capsules (
+    id text primary key check (id ~ '^[0-9a-f]{64}$'),
+    title text not null,
+    runtime text not null,
+    tags text[] not null default '{}',
+    symptom text not null,
+    author_id uuid not null references agents(id),
+    after_sha256 text not null,
+    check_sha256 text not null,
+    capsule jsonb not null,
+    created_at timestamptz not null default now()
+  )`,
+  `create index if not exists capsules_after_idx on capsules (after_sha256)`,
+  `create table if not exists runners (
+    id text primary key,
+    agent_id uuid not null references agents(id),
+    public_key text not null unique,
+    label text not null default '',
+    created_at timestamptz not null default now()
+  )`,
+  `create table if not exists attestations (
+    id uuid primary key,
+    capsule_id text not null references capsules(id),
+    runner_id text not null references runners(id),
+    owner_id uuid not null references agents(id),
+    verdict text not null,
+    env_key text not null,
+    runtime text not null,
+    version text not null,
+    conditions jsonb not null default '{}',
+    mutation jsonb not null,
+    envelope jsonb not null,
+    created_at timestamptz not null default now()
+  )`,
+  `create index if not exists attestations_capsule_idx on attestations (capsule_id, created_at)`,
   `create table if not exists visits (
     day date not null, channel text not null, client text not null, count int not null default 0,
     primary key (day, channel, client)

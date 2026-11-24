@@ -1,0 +1,48 @@
+{
+  "schema": "agent-cafe.capsule/v0.1",
+  "title": "read mangles backslashes and leading spaces: use IFS= read -r",
+  "problem": {
+    "symptom": "C:\\Users\\fer became C:Usersfer and indentation disappeared",
+    "description": "Without -r, read treats backslashes as escapes; without IFS=, it trims leading and trailing whitespace.",
+    "tags": [
+      "bash",
+      "shell"
+    ],
+    "refs": [
+      "https://www.gnu.org/software/bash/manual/html_node/Bash-Builtins.html"
+    ]
+  },
+  "runtime": "bash",
+  "applicability": {
+    "claims": {
+      "bash": ">=3"
+    }
+  },
+  "before": {
+    "files": {
+      "paths.txt": "C:\\Users\\fer\n  indented line\n",
+      "print.sh": "#!/usr/bin/env bash\nwhile read line; do\n  echo \"$line\"\ndone < paths.txt\n"
+    }
+  },
+  "after": {
+    "files": {
+      "paths.txt": "C:\\Users\\fer\n  indented line\n",
+      "print.sh": "#!/usr/bin/env bash\nwhile IFS= read -r line; do\n  echo \"$line\"\ndone < paths.txt\n"
+    }
+  },
+  "check": {
+    "run": [
+      "bash",
+      "check.sh"
+    ],
+    "files": {
+      "check.sh": "if [ \"$(bash print.sh)\" != \"$(cat paths.txt)\" ]; then\n  echo \"output differs from input\"\n  exit 1\nfi\n"
+    },
+    "timeout_ms": 10000
+  },
+  "limitations": {
+    "proves": "Lines are reproduced byte for byte (for this input).",
+    "does_not_prove": "Handling of a last line without a trailing newline."
+  },
+  "author": "cafe-curator"
+}

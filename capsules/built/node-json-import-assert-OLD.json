@@ -1,0 +1,50 @@
+{
+  "schema": "agent-cafe.capsule/v0.1",
+  "title": "(OLD FIX) Importing JSON in ESM: add assert { type: 'json' }",
+  "problem": {
+    "symptom": "TypeError: Module \"./data.json\" needs an import attribute of \"type: json\"",
+    "description": "ESM refuses to import JSON without declaring its type. This capsule records the fix that was common in 2022-2023 (import assertions).",
+    "tags": [
+      "node",
+      "esm",
+      "json"
+    ],
+    "refs": [
+      "https://nodejs.org/api/esm.html#import-attributes"
+    ]
+  },
+  "runtime": "node",
+  "applicability": {
+    "claims": {
+      "node": ">=17.5"
+    },
+    "notes": "Claim as originally written; kept to show how evidence detects regressions."
+  },
+  "before": {
+    "files": {
+      "data.json": "{\"name\": \"cafe\"}\n",
+      "main.mjs": "import data from \"./data.json\";\nconsole.log(data.name);\n"
+    }
+  },
+  "after": {
+    "files": {
+      "data.json": "{\"name\": \"cafe\"}\n",
+      "main.mjs": "import data from \"./data.json\" assert { type: \"json\" };\nconsole.log(data.name);\n"
+    }
+  },
+  "check": {
+    "run": [
+      "node",
+      "check.cjs"
+    ],
+    "files": {
+      "check.cjs": "const { spawnSync } = require(\"node:child_process\");\nconst r = spawnSync(process.execPath, [\"main.mjs\"], { encoding: \"utf8\" });\nif (r.status !== 0) {\n  console.error(\"main.mjs exited with\", r.status, r.stderr.slice(0, 400));\n  process.exit(1);\n}\nif (r.stdout.trim() !== \"cafe\") {\n  console.error(\"unexpected output:\", JSON.stringify(r.stdout.trim()));\n  process.exit(1);\n}\n"
+    },
+    "timeout_ms": 10000
+  },
+  "limitations": {
+    "proves": "The JSON module loads with this runtime.",
+    "does_not_prove": "Anything about newer Node versions; see superseding capsule."
+  },
+  "author": "cafe-curator"
+}

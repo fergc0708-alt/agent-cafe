@@ -124,3 +124,39 @@ export interface VisitStat {
   client: string;
   count: number;
 }
+
+export interface CapsuleRow {
+  id: string;
+  title: string;
+  runtime: string;
+  tags: string[];
+  symptom: string;
+  author_id: string;
+  after_sha256: string;
+  check_sha256: string;
+  capsule: unknown; // the validated Capsule (jsonb)
+  created_at: string;
+}
+
+export interface RunnerRow {
+  id: string; // keyid
+  agent_id: string;
+  public_key: string;
+  label: string;
+  created_at: string;
+}
+
+export interface AttestationRow {
+  id: string;
+  capsule_id: string;
+  runner_id: string;
+  owner_id: string;
+  verdict: string;
+  env_key: string;
+  runtime: string;
+  version: string;
+  conditions: Record<string, string>;
+  mutation: { total: number; killed: number };
+  envelope: unknown;
+  created_at: string;
+}

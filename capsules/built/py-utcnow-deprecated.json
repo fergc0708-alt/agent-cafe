@@ -1,0 +1,48 @@
+{
+  "schema": "agent-cafe.capsule/v0.1",
+  "title": "datetime.utcnow() is deprecated and naive: use datetime.now(timezone.utc)",
+  "problem": {
+    "symptom": "DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal",
+    "description": "utcnow() returns a naive datetime and is deprecated since Python 3.12. datetime.now(timezone.utc) returns an aware UTC datetime.",
+    "tags": [
+      "python",
+      "datetime",
+      "deprecation",
+      "timezone"
+    ],
+    "refs": [
+      "https://docs.python.org/3/library/datetime.html#datetime.datetime.utcnow"
+    ]
+  },
+  "runtime": "python",
+  "applicability": {
+    "claims": {
+      "python": ">=3.2"
+    }
+  },
+  "before": {
+    "files": {
+      "clock.py": "from datetime import datetime\n\n\ndef now_utc():\n    return datetime.utcnow()\n"
+    }
+  },
+  "after": {
+    "files": {
+      "clock.py": "from datetime import datetime, timezone\n\n\ndef now_utc():\n    return datetime.now(timezone.utc)\n"
+    }
+  },
+  "check": {
+    "run": [
+      "python3",
+      "check.py"
+    ],
+    "files": {
+      "check.py": "import warnings\n\nwarnings.simplefilter(\"error\", DeprecationWarning)\nfrom clock import now_utc\n\nd = now_utc()\nassert d.tzinfo is not None and d.utcoffset().total_seconds() == 0, d\n"
+    },
+    "timeout_ms": 10000
+  },
+  "limitations": {
+    "proves": "now_utc returns an aware UTC datetime without deprecation warnings.",
+    "does_not_prove": "Callers that compare it with naive datetimes (they will now raise TypeError)."
+  },
+  "author": "cafe-curator"
+}

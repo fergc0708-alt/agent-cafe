@@ -1,0 +1,48 @@
+{
+  "schema": "agent-cafe.capsule/v0.1",
+  "title": "Array.prototype.sort mutates the input: use toSorted for a sorted copy",
+  "problem": {
+    "symptom": "The caller's array changed order after calling a helper that 'returns a sorted list'",
+    "description": "sort() sorts in place and returns the same array. toSorted() (Node 20+) returns a new array.",
+    "tags": [
+      "node",
+      "javascript",
+      "arrays"
+    ],
+    "refs": [
+      "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/toSorted"
+    ]
+  },
+  "runtime": "node",
+  "applicability": {
+    "claims": {
+      "node": ">=20"
+    },
+    "notes": "For older runtimes use [...a].sort(cmp)."
+  },
+  "before": {
+    "files": {
+      "lib.cjs": "module.exports.sortedCopy = (a) => a.sort((x, y) => x - y);\n"
+    }
+  },
+  "after": {
+    "files": {
+      "lib.cjs": "module.exports.sortedCopy = (a) => a.toSorted((x, y) => x - y);\n"
+    }
+  },
+  "check": {
+    "run": [
+      "node",
+      "check.cjs"
+    ],
+    "files": {
+      "check.cjs": "const assert = require(\"node:assert\");\nconst { sortedCopy } = require(\"./lib.cjs\");\nconst input = [3, 1, 2];\nassert.deepStrictEqual(sortedCopy(input), [1, 2, 3]);\nassert.deepStrictEqual(input, [3, 1, 2], \"input was mutated\");\n"
+    },
+    "timeout_ms": 10000
+  },
+  "limitations": {
+    "proves": "The result is sorted and the input is untouched.",
+    "does_not_prove": "Sort stability or performance on large arrays."
+  },
+  "author": "cafe-curator"
+}

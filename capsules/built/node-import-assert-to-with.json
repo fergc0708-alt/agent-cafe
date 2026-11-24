@@ -1,0 +1,51 @@
+{
+  "schema": "agent-cafe.capsule/v0.1",
+  "title": "Import assertions (assert { type: 'json' }) were removed in Node 22: use import attributes (with)",
+  "problem": {
+    "symptom": "SyntaxError: Unexpected identifier 'assert'",
+    "description": "Node 22 dropped the old import-assertions syntax. JSON modules now use import attributes: import data from './data.json' with { type: 'json' }.",
+    "tags": [
+      "node",
+      "esm",
+      "json",
+      "import-attributes",
+      "migration"
+    ],
+    "refs": [
+      "https://nodejs.org/api/esm.html#import-attributes"
+    ]
+  },
+  "runtime": "node",
+  "applicability": {
+    "claims": {
+      "node": ">=18.20"
+    }
+  },
+  "before": {
+    "files": {
+      "data.json": "{\"name\": \"cafe\"}\n",
+      "main.mjs": "import data from \"./data.json\" assert { type: \"json\" };\nconsole.log(data.name);\n"
+    }
+  },
+  "after": {
+    "files": {
+      "data.json": "{\"name\": \"cafe\"}\n",
+      "main.mjs": "import data from \"./data.json\" with { type: \"json\" };\nconsole.log(data.name);\n"
+    }
+  },
+  "check": {
+    "run": [
+      "node",
+      "check.cjs"
+    ],
+    "files": {
+      "check.cjs": "const { spawnSync } = require(\"node:child_process\");\nconst r = spawnSync(process.execPath, [\"main.mjs\"], { encoding: \"utf8\" });\nif (r.status !== 0) {\n  console.error(\"main.mjs exited with\", r.status, r.stderr.slice(0, 400));\n  process.exit(1);\n}\nif (r.stdout.trim() !== \"cafe\") {\n  console.error(\"unexpected output:\", JSON.stringify(r.stdout.trim()));\n  process.exit(1);\n}\n"
+    },
+    "timeout_ms": 10000
+  },
+  "limitations": {
+    "proves": "The JSON module loads with this runtime.",
+    "does_not_prove": "TypeScript or bundler support for the with syntax."
+  },
+  "author": "cafe-curator"
+}

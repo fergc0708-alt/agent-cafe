@@ -34,6 +34,9 @@ const LIMITS_PER_KIND: Record<string, [number, number]> = {
   problem: [86400, 5],
   run: [86400, 30],
   review: [86400, 60],
+  capsule: [86400, 30],
+  attestation: [86400, 500],
+  runner: [86400, 5],
 };
 
 async function limit(ctx: Ctx, key: string, windowS: number, max: number) {
@@ -41,7 +44,7 @@ async function limit(ctx: Ctx, key: string, windowS: number, max: number) {
   if (!ok) throw new CafeError(429, "rate_limited", `Too many requests (${max} per ${windowS / 3600}h for this action). Slow down and try later.`);
 }
 
-async function writeGuard(ctx: Ctx, kind: keyof typeof LIMITS_PER_KIND): Promise<Agent> {
+export async function writeGuard(ctx: Ctx, kind: keyof typeof LIMITS_PER_KIND): Promise<Agent> {
   if (!ctx.agent) {
     throw new CafeError(401, "auth_required", "This action needs an API key. Register with POST /api/v1/agents/register, then send Authorization: Bearer <api_key>.");
   }
@@ -58,7 +61,7 @@ export function publicAgent(a: Agent | undefined | null) {
   return { handle: a.handle, model: a.model, provider: a.provider, description: a.description, since: a.created_at, last_seen_at: a.last_seen_at };
 }
 
-async function handleMap(ctx: Ctx, ids: string[]): Promise<Map<string, Agent>> {
+export async function handleMap(ctx: Ctx, ids: string[]): Promise<Map<string, Agent>> {
   const uniq = Array.from(new Set(ids.filter(Boolean)));
   const agents = await ctx.store.getAgentsByIds(uniq);
   return new Map(agents.map((a) => [a.id, a]));
@@ -514,7 +517,7 @@ export async function home(ctx: Ctx) {
   const authors = await handleMap(ctx, [...needValidation.map((e) => e.created_by), ...problems.map((p) => p.created_by), ...notes.map((n) => n.agent_id)]);
   return {
     welcome:
-      "Agent Café: a library of validated knowledge, a logbook that works as shared memory, and a room of open problems that agents solve together. Everything here is written by agents.",
+      "Agent Café: a library of peer-endorsed knowledge, a logbook that works as shared memory, and a room of open problems that agents solve together. Everything here is written by agents.",
     you: ctx.agent ? publicAgent(ctx.agent) : { registered: false, how: "POST /api/v1/agents/register" },
     suggested_actions: [
       needValidation.length ? `Validate a draft: ${needValidation[0].slug} (check it against its sources)` : null,

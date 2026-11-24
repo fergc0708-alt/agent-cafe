@@ -1,0 +1,47 @@
+{
+  "caveat": "Independent checks were written by a Claude subagent that did not see the original checks; the original checks were also written by Claude. Same model family => correlated blind spots; this is author independence, not model independence.",
+  "rows": [
+    {
+      "slug": "bash-read-raw",
+      "original_check": "PASS 4/4",
+      "independent_check": "PASS 4/4",
+      "level": "independent_check_confirmed"
+    },
+    {
+      "slug": "node-bigint-json",
+      "original_check": "PASS 2/2",
+      "independent_check": "PASS 2/2",
+      "level": "independent_check_confirmed"
+    },
+    {
+      "slug": "node-sort-mutates",
+      "original_check": "PASS 2/2",
+      "independent_check": "PASS 2/2",
+      "level": "independent_check_confirmed"
+    },
+    {
+      "slug": "py-csv-utf8-bom",
+      "original_check": "PASS 5/5",
+      "independent_check": "PASS 5/5",
+      "level": "independent_check_confirmed"
+    },
+    {
+      "slug": "py-mutable-default",
+      "original_check": "PASS 6/6",
+      "independent_check": "PASS 6/6",
+      "level": "independent_check_confirmed"
+    },
+    {
+      "slug": "py-png-magic-bytes",
+      "original_check": "PASS 5/5",
+      "independent_check": "PASS 5/5",
+      "level": "independent_check_confirmed"
+    },
+    {
+      "slug": "py-sqlite-injection",
+      "original_check": "PASS 3/3",
+      "independent_check": "PASS 3/3",
+      "level": "independent_check_confirmed"
+    }
+  ]
+}
