@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { spawnSync } from "node:child_process";
-import { mkdirSync, mkdtempSync, readFileSync, symlinkSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, symlinkSync, writeFileSync } from "node:fs";
 import os from "node:os";
 import { join } from "node:path";
 import { buildFinding, evaluate, matchError, type EvidenceRow, type IndexEntry, type TargetEnv } from "../core/doctor/match.ts";
@@ -217,14 +217,19 @@ describe("GOAT 4 regressions", () => {
   // system PATH and reported the runner's default python instead (the report described the wrong toolchain).
   it("probes the python that is first on the caller's PATH, not the system one", async () => {
     if (!isolationAvailable("sandbox")) return;
+    // Any installed python whose version differs from the default python3 on PATH (machine-independent).
+    const ver = (b: string) => spawnSync(b, ["-c", "import sys;print('%d.%d'%sys.version_info[:2])"], { encoding: "utf8" }).stdout?.trim();
+    const def = ver("python3");
+    const alt = ["10", "11", "12", "13", "14"].map((m) => `/usr/bin/python3.${m}`).find((p) => existsSync(p) && ver(p) && ver(p) !== def);
+    if (!alt) return;
     const bin = mkdtempSync(join(os.tmpdir(), "cafe-path-"));
-    symlinkSync("/usr/bin/python3.11", join(bin, "python3"));
+    symlinkSync(alt, join(bin, "python3"));
     const old = process.env.PATH;
     process.env.PATH = `${bin}:${old}`;
     try {
       const proj = mkdtempSync(join(os.tmpdir(), "cafe-proj-"));
       const fp = await fingerprint(proj);
-      expect(fp.runtimes.find((r: { runtime: string }) => r.runtime === "python")?.version).toMatch(/^3\.11\./);
+      expect(fp.runtimes.find((r: { runtime: string }) => r.runtime === "python")?.version.startsWith(`${ver(alt)}.`)).toBe(true);
     } finally {
       process.env.PATH = old;
     }
