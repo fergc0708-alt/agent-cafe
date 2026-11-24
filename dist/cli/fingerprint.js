@@ -31,7 +31,9 @@ if out["venv"] and os.path.exists(cfg):
 out["system_site_packages"] = (not out["venv"]) or bool(sysite)
 spec = importlib.util.find_spec("distutils")
 std = sysconfig.get_paths()["stdlib"]
-out["distutils"] = "missing" if spec is None else ("stdlib" if (spec.origin or "").startswith(std) else "setuptools-shim")
+origin = spec.origin or "" if spec else ""
+# stdlib is a prefix of site-packages on some layouts, so classify by where it really comes from
+out["distutils"] = "missing" if spec is None else ("setuptools-shim" if ("setuptools" in origin or "-packages" in origin) else "stdlib")
 out["setuptools"] = importlib.util.find_spec("setuptools") is not None
 out["kind"] = "conda" if "conda" in sys.prefix.lower() else ("pyenv" if ".pyenv" in sys.prefix else ("venv" if out["venv"] else "system"))
 print(json.dumps(out))
@@ -100,8 +102,11 @@ export async function fingerprint(projectDir, bins = {}) {
     else
         missing.push("time zone unknown");
     const pyInfo = runtimes.find((r) => r.runtime === "python");
-    if (pyInfo && pyInfo.details.system_site_packages === false && pyInfo.details.setuptools === false)
-        conditions.SITE = "venv-clean";
+    // Same vocabulary as the runner records in evidence (cli/runner.ts pythonSite).
+    if (pyInfo?.details.distutils === "setuptools-shim")
+        conditions.SITE = "setuptools-shim";
+    else if (pyInfo && pyInfo.details.distutils === "missing")
+        conditions.SITE = pyInfo.details.kind === "venv" ? "venv-clean" : "no-distutils";
     if (!lockfiles.length && kinds.length)
         missing.push("no lockfile: dependency versions are unknown");
     missing.push("native dependencies and compiler toolchains are not fingerprinted yet");

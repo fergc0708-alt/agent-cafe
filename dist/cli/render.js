@@ -51,8 +51,11 @@ export function renderDoctor(r, verbose = false) {
         out.push(green("No known break applies to your code in these environments."));
     for (const f of r.findings)
         out.push(...finding(f, verbose), "");
-    if (r.clear.length)
-        out.push(green(`✓ ${r.clear.length} other known break${r.clear.length === 1 ? "" : "s"} found in your code ${r.clear.length === 1 ? "does" : "do"} not affect these environments: `) + dim(r.clear.map((c) => c.slug).join(", ")));
+    const plain = r.clear.filter((c) => !c.conditional);
+    if (plain.length)
+        out.push(green(`✓ ${plain.length} other known break${plain.length === 1 ? "" : "s"} found in your code ${plain.length === 1 ? "does" : "do"} not affect these environments: `) + dim(plain.map((c) => c.slug).join(", ")));
+    for (const c of r.clear.filter((c) => c.conditional))
+        out.push(yellow(`≈ ${c.slug}: not affected HERE, but ${c.conditional}. If your deploy/CI environment differs (e.g. a clean virtualenv), check it with --python <path>.`));
     if (r.fingerprint.missing.length)
         out.push(dim(`Not determined: ${r.fingerprint.missing.join("; ")}.`));
     out.push(dim(`Evidence: ${r.evidence.verified} runs verified on GitHub-hosted CI (${r.evidence.ci_jobs} jobs) + ${r.evidence.claimed} self-reported, built ${r.evidence.generated_at.slice(0, 10)}. Verified = where it ran, not independent review.`));
@@ -136,6 +139,8 @@ export function markdownDoctor(r) {
             out.push(`| ${v.env.runtime} ${v.env.version.split(".").slice(0, 2).join(".")} (${v.env.label}) | ${v.status === "not_affected" ? "✅" : v.status.startsWith("affected") ? "❌" : "❔"} ${v.summary.replace(/\|/g, "/")} |`);
         out.push("", `**Action:** ${f.action}`, "");
     }
+    for (const c of r.clear.filter((c) => c.conditional))
+        out.push(`> ⚠️ \`${c.slug}\`: not affected in this job's environment, but ${c.conditional}. A different deploy environment may break.`, "");
     out.push(`<sub>Evidence: ${r.evidence.verified} runs verified on GitHub-hosted CI + ${r.evidence.claimed} self-reported. "Verified" proves where a check ran, not that it was independently reviewed. Untested environments are reported as untested, never as passing.</sub>`);
     return out.join("\n");
 }

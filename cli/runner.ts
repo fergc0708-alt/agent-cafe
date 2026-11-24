@@ -137,7 +137,7 @@ const siteCache = new Map<string, string | null>();
  *  provided by setuptools' shim? Recorded in every Python result so evidence is not ambiguous. */
 export function pythonSite(bin: string): string | null {
   if (siteCache.has(bin)) return siteCache.get(bin)!;
-  const probe = "import importlib.util, sys, sysconfig\ns = importlib.util.find_spec('distutils')\nstd = sysconfig.get_paths()['stdlib']\nprint('distutils-stdlib' if s and (s.origin or '').startswith(std) else ('setuptools-shim' if s else ('venv-clean' if sys.prefix != sys.base_prefix else 'no-distutils')))";
+  const probe = "import importlib.util, sys, sysconfig\ns = importlib.util.find_spec('distutils')\nstd = sysconfig.get_paths()['stdlib']\no = (s.origin or '') if s else ''\nprint(('setuptools-shim' if ('setuptools' in o or '-packages' in o) else 'distutils-stdlib') if s else ('venv-clean' if sys.prefix != sys.base_prefix else 'no-distutils'))";
   const r = spawnSync(bin, ["-I", "-c", probe], { encoding: "utf8", timeout: 5000 });
   const v = r.status === 0 ? r.stdout.trim() : null;
   siteCache.set(bin, v);

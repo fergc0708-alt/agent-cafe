@@ -4,7 +4,7 @@
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { extname, join, relative } from "node:path";
 import { capsuleId, parseVersion, validateCapsule } from "../core/capsule/capsule.js";
-import { buildFinding, evaluate, matchError } from "../core/doctor/match.js";
+import { buildFinding, evaluate, matchError, relevantConditions } from "../core/doctor/match.js";
 import { fingerprint } from "./fingerprint.js";
 // Works from the source tree (cli/) and from the compiled CLI (dist/cli/).
 const BUILT = [new URL("../capsules/built/", import.meta.url), new URL("../../capsules/built/", import.meta.url)].find((u) => existsSync(new URL("index.json", u)));
@@ -156,10 +156,17 @@ export async function doctor(projectDir, targets = [], bins = {}) {
         const f = buildFinding(entry, envs, `your code uses the affected API (${h.length}${h.length === 5 ? "+" : ""} place${h.length === 1 ? "" : "s"})`, h, index.byId);
         if (!f.verdicts.length)
             continue;
-        if (f.verdicts.every((v) => v.status === "not_affected"))
-            clear.push({ slug: f.slug, hits: h.length });
+        if (f.verdicts.every((v) => v.status === "not_affected")) {
+            const mmOf = (v) => v.split(".").slice(0, 2).join(".");
+            const versions = new Set(f.verdicts.map((v) => `${v.env.runtime}@${mmOf(v.env.version)}`));
+            const relevant = relevantConditions(entry.rows);
+            const elsewhere = entry.rows.filter((r) => versions.has(`${r.runtime}@${mmOf(r.version)}`) && (r.verdict === "PASS" || r.verdict === "FIX_FAILS") && Object.keys(r.conditions).some((k) => relevant.has(k)));
+            const conds = [...new Set(elsewhere.map((r) => Object.entries(r.conditions).filter(([k]) => relevant.has(k)).map(([k, v]) => `${k}=${v}`).join(",")))];
+            clear.push({ slug: f.slug, hits: h.length, ...(conds.length ? { conditional: `the same version breaks with ${conds.join(" or ")}` } : {}) });
+        }
         else
             findings.push(f);
+        continue;
     }
     findings.sort((a, b) => b.severity - a.severity);
     return { project: projectDir, fingerprint: fp, environments: envs, scanned_files: scanned, rules: index.entries.filter((e) => e.capsule.detect).length, findings, clear, evidence: index.evidence };
@@ -181,7 +188,7 @@ export async function diagnose(projectDir, error, targets = [], bins = {}) {
                 rejected.push({ slug: m.entry.slug, why: `looks similar, but no tested ${rt} version is affected by it, so it is probably not your cause` });
                 continue;
             }
-            matches.push({ ...f, match: `${m.why}. Your default ${f.verdicts.map((v) => `${v.env.runtime} ${v.env.version}`).join(", ")} is NOT affected, but it breaks on ${rt} ${broken.join(", ")}: if the failing process runs one of those, this is it (pass --${rt === "node" ? "node" : "python"} <path> to check that interpreter)`, score: Math.round(m.score * 0.6) });
+            matches.push({ ...f, action: `If the failing process runs ${rt} ${broken.join(" or ")}: apply the fix (cafe show ${m.entry.slug}). Your default runtime is not affected.`, match: `${m.why}. Your default ${f.verdicts.map((v) => `${v.env.runtime} ${v.env.version}`).join(", ")} is NOT affected, but it breaks on ${rt} ${broken.join(", ")}: if the failing process runs one of those, this is it (pass --${rt === "node" ? "node" : "python"} <path> to check that interpreter)`, score: Math.round(m.score * 0.6) });
             continue;
         }
         if (!f.verdicts.length) {

@@ -66,8 +66,34 @@ function condClass(k: string, v: string | undefined): string | undefined {
   return v;
 }
 
-export function conditionsCompatible(row: Record<string, string>, env: Record<string, string>): boolean {
+/**
+ * Condition keys that demonstrably change the outcome for THIS capsule: within the same runtime
+ * major.minor, rows that differ in that key's value (or its presence) have different verdicts.
+ * Only these are enforced when matching; e.g. Python's site setup matters for distutils, not for imp.
+ */
+export function relevantConditions(rows: EvidenceRow[]): Set<string> {
+  const out = new Set<string>();
+  const keys = new Set(rows.flatMap((r) => Object.keys(r.conditions)));
+  for (const k of keys) {
+    const groups = new Map<string, Map<string, Set<string>>>();
+    for (const r of rows) {
+      const g = `${r.runtime}@${mm(r.version)}`;
+      const cls = condClass(k, r.conditions[k]) ?? "(none)";
+      const m = groups.get(g) ?? new Map<string, Set<string>>();
+      (m.get(cls) ?? m.set(cls, new Set()).get(cls)!).add(r.verdict === "PASS" && !sensitive(r) ? "PASS_INSENSITIVE" : r.verdict);
+      groups.set(g, m);
+    }
+    for (const m of groups.values()) {
+      const sets = [...m.values()].map((s) => [...s].sort().join());
+      if (new Set(sets).size > 1) out.add(k);
+    }
+  }
+  return out;
+}
+
+export function conditionsCompatible(row: Record<string, string>, env: Record<string, string>, relevant?: Set<string>): boolean {
   for (const [k, v] of Object.entries(row)) {
+    if (relevant && !relevant.has(k)) continue;
     // A row that records a site setup only speaks for environments known to have the same setup.
     if (k === "SITE" && env.SITE === undefined) return false;
     if (k === "SITE" && ((v === "venv-clean" || v === "no-distutils") !== (env.SITE === "venv-clean" || env.SITE === "no-distutils"))) return false;
@@ -110,7 +136,8 @@ const WORDS: Record<Status, string> = {
 };
 
 export function evaluate(entry: IndexEntry, env: TargetEnv): EnvVerdict {
-  const all = entry.rows.filter((r) => r.runtime === env.runtime && conditionsCompatible(r.conditions, env.conditions));
+  const relevant = relevantConditions(entry.rows);
+  const all = entry.rows.filter((r) => r.runtime === env.runtime && conditionsCompatible(r.conditions, env.conditions, relevant));
   const same = all.filter((r) => mm(r.version) === mm(env.version));
   if (same.length) {
     const { status, trust } = classify(same);

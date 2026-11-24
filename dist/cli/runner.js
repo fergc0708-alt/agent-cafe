@@ -104,6 +104,18 @@ export function mutantsOf(c, max) {
     }
     return out;
 }
+const siteCache = new Map();
+/** Python environment fact that changes behavior (Experiment C): is distutils absent (clean venv) or
+ *  provided by setuptools' shim? Recorded in every Python result so evidence is not ambiguous. */
+export function pythonSite(bin) {
+    if (siteCache.has(bin))
+        return siteCache.get(bin);
+    const probe = "import importlib.util, sys, sysconfig\ns = importlib.util.find_spec('distutils')\nstd = sysconfig.get_paths()['stdlib']\no = (s.origin or '') if s else ''\nprint(('setuptools-shim' if ('setuptools' in o or '-packages' in o) else 'distutils-stdlib') if s else ('venv-clean' if sys.prefix != sys.base_prefix else 'no-distutils'))";
+    const r = spawnSync(bin, ["-I", "-c", probe], { encoding: "utf8", timeout: 5000 });
+    const v = r.status === 0 ? r.stdout.trim() : null;
+    siteCache.set(bin, v);
+    return v;
+}
 export function runtimeVersion(c, bins) {
     const bin = resolveBin(c.check.run[0], bins);
     const r = spawnSync(bin, ["--version"], { encoding: "utf8", timeout: 5000 });
@@ -150,7 +162,8 @@ export async function replay(c, opts = {}) {
     const binName = basename(resolveBin(c.check.run[0], bins));
     const runtime = /^bun/.test(binName) ? "bun" : c.runtime;
     const version = runtimeVersion(c, bins);
-    const conditions = { ...(c.check.env ?? {}), ...(opts.conditions ?? {}) };
+    const site = c.runtime === "python" ? pythonSite(resolveBin(c.check.run[0], bins)) : null;
+    const conditions = { ...(c.check.env ?? {}), ...(opts.conditions ?? {}), ...(site && site !== "distutils-stdlib" ? { SITE: site } : {}) };
     const condStr = Object.keys(conditions).sort().map((k) => `${k}=${conditions[k]}`).join(",");
     const predicate = {
         verdict,

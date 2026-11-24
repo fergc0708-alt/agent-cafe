@@ -1,0 +1,112 @@
+[
+  {
+    "query": "ModuleNotFoundError: No module named 'imghdr'",
+    "expected": "py-png-magic-bytes",
+    "rank": 1,
+    "top3": [
+      "py-png-magic-bytes",
+      "py-imghdr-removed",
+      "py-uu-removed"
+    ],
+    "replay": "PASS (python 3.13.18 linux-x64 [SITE=setuptools-shim], mutants 4/4)"
+  },
+  {
+    "query": "ERR_UNSUPPORTED_TYPESCRIPT_SYNTAX parameter property",
+    "expected": "node-ts-parameter-properties",
+    "rank": 1,
+    "top3": [
+      "node-ts-parameter-properties",
+      "py-cgi-parse-header",
+      "node-ts-import-extension"
+    ],
+    "replay": "PASS (node 22.23.5 linux-x64, mutants 3/4)"
+  },
+  {
+    "query": "SyntaxError: Unexpected identifier 'assert' json import",
+    "expected": "node-import-assert-to-with",
+    "rank": 1,
+    "top3": [
+      "node-import-assert-to-with",
+      "node-json-import-assert-OLD",
+      "node-json-import-with"
+    ],
+    "replay": "PASS (node 22.23.5 linux-x64, mutants 2/2)"
+  },
+  {
+    "query": "ReferenceError: __dirname is not defined in ES module scope",
+    "expected": "node-esm-dirname",
+    "rank": 1,
+    "top3": [
+      "node-esm-dirname",
+      "py-ssl-wrap-socket",
+      "py-imp-removed"
+    ],
+    "replay": "PASS (node 22.23.5 linux-x64, mutants 1/1)"
+  },
+  {
+    "query": "TypeError: Do not know how to serialize a BigInt",
+    "expected": "node-bigint-json",
+    "rank": 1,
+    "top3": [
+      "node-bigint-json",
+      "node-crypto-createcipher",
+      "py-distutils-removed"
+    ],
+    "replay": "PASS (node 22.23.5 linux-x64, mutants 1/1)"
+  },
+  {
+    "query": "No module named 'distutils'",
+    "expected": "py-distutils-removed",
+    "rank": 1,
+    "top3": [
+      "py-distutils-removed",
+      "py-uu-removed",
+      "py-imp-removed"
+    ],
+    "replay": "PROBLEM_NOT_REPRODUCED (python 3.12.3 linux-x64 [SITE=setuptools-shim], mutants 0/0)"
+  },
+  {
+    "query": "csv first column name has \\ufeff BOM",
+    "expected": "py-csv-utf8-bom",
+    "rank": 1,
+    "top3": [
+      "py-csv-utf8-bom",
+      "node-zlib-bytesread",
+      "py-unittest-makesuite"
+    ],
+    "replay": "PASS (python 3.12.3 linux-x64 [SITE=setuptools-shim], mutants 4/4)"
+  },
+  {
+    "query": "datetime.utcnow() is deprecated",
+    "expected": "py-utcnow-deprecated",
+    "rank": 1,
+    "top3": [
+      "py-utcnow-deprecated",
+      "py-locale-format",
+      "py-getargspec"
+    ],
+    "replay": "PASS (python 3.12.3 linux-x64 [SITE=setuptools-shim], mutants 3/3)"
+  },
+  {
+    "query": "pipeline exit status hides failure in bash script",
+    "expected": "bash-pipefail",
+    "rank": 1,
+    "top3": [
+      "bash-pipefail",
+      "bash-read-raw",
+      "node-structuredclone-dates"
+    ],
+    "replay": "PASS (bash 5.2.21 linux-x64, mutants 2/3)"
+  },
+  {
+    "query": "0.1 + 0.2 rounding error in invoice total",
+    "expected": "node-money-cents",
+    "rank": null,
+    "top3": [
+      "node-crypto-createcipher",
+      "py-ssl-wrap-socket",
+      "py-locale-format"
+    ],
+    "replay": "not found"
+  }
+]

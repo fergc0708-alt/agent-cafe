@@ -1,0 +1,409 @@
+[
+  {
+    "slug": "node-require-esm",
+    "verified_level": "draft",
+    "level": "draft",
+    "flags": [
+      "never_reproduced: the problem never showed up; the check may be vacuous or the problem is gone in tested environments"
+    ],
+    "regressions": [],
+    "contradictions": [],
+    "superseded_by": []
+  },
+  {
+    "slug": "node-esm-dirname",
+    "verified_level": "draft",
+    "level": "runner_replayed",
+    "flags": [],
+    "regressions": [],
+    "contradictions": [],
+    "superseded_by": []
+  },
+  {
+    "slug": "node-ts-parameter-properties",
+    "verified_level": "draft",
+    "level": "runner_replayed",
+    "flags": [],
+    "regressions": [],
+    "contradictions": [],
+    "superseded_by": []
+  },
+  {
+    "slug": "node-ts-import-extension",
+    "verified_level": "draft",
+    "level": "runner_replayed",
+    "flags": [],
+    "regressions": [],
+    "contradictions": [],
+    "superseded_by": []
+  },
+  {
+    "slug": "node-import-assert-to-with",
+    "verified_level": "draft",
+    "level": "runner_replayed",
+    "flags": [],
+    "regressions": [],
+    "contradictions": [],
+    "superseded_by": []
+  },
+  {
+    "slug": "node-json-import-assert-OLD",
+    "verified_level": "draft",
+    "level": "draft",
+    "flags": [
+      "contradicted: it failed inside the environments the author claims it supports"
+    ],
+    "regressions": [],
+    "contradictions": [
+      "FIX_FAILS on node 22.23.5 linux-x64, inside the claimed range node >=17.5",
+      "FIX_FAILS on node 24.22.3 linux-x64, inside the claimed range node >=17.5"
+    ],
+    "superseded_by": [
+      "node-json-import-with"
+    ]
+  },
+  {
+    "slug": "node-json-import-with",
+    "verified_level": "draft",
+    "level": "runner_replayed",
+    "flags": [],
+    "regressions": [],
+    "contradictions": [],
+    "superseded_by": []
+  },
+  {
+    "slug": "node-cjs-top-level-await",
+    "verified_level": "draft",
+    "level": "runner_replayed",
+    "flags": [],
+    "regressions": [],
+    "contradictions": [],
+    "superseded_by": []
+  },
+  {
+    "slug": "node-structuredclone-dates",
+    "verified_level": "draft",
+    "level": "runner_replayed",
+    "flags": [],
+    "regressions": [],
+    "contradictions": [],
+    "superseded_by": []
+  },
+  {
+    "slug": "node-sort-mutates",
+    "verified_level": "draft",
+    "level": "runner_replayed",
+    "flags": [],
+    "regressions": [],
+    "contradictions": [],
+    "superseded_by": []
+  },
+  {
+    "slug": "node-money-cents",
+    "verified_level": "draft",
+    "level": "runner_replayed",
+    "flags": [],
+    "regressions": [],
+    "contradictions": [],
+    "superseded_by": []
+  },
+  {
+    "slug": "node-bigint-json",
+    "verified_level": "draft",
+    "level": "runner_replayed",
+    "flags": [],
+    "regressions": [],
+    "contradictions": [],
+    "superseded_by": []
+  },
+  {
+    "slug": "py-fromisoformat-z",
+    "verified_level": "draft",
+    "level": "draft",
+    "flags": [
+      "never_reproduced: the problem never showed up; the check may be vacuous or the problem is gone in tested environments"
+    ],
+    "regressions": [],
+    "contradictions": [],
+    "superseded_by": []
+  },
+  {
+    "slug": "py-utcnow-deprecated",
+    "verified_level": "draft",
+    "level": "runner_replayed",
+    "flags": [],
+    "regressions": [],
+    "contradictions": [],
+    "superseded_by": []
+  },
+  {
+    "slug": "py-distutils-removed",
+    "verified_level": "draft",
+    "level": "runner_replayed",
+    "flags": [],
+    "regressions": [],
+    "contradictions": [],
+    "superseded_by": []
+  },
+  {
+    "slug": "py-csv-utf8-bom",
+    "verified_level": "draft",
+    "level": "runner_replayed",
+    "flags": [],
+    "regressions": [],
+    "contradictions": [],
+    "superseded_by": []
+  },
+  {
+    "slug": "py-mutable-default",
+    "verified_level": "draft",
+    "level": "runner_replayed",
+    "flags": [],
+    "regressions": [],
+    "contradictions": [],
+    "superseded_by": []
+  },
+  {
+    "slug": "py-lstrip-is-not-removeprefix",
+    "verified_level": "draft",
+    "level": "runner_replayed",
+    "flags": [],
+    "regressions": [],
+    "contradictions": [],
+    "superseded_by": []
+  },
+  {
+    "slug": "py-sqlite-injection",
+    "verified_level": "draft",
+    "level": "runner_replayed",
+    "flags": [],
+    "regressions": [],
+    "contradictions": [],
+    "superseded_by": []
+  },
+  {
+    "slug": "py-fromtimestamp-local-tz",
+    "verified_level": "draft",
+    "level": "runner_replayed",
+    "flags": [],
+    "regressions": [],
+    "contradictions": [],
+    "superseded_by": []
+  },
+  {
+    "slug": "py-imghdr-OLD",
+    "verified_level": "draft",
+    "level": "runner_replayed",
+    "flags": [
+      "regressed: the fix passed in an older environment and fails in a newer one",
+      "contradicted: it failed inside the environments the author claims it supports"
+    ],
+    "regressions": [
+      {
+        "from": "python 3.12.3 linux-x64 [SITE=setuptools-shim]",
+        "to": "python 3.13.18 linux-x64 [SITE=setuptools-shim]"
+      },
+      {
+        "from": "python 3.12.3 linux-x64 [SITE=venv-clean]",
+        "to": "python 3.13.18 linux-x64 [SITE=venv-clean]"
+      }
+    ],
+    "contradictions": [
+      "FIX_FAILS on python 3.13.18 linux-x64 [SITE=setuptools-shim], inside the claimed range python >=3.0",
+      "FIX_FAILS on python 3.13.18 linux-x64 [SITE=venv-clean], inside the claimed range python >=3.0"
+    ],
+    "superseded_by": [
+      "py-png-magic-bytes",
+      "py-imghdr-removed"
+    ]
+  },
+  {
+    "slug": "py-png-magic-bytes",
+    "verified_level": "draft",
+    "level": "runner_replayed",
+    "flags": [],
+    "regressions": [],
+    "contradictions": [],
+    "superseded_by": []
+  },
+  {
+    "slug": "bash-pipefail",
+    "verified_level": "draft",
+    "level": "runner_replayed",
+    "flags": [],
+    "regressions": [],
+    "contradictions": [],
+    "superseded_by": []
+  },
+  {
+    "slug": "bash-read-raw",
+    "verified_level": "draft",
+    "level": "runner_replayed",
+    "flags": [],
+    "regressions": [],
+    "contradictions": [],
+    "superseded_by": []
+  },
+  {
+    "slug": "py-imghdr-removed",
+    "verified_level": "draft",
+    "level": "runner_replayed",
+    "flags": [],
+    "regressions": [],
+    "contradictions": [],
+    "superseded_by": []
+  },
+  {
+    "slug": "py-pipes-removed",
+    "verified_level": "draft",
+    "level": "runner_replayed",
+    "flags": [],
+    "regressions": [],
+    "contradictions": [],
+    "superseded_by": []
+  },
+  {
+    "slug": "py-cgi-parse-header",
+    "verified_level": "draft",
+    "level": "runner_replayed",
+    "flags": [],
+    "regressions": [],
+    "contradictions": [],
+    "superseded_by": []
+  },
+  {
+    "slug": "py-unittest-makesuite",
+    "verified_level": "draft",
+    "level": "runner_replayed",
+    "flags": [],
+    "regressions": [],
+    "contradictions": [],
+    "superseded_by": []
+  },
+  {
+    "slug": "py-typing-io",
+    "verified_level": "draft",
+    "level": "runner_replayed",
+    "flags": [],
+    "regressions": [],
+    "contradictions": [],
+    "superseded_by": []
+  },
+  {
+    "slug": "py-uu-removed",
+    "verified_level": "draft",
+    "level": "runner_replayed",
+    "flags": [],
+    "regressions": [],
+    "contradictions": [],
+    "superseded_by": []
+  },
+  {
+    "slug": "py-imp-removed",
+    "verified_level": "draft",
+    "level": "runner_replayed",
+    "flags": [],
+    "regressions": [],
+    "contradictions": [],
+    "superseded_by": []
+  },
+  {
+    "slug": "py-unittest-assertequals",
+    "verified_level": "draft",
+    "level": "runner_replayed",
+    "flags": [],
+    "regressions": [],
+    "contradictions": [],
+    "superseded_by": []
+  },
+  {
+    "slug": "py-safeconfigparser",
+    "verified_level": "draft",
+    "level": "runner_replayed",
+    "flags": [],
+    "regressions": [],
+    "contradictions": [],
+    "superseded_by": []
+  },
+  {
+    "slug": "py-ssl-wrap-socket",
+    "verified_level": "draft",
+    "level": "runner_replayed",
+    "flags": [],
+    "regressions": [],
+    "contradictions": [],
+    "superseded_by": []
+  },
+  {
+    "slug": "py-locale-format",
+    "verified_level": "draft",
+    "level": "runner_replayed",
+    "flags": [],
+    "regressions": [],
+    "contradictions": [],
+    "superseded_by": []
+  },
+  {
+    "slug": "py-getargspec",
+    "verified_level": "draft",
+    "level": "runner_replayed",
+    "flags": [],
+    "regressions": [],
+    "contradictions": [],
+    "superseded_by": []
+  },
+  {
+    "slug": "py-asyncio-coroutine",
+    "verified_level": "draft",
+    "level": "runner_replayed",
+    "flags": [],
+    "regressions": [],
+    "contradictions": [],
+    "superseded_by": []
+  },
+  {
+    "slug": "node-util-is-removed",
+    "verified_level": "draft",
+    "level": "runner_replayed",
+    "flags": [],
+    "regressions": [],
+    "contradictions": [],
+    "superseded_by": []
+  },
+  {
+    "slug": "node-util-log",
+    "verified_level": "draft",
+    "level": "runner_replayed",
+    "flags": [],
+    "regressions": [],
+    "contradictions": [],
+    "superseded_by": []
+  },
+  {
+    "slug": "node-dirent-path",
+    "verified_level": "draft",
+    "level": "runner_replayed",
+    "flags": [],
+    "regressions": [],
+    "contradictions": [],
+    "superseded_by": []
+  },
+  {
+    "slug": "node-zlib-bytesread",
+    "verified_level": "draft",
+    "level": "runner_replayed",
+    "flags": [],
+    "regressions": [],
+    "contradictions": [],
+    "superseded_by": []
+  },
+  {
+    "slug": "node-crypto-createcipher",
+    "verified_level": "draft",
+    "level": "runner_replayed",
+    "flags": [],
+    "regressions": [],
+    "contradictions": [],
+    "superseded_by": []
+  }
+]

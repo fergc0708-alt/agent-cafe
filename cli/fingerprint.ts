@@ -59,7 +59,9 @@ if out["venv"] and os.path.exists(cfg):
 out["system_site_packages"] = (not out["venv"]) or bool(sysite)
 spec = importlib.util.find_spec("distutils")
 std = sysconfig.get_paths()["stdlib"]
-out["distutils"] = "missing" if spec is None else ("stdlib" if (spec.origin or "").startswith(std) else "setuptools-shim")
+origin = spec.origin or "" if spec else ""
+# stdlib is a prefix of site-packages on some layouts, so classify by where it really comes from
+out["distutils"] = "missing" if spec is None else ("setuptools-shim" if ("setuptools" in origin or "-packages" in origin) else "stdlib")
 out["setuptools"] = importlib.util.find_spec("setuptools") is not None
 out["kind"] = "conda" if "conda" in sys.prefix.lower() else ("pyenv" if ".pyenv" in sys.prefix else ("venv" if out["venv"] else "system"))
 print(json.dumps(out))

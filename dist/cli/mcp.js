@@ -119,7 +119,7 @@ async function call(name, a) {
                 environment: envLine(r.fingerprint),
                 checked: r.environments.map((e) => `${e.runtime} ${e.version} (${e.label})`),
                 findings: r.findings.slice(0, 10).map((f) => compact(f, index, false)),
-                not_affected: r.clear.map((c) => c.slug),
+                not_affected: r.clear.map((c) => (c.conditional ? `${c.slug} (only here: ${c.conditional})` : c.slug)),
                 not_determined: r.fingerprint.missing,
                 evidence: `${r.evidence.verified} verified CI runs + ${r.evidence.claimed} self-reported. Verified = where it ran, not independent review.`,
                 next: r.findings.length ? "cafe_show <name> for the fix diff; cafe_replay to reproduce here." : "Nothing known applies.",

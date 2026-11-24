@@ -4,7 +4,7 @@
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { extname, join, relative } from "node:path";
 import { capsuleId, parseVersion, validateCapsule, type Capsule } from "../core/capsule/capsule.ts";
-import { buildFinding, evaluate, matchError, type EvidenceRow, type Finding, type Hit, type IndexEntry, type TargetEnv } from "../core/doctor/match.ts";
+import { buildFinding, evaluate, matchError, relevantConditions, type EvidenceRow, type Finding, type Hit, type IndexEntry, type TargetEnv } from "../core/doctor/match.ts";
 import { fingerprint, type Fingerprint } from "./fingerprint.ts";
 
 // Works from the source tree (cli/) and from the compiled CLI (dist/cli/).
@@ -150,7 +150,9 @@ export interface DoctorReport {
   scanned_files: number;
   rules: number;
   findings: Finding[];
-  clear: { slug: string; hits: number }[];
+  /** Breaks found in the code that do not affect these environments; `conditional` names the
+   *  conditions under which the SAME version does break (e.g. a clean deploy venv). */
+  clear: { slug: string; hits: number; conditional?: string }[];
   evidence: LoadedIndex["evidence"];
 }
 
@@ -165,8 +167,15 @@ export async function doctor(projectDir: string, targets: string[] = [], bins: R
     const entry = index.byId.get(id)!;
     const f = buildFinding(entry, envs, `your code uses the affected API (${h.length}${h.length === 5 ? "+" : ""} place${h.length === 1 ? "" : "s"})`, h, index.byId);
     if (!f.verdicts.length) continue;
-    if (f.verdicts.every((v) => v.status === "not_affected")) clear.push({ slug: f.slug, hits: h.length });
-    else findings.push(f);
+    if (f.verdicts.every((v) => v.status === "not_affected")) {
+      const mmOf = (v: string) => v.split(".").slice(0, 2).join(".");
+      const versions = new Set(f.verdicts.map((v) => `${v.env.runtime}@${mmOf(v.env.version)}`));
+      const relevant = relevantConditions(entry.rows);
+      const elsewhere = entry.rows.filter((r) => versions.has(`${r.runtime}@${mmOf(r.version)}`) && (r.verdict === "PASS" || r.verdict === "FIX_FAILS") && Object.keys(r.conditions).some((k) => relevant.has(k)));
+      const conds = [...new Set(elsewhere.map((r) => Object.entries(r.conditions).filter(([k]) => relevant.has(k)).map(([k, v]) => `${k}=${v}`).join(",")))];
+      clear.push({ slug: f.slug, hits: h.length, ...(conds.length ? { conditional: `the same version breaks with ${conds.join(" or ")}` } : {}) });
+    } else findings.push(f);
+    continue;
   }
   findings.sort((a, b) => b.severity - a.severity);
   return { project: projectDir, fingerprint: fp, environments: envs, scanned_files: scanned, rules: index.entries.filter((e) => e.capsule.detect).length, findings, clear, evidence: index.evidence };
