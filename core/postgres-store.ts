@@ -239,11 +239,11 @@ export class PostgresStore implements Store {
     if (Math.random() < 0.01) await this.q("delete from rate_limits where reset_at < now() - interval '1 day'");
     return Number(rows[0].count) <= max;
   }
-  async trackVisit(day: string, channel: string, client: string) {
+  async trackVisit(day: string, channel: string, client: string, n = 1) {
     await this.q(
-      `insert into visits (day, channel, client, count) values ($1, $2, $3, 1)
-       on conflict (day, channel, client) do update set count = visits.count + 1`,
-      [day, channel, client],
+      `insert into visits (day, channel, client, count) values ($1, $2, $3, $4)
+       on conflict (day, channel, client) do update set count = visits.count + excluded.count`,
+      [day, channel, client, n],
     );
   }
   visitsSince(day: string) {

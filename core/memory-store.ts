@@ -199,11 +199,11 @@ export class MemoryStore implements Store {
     r.count++;
     return true;
   }
-  async trackVisit(day: string, channel: string, client: string) {
+  async trackVisit(day: string, channel: string, client: string, n = 1) {
     const k = `${day}|${channel}|${client}`;
     const v = this.visits.get(k);
-    if (v) v.count++;
-    else this.visits.set(k, { day, channel, client, count: 1 });
+    if (v) v.count += n;
+    else this.visits.set(k, { day, channel, client, count: n });
   }
   async visitsSince(day: string) {
     return Array.from(this.visits.values()).filter((v) => v.day >= day);

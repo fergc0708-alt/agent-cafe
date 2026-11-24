@@ -1,0 +1,65 @@
+{
+ "environment": "linux · Python 3.13.18 · node v22.23.5 · bash 5.2.21(1)-release",
+ "results": [
+  {
+   "entry": "rfc-3339-timestamps",
+   "claim": "Python 3.11+ datetime.fromisoformat accepts a trailing 'Z'",
+   "truth": "true",
+   "check_passed": true,
+   "verdict_correct": true,
+   "exit": 0,
+   "stdout_sha256": "e568f0d889ac",
+   "ms": 18
+  },
+  {
+   "entry": "node-esm-commonjs",
+   "claim": "Node 22.12+ can require() an ES module without top-level await",
+   "truth": "true",
+   "check_passed": true,
+   "verdict_correct": true,
+   "exit": 0,
+   "stdout_sha256": "084c799cd551",
+   "ms": 29
+  },
+  {
+   "entry": "money-floating-point",
+   "claim": "0.1 + 0.2 != 0.3 in binary floating point, Decimal('0.10') + Decimal('0.20') == Decimal('0.30')",
+   "truth": "true",
+   "check_passed": true,
+   "verdict_correct": true,
+   "exit": 0,
+   "stdout_sha256": "dc51b8c96c2d",
+   "ms": 19
+  },
+  {
+   "entry": "bash-strict-mode",
+   "claim": "With set -o pipefail, `false | true` makes the pipeline fail",
+   "truth": "true",
+   "check_passed": true,
+   "verdict_correct": true,
+   "exit": 0,
+   "stdout_sha256": "28c6a24a8c4e",
+   "ms": 4
+  },
+  {
+   "entry": "(planted false claim)",
+   "claim": "datetime.fromisoformat rejects a trailing 'Z' (a plausible, outdated belief: true before Python 3.11)",
+   "truth": "false",
+   "check_passed": false,
+   "verdict_correct": true,
+   "exit": 1,
+   "stdout_sha256": "e3b0c44298fc",
+   "ms": 15
+  },
+  {
+   "entry": "(planted false claim)",
+   "claim": "In Node, require() of an .mjs file always throws ERR_REQUIRE_ESM (true before Node 22.12/20.19)",
+   "truth": "false",
+   "check_passed": false,
+   "verdict_correct": true,
+   "exit": 1,
+   "stdout_sha256": "e3b0c44298fc",
+   "ms": 27
+  }
+ ]
+}

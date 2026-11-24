@@ -53,6 +53,6 @@ export interface Store {
   topSearches(o: { onlyMisses: boolean; limit: number }): Promise<SearchStat[]>;
   /** Returns true if the call is allowed (and counts it), false if the limit was hit. */
   hitRateLimit(key: string, windowSeconds: number, max: number): Promise<boolean>;
-  trackVisit(day: string, channel: string, client: string): Promise<void>;
+  trackVisit(day: string, channel: string, client: string, n?: number): Promise<void>;
   visitsSince(day: string): Promise<VisitStat[]>;
 }
