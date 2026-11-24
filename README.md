@@ -62,13 +62,13 @@ Six short tools: `cafe_diagnose` (error → matching fix as a diff, or "nothing 
 ```yaml
 - uses: actions/setup-node@v4          # your project's runtimes, as you already set them up
 - uses: actions/setup-python@v5
-- uses: fergc0708-alt/agent-cafe@goat/evidence-network
+- uses: fergc0708-alt/agent-cafe@c1eb37e6eb8b100e45f77c70ab7665799e1fda5c   # pin a full commit SHA, never a branch
   with:
     fail-on: now                       # or "upgrade" to also fail on breaks at the newest verified versions
     # targets: "node@24,python@3.13"
 ```
 
-It runs on the job's own Node/Python (it does not install its own runtime, so the report describes your toolchain), writes a Markdown summary, and **reports an untested environment as untested, never as passing**. Dogfooded on [`examples/legacy-app`](examples/legacy-app) by `.github/workflows/guard-example.yml` (Node 20 + Python 3.11 and Node 24 + Python 3.13).
+It runs on the job's own Node/Python (it does not install its own runtime, so the report describes your toolchain), writes a Markdown summary, and **reports an untested environment as untested, never as passing**. Dogfooded on [`examples/legacy-app`](examples/legacy-app) by `.github/workflows/guard-example.yml` (Node 20 + Python 3.11 and Node 24 + Python 3.13), including a job that consumes the action by pinned SHA exactly as an external repository would. The action needs no `npm install`, no token and no permissions beyond `contents: read`; it makes no network calls.
 
 ## How it knows: capsules and executed evidence
 
@@ -92,7 +92,7 @@ A **capsule** is a minimal broken program, its fix, and a check that must fail o
 
 - **Engine and evidence:** 62 automated tests (`npm test`), including OIDC forgery/replay attempts, the evidence semantics and its re-derivation from signatures, the scan, the MCP approval flow, and regressions for every reproduced red-team finding.
 - **Security audit:** two adversarial audits by separate agents (same model family, so not independent in the strong sense). The second found 1 critical, 5 high and 7 medium issues on this iteration (repository-shipped interpreters executed during `doctor`, planted local capsules, a green pass when a runtime was not evaluated, a circular evidence-integrity test, a broad OIDC policy, …); all critical/high and most medium ones are fixed with regression tests. See [docs/SECURITY-THREAT-MODEL.md](docs/SECURITY-THREAT-MODEL.md).
-- **Utility for agents:** a pre-registered controlled evaluation ([`experiments/eval`](experiments/eval/RESULTS.md)): 4 tasks × {with, without} × 2 repetitions, same model, hidden graders. **Both arms solved 8/8; the agents with Agent Café were slower (median 34 s vs 21 s on the wedge tasks).** The pre-registered success rule was not met. On these well-documented breaks the model already knows the fix. The evaluation also exposed two product defects (a detection rule that missed submodule imports; diagnose ruling out the right fix because it only checked the default runtime), both fixed afterwards and not re-run. Only one model family was available, so the cross-family run is still pending.
+- **Utility for agents:** a pre-registered controlled evaluation ([`experiments/eval`](experiments/eval/RESULTS.md)): 4 tasks × {with, without} × 2 repetitions, same model, hidden graders. **Both arms solved 8/8; the agents with Agent Café were slower (median 34 s vs 21 s on the wedge tasks).** The pre-registered success rule was not met. On these well-documented breaks the model already knows the fix. The evaluation also exposed two product defects (a detection rule that missed submodule imports; diagnose ruling out the right fix because it only checked the default runtime), both fixed afterwards. **A replication after the fixes (run 2) gave the same picture: 8/8 vs 8/8, +56% median time with Agent Café, and +52% on the task where no capsule applies.** Only one model family was available, so the cross-family run is still pending.
 - **Where it plausibly helps (not yet measured):** catching breaks before any agent or developer time is spent (the CI guard), breaks newer than the model's knowledge, environment traps that look fine locally (the distutils/setuptools case), and "this fix breaks your other supported version".
 
 ## Limits you should know

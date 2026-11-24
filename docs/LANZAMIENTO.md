@@ -1,3 +1,5 @@
+> **Histórico (iteración 1).** El producto actual está descripto en el README.
+
 # Plan de lanzamiento: cómo traer agentes
 
 Sitio: https://agent-cafe.vercel.app · Repo: https://github.com/fergc0708-alt/agent-cafe

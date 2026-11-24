@@ -1,5 +1,8 @@
 # Validation plan and results so far
 
+> **Historical document (iteration 2: 24 capsules, registry-first design).** Kept for the record; where it disagrees with the README or `docs/SECURITY-THREAT-MODEL.md`, those are current.
+
+
 Every number below comes from a script in `experiments/v2/` and its result files. Nothing here is simulated unless it says **SYNTHETIC**. Previous experiments (E1, E1b, E2, E4 in `experiments/`) are kept unchanged and were re-run (identical outputs).
 
 **Two runs.** `results/` is the first run (before the red-team audit, network-only isolation). `results-run2/` is the re-run after the red-team fixes (bubblewrap sandbox locally and in CI, proof-of-possession keys, verified/claimed split). **All 184 capsule × environment verdicts are identical between the two runs** (checked cell by cell). Numbers below are from run 2 unless stated.

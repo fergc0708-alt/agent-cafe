@@ -1,0 +1,310 @@
+[
+  {
+    "task": "clean-venv-versions",
+    "arm": "cafe",
+    "rep": "r1",
+    "pass": true,
+    "results": [
+      {
+        "bin": "/usr/bin/python3.11",
+        "pass": true,
+        "err": ""
+      },
+      {
+        "bin": "/tmp/venv-3.12/bin/python",
+        "pass": true,
+        "err": ""
+      },
+      {
+        "bin": "/tmp/venv-3.13/bin/python",
+        "pass": true,
+        "err": ""
+      }
+    ]
+  },
+  {
+    "task": "clean-venv-versions",
+    "arm": "cafe",
+    "rep": "r2",
+    "pass": true,
+    "results": [
+      {
+        "bin": "/usr/bin/python3.11",
+        "pass": true,
+        "err": ""
+      },
+      {
+        "bin": "/tmp/venv-3.12/bin/python",
+        "pass": true,
+        "err": ""
+      },
+      {
+        "bin": "/tmp/venv-3.13/bin/python",
+        "pass": true,
+        "err": ""
+      }
+    ]
+  },
+  {
+    "task": "clean-venv-versions",
+    "arm": "control",
+    "rep": "r1",
+    "pass": true,
+    "results": [
+      {
+        "bin": "/usr/bin/python3.11",
+        "pass": true,
+        "err": ""
+      },
+      {
+        "bin": "/tmp/venv-3.12/bin/python",
+        "pass": true,
+        "err": ""
+      },
+      {
+        "bin": "/tmp/venv-3.13/bin/python",
+        "pass": true,
+        "err": ""
+      }
+    ]
+  },
+  {
+    "task": "clean-venv-versions",
+    "arm": "control",
+    "rep": "r2",
+    "pass": true,
+    "results": [
+      {
+        "bin": "/usr/bin/python3.11",
+        "pass": true,
+        "err": ""
+      },
+      {
+        "bin": "/tmp/venv-3.12/bin/python",
+        "pass": true,
+        "err": ""
+      },
+      {
+        "bin": "/tmp/venv-3.13/bin/python",
+        "pass": true,
+        "err": ""
+      }
+    ]
+  },
+  {
+    "task": "no-capsule-duration",
+    "arm": "cafe",
+    "rep": "r1",
+    "pass": true,
+    "results": [
+      {
+        "bin": "/usr/bin/python3.12",
+        "pass": true,
+        "err": ""
+      },
+      {
+        "bin": "/usr/bin/python3.13",
+        "pass": true,
+        "err": ""
+      }
+    ]
+  },
+  {
+    "task": "no-capsule-duration",
+    "arm": "cafe",
+    "rep": "r2",
+    "pass": true,
+    "results": [
+      {
+        "bin": "/usr/bin/python3.12",
+        "pass": true,
+        "err": ""
+      },
+      {
+        "bin": "/usr/bin/python3.13",
+        "pass": true,
+        "err": ""
+      }
+    ]
+  },
+  {
+    "task": "no-capsule-duration",
+    "arm": "control",
+    "rep": "r1",
+    "pass": true,
+    "results": [
+      {
+        "bin": "/usr/bin/python3.12",
+        "pass": true,
+        "err": ""
+      },
+      {
+        "bin": "/usr/bin/python3.13",
+        "pass": true,
+        "err": ""
+      }
+    ]
+  },
+  {
+    "task": "no-capsule-duration",
+    "arm": "control",
+    "rep": "r2",
+    "pass": true,
+    "results": [
+      {
+        "bin": "/usr/bin/python3.12",
+        "pass": true,
+        "err": ""
+      },
+      {
+        "bin": "/usr/bin/python3.13",
+        "pass": true,
+        "err": ""
+      }
+    ]
+  },
+  {
+    "task": "node24-gzip-stats",
+    "arm": "cafe",
+    "rep": "r1",
+    "pass": true,
+    "results": [
+      {
+        "bin": "/opt/node22/bin/node",
+        "pass": true,
+        "err": ""
+      },
+      {
+        "bin": "/opt/node24/bin/node",
+        "pass": true,
+        "err": ""
+      }
+    ]
+  },
+  {
+    "task": "node24-gzip-stats",
+    "arm": "cafe",
+    "rep": "r2",
+    "pass": true,
+    "results": [
+      {
+        "bin": "/opt/node22/bin/node",
+        "pass": true,
+        "err": ""
+      },
+      {
+        "bin": "/opt/node24/bin/node",
+        "pass": true,
+        "err": ""
+      }
+    ]
+  },
+  {
+    "task": "node24-gzip-stats",
+    "arm": "control",
+    "rep": "r1",
+    "pass": true,
+    "results": [
+      {
+        "bin": "/opt/node22/bin/node",
+        "pass": true,
+        "err": ""
+      },
+      {
+        "bin": "/opt/node24/bin/node",
+        "pass": true,
+        "err": ""
+      }
+    ]
+  },
+  {
+    "task": "node24-gzip-stats",
+    "arm": "control",
+    "rep": "r2",
+    "pass": true,
+    "results": [
+      {
+        "bin": "/opt/node22/bin/node",
+        "pass": true,
+        "err": ""
+      },
+      {
+        "bin": "/opt/node24/bin/node",
+        "pass": true,
+        "err": ""
+      }
+    ]
+  },
+  {
+    "task": "py313-plugins",
+    "arm": "cafe",
+    "rep": "r1",
+    "pass": true,
+    "results": [
+      {
+        "bin": "/usr/bin/python3.11",
+        "pass": true,
+        "err": ""
+      },
+      {
+        "bin": "/usr/bin/python3.13",
+        "pass": true,
+        "err": ""
+      }
+    ]
+  },
+  {
+    "task": "py313-plugins",
+    "arm": "cafe",
+    "rep": "r2",
+    "pass": true,
+    "results": [
+      {
+        "bin": "/usr/bin/python3.11",
+        "pass": true,
+        "err": ""
+      },
+      {
+        "bin": "/usr/bin/python3.13",
+        "pass": true,
+        "err": ""
+      }
+    ]
+  },
+  {
+    "task": "py313-plugins",
+    "arm": "control",
+    "rep": "r1",
+    "pass": true,
+    "results": [
+      {
+        "bin": "/usr/bin/python3.11",
+        "pass": true,
+        "err": ""
+      },
+      {
+        "bin": "/usr/bin/python3.13",
+        "pass": true,
+        "err": ""
+      }
+    ]
+  },
+  {
+    "task": "py313-plugins",
+    "arm": "control",
+    "rep": "r2",
+    "pass": true,
+    "results": [
+      {
+        "bin": "/usr/bin/python3.11",
+        "pass": true,
+        "err": ""
+      },
+      {
+        "bin": "/usr/bin/python3.13",
+        "pass": true,
+        "err": ""
+      }
+    ]
+  }
+]

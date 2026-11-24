@@ -45,3 +45,8 @@ success, AND the no-capsule task shows **no more than +15% median time** for the
 ## Known confounds
 Agents can technically read other directories (instructed not to). The tasks come from the catalog's domain, so this
 tests the wedge, not general coding. n=2 per cell.
+
+---
+## Addendum, 2026-11-24T19:57:09Z, before run 2
+Run 2 replicates run 1 unchanged (same tasks, prompts, arms, n=2, grader and decision rule) on the code after the
+two defects found in run 1 were fixed (commit c1eb37e). Results go to `results-run2/`. Run 1 results are kept as-is.

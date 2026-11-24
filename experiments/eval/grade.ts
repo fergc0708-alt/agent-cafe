@@ -20,7 +20,7 @@ for (const ws of readdirSync(runs).sort()) {
   rmSync(dir, { recursive: true, force: true });
   rows.push({ task, arm, rep, pass: results.every((x: any) => x.pass), results });
 }
-const outDir = new URL("./results/", import.meta.url).pathname;
+const outDir = new URL(`./${process.env.RESULTS ?? "results"}/`, import.meta.url).pathname;
 if (!existsSync(outDir)) cpSync(tasks, outDir, { filter: () => false });
 writeFileSync(join(outDir, "grades.json"), JSON.stringify(rows, null, 2) + "\n");
 for (const r of rows) console.log(`${r.pass ? "PASS" : "FAIL"} ${r.task.padEnd(22)} ${r.arm.padEnd(8)} ${r.rep}  ${r.results.filter((x: any) => !x.pass).map((x: any) => `${x.bin}: ${x.err}`).join(" | ")}`);

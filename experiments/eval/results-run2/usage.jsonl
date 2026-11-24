@@ -1,0 +1,16 @@
+{"ws":"no-capsule-duration__control__r2","tokens":58740,"tool_uses":6,"ms":17800,"failed_approaches":"none","cafe_report":"n/a"}
+{"ws":"no-capsule-duration__control__r1","tokens":59011,"tool_uses":7,"ms":19787,"failed_approaches":"none","cafe_report":"n/a"}
+{"ws":"node24-gzip-stats__control__r1","tokens":59006,"tool_uses":6,"ms":20196,"failed_approaches":"none","cafe_report":"n/a"}
+{"ws":"node24-gzip-stats__control__r2","tokens":59336,"tool_uses":7,"ms":20796,"failed_approaches":"none","cafe_report":"n/a"}
+{"ws":"py313-plugins__control__r2","tokens":59087,"tool_uses":7,"ms":21643,"failed_approaches":"none","cafe_report":"n/a"}
+{"ws":"py313-plugins__control__r1","tokens":59202,"tool_uses":7,"ms":22320,"failed_approaches":"none","cafe_report":"n/a"}
+{"ws":"clean-venv-versions__control__r2","tokens":59804,"tool_uses":7,"ms":25588,"failed_approaches":"none","cafe_report":"n/a"}
+{"ws":"clean-venv-versions__control__r1","tokens":59388,"tool_uses":6,"ms":25644,"failed_approaches":"none","cafe_report":"n/a"}
+{"ws":"no-capsule-duration__cafe__r2","tokens":60774,"tool_uses":8,"ms":28453,"failed_approaches":"none","cafe_report":"diagnose no match + doctor no break: correct, not misleading"}
+{"ws":"no-capsule-duration__cafe__r1","tokens":59642,"tool_uses":7,"ms":28706,"failed_approaches":"none","cafe_report":"diagnose no match: correct, irrelevant"}
+{"ws":"node24-gzip-stats__cafe__r2","tokens":61067,"tool_uses":8,"ms":32717,"failed_approaches":"none","cafe_report":"diagnose weak match + doctor flagged stats.cjs:11: correct; did not save effort (Node 22 warning named the fix)"}
+{"ws":"node24-gzip-stats__cafe__r1","tokens":61403,"tool_uses":8,"ms":32796,"failed_approaches":"none","cafe_report":"doctor + diagnose correct; agent already had the fix from Node 22 warning"}
+{"ws":"py313-plugins__cafe__r2","tokens":61004,"tool_uses":9,"ms":33422,"failed_approaches":"none","cafe_report":"diagnose + show correct and useful; diff applied"}
+{"ws":"clean-venv-versions__cafe__r2","tokens":61694,"tool_uses":9,"ms":35079,"failed_approaches":"none","cafe_report":"diagnose weak match + show correct; 'default python not affected' beside the point; agent rejected the int-tuple fix as too brittle for '1.0rc1'"}
+{"ws":"py313-plugins__cafe__r1","tokens":60982,"tool_uses":9,"ms":35433,"failed_approaches":"none","cafe_report":"diagnose + show correct; diff applied"}
+{"ws":"clean-venv-versions__cafe__r1","tokens":62405,"tool_uses":9,"ms":41176,"failed_approaches":"none","cafe_report":"diagnose weak match + show correct; agent rejected int-tuple fix as too brittle"}

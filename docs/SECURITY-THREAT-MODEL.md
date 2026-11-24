@@ -28,7 +28,7 @@ The auditor found 4 critical, 4 high, 4 medium and 4 low issues and reproduced 1
 
 | id | finding | status | what changed |
 |---|---|---|---|
-| C1 | Two free accounts could push a never-run, vacuous capsule to `independent_check_confirmed` with fabricated, self-signed predicates | **FIXED in meaning, OPEN in capability** | The main `level` and its flags now use **only results from runners the registry verified** (`trusted`, settable only by the operator; no API). Everything else appears under `evidence.claimed`, labeled "self-reported, not verified". Re-running the exploit: verified level `draft`; the claimed level is capped by `weak_check`. Verifying runner identities (Sigstore/GitHub OIDC) is **PENDING**, so today no capsule has a verified level above `draft`. |
+| C1 | Two free accounts could push a never-run, vacuous capsule to `independent_check_confirmed` with fabricated, self-signed predicates | **FIXED in meaning, OPEN in capability** | The main `level` and its flags now use **only results from runners the registry verified** (`trusted`, settable only by the operator; no API). Everything else appears under `evidence.claimed`, labeled "self-reported, not verified". Re-running the exploit: verified level `draft`; the claimed level is capped by `weak_check`. At the time verifying runner identities was pending; *(3.0)* GitHub OIDC verification now exists (see "Red team 3.0" and remaining risk 1). |
 | C2 | `cafe replay` let fix files run arbitrary code as the user (read SSH keys and the runner key, persist in `.bashrc`, leave background processes, leak key bits through timing/exit codes), the prompt hid fix-file contents, and isolation fell back silently to none | **FIXED (for bubblewrap-capable Linux)** | The default isolation is **bubblewrap**: no network, read-only `/`, `/home`, `/root` and `/tmp` replaced by empty tmpfs, only the replay dir writable, `--die-with-parent` + PID namespace kill stray processes. **Fails closed**: without bubblewrap the runner refuses unless the user explicitly picks `--isolation net-only` or `none`. The confirmation shows **every executable file** (before, after, check). Published predicates carry only `passed`/`timed_out` (no exit codes, timings, stdout hashes or kernel). Re-running the exploit inside the sandbox: no home/SSH/key read, `.bashrc` untouched, no surviving process, nothing leaked. On macOS/Windows there is no sandbox yet: replay needs a VM/container and an explicit `--isolation none`. |
 | C3 | Same-author checks that defeat mutation testing: canary export, tautology, text inspection via string tricks, inline `node -p`, `json.py` shadowing the stdlib, `python -m pytest` with a plugin in `pyproject.toml` | **PARTLY FIXED** | `check.run` must be exactly `[interpreter, <check file>]` (no flags, no `-m`, `-p`, `-c`, `--import`); Python files that shadow stdlib modules, `pyproject.toml`, `setup.py`, compiled/native files and case variants (`Conftest.py`) are rejected; the "empty file" mutant was removed and a PASS needs ≥ 50% of line-deletion mutants caught; five lint findings now cap the level; optional `problem.symptom_regex` makes the *before* failure match the declared symptom. **OPEN:** a determined author can still write a tautological or canary check that passes mutation testing. The only real defense is a check written by someone else (`independent_check_confirmed`), which is why that level exists. |
 | C4 | Anyone could register a published public key and claim all its published results | **FIXED** | Registering a runner requires **proof of possession**: an Ed25519 signature over `agent-cafe/runner-registration/v1\n<handle>\n<public_key>`. Re-running the exploit: 0/104 envelopes credited to the squatter. |
@@ -90,3 +90,25 @@ evidence bundle, OIDC verification, MCP, capture and the Action. Status after th
 | L4 | Action on Node < 20 | **FIXED**: explicit version check. |
 | L5 | Published CI artifacts replayable to a registry within 7 days | OPEN (low): attribution stays with the GitHub identity. |
 | L6 | TZ forced to UTC but not recorded | OPEN (documented in README limits). |
+
+## MCP tool review (GOAT 4)
+
+| tool | reads | writes | executes | network | approval |
+|---|---|---|---|---|---|
+| `cafe_doctor` | project files (lstat, regular files, bounded) + bundled catalog | nothing | interpreter version probes; non-PATH interpreters only inside bubblewrap | none | `readOnlyHint` |
+| `cafe_diagnose` | same + the pasted error (≤ 20 KB) | nothing | same probes | none | `readOnlyHint` |
+| `cafe_show` / `cafe_search` | bundled catalog, `.cafe/capsules` (labelled unverified) | nothing | version probes (`show`) | none | `readOnlyHint` |
+| `cafe_replay` | catalog or project capsule by name/id only (no paths) | temp dir | capsule code in bubblewrap (no network, read-only system) | none | preview → digest (code + interpreters) → `destructiveHint` |
+| `cafe_capture` | git HEAD + listed files inside the project | `.cafe/capsules/<name>.json` | the user's own test in bubblewrap | none | same two-step |
+
+All tools declare `openWorldHint: false`. Changes in this round: explicit `readOnlyHint: false` on the two executing
+tools, and the preview-digest set is bounded (256) so a long session cannot grow it without limit.
+
+**Residual risks (accepted, documented):**
+- The digest gate is not a human gate: a model can echo the digest. The real gate is the client's approval prompt,
+  which depends on the client honouring `destructiveHint`. Clients that auto-approve all tools remove it.
+- `path` is chosen by the model: doctor can be pointed at any directory the MCP server process can read. It only
+  reports file:line positions of known API uses, never file contents, but a hostile prompt could use it to probe
+  whether a path exists. Same privilege as the agent's own shell.
+- On macOS/Windows there is no bubblewrap: `cafe_replay`/`cafe_capture` refuse to run instead of running unsandboxed
+  (fail closed); doctor's non-PATH interpreter probes are skipped and the environment is reported NOT EVALUATED.

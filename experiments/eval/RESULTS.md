@@ -46,3 +46,29 @@ limit: the cross-family run remains unperformed.
 
 The two defects above were fixed after this run (see git history); the numbers above are from the code as it was when
 the run started and are not re-run.
+
+---
+
+# Run 2 (replication after the fixes, 2026-11-24)
+
+Same tasks, prompts, arms, n=2, grader and decision rule (addendum in `PREREGISTRATION.md`, written before the run).
+Code: commit c1eb37e (both run-1 defects fixed). Data: `results-run2/`.
+
+| task | arm | first-attempt success | median time (s) | median tokens | median tool calls |
+|---|---|---|---|---|---|
+| clean-venv-versions | control | 2/2 | 25.6 | 59596 | 6.5 |
+| clean-venv-versions | cafe | 2/2 | 38.1 | 62050 | 9 |
+| no-capsule-duration | control | 2/2 | 18.8 | 58876 | 6.5 |
+| no-capsule-duration | cafe | 2/2 | 28.6 | 60208 | 7.5 |
+| node24-gzip-stats | control | 2/2 | 20.5 | 59171 | 6.5 |
+| node24-gzip-stats | cafe | 2/2 | 32.8 | 61235 | 8 |
+| py313-plugins | control | 2/2 | 22.0 | 59145 | 7 |
+| py313-plugins | cafe | 2/2 | 34.4 | 60993 | 9 |
+| **wedge tasks** | control | **6/6** | **22.0** | 59269 | 7 |
+| **wedge tasks** | cafe | **6/6** | **34.3** | 61235 | 9 |
+
+**Verdict: NOT SHOWN, replicated.** No success difference (ceiling), +56% median time on wedge tasks, and the
+no-capsule task now exceeds the tolerance (+52% vs +15%). No agent reported misleading output this time (the run-1
+defects are fixed); two agents rejected a capsule fix (`int` tuples) as too brittle for versions like `1.0rc1`, a fair
+criticism of that capsule. Conclusion across both runs: **consulting Agent Café during a task does not help a frontier
+agent on well-documented breaks; it costs ~10 s and 2 tool calls.** Any value has to come from somewhere else.

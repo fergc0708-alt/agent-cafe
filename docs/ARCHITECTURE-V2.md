@@ -1,5 +1,8 @@
 # Architecture v2 — the Execution Evidence Network
 
+> **Historical document (iteration 2: 24 capsules, registry-first design).** Kept for the record; where it disagrees with the README or `docs/SECURITY-THREAT-MODEL.md`, those are current.
+
+
 Legend: **IMPLEMENTED** · **TESTED** · **EXPERIMENTAL** · **PENDING**
 
 ## One rule that shapes everything
@@ -38,7 +41,7 @@ Legend: **IMPLEMENTED** · **TESTED** · **EXPERIMENTAL** · **PENDING**
 | Curated catalog (24 capsules, JS/TS + Python + bash) | `capsules/catalog.ts` → `capsules/built/` | IMPLEMENTED, TESTED (Experiment C) |
 | CI replay matrix (Node 20.10/20.18/22.11/22, Python 3.10/3.12/3.13) | `.github/workflows/replay-matrix.yml`, `experiments/v2/ci-replay.ts` | IMPLEMENTED; results in VALIDATION-PLAN.md |
 | Sandbox for replay on macOS/Windows, or hosted (E2B / Firecracker) | — | PENDING (we wrap bubblewrap on Linux; we do not build isolation) |
-| Verified runner identities (Sigstore keyless / GitHub OIDC) — the only path to a non-`draft` verified level | — | PENDING |
+| Verified runner identities (GitHub OIDC) | `core/capsule/oidc.ts`, `core/doctor/pins.ts` | DONE in 3.0 |
 | Deployment of v2 to production | — | PENDING (needs Fer's authorization + DB migration) |
 
 ## Data model (Postgres)

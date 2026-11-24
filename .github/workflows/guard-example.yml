@@ -16,12 +16,29 @@ jobs:
           - { node: "20", python: "3.11" }
           - { node: "24", python: "3.13" }
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with: { node-version: "${{ matrix.node }}" }
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
         with: { python-version: "${{ matrix.python }}" }
       - uses: ./
         with:
           path: examples/legacy-app
           fail-on: never
+  # Distribution test: consume the action the way an external repo would, by immutable commit SHA.
+  remote-pinned:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with: { node-version: "22" }
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with: { python-version: "3.13" }
+      - id: cafe
+        continue-on-error: true
+        uses: fergc0708-alt/agent-cafe@c1eb37e6eb8b100e45f77c70ab7665799e1fda5c # goat/evidence-network, 3.0
+        with:
+          path: examples/legacy-app
+          fail-on: now
+      - name: The pinned action must fail this project (it uses imp and cgi on Python 3.13)
+        run: test "${{ steps.cafe.outcome }}" = "failure"

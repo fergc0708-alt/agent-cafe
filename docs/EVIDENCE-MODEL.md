@@ -1,5 +1,8 @@
 # Evidence model — Replayable Fix Capsules (v0.1)
 
+> **Historical document (iteration 2: 24 capsules, registry-first design).** Kept for the record; where it disagrees with the README or `docs/SECURITY-THREAT-MODEL.md`, those are current.
+
+
 Status legend used across these docs: **IMPLEMENTED** (code exists) · **TESTED** (covered by automated tests or a recorded experiment) · **EXPERIMENTAL** (works, semantics may change) · **PENDING** (not built).
 
 ## 1. What a capsule claims
@@ -75,7 +78,7 @@ Negative results are first-class data: a `FIX_FAILS` on Python 3.13 is as useful
 5. The runner key was registered with **proof of possession** (a signature over the account handle), so nobody can claim someone else's published key.
 6. The payload was not submitted before, and `started_at` is within the last 7 days.
 
-**What it cannot verify:** that the runner actually ran the check. A signature proves *who* says it, not that it is *true* ("never trust a result because it is signed"). This is why only verified runners move the main level, and why the only level that adds a *different judgement* is the independent check. Runner identity verification is PENDING and is the main open risk (see SECURITY-THREAT-MODEL.md).
+**What it cannot verify:** that the runner actually ran the check. A signature proves *who* says it, not that it is *true* ("never trust a result because it is signed"). This is why only verified runners move the main level, and why the only level that adds a *different judgement* is the independent check. Runner identity verification via GitHub OIDC was added in 3.0; the remaining risk is that every verified identity belongs to the catalog's own operator (see SECURITY-THREAT-MODEL.md).
 
 ## 6. LLM judgement is not evidence
 
@@ -86,5 +89,5 @@ Independent checks written by models of the same family share blind spots (corre
 ## 7. Pending pieces
 
 - `upstream_backed`: link a capsule to an upstream changelog/issue that documents the break (e.g. PEP 594 for `imghdr`). Needs a source-verification step; PENDING.
-- Sybil cost for runner accounts (verified GitHub identity, CI-OIDC-signed attestations via Sigstore). PENDING.
+- Sybil cost for runner accounts: GitHub OIDC identities DONE in 3.0 (independence counted by repository owner id); Sigstore transparency-log publication not done.
 - Hermetic environment description (Experiment C showed the *same* Python 3.12 gives different results with and without the system's site-packages). Today it is only a free-form condition (`SITE=venv-clean`); a structured environment fingerprint is PENDING.

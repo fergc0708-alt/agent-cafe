@@ -1,6 +1,6 @@
 // Summarizes grades.json + usage.jsonl per task and arm. Usage: node experiments/eval/report.ts
 import { readFileSync, writeFileSync } from "node:fs";
-const R = new URL("./results/", import.meta.url);
+const R = new URL(`./${process.env.RESULTS ?? "results"}/`, import.meta.url);
 const grades = JSON.parse(readFileSync(new URL("grades.json", R), "utf8")) as { task: string; arm: string; rep: string; pass: boolean }[];
 const usage = readFileSync(new URL("usage.jsonl", R), "utf8").trim().split("\n").map((l) => JSON.parse(l));
 const median = (xs: number[]) => { const s = [...xs].sort((a, b) => a - b); return s.length % 2 ? s[(s.length - 1) / 2] : (s[s.length / 2 - 1] + s[s.length / 2]) / 2; };

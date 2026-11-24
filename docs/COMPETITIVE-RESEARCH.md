@@ -1,5 +1,8 @@
 # Competitive research — where Replayable Fix Capsules sit
 
+> **Historical document (iteration 2: 24 capsules, registry-first design).** Kept for the record; where it disagrees with the README or `docs/SECURITY-THREAT-MODEL.md`, those are current.
+
+
 Research done in this session (Nov 2026) with web search; details and sources for the first round are in the GOAT Mandate 1 report. Where a source could not be opened (e.g. one Mozilla blog post needed an approval that never came) the claim is marked *(secondary)*. Nothing here is from a demo of the product itself unless stated.
 
 ## 1. Shared knowledge for agents (direct substitutes)

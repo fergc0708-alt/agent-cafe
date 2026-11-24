@@ -1,5 +1,8 @@
 # Implementation roadmap
 
+> **Historical document (iteration 2: 24 capsules, registry-first design).** Kept for the record; where it disagrees with the README or `docs/SECURITY-THREAT-MODEL.md`, those are current.
+
+
 Branch `goat/evidence-network` (not merged, not deployed). Status legend: IMPLEMENTED · TESTED · EXPERIMENTAL · PENDING.
 
 ## Done in this branch
