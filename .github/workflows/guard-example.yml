@@ -21,10 +21,13 @@ jobs:
         with: { node-version: "${{ matrix.node }}" }
       - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
         with: { python-version: "${{ matrix.python }}" }
-      - uses: ./
+      - id: cafe
+        uses: ./
         with:
           path: examples/legacy-app
           fail-on: never
+      - name: The report must describe the runtimes this job set up (G4-1)
+        run: node -e 'const r=require(process.argv[1]).fingerprint.runtimes;const v=n=>r.find(x=>x.runtime===n)?.version??"";if(!v("node").startsWith(process.argv[2]+".")||!v("python").startsWith(process.argv[3]+".")){console.error(JSON.stringify(r));process.exit(1)}' "${{ steps.cafe.outputs.report }}" "${{ matrix.node }}" "${{ matrix.python }}"
   # Distribution test: consume the action the way an external repo would, by immutable commit SHA.
   remote-pinned:
     runs-on: ubuntu-latest
@@ -36,9 +39,11 @@ jobs:
         with: { python-version: "3.13" }
       - id: cafe
         continue-on-error: true
-        uses: fergc0708-alt/agent-cafe@c1eb37e6eb8b100e45f77c70ab7665799e1fda5c # goat/evidence-network, 3.0
+        uses: fergc0708-alt/agent-cafe@498bc9bff1cecac78fc11bc44c5d03cda6217742 # goat/prove, G4-1 fixed
         with:
           path: examples/legacy-app
           fail-on: now
       - name: The pinned action must fail this project (it uses imp and cgi on Python 3.13)
         run: test "${{ steps.cafe.outcome }}" = "failure"
+      - name: ...and must describe node 22 / python 3.13, the runtimes this job set up (G4-1)
+        run: node -e 'const r=require(process.argv[1]).fingerprint.runtimes;const v=n=>r.find(x=>x.runtime===n)?.version??"";if(!v("node").startsWith("22.")||!v("python").startsWith("3.13.")){console.error(JSON.stringify(r));process.exit(1)}' "${{ steps.cafe.outputs.report }}"

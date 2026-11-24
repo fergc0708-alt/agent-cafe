@@ -62,7 +62,7 @@ Six short tools: `cafe_diagnose` (error → matching fix as a diff, or "nothing 
 ```yaml
 - uses: actions/setup-node@v4          # your project's runtimes, as you already set them up
 - uses: actions/setup-python@v5
-- uses: fergc0708-alt/agent-cafe@c1eb37e6eb8b100e45f77c70ab7665799e1fda5c   # pin a full commit SHA, never a branch
+- uses: fergc0708-alt/agent-cafe@498bc9bff1cecac78fc11bc44c5d03cda6217742   # pin a full commit SHA, never a branch
   with:
     fail-on: now                       # or "upgrade" to also fail on breaks at the newest verified versions
     # targets: "node@24,python@3.13"
