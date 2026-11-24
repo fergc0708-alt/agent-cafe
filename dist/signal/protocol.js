@@ -51,34 +51,39 @@ export function normalizePackage(eco, name) {
     return eco === "pypi" ? n.toLowerCase().replace(/[-_.]+/g, "-") : n.toLowerCase();
 }
 // ---------- error fingerprints ----------
-const SCRUB = [
-    [/\x1b\[[0-9;]*m/g, ""], // ANSI colors
-    [/[A-Za-z0-9+/_-]{32,}={0,2}/g, "<blob>"], // tokens, hashes, base64
-    [/\b(?:https?|file|git|ssh):\/\/\S+/g, "<url>"],
-    [/[\w.+-]+@[\w-]+\.[\w.-]+/g, "<email>"],
-    [/(?:[A-Za-z]:)?(?:[\\/][\w@.+~-]+){2,}[\\/]?/g, "<path>"], // absolute or nested paths
-    [/\b[\w-]+\.(?:js|mjs|cjs|ts|tsx|jsx|py|pyi|json|toml|yaml|yml|lock|cfg|txt|md)\b/g, "<file>"],
-    [/0x[0-9a-fA-F]+/g, "<hex>"],
-    [/\b\d+(?:\.\d+)*\b/g, "<n>"],
-    [/(["'`]).{0,80}?\1/g, "<str>"],
-    [/\s+/g, " "],
-];
-/** Error-signature lines (exception types, Node error codes, compiler/test-runner failures). */
-const SIGNATURE = /\b(?:[A-Z][A-Za-z]+(?:Error|Exception|Warning)|ERR_[A-Z_]+|TS\d{4}|E\d{3,4}|AssertionError|ModuleNotFoundError|ImportError|SyntaxError|TypeError|ReferenceError|Cannot find module|No matching distribution|ResolutionImpossible|ERESOLVE|failed to (?:build|compile)|Segmentation fault|panicked)\b/;
+// Privacy-first signatures: the error TYPE (or code) plus the shape of its message. Every token that could be an
+// identifier, a value, a path, a host, a user or a secret becomes a placeholder; only short lowercase English-like
+// words survive. "TypeError: chalk.bold is not a function" -> "TypeError: <id> is not a function".
+const ERR = /\b([A-Z][A-Za-z]{1,40}(?:Error|Exception)|ERR_[A-Z_]{2,60}|TS\d{4}|E[A-Z]{3,12})\b:?\s*(.{0,300})/;
+const WORD = /^[a-z]{1,15}$/;
+function shape(msg) {
+    const toks = msg.replace(/\x1b\[[0-9;]*m/g, "").split(/\s+/).filter(Boolean).slice(0, 14);
+    const out = [];
+    for (const t of toks) {
+        const core = t.replace(/^[("'`[{<]+|[)"'`\]}>,;:.!?]+$/g, "");
+        const p = WORD.test(core) ? core : "<id>";
+        if (!(p === "<id>" && out[out.length - 1] === "<id>"))
+            out.push(p);
+    }
+    return out.join(" ");
+}
 export function scrub(line) {
-    let s = line;
-    for (const [re, r] of SCRUB)
-        s = s.replace(re, r);
-    return s.trim().slice(0, 160);
+    const m = line.match(ERR);
+    if (!m)
+        return "";
+    const msg = shape(m[2]);
+    return (msg ? `${m[1]}: ${msg}` : m[1]).slice(0, 120).trim();
 }
 /** Distinct normalized signatures in a log, at most `max`. Raw log text never leaves this function. */
 export function signatures(log, max = 12) {
     const out = new Set();
-    for (const line of log.split(/\r?\n/)) {
-        if (line.length > 2000 || !SIGNATURE.test(line))
+    const seenLines = new Set();
+    for (const line of log.slice(0, 4 << 20).split(/\r?\n/)) {
+        if (line.length > 2000 || seenLines.has(line))
             continue;
+        seenLines.add(line);
         const s = scrub(line);
-        if (s.length >= 8)
+        if (s.length >= 6)
             out.add(s);
         if (out.size >= max * 4)
             break;
@@ -94,7 +99,10 @@ const isPrivateName = (name, pats) => pats.some((p) => (p.endsWith("*") ? name.s
 /** The exact object that would be sent: allow-listed fields only, internal packages redacted. */
 export function shareable(o, opts = {}) {
     const pats = opts.privatePackages ?? [];
-    const changes = o.changes.filter((c) => !isPrivateName(c.package, pats)).map((c) => ({ ecosystem: c.ecosystem, package: c.package, from: c.from, to: c.to, direct: c.direct }));
+    const changes = o.changes
+        .filter((c) => (opts.includeChanges ? true : c.package === o.primary.package))
+        .filter((c) => !isPrivateName(c.package, pats))
+        .map((c) => ({ ecosystem: c.ecosystem, package: c.package, from: c.from, to: c.to, direct: c.direct === true }));
     if (isPrivateName(o.primary.package, pats))
         throw new Error("the updated package matches a private pattern: this observation cannot be shared");
     return {
@@ -108,7 +116,7 @@ export function shareable(o, opts = {}) {
         candidate: o.candidate,
         attribution: o.attribution,
         phase: o.phase,
-        fingerprints: o.fingerprints.map(scrub).slice(0, 8),
+        fingerprints: [...new Set(o.fingerprints.map(scrub).filter(Boolean))].slice(0, 8),
         provenance: { kind: o.provenance.kind, ...(opts.includeSource && o.provenance.source_url ? { source_url: o.provenance.source_url } : {}) },
     };
 }
@@ -116,34 +124,58 @@ const ATTRS = new Set(["regression", "compatible", "baseline_red", "upgrade_fixe
 const RESULTS = new Set(["pass", "fail", "flaky", "error", "not_run"]);
 const NAME = /^(?:@[a-z0-9][\w.-]{0,100}\/)?[a-z0-9][\w.-]{0,100}$/i;
 const VER = /^[\w.+!-]{1,64}$/;
-/** Server-side validation of a submitted observation. Throws with a reason; never trusts the client's attribution. */
-export function validate(o) {
-    if (!o || typeof o !== "object" || o.protocol !== PROTOCOL)
+const OS = new Set(["linux", "darwin", "win32", "freebsd"]);
+const ARCH = new Set(["x64", "arm64", "arm", "ia32", "ppc64", "s390x"]);
+const PHASE = new Set(["install", "test", "unknown"]);
+/** Server-side validation. Returns a NEW object built only from allow-listed, type-checked fields (extra fields are
+ *  dropped); recomputes the attribution from the two results; provenance is never taken from the client. */
+export function validate(o, now = Date.now()) {
+    if (!o || typeof o !== "object" || Array.isArray(o) || o.protocol !== PROTOCOL)
         throw new Error("not a cafe-signal/v1 observation");
+    if (typeof o.id !== "string" || !/^[0-9a-f]{64}$/.test(o.id))
+        throw new Error("bad id");
     const p = o.primary;
-    if (!p || !["npm", "pypi"].includes(p.ecosystem) || !NAME.test(p.package ?? "") || !VER.test(p.from ?? "") || !VER.test(p.to ?? ""))
+    if (!p || typeof p !== "object" || !["npm", "pypi"].includes(p.ecosystem) || typeof p.package !== "string" || !NAME.test(p.package) || typeof p.from !== "string" || !VER.test(p.from) || typeof p.to !== "string" || !VER.test(p.to))
         throw new Error("bad primary update");
+    if (p.from === p.to)
+        throw new Error("from and to are the same version");
     if (!RESULTS.has(o.baseline) || !RESULTS.has(o.candidate))
         throw new Error("bad run results");
     if (!ATTRS.has(o.attribution))
         throw new Error("bad attribution");
     // The server recomputes the attribution from the two results: a client cannot claim "regression" for FAIL/FAIL.
-    if (o.attribution !== attribute(o.baseline, o.candidate))
+    if (o.attribution !== attribute(o.baseline, o.candidate) && !(o.attribution.startsWith("observational_") && o.baseline === "not_run"))
         throw new Error("attribution does not follow from baseline/candidate results");
-    if (!Array.isArray(o.changes) || o.changes.length > 500)
+    if (!Array.isArray(o.changes) || o.changes.length > 50)
         throw new Error("bad changes");
-    for (const c of o.changes)
-        if (!["npm", "pypi"].includes(c.ecosystem) || !NAME.test(c.package ?? "") || (c.from !== null && !VER.test(c.from)) || (c.to !== null && !VER.test(c.to)))
+    const changes = o.changes.map((c) => {
+        if (!c || typeof c !== "object" || !["npm", "pypi"].includes(c.ecosystem) || typeof c.package !== "string" || !NAME.test(c.package) || (c.from !== null && (typeof c.from !== "string" || !VER.test(c.from))) || (c.to !== null && (typeof c.to !== "string" || !VER.test(c.to))) || typeof c.direct !== "boolean")
             throw new Error("bad change entry");
-    if (!Array.isArray(o.fingerprints) || o.fingerprints.length > 8 || o.fingerprints.some((f) => typeof f !== "string" || f.length > 160))
+        return { ecosystem: c.ecosystem, package: c.package, from: c.from, to: c.to, direct: c.direct };
+    });
+    if (!Array.isArray(o.fingerprints) || o.fingerprints.length > 8 || o.fingerprints.some((f) => typeof f !== "string" || f.length > 120))
         throw new Error("bad fingerprints");
     if (o.fingerprints.some((f) => f !== scrub(f)))
-        throw new Error("fingerprints must be scrubbed (no paths, numbers, URLs, strings)");
-    if (o.env !== null && (typeof o.env !== "object" || !/^\d+(\.\d+)?$/.test(o.env.runtime_version ?? "") || !["node", "python"].includes(o.env.runtime)))
-        throw new Error("bad env");
-    if (!/^\d{4}-\d{2}-\d{2}/.test(o.observed_at ?? ""))
+        throw new Error("fingerprints must be scrubbed (error type + message shape only)");
+    let env = null;
+    if (o.env !== null) {
+        const e = o.env;
+        if (!e || typeof e !== "object" || !OS.has(e.os) || !ARCH.has(e.arch) || !["node", "python"].includes(e.runtime) || typeof e.runtime_version !== "string" || !/^\d{1,3}\.\d{1,3}$/.test(e.runtime_version))
+            throw new Error("bad env");
+        env = { os: e.os, arch: e.arch, runtime: e.runtime, runtime_version: e.runtime_version };
+    }
+    if (!PHASE.has(o.phase))
+        throw new Error("bad phase");
+    if (typeof o.observed_at !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(o.observed_at.slice(0, 10)))
         throw new Error("bad date");
-    return o;
+    const day = o.observed_at.slice(0, 10);
+    if (Date.parse(day) > now + 86_400_000)
+        throw new Error("date in the future");
+    return {
+        protocol: PROTOCOL, id: o.id, observed_at: day, changes, primary: { ecosystem: p.ecosystem, package: p.package, from: p.from, to: p.to },
+        env, baseline: o.baseline, candidate: o.candidate, attribution: o.attribution, phase: o.phase, fingerprints: [...o.fingerprints],
+        provenance: { kind: "local" },
+    };
 }
 export async function observationId(o) {
     const canon = JSON.stringify({

@@ -4,7 +4,7 @@ import { createServer } from "node:http";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { buildIndex, query, type Report } from "./engine.ts";
-import { shareable, type Observation } from "./protocol.ts";
+import { observationId, shareable, type Observation } from "./protocol.ts";
 import { prTitleFromEvent, runPaired } from "./run.ts";
 import { audienceFor, handleSignal, MemorySignalStore, type Stored } from "./server.ts";
 import { fetchGithubJwks } from "../core/capsule/oidc.ts";
@@ -24,7 +24,7 @@ function flags(argv: string[]) {
     if (a.startsWith("--")) {
       const [k, v] = a.slice(2).split("=", 2);
       if (v !== undefined) f[k] = v;
-      else if (argv[i + 1] && !argv[i + 1].startsWith("--") && !["public", "source", "json", "no-network"].includes(k)) f[k] = argv[++i];
+      else if (argv[i + 1] && !argv[i + 1].startsWith("--") && !["public", "source", "json", "no-network", "share-changes", "fail-on-regression", "no-install"].includes(k)) f[k] = argv[++i];
       else f[k] = true;
     } else pos.push(a);
   }
@@ -33,19 +33,29 @@ function flags(argv: string[]) {
 
 const pct = (x: number | null) => (x === null ? "–" : `${Math.round(x * 100)}%`);
 
+/** Everything rendered into a PR/summary that came from other projects is escaped (no links, no markup). */
+export const md = (s: string) => String(s).replace(/[\\`*_{}\[\]()#+!|<>~]/g, (c) => `\\${c}`).replace(/\s+/g, " ").slice(0, 200);
+
 export function renderReport(r: Report, title = "What other projects saw"): string {
-  const L = [`### ${title}: \`${r.query.package}\` ${r.query.from} → ${r.query.to}`, ""];
-  const v = { known_regression: "⚠️ **Known regression** reported by other projects", likely_safe: "✅ Other projects took this update without regressions", mixed: "⚠️ **Mixed results**", insufficient_evidence: "ℹ️ **Not enough evidence** to say anything" }[r.verdict];
+  const L = [`### ${title}: \`${md(r.query.package)}\` ${md(r.query.from)} → ${md(r.query.to)}`, ""];
+  const n = `(${r.causal.owners} owners with paired evidence, ${r.observational.owners} with CI status only)`;
+  const v = {
+    known_regression: `⚠️ **Regression reproduced by several independent projects** ${n}`,
+    single_report: `🟡 **One project reproduced a regression**; not enough to conclude ${n}`,
+    likely_safe: `✅ Other projects took this update without regressions ${n}`,
+    mixed: `⚠️ **Mixed or contradictory results** ${n}`,
+    insufficient_evidence: `ℹ️ **Not enough evidence** to say anything ${n}`,
+  }[r.verdict];
   L.push(v, "", r.summary, "");
   L.push("| evidence | independent owners | failed | estimate | 90% interval |", "|---|---|---|---|---|");
   L.push(`| paired experiments (causal) | ${r.causal.owners} | ${r.causal.failures} | ${pct(r.causal.mean)} | ${r.causal.ci90 ? `${pct(r.causal.ci90[0])}–${pct(r.causal.ci90[1])}` : "–"} |`);
   L.push(`| CI status only (not causal) | ${r.observational.owners} | ${r.observational.failures} | ${pct(r.observational.mean)} | ${r.observational.ci90 ? `${pct(r.observational.ci90[0])}–${pct(r.observational.ci90[1])}` : "–"} |`);
   L.push("", `Prior: ${r.causal.prior.from}. Match level: ${r.match}.`);
-  if (r.fingerprints.length) L.push("", "**Failure signatures** (normalized):", ...r.fingerprints.map((f) => `- \`${f.signature}\` (${f.owners} owners)`));
-  if (r.environments.length) L.push("", `**Environments seen:** ${r.environments.map((e) => `${e.runtime}/${e.os}: ${e.failures}/${e.owners} failed`).join(" · ")}`);
+  if (r.fingerprints.length) L.push("", "**Failure signatures** (normalized):", ...r.fingerprints.map((f) => `- ${md(f.signature)} (${f.owners} owners)`));
+  if (r.environments.length) L.push("", `**Environments seen:** ${r.environments.map((e) => `${md(e.runtime)}/${md(e.os)}: ${e.failures}/${e.owners} failed`).join(" · ")}`);
   if (r.your_env_tested === false) L.push("", "Your runtime has **not** been observed for this update.");
   const src = r.evidence.filter((e) => e.source).slice(0, 5);
-  if (src.length) L.push("", "Sources: " + src.map((e) => `[${e.attribution}](${e.source})`).join(" · "));
+  if (src.length) L.push("", "Sources: " + src.filter((e) => /^https:\/\/github\.com\/[\w.-]+\/[\w.-]+\/(pull|commit)\/\w+$/.test(e.source!)).map((e) => `[${e.attribution}](${e.source})`).join(" · "));
   return L.join("\n");
 }
 
@@ -62,8 +72,8 @@ function renderRun(o: Observation, other: number, files: string[]): string {
   const L = [`## Café Signal: \`${o.primary.package}\` ${o.primary.from} → ${o.primary.to}`, "", meaning[o.attribution], ""];
   L.push(`| | result |`, `|---|---|`, `| baseline (dependencies reverted) | ${o.baseline} |`, `| candidate (the update) | ${o.candidate} |`);
   L.push("", `Environment: ${o.env?.runtime} ${o.env?.runtime_version} · ${o.env?.os}/${o.env?.arch}. Dependency changes: ${o.changes.length} (${o.changes.filter((c) => c.direct).length} direct) in ${files.join(", ")}.`);
-  if (other) L.push(`The branch also changes ${other} non-dependency file(s); they were kept identical in both runs, so they cannot explain a difference.`);
-  if (o.fingerprints.length) L.push("", "Errors that appear only with the update:", ...o.fingerprints.map((f) => `- \`${f}\``));
+
+  if (o.fingerprints.length) L.push("", "Errors that appear only with the update (shape only; your logs stay on the runner):", ...o.fingerprints.map((f) => `- ${md(f)}`));
   return L.join("\n");
 }
 
@@ -99,17 +109,17 @@ export async function main(argv: string[]): Promise<number> {
   switch (sub) {
     case "run": {
       if (typeof f.test !== "string") throw new Error("usage: cafe signal run --test '<cmd>' [--install '<cmd>'] [--base origin/main] [--out obs.json]");
-      const base = typeof f.base === "string" ? f.base : process.env.GITHUB_BASE_REF ? `origin/${process.env.GITHUB_BASE_REF}` : "origin/main";
+      const base = typeof f.base === "string" ? f.base : "auto";
       let out;
       try {
-        out = await runPaired({ dir: resolve(typeof f.dir === "string" ? f.dir : "."), base, test: f.test, install: typeof f.install === "string" ? f.install : undefined, retries: f.retries ? Number(f.retries) : 1, title: typeof f.title === "string" ? f.title : prTitleFromEvent(), log: (s) => console.error(s) });
+        out = await runPaired({ dir: resolve(typeof f.dir === "string" ? f.dir : "."), base, test: f.test, install: typeof f.install === "string" ? f.install : null, allowNoInstall: f["no-install"] === true, retries: f.retries ? Number(f.retries) : 1, title: typeof f.title === "string" ? f.title : prTitleFromEvent(), log: (s) => console.error(s) });
       } catch (e) {
         if (/no dependency update found/.test((e as Error).message)) { console.log(`[signal] ${(e as Error).message}: nothing to do.`); return 0; }
         throw e;
       }
       const o = out.observation;
       writeFileSync(typeof f.out === "string" ? f.out : "cafe-signal-observation.json", JSON.stringify(o, null, 2));
-      summary(renderRun(o, out.otherFilesChanged, out.depFiles));
+      summary(renderRun(o, out.otherFilesChanged, out.depFiles) + (out.note ? `\n\nNote: ${out.note}.` : ""));
       if (!f["no-network"]) {
         const r = await lookup(o.primary.ecosystem, o.primary.package, o.primary.from, o.primary.to, f, o.env).catch((e) => (console.error(`[signal] lookup failed: ${e.message}`), null));
         if (r) summary(renderReport(r));
@@ -128,15 +138,18 @@ export async function main(argv: string[]): Promise<number> {
     case "preview": {
       const o: Observation = JSON.parse(readFileSync(pos[0] ?? "cafe-signal-observation.json", "utf8"));
       const priv = typeof f["private-packages"] === "string" ? f["private-packages"].split(",").map((s) => s.trim()).filter(Boolean) : [];
+      const sh = shareable(o, { privatePackages: priv, includeChanges: f["share-changes"] === true });
+      sh.id = await observationId(sh);
       console.log("This is EXACTLY what `cafe signal share` would send (nothing else leaves this machine):\n");
-      console.log(JSON.stringify(shareable(o, { privatePackages: priv }), null, 2));
+      console.log(JSON.stringify(sh, null, 2));
       return 0;
     }
     case "share": {
       if (typeof f.endpoint !== "string") throw new Error("usage: cafe signal share obs.json --endpoint <url> [--public] [--source] [--private-packages '@acme/*']");
       const o: Observation = JSON.parse(readFileSync(pos[0] ?? "cafe-signal-observation.json", "utf8"));
       const priv = typeof f["private-packages"] === "string" ? f["private-packages"].split(",").map((s) => s.trim()).filter(Boolean) : [];
-      const s = shareable(o, { privatePackages: priv });
+      const s = shareable(o, { privatePackages: priv, includeChanges: f["share-changes"] === true });
+      s.id = await observationId(s); // the id covers exactly what is sent
       const token = await requestOidc(audienceFor(s.id));
       const r = await fetch(new URL("/api/signal/v1/observations", f.endpoint), { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ observation: s, oidc_token: token, share_public: f.public === true, share_source: f.source === true }) });
       console.log(`${r.status} ${await r.text()}`);
@@ -148,7 +161,8 @@ export async function main(argv: string[]): Promise<number> {
       const rows: Stored[] = seed ? (JSON.parse(readFileSync(seed, "utf8")).observations as Observation[]).map((o) => ({ ...o, scope: "public" as const, key: `seed|${o.id}`, received_at: o.observed_at })) : [];
       const store = new MemorySignalStore(rows);
       createServer(async (req, res) => {
-        const body = req.method === "POST" ? await new Promise<string>((ok) => { let b = ""; req.on("data", (c) => (b += c)); req.on("end", () => ok(b)); }) : undefined;
+        const body = req.method === "POST" ? await new Promise<string | null>((ok) => { let b = ""; req.on("data", (c) => { b += c; if (b.length > 64_000) { ok(null); req.destroy(); } }); req.on("end", () => ok(b)); }) : undefined;
+        if (body === null) { res.writeHead(413); res.end(); return; }
         const request = new Request(`http://localhost:${port}${req.url}`, { method: req.method, body, headers: { "content-type": "application/json" } });
         const r = (await handleSignal(request, new URL(request.url).pathname, { store, jwks: () => fetchGithubJwks() })) ?? new Response("not found", { status: 404 });
         res.writeHead(r.status, { "content-type": r.headers.get("content-type") ?? "text/plain" });

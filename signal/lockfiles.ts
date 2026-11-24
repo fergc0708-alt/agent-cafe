@@ -15,11 +15,16 @@ export function npmLock(text: string): Versions {
     return out;
   }
   if (j.packages && typeof j.packages === "object") {
-    for (const [path, info] of Object.entries<any>(j.packages)) {
-      if (!path || !info?.version) continue;
-      const name = info.name ?? path.slice(path.lastIndexOf("node_modules/") + "node_modules/".length);
-      const n = normalizePackage("npm", name);
-      if (!out.has(n)) out.set(n, normalizeVersion(String(info.version)));
+    // The hoisted copy (node_modules/<name>) is the one the project resolves; nested copies only fill gaps.
+    const entries = Object.entries<any>(j.packages).filter(([path, info]) => path.includes("node_modules/") && info?.version && !info.link);
+    const nameOf = (path: string) => path.slice(path.lastIndexOf("node_modules/") + "node_modules/".length);
+    for (const nested of [false, true]) {
+      for (const [path, info] of entries) {
+        const isNested = path.indexOf("node_modules/") !== path.lastIndexOf("node_modules/") || !path.startsWith("node_modules/");
+        if (isNested !== nested) continue;
+        const n = normalizePackage("npm", nameOf(path));
+        if (!out.has(n)) out.set(n, normalizeVersion(String(info.version)));
+      }
     }
   } else if (j.dependencies) {
     const walk = (deps: any) => {
@@ -37,6 +42,17 @@ export function npmLock(text: string): Versions {
 /** pnpm-lock.yaml (v6-v9): keys like "/name@1.2.3" or "name@1.2.3" under packages:. Line-based, no YAML lib. */
 export function pnpmLock(text: string): Versions {
   const out: Versions = new Map();
+  // Direct dependencies first: importers.<dir>.(dev)dependencies.<name>.version (strip "(peer)" suffixes).
+  let inImp = false, cur: string | null = null;
+  for (const line of text.split(/\r?\n/)) {
+    if (/^importers:\s*$/.test(line)) { inImp = true; continue; }
+    if (/^\S/.test(line)) inImp = false;
+    if (!inImp) continue;
+    const n = line.match(/^ {6}['"]?((?:@[^/'"\s]+\/)?[^'":\s]+)['"]?:\s*$/);
+    if (n) { cur = n[1]; continue; }
+    const v = line.match(/^ {8}version:\s*['"]?([^('"\s]+)/);
+    if (v && cur && !v[1].startsWith("link:")) { const k = normalizePackage("npm", cur); if (!out.has(k)) out.set(k, normalizeVersion(v[1])); cur = null; }
+  }
   let inPkgs = false;
   for (const line of text.split(/\r?\n/)) {
     if (/^packages:\s*$/.test(line)) { inPkgs = true; continue; }
@@ -57,7 +73,9 @@ export function yarnLock(text: string): Versions {
   let names: string[] = [];
   for (const line of text.split(/\r?\n/)) {
     if (/^\S.*:\s*$/.test(line) && !line.startsWith("#") && !line.startsWith("__metadata")) {
-      names = line.replace(/:\s*$/, "").split(/,\s*/).map((s) => s.replace(/^"|"$/g, "")).map((s) => s.slice(0, s.lastIndexOf("@") > 0 ? s.lastIndexOf("@") : s.length));
+      names = line.replace(/:\s*$/, "").split(/,\s*/).map((s) => s.replace(/^"|"$/g, ""))
+        .filter((s) => !/@(patch|workspace|link|portal|file):/.test(s))
+        .map((s) => { const at = s.indexOf("@", 1); return at > 0 ? s.slice(0, at) : s; }); // "alias@npm:real@^1" -> alias
       continue;
     }
     const v = line.match(/^\s+version:?\s+"?([^"\s]+)"?/);
@@ -73,7 +91,7 @@ export function yarnLock(text: string): Versions {
 export function requirements(text: string): Versions {
   const out: Versions = new Map();
   for (const raw of text.split(/\r?\n/)) {
-    const line = raw.replace(/\s+#.*$/, "").trim();
+    const line = raw.slice(0, 1000).replace(/[ \t]#.*$/, "").trim();
     const m = line.match(/^([A-Za-z0-9][A-Za-z0-9._-]*)(?:\[[^\]]*\])?\s*===?\s*([A-Za-z0-9.+!_-]+)/);
     if (m) out.set(normalizePackage("pypi", m[1]), normalizeVersion(m[2]));
   }
@@ -103,7 +121,7 @@ export function declared(file: string, text: string): Set<string> {
       for (const k of ["dependencies", "devDependencies", "optionalDependencies", "peerDependencies"]) for (const n of Object.keys(j[k] ?? {})) out.add(normalizePackage("npm", n));
     } catch { /* not JSON */ }
   } else if (file.endsWith("pyproject.toml") || /requirements.*\.(txt|in)$/.test(file)) {
-    for (const m of text.matchAll(/^\s*["']?([A-Za-z0-9][A-Za-z0-9._-]*)(?:\[[^\]]*\])?\s*(?:[=<>!~]=?|["',]|$)/gm)) out.add(normalizePackage("pypi", m[1]));
+    for (const m of text.matchAll(/^[ \t]*["']?([A-Za-z0-9][A-Za-z0-9._-]*)(?:\[[^\]]*\])?[ \t]*(?:[=<>!~]=?|["',]|$)/gm)) out.add(normalizePackage("pypi", m[1]));
   }
   return out;
 }

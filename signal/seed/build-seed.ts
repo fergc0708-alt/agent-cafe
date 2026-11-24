@@ -8,9 +8,11 @@ import { normalizePackage, normalizeVersion, observationId, PROTOCOL, type Obser
 export interface PrRecord {
   url: string; repo: string; number: number; title: string; ecosystem: "npm" | "pypi"; package: string; from: string; to: string;
   ci: "failure" | "success"; state: string; merged_at: string | null; created_at: string; closed_at: string | null;
-  mc_badge: boolean; multi_update: boolean; security: boolean;
+  mc_badge: boolean; multi_update: boolean; security: boolean; stratum?: string;
 }
 
+/** Loads PR records: one per URL, grouped updates dropped (cannot be attributed to one package), from == to dropped,
+ *  and ONE record per repository and transition (Renovate re-opens PRs for the same update; the earliest counts). */
 export function loadPrs(files: string[]): PrRecord[] {
   const seen = new Map<string, PrRecord>();
   for (const f of files) for (const l of readFileSync(f, "utf8").split("\n")) {
@@ -18,10 +20,27 @@ export function loadPrs(files: string[]): PrRecord[] {
     const r = JSON.parse(l) as PrRecord;
     if (!seen.has(r.url)) seen.set(r.url, r);
   }
-  return [...seen.values()].filter((r) => !r.multi_update); // grouped updates cannot be attributed to one package
+  const byKey = new Map<string, PrRecord>();
+  for (const r of [...seen.values()].sort((a, b) => a.created_at.localeCompare(b.created_at))) {
+    if (r.multi_update || normalizeVersion(r.from) === normalizeVersion(r.to)) continue;
+    const k = `${r.repo.toLowerCase()}|${r.ecosystem}|${r.package.toLowerCase()}|${normalizeVersion(r.from)}|${normalizeVersion(r.to)}`;
+    if (!byKey.has(k)) byKey.set(k, r);
+  }
+  return [...byKey.values()];
 }
 
-export async function toObservation(r: PrRecord): Promise<Observation> {
+/** Stratum weights (total / returned) from the collector's totals files. Throws if a record has no stratum. */
+export function weightsFrom(files: string[]): (r: PrRecord) => number {
+  const t: Record<string, { total: number; returned: number }> = {};
+  for (const f of files) Object.assign(t, JSON.parse(readFileSync(f, "utf8")));
+  return (r) => {
+    const s = r.stratum ? t[r.stratum] : undefined;
+    if (!s || !s.returned) throw new Error(`no stratum total for ${r.url} (${r.stratum}); weights would silently be 1`);
+    return s.total / s.returned;
+  };
+}
+
+export async function toObservation(r: PrRecord, weight?: number): Promise<Observation> {
   const draft = {
     protocol: PROTOCOL as typeof PROTOCOL,
     observed_at: r.created_at,
@@ -34,16 +53,18 @@ export async function toObservation(r: PrRecord): Promise<Observation> {
     phase: "unknown" as const,
     fingerprints: [],
   };
-  return { ...draft, id: await observationId({ ...draft, fingerprints: [r.url] }), provenance: { kind: "seed", source_url: r.url } };
+  return { ...draft, id: await observationId({ ...draft, fingerprints: [r.url] }), provenance: { kind: "seed", source_url: r.url, owner_login: r.repo.split("/")[0].toLowerCase() }, ...(weight ? { weight } : {}) };
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
-  const [out, ...files] = process.argv.slice(2);
+  const [out, ...rest] = process.argv.slice(2);
+  const files = rest.filter((f) => f.endsWith(".jsonl")), totals = rest.filter((f) => f.endsWith(".json"));
   const prs = loadPrs(files);
-  const observations = await Promise.all(prs.map(toObservation));
+  const w = totals.length ? weightsFrom(totals) : null;
+  const observations = await Promise.all(prs.map((p) => toObservation(p, w ? w(p) : undefined)));
   writeFileSync(out, JSON.stringify({
     protocol: PROTOCOL,
-    source: "Public GitHub pull requests opened by Renovate (search API, `status:` qualifier = combined CI status at collection time). Observational only.",
+    source: "Public GitHub pull requests opened by Renovate (search API, `status:` qualifier = combined CI status at collection time). Observational only. Sampled per package x week x status (newest 100); `weight` = stratum total / sampled.",
     collected: new Date().toISOString().slice(0, 10),
     count: observations.length,
     observations,

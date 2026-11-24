@@ -11,10 +11,12 @@
 //  - Observations from private repositories stay private to their owner: never returned to anyone else.
 import { bindingAudience as _unused, verifyGithubOidc } from "../core/capsule/oidc.js";
 import { buildIndex, query } from "./engine.js";
-import { normalizePackage, validate } from "./protocol.js";
+import { normalizePackage, observationId, validate } from "./protocol.js";
 export const SIGNAL_AUDIENCE_PREFIX = "cafe-signal/v1:";
-export const audienceFor = (observationId) => `${SIGNAL_AUDIENCE_PREFIX}${observationId}`;
+/** Separate audience namespaces: a token minted to READ can never be used to WRITE, and vice versa. */
+export const audienceFor = (observationId) => `${SIGNAL_AUDIENCE_PREFIX}obs:${observationId}`;
 export const QUERY_AUDIENCE = `${SIGNAL_AUDIENCE_PREFIX}query`;
+const MAX_BODY = 64_000;
 export class MemorySignalStore {
     rows = new Map();
     constructor(seed = []) {
@@ -34,10 +36,11 @@ export class MemorySignalStore {
     }
 }
 const POLICY = {
-    workflows: ["*"], // any repository may contribute; independence and quotas are enforced per owner id
-    events: ["pull_request", "push", "workflow_dispatch", "schedule", "merge_group"],
+    workflows: ["*"], // any repository may contribute; independence and quotas are enforced per owner
+    events: ["pull_request", "merge_group"], // observations come from dependency-update PR runs only
     maxAgeMs: 2 * 3600_000,
 };
+const QUERY_POLICY = { ...POLICY, events: ["pull_request", "merge_group", "push", "workflow_dispatch", "schedule"] };
 const json = (data, status = 200) => new Response(JSON.stringify(data, null, 2), { status, headers: { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store", "X-Content-Type-Options": "nosniff" } });
 function claim(token, k) {
     try {
@@ -47,14 +50,45 @@ function claim(token, k) {
         return undefined;
     }
 }
+async function readBody(req) {
+    const len = Number(req.headers.get("content-length") ?? "0");
+    if (len > MAX_BODY)
+        return null;
+    const reader = req.body?.getReader();
+    if (!reader)
+        return "";
+    let size = 0;
+    const chunks = [];
+    for (;;) {
+        const { done, value } = await reader.read();
+        if (done)
+            break;
+        size += value.byteLength;
+        if (size > MAX_BODY) {
+            await reader.cancel().catch(() => { });
+            return null;
+        }
+        chunks.push(value);
+    }
+    return new TextDecoder().decode(Buffer.concat(chunks));
+}
 export async function handleSignal(req, path, deps) {
     if (!path.startsWith("/api/signal/v1/"))
         return null;
+    try {
+        return await route(req, path, deps);
+    }
+    catch (e) {
+        console.error("signal: unhandled", e);
+        return json({ error: "bad request" }, 400);
+    }
+}
+async function route(req, path, deps) {
     const now = deps.now?.() ?? Date.now();
     const sub = path.slice("/api/signal/v1/".length);
     if (sub === "observations" && req.method === "POST") {
-        const body = (await req.text().catch(() => "")) ?? "";
-        if (body.length > 64_000)
+        const body = await readBody(req);
+        if (body === null)
             return json({ error: "payload too large" }, 413);
         let b;
         try {
@@ -63,9 +97,14 @@ export async function handleSignal(req, path, deps) {
         catch {
             return json({ error: "invalid JSON" }, 400);
         }
+        if (!b || typeof b !== "object" || Array.isArray(b))
+            return json({ error: "body must be an object" }, 400);
         let obs;
         try {
-            obs = validate(b.observation);
+            obs = validate(b.observation, now);
+            // The id is recomputed from the content: a token bound to one observation cannot carry another one.
+            if ((await observationId(obs)) !== obs.id)
+                throw new Error("id does not match the observation content");
         }
         catch (e) {
             return json({ error: e.message }, 400);
@@ -77,6 +116,13 @@ export async function handleSignal(req, path, deps) {
         catch (e) {
             return json({ error: `identity: ${e.message}` }, 401);
         }
+        const exp = Number(claim(String(b.oidc_token), "exp"));
+        if (!Number.isFinite(exp) || exp * 1000 < now)
+            return json({ error: "identity: token expired or without exp" }, 401);
+        const used = (deps.usedJti ??= new Set());
+        if (used.has(id.jti))
+            return json({ error: "identity: token already used" }, 401);
+        used.add(id.jti);
         const day = new Date(now).toISOString().slice(0, 10);
         if ((await deps.store.countToday(id.repository_owner_id, day)) >= (deps.dailyQuotaPerOwner ?? 200))
             return json({ error: "daily quota for this owner reached" }, 429);
@@ -87,6 +133,7 @@ export async function handleSignal(req, path, deps) {
             // provenance is set by the server from the verified token, never taken from the client
             provenance: {
                 kind: "github-oidc",
+                owner_login: id.repository_owner.toLowerCase(),
                 owner_id: id.repository_owner_id,
                 repository_id: id.repository_id,
                 workflow: id.job_workflow_ref,
@@ -96,6 +143,7 @@ export async function handleSignal(req, path, deps) {
             key: [id.repository_id, obs.primary.ecosystem, normalizePackage(obs.primary.ecosystem, obs.primary.package), obs.primary.from, obs.primary.to, id.sha].join("|"),
             received_at: new Date(now).toISOString(),
         };
+        delete stored.weight;
         const r = await deps.store.upsert(stored);
         return json({ status: r, scope: stored.scope, independence_unit: `owner ${id.repository_owner}`, note: r === "replaced" ? "same repository, transition and commit: the previous record was replaced (retries are not extra evidence)" : undefined });
     }
@@ -104,18 +152,31 @@ export async function handleSignal(req, path, deps) {
         let p = Object.fromEntries(u.searchParams);
         let owner = null;
         if (req.method === "POST") {
-            const b = await req.json().catch(() => ({}));
-            p = { ...p, ...b };
+            const raw = await readBody(req);
+            if (raw === null)
+                return json({ error: "payload too large" }, 413);
+            let b = {};
+            try {
+                b = raw ? JSON.parse(raw) : {};
+            }
+            catch {
+                return json({ error: "invalid JSON" }, 400);
+            }
+            if (!b || typeof b !== "object" || Array.isArray(b))
+                return json({ error: "body must be an object" }, 400);
+            for (const k of ["ecosystem", "package", "from", "to", "runtime", "runtime_version"])
+                if (b[k] !== undefined && typeof b[k] === "string")
+                    p[k] = b[k];
             if (b.oidc_token) {
                 try {
-                    owner = (await verifyGithubOidc(String(b.oidc_token), { jwks: await deps.jwks(), expectedAudience: QUERY_AUDIENCE, policy: POLICY, now })).repository_owner_id;
+                    owner = (await verifyGithubOidc(String(b.oidc_token), { jwks: await deps.jwks(), expectedAudience: QUERY_AUDIENCE, policy: QUERY_POLICY, now })).repository_owner_id;
                 }
                 catch (e) {
                     return json({ error: `identity: ${e.message}` }, 401);
                 }
             }
         }
-        if (!["npm", "pypi"].includes(p.ecosystem) || !p.package || !p.from || !p.to)
+        if (!["npm", "pypi"].includes(p.ecosystem) || [p.package, p.from, p.to].some((x) => typeof x !== "string" || !x || x.length > 214))
             return json({ error: "need ecosystem (npm|pypi), package, from, to" }, 400);
         const all = await deps.store.byPackage(p.ecosystem, normalizePackage(p.ecosystem, p.package));
         const q = {
@@ -123,7 +184,8 @@ export async function handleSignal(req, path, deps) {
             env: p.runtime && p.runtime_version ? { runtime: p.runtime, runtime_version: p.runtime_version } : null,
         };
         // network: other owners' public observations, one voice per owner
-        const network = query(buildIndex(all.filter((r) => r.scope === "public")), { ...q, excludeOwner: owner ? `id:${owner}` : undefined });
+        const ownerLogin = owner ? all.find((r) => r.provenance.owner_id === owner)?.provenance.owner_login : undefined;
+        const network = query(buildIndex(all.filter((r) => r.scope === "public" && (!owner || r.provenance.owner_id !== owner))), { ...q, excludeOwner: ownerLogin ? `gh:${ownerLogin}` : undefined });
         // your fleet: this owner's own observations (public or private), one voice per repository
         const fleet = owner ? query(buildIndex(all.filter((r) => r.provenance.owner_id === owner)), { ...q, unit: "repository" }) : null;
         return json({ network, ...(fleet ? { your_organization: fleet } : {}) });

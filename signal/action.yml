@@ -8,8 +8,8 @@ inputs:
     description: Test command (e.g. "npm test", "pytest -q")
     required: true
   install:
-    description: Install command run before tests on each side (e.g. "npm ci", "pip install -r requirements.txt")
-    default: ""
+    description: Install command run on each side from a clean state (e.g. "npm ci", "uv sync --frozen"). Required: without it the baseline would reuse the update's packages.
+    required: true
   working-directory:
     description: Project directory inside the repository (monorepo sub-project)
     default: "."
@@ -55,10 +55,11 @@ runs:
         set -euo pipefail
         command -v node >/dev/null || { echo "::error::Café Signal needs node >= 20 on PATH"; exit 1; }
         if [ -z "${GITHUB_BASE_REF:-}" ]; then echo "::notice::Café Signal runs on pull_request events only"; exit 0; fi
-        git fetch --no-tags --depth=1 origin "+refs/heads/${GITHUB_BASE_REF}:refs/remotes/origin/${GITHUB_BASE_REF}" >/dev/null 2>&1 || true
+        if [ "${GITHUB_EVENT_NAME:-}" = "pull_request_target" ]; then echo "::error::Café Signal refuses pull_request_target (it would run untrusted PR code with secrets)"; exit 1; fi
+        # The PR merge commit's first parent is the exact base the PR is tested against.
+        git fetch --no-tags --depth=2 origin "$GITHUB_SHA" >/dev/null 2>&1 || true
         obs="$RUNNER_TEMP/cafe-signal-observation.json"
-        args=(signal run --test "$SIGNAL_TEST" --retries "$SIGNAL_RETRIES" --out "$obs" --base "origin/${GITHUB_BASE_REF}" --dir "$SIGNAL_WD")
-        [ -n "$SIGNAL_INSTALL" ] && args+=(--install "$SIGNAL_INSTALL")
+        args=(signal run --test "$SIGNAL_TEST" --install "$SIGNAL_INSTALL" --retries "$SIGNAL_RETRIES" --out "$obs" --base auto --dir "$SIGNAL_WD")
         [ -n "$SIGNAL_ENDPOINT" ] && args+=(--endpoint "$SIGNAL_ENDPOINT")
         [ "$SIGNAL_FAIL" = "true" ] && args+=(--fail-on-regression)
         set +e

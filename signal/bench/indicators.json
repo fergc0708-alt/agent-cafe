@@ -1,0 +1,1257 @@
+{
+"npm|typescript|2.8.3|7.0.2": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|typescript|3.9.10|7.0.2": {
+"mend": "low",
+"dependabot": 67,
+"dependabot_raw": "67%"
+},
+"npm|typescript|4.1.5|7.0.2": {
+"mend": "low",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|typescript|4.2.4|7.0.2": {
+"mend": "low",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|typescript|4.4.4|4.9.5": {
+"mend": "high",
+"dependabot": 29,
+"dependabot_raw": "29%"
+},
+"npm|typescript|4.6.2|4.9.5": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|typescript|4.6.4|7.0.2": {
+"mend": "low",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|typescript|4.7.4|4.9.5": {
+"mend": "high",
+"dependabot": 67,
+"dependabot_raw": "67%"
+},
+"npm|typescript|4.7.4|7.0.2": {
+"mend": "low",
+"dependabot": 30,
+"dependabot_raw": "30%"
+},
+"npm|typescript|4.8.4|7.0.2": {
+"mend": "low",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|typescript|4.9.4|4.9.5": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|typescript|4.9.5|4.9.5": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|typescript|4.9.5|5.9.3": {
+"mend": "low",
+"dependabot": 47,
+"dependabot_raw": "47%"
+},
+"npm|typescript|4.9.5|7.0.2": {
+"mend": "low",
+"dependabot": 25,
+"dependabot_raw": "25%"
+},
+"npm|typescript|5.0.2|7.0.2": {
+"mend": "low",
+"dependabot": 20,
+"dependabot_raw": "20%"
+},
+"npm|typescript|5.0.4|5.9.3": {
+"mend": "high",
+"dependabot": 44,
+"dependabot_raw": "44%"
+},
+"npm|typescript|5.0.4|7.0.2": {
+"mend": "low",
+"dependabot": 18,
+"dependabot_raw": "18%"
+},
+"npm|typescript|5.1.3|5.9.3": {
+"mend": "high",
+"dependabot": 60,
+"dependabot_raw": "60%"
+},
+"npm|typescript|5.1.6|5.9.3": {
+"mend": "high",
+"dependabot": 59,
+"dependabot_raw": "59%"
+},
+"npm|typescript|5.2.2|5.9.3": {
+"mend": "high",
+"dependabot": 30,
+"dependabot_raw": "30%"
+},
+"npm|typescript|5.2.2|7.0.2": {
+"mend": "low",
+"dependabot": 17,
+"dependabot_raw": "17%"
+},
+"npm|typescript|5.3.3|5.9.3": {
+"mend": "high",
+"dependabot": 60,
+"dependabot_raw": "60%"
+},
+"npm|typescript|5.3.3|7.0.2": {
+"mend": "low",
+"dependabot": 17,
+"dependabot_raw": "17%"
+},
+"npm|typescript|5.4.2|5.9.3": {
+"mend": "high",
+"dependabot": 50,
+"dependabot_raw": "50%"
+},
+"npm|typescript|5.4.5|5.9.3": {
+"mend": "high",
+"dependabot": 52,
+"dependabot_raw": "52%"
+},
+"npm|typescript|5.5.4|5.9.3": {
+"mend": "high",
+"dependabot": 41,
+"dependabot_raw": "41%"
+},
+"npm|typescript|5.6.2|5.9.3": {
+"mend": "high",
+"dependabot": 74,
+"dependabot_raw": "74%"
+},
+"npm|typescript|5.6.3|6.0.3": {
+"mend": "low",
+"dependabot": 46,
+"dependabot_raw": "46%"
+},
+"npm|typescript|5.6.3|7.0.2": {
+"mend": "low",
+"dependabot": 35,
+"dependabot_raw": "35%"
+},
+"npm|typescript|5.7.2|5.9.3": {
+"mend": "high",
+"dependabot": 60,
+"dependabot_raw": "60%"
+},
+"npm|typescript|5.7.3|5.9.3": {
+"mend": "high",
+"dependabot": 60,
+"dependabot_raw": "60%"
+},
+"npm|typescript|5.7.3|7.0.2": {
+"mend": "low",
+"dependabot": 26,
+"dependabot_raw": "26%"
+},
+"npm|typescript|5.8.2|7.0.2": {
+"mend": "low",
+"dependabot": 18,
+"dependabot_raw": "18%"
+},
+"npm|typescript|5.8.3|5.9.3": {
+"mend": "high",
+"dependabot": 64,
+"dependabot_raw": "64%"
+},
+"npm|typescript|5.8.3|6.0.3": {
+"mend": "low",
+"dependabot": 44,
+"dependabot_raw": "44%"
+},
+"npm|typescript|5.8.3|7.0.2": {
+"mend": "low",
+"dependabot": 33,
+"dependabot_raw": "33%"
+},
+"npm|typescript|5.9.2|5.9.3": {
+"mend": "high",
+"dependabot": 91,
+"dependabot_raw": "91%"
+},
+"npm|typescript|5.9.2|7.0.2": {
+"mend": "low",
+"dependabot": 23,
+"dependabot_raw": "23%"
+},
+"npm|typescript|5.9.3|5.9.3": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|typescript|5.9.3|6.0.3": {
+"mend": "low",
+"dependabot": 31,
+"dependabot_raw": "31%"
+},
+"npm|typescript|5.9.3|7.0.2": {
+"mend": "low",
+"dependabot": 19,
+"dependabot_raw": "19%"
+},
+"npm|typescript|6.0.2|6.0.3": {
+"mend": "high",
+"dependabot": 92,
+"dependabot_raw": "92%"
+},
+"npm|typescript|6.0.2|7.0.2": {
+"mend": "low",
+"dependabot": 45,
+"dependabot_raw": "45%"
+},
+"npm|typescript|6.0.3|6.0.3": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|typescript|6.0.3|7.0.2": {
+"mend": "low",
+"dependabot": 38,
+"dependabot_raw": "38%"
+},
+"npm|typescript|7.0.2|7.0.2": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|typescript|7.1.0-beta|7.1.0-dev.20261022.1": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|typescript|7.1.0-beta|7.1.0-dev.20261029.1": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|typescript|7.1.0-beta|7.1.0-dev.20261106.1": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|typescript|7.1.0-beta|7.1.0-dev.20261110.1": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|typescript|7.1.0-beta|7.1.0-dev.20261111.1": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|typescript|7.1.0-beta|7.1.0-dev.20261113.1": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|typescript|7.1.0-beta|7.1.0-dev.20261120.1": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|typescript|7.1.0-dev.20260829.1|7.1.0-dev.20260901.1": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|typescript|7.1.0-dev.20260915.1|7.1.0-dev.20260917.1": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|typescript|7.1.0-dev.20260923.1|7.1.0-dev.20260926.1": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|typescript|7.1.0-dev.20261014.1|7.1.0-dev.20261015.1": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|typescript|7.1.0-dev.20261021.1|7.1.0-dev.20261022.1": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|typescript|7.1.0-dev.20261105.1|7.1.0-dev.20261106.1": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|typescript|7.1.0-dev.20261107.1|7.1.0-dev.20261108.1": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|typescript|7.1.0-dev.20261110.1|7.1.0-dev.20261113.1": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|typescript|7.1.0-dev.20261111.1|7.1.0-dev.20261112.1": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|typescript|7.1.0-dev.20261111.1|7.1.0-dev.20261113.1": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|typescript|7.1.0-dev.20261114.1|7.1.0-dev.20261115.1": {
+"mend": "low",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|typescript|7.1.0-dev.20261118.1|7.1.0-dev.20261119.1": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|vite|0.2.4|0.3.3": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|vite|0.3.1|0.3.2": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|vite|0.3.1|1.0.0": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|vite|0.3.2|0.3.3": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|vite|0.3.3|1.1.0": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|vite|1.0.0|1.3.0": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|vite|1.0.0|1.4.0": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|vite|1.3.0|1.4.0": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|vite|1.4.0|8.1.6": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|vite|2.5.0|6.4.4": {
+"mend": "low",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|vite|3.0.4|3.2.11": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|vite|3.0.9|8.3.8": {
+"mend": "low",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|vite|3.2.11|6.4.3": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|vite|4.0.0|8.0.16": {
+"mend": "low",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|vite|4.2.0|8.3.8": {
+"mend": "low",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|vite|4.3.3|6.4.4": {
+"mend": "low",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|vite|4.5.14|6.4.4": {
+"mend": "low",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|vite|4.5.2|6.4.4": {
+"mend": "low",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|vite|4.5.3|5.4.21": {
+"mend": "low",
+"dependabot": 47,
+"dependabot_raw": "47%"
+},
+"npm|vite|5.2.11|8.3.4": {
+"mend": "low",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|vite|5.2.11|8.3.6": {
+"mend": "low",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|vite|5.2.13|6.4.4": {
+"mend": "low",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|vite|5.2.8|6.4.4": {
+"mend": "low",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|vite|5.2.9|5.4.21": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|vite|5.2.9|8.3.5": {
+"mend": "low",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|vite|5.4.11|6.4.3": {
+"mend": "low",
+"dependabot": 73,
+"dependabot_raw": "73%"
+},
+"npm|vite|5.4.11|6.4.4": {
+"mend": "low",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|vite|5.4.11|8.1.6": {
+"mend": "low",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|vite|5.4.19|6.4.4": {
+"mend": "low",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|vite|5.4.21|6.4.3": {
+"mend": "low",
+"dependabot": 73,
+"dependabot_raw": "73%"
+},
+"npm|vite|5.4.21|6.4.4": {
+"mend": "low",
+"dependabot": 61,
+"dependabot_raw": "61%"
+},
+"npm|vite|5.4.21|8.3.0": {
+"mend": "low",
+"dependabot": 25,
+"dependabot_raw": "25%"
+},
+"npm|vite|5.4.21|8.3.5": {
+"mend": "low",
+"dependabot": 29,
+"dependabot_raw": "29%"
+},
+"npm|vite|5.4.21|8.3.7": {
+"mend": "low",
+"dependabot": 24,
+"dependabot_raw": "24%"
+},
+"npm|vite|5.4.21|8.3.8": {
+"mend": "low",
+"dependabot": 21,
+"dependabot_raw": "21%"
+},
+"npm|vite|6.3.5|6.4.4": {
+"mend": "high",
+"dependabot": 60,
+"dependabot_raw": "60%"
+},
+"npm|vite|6.4.1|6.4.4": {
+"mend": "high",
+"dependabot": 58,
+"dependabot_raw": "58%"
+},
+"npm|vite|6.4.1|6.4.5": {
+"mend": "high",
+"dependabot": 83,
+"dependabot_raw": "83%"
+},
+"npm|vite|6.4.2|6.4.3": {
+"mend": "high",
+"dependabot": 81,
+"dependabot_raw": "81%"
+},
+"npm|vite|6.4.2|6.4.4": {
+"mend": "high",
+"dependabot": 67,
+"dependabot_raw": "67%"
+},
+"npm|vite|6.4.3|6.4.4": {
+"mend": "high",
+"dependabot": 77,
+"dependabot_raw": "77%"
+},
+"npm|vite|6.4.3|6.4.5": {
+"mend": "high",
+"dependabot": 72,
+"dependabot_raw": "72%"
+},
+"npm|vite|6.4.3|6.4.6": {
+"mend": "high",
+"dependabot": 77,
+"dependabot_raw": "77%"
+},
+"npm|vite|6.4.3|8.3.0": {
+"mend": "low",
+"dependabot": 36,
+"dependabot_raw": "36%"
+},
+"npm|vite|6.4.3|8.3.4": {
+"mend": "low",
+"dependabot": 34,
+"dependabot_raw": "34%"
+},
+"npm|vite|6.4.3|8.3.5": {
+"mend": "low",
+"dependabot": 32,
+"dependabot_raw": "32%"
+},
+"npm|vite|6.4.3|8.3.8": {
+"mend": "low",
+"dependabot": 41,
+"dependabot_raw": "41%"
+},
+"npm|vite|6.4.4|6.4.5": {
+"mend": "high",
+"dependabot": 82,
+"dependabot_raw": "82%"
+},
+"npm|vite|6.4.4|8.3.4": {
+"mend": "low",
+"dependabot": 38,
+"dependabot_raw": "38%"
+},
+"npm|vite|6.4.4|8.3.5": {
+"mend": "low",
+"dependabot": 46,
+"dependabot_raw": "46%"
+},
+"npm|vite|6.4.5|6.4.6": {
+"mend": "high",
+"dependabot": 81,
+"dependabot_raw": "81%"
+},
+"npm|vite|6.4.5|7.3.7": {
+"mend": "low",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|vite|6.4.5|7.3.8": {
+"mend": "low",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|vite|6.4.5|8.3.5": {
+"mend": "low",
+"dependabot": 33,
+"dependabot_raw": "33%"
+},
+"npm|vite|6.4.5|8.3.6": {
+"mend": "low",
+"dependabot": 33,
+"dependabot_raw": "33%"
+},
+"npm|vite|6.4.5|8.3.8": {
+"mend": "low",
+"dependabot": 37,
+"dependabot_raw": "37%"
+},
+"npm|vite|6.4.6|8.3.5": {
+"mend": "low",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|vite|6.4.6|8.3.7": {
+"mend": "low",
+"dependabot": 33,
+"dependabot_raw": "33%"
+},
+"npm|vite|6.4.6|8.3.8": {
+"mend": "low",
+"dependabot": 33,
+"dependabot_raw": "33%"
+},
+"npm|vite|7.0.6|7.3.7": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|vite|7.1.12|7.3.7": {
+"mend": "high",
+"dependabot": 84,
+"dependabot_raw": "84%"
+},
+"npm|vite|7.2.7|8.2.4": {
+"mend": "low",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|vite|7.3.0|7.3.5": {
+"mend": "high",
+"dependabot": 79,
+"dependabot_raw": "79%"
+},
+"npm|vite|7.3.0|7.3.7": {
+"mend": "high",
+"dependabot": 86,
+"dependabot_raw": "86%"
+},
+"npm|vite|7.3.0|8.3.4": {
+"mend": "low",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|vite|7.3.0|8.3.5": {
+"mend": "low",
+"dependabot": 60,
+"dependabot_raw": "60%"
+},
+"npm|vite|7.3.1|7.3.6": {
+"mend": "high",
+"dependabot": 82,
+"dependabot_raw": "82%"
+},
+"npm|vite|7.3.1|7.3.8": {
+"mend": "high",
+"dependabot": 67,
+"dependabot_raw": "67%"
+},
+"npm|vite|7.3.1|8.3.8": {
+"mend": "low",
+"dependabot": 71,
+"dependabot_raw": "71%"
+},
+"npm|vite|7.3.2|7.3.7": {
+"mend": "high",
+"dependabot": 85,
+"dependabot_raw": "85%"
+},
+"npm|vite|7.3.3|7.3.7": {
+"mend": "high",
+"dependabot": 80,
+"dependabot_raw": "80%"
+},
+"npm|vite|7.3.3|8.3.5": {
+"mend": "low",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|vite|7.3.5|7.3.6": {
+"mend": "high",
+"dependabot": 86,
+"dependabot_raw": "86%"
+},
+"npm|vite|7.3.5|7.3.7": {
+"mend": "high",
+"dependabot": 67,
+"dependabot_raw": "67%"
+},
+"npm|vite|7.3.6|7.3.7": {
+"mend": "high",
+"dependabot": 77,
+"dependabot_raw": "77%"
+},
+"npm|vite|7.3.6|8.3.0": {
+"mend": "low",
+"dependabot": 55,
+"dependabot_raw": "55%"
+},
+"npm|vite|7.3.6|8.3.1": {
+"mend": "low",
+"dependabot": 58,
+"dependabot_raw": "58%"
+},
+"npm|vite|7.3.6|8.3.2": {
+"mend": "low",
+"dependabot": 63,
+"dependabot_raw": "63%"
+},
+"npm|vite|7.3.6|8.3.4": {
+"mend": "low",
+"dependabot": 60,
+"dependabot_raw": "60%"
+},
+"npm|vite|7.3.6|8.3.5": {
+"mend": "low",
+"dependabot": 65,
+"dependabot_raw": "65%"
+},
+"npm|vite|7.3.7|7.3.8": {
+"mend": "high",
+"dependabot": 82,
+"dependabot_raw": "82%"
+},
+"npm|vite|7.3.7|8.1.6": {
+"mend": "low",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|vite|7.3.7|8.3.3": {
+"mend": "low",
+"dependabot": 70,
+"dependabot_raw": "70%"
+},
+"npm|vite|7.3.7|8.3.4": {
+"mend": "low",
+"dependabot": 55,
+"dependabot_raw": "55%"
+},
+"npm|vite|7.3.7|8.3.5": {
+"mend": "low",
+"dependabot": 56,
+"dependabot_raw": "56%"
+},
+"npm|vite|7.3.7|8.3.6": {
+"mend": "low",
+"dependabot": 58,
+"dependabot_raw": "58%"
+},
+"npm|vite|7.3.7|8.3.8": {
+"mend": "low",
+"dependabot": 52,
+"dependabot_raw": "52%"
+},
+"npm|vite|7.3.8|8.3.8": {
+"mend": "low",
+"dependabot": 53,
+"dependabot_raw": "53%"
+},
+"npm|vite|8.0.0|8.3.8": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|vite|8.0.10|8.3.4": {
+"mend": "high",
+"dependabot": 71,
+"dependabot_raw": "71%"
+},
+"npm|vite|8.0.13|8.3.3": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|vite|8.0.13|8.3.5": {
+"mend": "high",
+"dependabot": 81,
+"dependabot_raw": "81%"
+},
+"npm|vite|8.0.14|8.1.6": {
+"mend": "high",
+"dependabot": 90,
+"dependabot_raw": "90%"
+},
+"npm|vite|8.0.16|8.1.6": {
+"mend": "high",
+"dependabot": 68,
+"dependabot_raw": "68%"
+},
+"npm|vite|8.0.16|8.3.0": {
+"mend": "high",
+"dependabot": 82,
+"dependabot_raw": "82%"
+},
+"npm|vite|8.0.16|8.3.1": {
+"mend": "high",
+"dependabot": 71,
+"dependabot_raw": "71%"
+},
+"npm|vite|8.0.16|8.3.3": {
+"mend": "high",
+"dependabot": 40,
+"dependabot_raw": "40%"
+},
+"npm|vite|8.0.16|8.3.4": {
+"mend": "high",
+"dependabot": 79,
+"dependabot_raw": "79%"
+},
+"npm|vite|8.0.16|8.3.5": {
+"mend": "high",
+"dependabot": 85,
+"dependabot_raw": "85%"
+},
+"npm|vite|8.0.1|8.3.4": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|vite|8.0.3|8.0.16": {
+"mend": "high",
+"dependabot": 78,
+"dependabot_raw": "78%"
+},
+"npm|vite|8.0.3|8.1.6": {
+"mend": "high",
+"dependabot": 40,
+"dependabot_raw": "40%"
+},
+"npm|vite|8.0.5|8.3.5": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|vite|8.0.9|8.3.8": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|vite|8.1.0|8.1.6": {
+"mend": "high",
+"dependabot": 63,
+"dependabot_raw": "63%"
+},
+"npm|vite|8.1.4|8.1.6": {
+"mend": "high",
+"dependabot": 68,
+"dependabot_raw": "68%"
+},
+"npm|vite|8.1.4|8.3.0": {
+"mend": "high",
+"dependabot": 73,
+"dependabot_raw": "73%"
+},
+"npm|vite|8.1.4|8.3.2": {
+"mend": "high",
+"dependabot": 50,
+"dependabot_raw": "50%"
+},
+"npm|vite|8.1.5|8.1.6": {
+"mend": "high",
+"dependabot": 52,
+"dependabot_raw": "52%"
+},
+"npm|vite|8.1.5|8.3.5": {
+"mend": "high",
+"dependabot": 77,
+"dependabot_raw": "77%"
+},
+"npm|vite|8.1.6|8.3.3": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|vite|8.1.6|8.3.4": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|vite|8.1.6|8.3.5": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|vite|8.1.6|8.3.8": {
+"mend": "high",
+"dependabot": 67,
+"dependabot_raw": "67%"
+},
+"npm|vite|8.2.0|8.2.4": {
+"mend": "high",
+"dependabot": 57,
+"dependabot_raw": "57%"
+},
+"npm|vite|8.2.0|8.3.4": {
+"mend": "high",
+"dependabot": 71,
+"dependabot_raw": "71%"
+},
+"npm|vite|8.2.1|8.2.2": {
+"mend": "high",
+"dependabot": 89,
+"dependabot_raw": "89%"
+},
+"npm|vite|8.2.1|8.2.4": {
+"mend": "high",
+"dependabot": 51,
+"dependabot_raw": "51%"
+},
+"npm|vite|8.2.1|8.3.1": {
+"mend": "high",
+"dependabot": 87,
+"dependabot_raw": "87%"
+},
+"npm|vite|8.2.1|8.3.2": {
+"mend": "high",
+"dependabot": 84,
+"dependabot_raw": "84%"
+},
+"npm|vite|8.2.1|8.3.3": {
+"mend": "high",
+"dependabot": 95,
+"dependabot_raw": "95%"
+},
+"npm|vite|8.2.1|8.3.4": {
+"mend": "high",
+"dependabot": 78,
+"dependabot_raw": "78%"
+},
+"npm|vite|8.2.2|8.2.4": {
+"mend": "high",
+"dependabot": 61,
+"dependabot_raw": "61%"
+},
+"npm|vite|8.2.2|8.3.0": {
+"mend": "high",
+"dependabot": 92,
+"dependabot_raw": "92%"
+},
+"npm|vite|8.2.2|8.3.1": {
+"mend": "high",
+"dependabot": 85,
+"dependabot_raw": "85%"
+},
+"npm|vite|8.2.2|8.3.2": {
+"mend": "high",
+"dependabot": 75,
+"dependabot_raw": "75%"
+},
+"npm|vite|8.2.2|8.3.3": {
+"mend": "high",
+"dependabot": 77,
+"dependabot_raw": "77%"
+},
+"npm|vite|8.2.2|8.3.4": {
+"mend": "high",
+"dependabot": 79,
+"dependabot_raw": "79%"
+},
+"npm|vite|8.2.2|8.3.5": {
+"mend": "high",
+"dependabot": 68,
+"dependabot_raw": "68%"
+},
+"npm|vite|8.2.2|8.3.6": {
+"mend": "neutral",
+"dependabot": 79,
+"dependabot_raw": "79%"
+},
+"npm|vite|8.2.4|8.3.5": {
+"mend": "high",
+"dependabot": 100,
+"dependabot_raw": "100%"
+},
+"npm|vite|8.2.4|8.3.8": {
+"mend": "high",
+"dependabot": 86,
+"dependabot_raw": "86%"
+},
+"npm|vite|8.3.0|8.3.1": {
+"mend": "high",
+"dependabot": 93,
+"dependabot_raw": "93%"
+},
+"npm|vite|8.3.0|8.3.2": {
+"mend": "high",
+"dependabot": 74,
+"dependabot_raw": "74%"
+},
+"npm|vite|8.3.0|8.3.3": {
+"mend": "high",
+"dependabot": 70,
+"dependabot_raw": "70%"
+},
+"npm|vite|8.3.0|8.3.4": {
+"mend": "high",
+"dependabot": 79,
+"dependabot_raw": "79%"
+},
+"npm|vite|8.3.0|8.3.5": {
+"mend": "high",
+"dependabot": 70,
+"dependabot_raw": "70%"
+},
+"npm|vite|8.3.0|8.3.6": {
+"mend": "neutral",
+"dependabot": 77,
+"dependabot_raw": "77%"
+},
+"npm|vite|8.3.0|8.3.8": {
+"mend": "high",
+"dependabot": 74,
+"dependabot_raw": "74%"
+},
+"npm|vite|8.3.1|8.3.2": {
+"mend": "high",
+"dependabot": 89,
+"dependabot_raw": "89%"
+},
+"npm|vite|8.3.1|8.3.3": {
+"mend": "high",
+"dependabot": 73,
+"dependabot_raw": "73%"
+},
+"npm|vite|8.3.1|8.3.4": {
+"mend": "high",
+"dependabot": 84,
+"dependabot_raw": "84%"
+},
+"npm|vite|8.3.1|8.3.5": {
+"mend": "high",
+"dependabot": 81,
+"dependabot_raw": "81%"
+},
+"npm|vite|8.3.1|8.3.8": {
+"mend": "high",
+"dependabot": 66,
+"dependabot_raw": "66%"
+},
+"npm|vite|8.3.2|8.3.3": {
+"mend": "high",
+"dependabot": 90,
+"dependabot_raw": "90%"
+},
+"npm|vite|8.3.2|8.3.4": {
+"mend": "high",
+"dependabot": 88,
+"dependabot_raw": "88%"
+},
+"npm|vite|8.3.3|8.3.4": {
+"mend": "high",
+"dependabot": 92,
+"dependabot_raw": "92%"
+},
+"npm|vite|8.3.3|8.3.5": {
+"mend": "high",
+"dependabot": 87,
+"dependabot_raw": "87%"
+},
+"npm|vite|8.3.3|8.3.6": {
+"mend": "neutral",
+"dependabot": 71,
+"dependabot_raw": "71%"
+},
+"npm|vite|8.3.3|8.3.8": {
+"mend": "high",
+"dependabot": 63,
+"dependabot_raw": "63%"
+},
+"npm|vite|8.3.4|8.3.5": {
+"mend": "high",
+"dependabot": 83,
+"dependabot_raw": "83%"
+},
+"npm|vite|8.3.4|8.3.6": {
+"mend": "neutral",
+"dependabot": 74,
+"dependabot_raw": "74%"
+},
+"npm|vite|8.3.4|8.3.7": {
+"mend": "neutral",
+"dependabot": 80,
+"dependabot_raw": "80%"
+},
+"npm|vite|8.3.4|8.3.8": {
+"mend": "high",
+"dependabot": 75,
+"dependabot_raw": "75%"
+},
+"npm|vite|8.3.5|8.3.6": {
+"mend": "neutral",
+"dependabot": 87,
+"dependabot_raw": "87%"
+},
+"npm|vite|8.3.5|8.3.7": {
+"mend": "neutral",
+"dependabot": 86,
+"dependabot_raw": "86%"
+},
+"npm|vite|8.3.5|8.3.8": {
+"mend": "high",
+"dependabot": 84,
+"dependabot_raw": "84%"
+},
+"npm|vite|8.3.6|8.3.6": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"npm|vite|8.3.6|8.3.7": {
+"mend": "neutral",
+"dependabot": 93,
+"dependabot_raw": "93%"
+},
+"npm|vite|8.3.6|8.3.8": {
+"mend": "high",
+"dependabot": 86,
+"dependabot_raw": "86%"
+},
+"npm|vite|8.3.7|8.3.8": {
+"mend": "high",
+"dependabot": 95,
+"dependabot_raw": "95%"
+},
+"pypi|pytest|6.2.5|9.2.0": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"pypi|pytest|7.0.1|7.1.0": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"pypi|pytest|7.0.1|9.0.3": {
+"mend": "low",
+"dependabot": 67,
+"dependabot_raw": "67%"
+},
+"pypi|pytest|7.4.0|9.2.0": {
+"mend": "low",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"pypi|pytest|7.4.3|7.4.4": {
+"mend": "high",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"pypi|pytest|7.4.4|9.0.3": {
+"mend": "low",
+"dependabot": 70,
+"dependabot_raw": "70%"
+},
+"pypi|pytest|7.4.4|9.2.0": {
+"mend": "low",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"pypi|pytest|8.0.2|9.0.3": {
+"mend": "neutral",
+"dependabot": 50,
+"dependabot_raw": "50%"
+},
+"pypi|pytest|8.2.2|9.1.1": {
+"mend": "neutral",
+"dependabot": 59,
+"dependabot_raw": "59%"
+},
+"pypi|pytest|8.2.2|9.2.0": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"pypi|pytest|8.3.3|8.4.2": {
+"mend": "high",
+"dependabot": 71,
+"dependabot_raw": "71%"
+},
+"pypi|pytest|8.3.3|9.0.3": {
+"mend": "neutral",
+"dependabot": 67,
+"dependabot_raw": "67%"
+},
+"pypi|pytest|8.3.5|8.4.2": {
+"mend": "high",
+"dependabot": 74,
+"dependabot_raw": "74%"
+},
+"pypi|pytest|8.3.5|9.0.3": {
+"mend": "neutral",
+"dependabot": 73,
+"dependabot_raw": "73%"
+},
+"pypi|pytest|8.4.0|8.4.2": {
+"mend": "high",
+"dependabot": 70,
+"dependabot_raw": "70%"
+},
+"pypi|pytest|8.4.0|9.0.3": {
+"mend": "neutral",
+"dependabot": 72,
+"dependabot_raw": "72%"
+},
+"pypi|pytest|8.4.1|8.4.2": {
+"mend": "high",
+"dependabot": 94,
+"dependabot_raw": "94%"
+},
+"pypi|pytest|8.4.1|9.0.3": {
+"mend": "neutral",
+"dependabot": 77,
+"dependabot_raw": "77%"
+},
+"pypi|pytest|8.4.1|9.2.0": {
+"mend": "neutral",
+"dependabot": 50,
+"dependabot_raw": "50%"
+},
+"pypi|pytest|8.4.2|9.0.3": {
+"mend": "neutral",
+"dependabot": 74,
+"dependabot_raw": "74%"
+},
+"pypi|pytest|8.4.2|9.1.1": {
+"mend": "neutral",
+"dependabot": 73,
+"dependabot_raw": "73%"
+},
+"pypi|pytest|9.0.2|8.4.2": {
+"mend": "neutral",
+"dependabot": null,
+"dependabot_raw": "unknown"
+},
+"pypi|pytest|9.0.2|9.0.3": {
+"mend": "high",
+"dependabot": 91,
+"dependabot_raw": "91%"
+},
+"pypi|pytest|9.0.2|9.1.1": {
+"mend": "high",
+"dependabot": 82,
+"dependabot_raw": "82%"
+},
+"pypi|pytest|9.0.3|9.1.1": {
+"mend": "high",
+"dependabot": 88,
+"dependabot_raw": "88%"
+}
+}

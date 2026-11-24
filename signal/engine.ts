@@ -37,11 +37,11 @@ export interface Report {
   environments: { runtime: string; os: string; owners: number; failures: number }[];
   your_env_tested: boolean | null;
   evidence: { attribution: Attribution; date: string; source?: string; env?: string }[];
-  verdict: "known_regression" | "likely_safe" | "mixed" | "insufficient_evidence";
+  verdict: "known_regression" | "single_report" | "likely_safe" | "mixed" | "insufficient_evidence";
   summary: string;
 }
 
-const MIN_CAUSAL = 2;
+const MIN_CAUSAL = 3;
 const MIN_OBSERVATIONAL = 5;
 
 export function repoOf(o: Observation): string {
@@ -53,6 +53,7 @@ export function repoOf(o: Observation): string {
 let UNIT: (o: Observation) => string = (o) => ownerOf(o);
 
 export function ownerOf(o: Observation): string {
+  if (o.provenance.owner_login) return `gh:${o.provenance.owner_login.toLowerCase()}`;
   if (o.provenance.owner_id) return `id:${o.provenance.owner_id}`;
   const m = o.provenance.source_url?.match(/github\.com\/([^/]+)\//i);
   return m ? `gh:${m[1].toLowerCase()}` : `obs:${o.id}`;
@@ -71,6 +72,13 @@ function collapse(obs: Observation[], grade: "causal" | "observational"): Map<st
     out.set(k, (out.get(k) ?? false) || isFail(o.attribution));
   }
   return out;
+}
+
+/** Sampling weight of each owner's outcome (seed records sampled per stratum carry weight = stratum size / sample). */
+function ownerWeights(obs: Observation[], grade: "causal" | "observational"): Map<string, number> {
+  const w = new Map<string, number>();
+  for (const o of obs) if (GRADE[o.attribution] === grade) w.set(UNIT(o), Math.max(w.get(UNIT(o)) ?? 0, o.weight ?? 1));
+  return w;
 }
 
 // ---- Beta distribution helpers (Lentz continued fraction for the regularized incomplete beta) ----
@@ -110,10 +118,17 @@ export function betaQuantile(p: number, a: number, b: number): number {
 
 /** Empirical-Bayes estimate: Beta prior centred on the package's (or ecosystem's) failure rate among OTHER
  *  transitions, with a weak strength, updated with owner-level outcomes for this transition. */
-function estimate(outcomes: Map<string, boolean>, prior: Estimate["prior"]): Estimate {
+function estimate(outcomes: Map<string, boolean>, prior: Estimate["prior"], weights?: Map<string, number>): Estimate {
   const n = outcomes.size, f = [...outcomes.values()].filter(Boolean).length;
   if (!n) return { owners: 0, failures: 0, mean: null, ci90: null, prior };
-  const a = prior.mean * prior.strength + f, b = (1 - prior.mean) * prior.strength + (n - f);
+  // Weighted failure share (corrects stratified sampling), applied to the owner count: n stays the real sample size.
+  let fw = f;
+  if (weights) {
+    let W = 0, F = 0;
+    for (const [k, fail] of outcomes) { const w = weights.get(k) ?? 1; W += w; if (fail) F += w; }
+    fw = W ? (F / W) * n : f;
+  }
+  const a = prior.mean * prior.strength + fw, b = (1 - prior.mean) * prior.strength + (n - fw);
   return { owners: n, failures: f, mean: a / (a + b), ci90: [betaQuantile(0.05, a, b), betaQuantile(0.95, a, b)], prior };
 }
 
@@ -133,8 +148,13 @@ export function buildIndex(obs: Observation[]): Index {
 
 function priorFor(pool: Observation[], grade: "causal" | "observational", base: number): Estimate["prior"] {
   const o = collapse(pool, grade);
+  const w = ownerWeights(pool, grade);
   // pseudo-count 4: the package history moves the prior, a single transition's evidence quickly dominates it
-  if (o.size >= 10) return { mean: Math.min(0.95, Math.max(0.02, [...o.values()].filter(Boolean).length / o.size)), strength: 4, from: `package history (${o.size} owner-outcomes)` };
+  if (o.size >= 10) {
+    let W = 0, F = 0;
+    for (const [k, fail] of o) { const x = w.get(k) ?? 1; W += x; if (fail) F += x; }
+    return { mean: Math.min(0.95, Math.max(0.02, F / W)), strength: 4, from: `package history (${o.size} owner-outcomes)` };
+  }
   return { mean: base, strength: 2, from: "ecosystem default" };
 }
 
@@ -152,21 +172,23 @@ function queryInner(index: Index, q: Query, opts: { base?: number }): Report {
   const usable = (o: Observation) => (!q.before || o.observed_at < q.before) && (!q.excludeOwner || ownerOf(o) !== q.excludeOwner);
   const pool = (index.byPackage.get(`${q.ecosystem}:${pkg}`) ?? []).filter(usable);
   const to = q.to.replace(/^v/, ""), from = q.from.replace(/^v/, "");
+  const pre = (v: string) => /[a-z]/i.test(v.replace(/^v/, "").replace(/^\d+!/, "")); // 5.0.0-beta.1, 2.0rc1, 7.1.0-dev
+  // Evidence about the same TARGET version is pooled (exact transitions are a subset, not a separate tier that could
+  // shadow it). Only when none exists do we fall back to the same jump (same majors and target minor, no prereleases).
   const tiers: [Report["match"], (o: Observation) => boolean][] = [
-    ["exact", (o) => o.primary.to === to && o.primary.from === from],
     ["same_target", (o) => o.primary.to === to],
-    ["same_jump", (o) => { const a = semverParts(o.primary.from), b = semverParts(o.primary.to), x = semverParts(from), y = semverParts(to); return !!(a && b && x && y && a[0] === x[0] && b[0] === y[0] && bumpKind(from, to) === bumpKind(o.primary.from, o.primary.to) && b[1] === y[1]); }],
+    ["same_jump", (o) => { if (pre(o.primary.to) !== pre(to)) return false; const a = semverParts(o.primary.from), b = semverParts(o.primary.to), x = semverParts(from), y = semverParts(to); return !!(a && b && x && y && a[0] === x[0] && b[0] === y[0] && bumpKind(from, to) === bumpKind(o.primary.from, o.primary.to) && b[1] === y[1]); }],
   ];
   let match: Report["match"] = "none";
   let hits: Observation[] = [];
   for (const [name, f] of tiers) {
     const h = pool.filter(f);
-    if (h.length > 0) { match = name; hits = h; break; }
+    if (h.length > 0) { match = name === "same_target" && h.every((o) => o.primary.from === from) ? "exact" : name; hits = h; break; }
   }
   const others = pool.filter((o) => !hits.includes(o));
   const base = opts.base ?? 0.1;
   const causal = estimate(collapse(hits, "causal"), priorFor(others, "causal", base));
-  const observational = estimate(collapse(hits, "observational"), priorFor(others, "observational", base));
+  const observational = estimate(collapse(hits, "observational"), priorFor(others, "observational", base), ownerWeights(hits, "observational"));
   const inconclusive = new Set(hits.filter((o) => GRADE[o.attribution] === "none").map(UNIT)).size;
 
   const fp = new Map<string, Set<string>>();
@@ -174,22 +196,29 @@ function queryInner(index: Index, q: Query, opts: { base?: number }): Report {
   const env = new Map<string, { runtime: string; os: string; owners: Set<string>; fails: Set<string> }>();
   for (const o of hits) {
     if (!o.env) continue;
-    const k = `${o.env.runtime} ${o.env.runtime_version.split(".")[0]}|${o.env.os}`;
-    const e = env.get(k) ?? env.set(k, { runtime: `${o.env.runtime} ${o.env.runtime_version.split(".")[0]}`, os: o.env.os, owners: new Set(), fails: new Set() }).get(k)!;
+    const rv = o.env.runtime === "python" ? o.env.runtime_version.split(".").slice(0, 2).join(".") : o.env.runtime_version.split(".")[0];
+    const k = `${o.env.runtime} ${rv}|${o.env.os}`;
+    const e = env.get(k) ?? env.set(k, { runtime: `${o.env.runtime} ${rv}`, os: o.env.os, owners: new Set(), fails: new Set() }).get(k)!;
     e.owners.add(UNIT(o));
     if (isFail(o.attribution)) e.fails.add(UNIT(o));
   }
   const environments = [...env.values()].map((e) => ({ runtime: e.runtime, os: e.os, owners: e.owners.size, failures: e.fails.size }));
-  const your_env_tested = q.env ? environments.some((e) => e.runtime === `${q.env!.runtime} ${q.env!.runtime_version.split(".")[0]}`) : null;
+  const qrv = q.env ? (q.env.runtime === "python" ? q.env.runtime_version.split(".").slice(0, 2).join(".") : q.env.runtime_version.split(".")[0]) : "";
+  const your_env_tested = q.env ? environments.some((e) => e.runtime === `${q.env!.runtime} ${qrv}`) : null;
 
+  // Verdicts follow the interval, need several independent owners, and never let a handful of (possibly Sybil)
+  // owners overrule a large opposite signal: contradictions are reported as "mixed".
   let verdict: Report["verdict"] = "insufficient_evidence";
-  if (causal.owners >= MIN_CAUSAL) {
-    verdict = causal.failures === 0 ? "likely_safe" : causal.failures === causal.owners ? "known_regression" : "mixed";
+  const obsHigh = observational.owners >= MIN_OBSERVATIONAL && observational.ci90 && observational.ci90[0] > 0.5;
+  const obsLow = observational.owners >= MIN_OBSERVATIONAL && observational.ci90 && observational.ci90[1] < 0.2;
+  if (causal.owners >= MIN_CAUSAL && causal.ci90) {
+    if (causal.failures >= 2 && causal.ci90[0] > 0.25) verdict = obsLow ? "mixed" : "known_regression";
+    else if (causal.failures === 0 && causal.ci90[1] < 0.35) verdict = obsHigh ? "mixed" : "likely_safe";
+    else if (causal.failures > 0) verdict = "mixed";
   } else if (causal.failures >= 1) {
-    verdict = "known_regression"; // one reproduced paired regression is worth showing even alone; n is displayed
-  } else if (observational.owners >= MIN_OBSERVATIONAL && observational.ci90) {
-    verdict = observational.ci90[0] > 0.5 ? "mixed" : observational.ci90[1] < 0.2 ? "likely_safe" : "insufficient_evidence";
-  }
+    verdict = "single_report"; // one paired regression is shown, never as a conclusion
+  } else if (obsHigh) verdict = "mixed";
+  else if (obsLow) verdict = "likely_safe";
   const pct = (x: number) => `${Math.round(x * 100)}%`;
   const describe = (e: Estimate, what: string) => (e.owners ? `${what}: ${e.failures} of ${e.owners} owners failed (estimate ${pct(e.mean!)}, 90% interval ${pct(e.ci90![0])}–${pct(e.ci90![1])})` : `${what}: none`);
   const summary = [

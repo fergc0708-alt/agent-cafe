@@ -73,7 +73,7 @@ describe("signal protocol: privacy", () => {
   it("keeps only errors introduced by the update (differential), never raw logs", () => {
     const base = "ok\nDeprecationWarning: x is deprecated\n";
     const cand = "DeprecationWarning: x is deprecated\nTypeError: foo.bar is not a function\n    at /srv/app/index.js:10:3\n";
-    expect(differentialFingerprints(base, cand)).toEqual(["TypeError: foo.bar is not a function"]);
+    expect(differentialFingerprints(base, cand)).toEqual(["TypeError: <id> is not a function"]);
     expect(signatures("just text\nnothing here")).toEqual([]);
   });
 
@@ -85,6 +85,20 @@ describe("signal protocol: privacy", () => {
     expect(Object.keys(s).sort()).toEqual(["attribution", "baseline", "candidate", "changes", "env", "fingerprints", "id", "observed_at", "phase", "primary", "protocol", "provenance"].sort());
     const p = await obs({ primary: { ecosystem: "npm", package: "@acme/internal-auth", from: "1.0.0", to: "2.0.0" } });
     expect(() => shareable(p, { privatePackages: ["@acme/*"] })).toThrow(/private/);
+  });
+
+  it("signatures keep the error type and message shape only (no secrets, hosts, users, identifiers)", () => {
+    const leaks = [
+      "Error: AKIAIOSFODNN7EXAMPLE rejected", "Error: token ghp_shortTok12345 invalid", "ConnectionError: host.acme.internal user=svc_billing password=Sup3rS3cret!",
+      "OperationalError: postgresql+psycopg2://admin:hunter2@db/prod", "Error: getaddrinfo ENOTFOUND registry.npm.acme-corp.net", "Error: C:\\Users\\Juan Gonzalez\\app\\x.js",
+      "ValueError: user fernando.gonzalez not allowed", "KeyError: AcmeInternalBillingClient", "Error: sk-live-51Habc23XYZ",
+      "JWTError: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIn0.abc",
+    ];
+    for (const l of leaks) expect(scrub(l)).not.toMatch(/AKIA|ghp_|acme|svc_billing|Sup3r|hunter2|admin|ENOTFOUND registry|Gonzalez|fernando|AcmeInternal|sk-live|eyJ/);
+    const big = "Error: x\n".repeat(20000);
+    const t = Date.now(); signatures(big); expect(Date.now() - t).toBeLessThan(1500);
+    const s1 = scrub("TypeError: " + "word ".repeat(60));
+    expect(scrub(s1)).toBe(s1); // idempotent
   });
 
   it("the server rejects unscrubbed fingerprints", async () => {
@@ -100,7 +114,7 @@ describe("signal engine: independence, uncertainty and honesty", () => {
     const r = query(buildIndex([...many, one]), { ecosystem: "npm", package: "left", from: "1.0.0", to: "2.0.0" });
     expect(r.causal.owners).toBe(2);
     expect(r.causal.failures).toBe(1);
-    expect(r.verdict).toBe("mixed"); // contradictory outcomes are shown as such
+    expect(r.verdict).toBe("single_report"); // two owners are not enough to conclude anything
     // fleet mode (inside one org): repositories are the unit
     const f = query(buildIndex(many), { ecosystem: "npm", package: "left", from: "1.0.0", to: "2.0.0", unit: "repository" });
     expect(f.causal.owners).toBe(10);
@@ -132,6 +146,27 @@ describe("signal engine: independence, uncertainty and honesty", () => {
     expect(r.your_env_tested).toBe(false);
   });
 
+  it("Sybil resistance: two fabricated owners can neither clear nor condemn an update", async () => {
+    const crowd = await Promise.all(Array.from({ length: 30 }, (_, i) => obs({ baseline: "not_run", candidate: "fail" }, { kind: "seed", source_url: `https://github.com/o${i}/r/pull/1` })));
+    const sybils = await Promise.all([1, 2].map((i) => obs({ baseline: "pass", candidate: "pass" }, { kind: "github-oidc", owner_login: `sybil${i}` })));
+    expect(query(buildIndex([...crowd, ...sybils]), { ecosystem: "npm", package: "left", from: "1.0.0", to: "2.0.0" }).verdict).not.toBe("likely_safe");
+    const three = await Promise.all([1, 2, 3].map((i) => obs({ baseline: "pass", candidate: "pass" }, { kind: "github-oidc", owner_login: `s${i}` })));
+    expect(query(buildIndex([...crowd, ...three]), { ecosystem: "npm", package: "left", from: "1.0.0", to: "2.0.0" }).verdict).toBe("mixed"); // contradiction is shown, not resolved
+    const passes = await Promise.all(Array.from({ length: 40 }, (_, i) => obs({ baseline: "not_run", candidate: "pass" }, { kind: "seed", source_url: `https://github.com/p${i}/r/pull/1` })));
+    const one = await obs({}, { kind: "github-oidc", owner_login: "attacker" });
+    expect(query(buildIndex([...passes, one]), { ecosystem: "npm", package: "left", from: "1.0.0", to: "2.0.0" }).verdict).not.toBe("known_regression");
+  });
+
+  it("exact matches do not shadow same-target evidence; prereleases are not pooled with releases", async () => {
+    const reg = await Promise.all([1, 2, 3].map((i) => obs({ primary: { ecosystem: "npm", package: "left", from: "1.5.0", to: "2.0.0" } }, { kind: "github-oidc", owner_login: `r${i}` })));
+    const exactPass = await obs({ baseline: "not_run", candidate: "pass" }, { kind: "seed", source_url: "https://github.com/z/r/pull/1" });
+    const r = query(buildIndex([...reg, exactPass]), { ecosystem: "npm", package: "left", from: "1.0.0", to: "2.0.0" });
+    expect(r.causal.failures).toBe(3);
+    expect(r.verdict).toBe("known_regression");
+    const beta = await Promise.all([1, 2, 3].map((i) => obs({ primary: { ecosystem: "npm", package: "left", from: "1.0.0", to: "2.0.0-beta.1" } }, { kind: "github-oidc", owner_login: `b${i}` })));
+    expect(query(buildIndex(beta), { ecosystem: "npm", package: "left", from: "1.0.0", to: "2.0.1" }).match).toBe("none");
+  });
+
   it("credible intervals are correct and shrink with data", () => {
     expect(betaCdf(0.5, 2, 2)).toBeCloseTo(0.5, 6);
     expect(betaQuantile(0.95, 1, 1)).toBeCloseTo(0.95, 4);
@@ -148,6 +183,13 @@ describe("signal lockfiles", () => {
     expect(tomlLock('[[package]]\nname = "Pydantic_Core"\nversion = "2.27.1"\n').get("pydantic-core")).toBe("2.27.1");
     expect(updateFromTitle("chore(deps): update dependency vite to v7.1.0")).toEqual({ package: "vite", to: "7.1.0" });
     expect(updateFromTitle("Bump requests from 2.31.0 to 2.32.0")).toEqual({ package: "requests", from: "2.31.0", to: "2.32.0" });
+    // the hoisted copy wins over nested ones; workspace links and patches are not packages
+    const multi = npmLock(JSON.stringify({ lockfileVersion: 3, packages: { "": {}, "node_modules/@babel/core/node_modules/semver": { version: "6.3.1" }, "node_modules/semver": { version: "7.6.3" }, "packages/app": { version: "1.0.0" }, "node_modules/app": { link: true, resolved: "packages/app" } } }));
+    expect(multi.get("semver")).toBe("7.6.3");
+    expect([...multi.keys()]).not.toContain("");
+    expect(pnpmLock("importers:\n  .:\n    dependencies:\n      semver:\n        specifier: ^7\n        version: 7.6.3\npackages:\n  semver@6.3.1:\n    x: y\n  semver@7.6.3:\n    x: y\n").get("semver")).toBe("7.6.3");
+    const y = yarnLock('"resolve@patch:resolve@^1.0.0#~builtin<compat/resolve>":\n  version: 1.22.8\n"is-num@npm:is-number@^7":\n  version: 7.0.0\n');
+    expect([...y.keys()]).toEqual(["is-num"]);
     const d = diffVersions("npm", new Map([["a", "1.0.0"], ["b", "1.0.0"]]), new Map([["a", "2.0.0"], ["c", "1.0.0"]]), new Set(["a"]));
     expect(d.map((c) => `${c.package}:${c.from}->${c.to}:${c.direct}`)).toEqual(["a:1.0.0->2.0.0:true", "b:1.0.0->null:false", "c:null->1.0.0:false"]);
   });
@@ -172,23 +214,62 @@ describe("signal paired runner (real git repository, no network)", () => {
 
   it("attributes a regression to the update, restores the branch, keeps only the new error", async () => {
     const d = repo(leftMajor);
-    const r = await runPaired({ dir: d, base: "main", test: "sh test.sh", title: "Update dependency left to v2" });
+    writeFileSync(join(d, "untracked-marker"), "x");
+    const r = await runPaired({ dir: d, base: "main", test: "sh test.sh", install: "true", title: "Update dependency left to v2" });
     expect(r.observation.attribution).toBe("regression");
     expect(r.observation.primary).toEqual({ ecosystem: "npm", package: "left", from: "1.0.0", to: "2.0.0" });
-    expect(r.observation.fingerprints).toEqual(["TypeError: left.pad is not a function"]);
+    expect(r.observation.fingerprints).toEqual(["TypeError: <id> is not a function"]);
+    expect(spawnSync("git", ["worktree", "list"], { cwd: d, encoding: "utf8" }).stdout.trim().split("\n")).toHaveLength(1); // baseline worktree removed
     expect(readFileSync(join(d, "package-lock.json"), "utf8")).toContain("2.0.0"); // branch restored
-    expect(spawnSync("git", ["status", "--porcelain"], { cwd: d, encoding: "utf8" }).stdout.trim()).toBe("");
+    expect(spawnSync("git", ["status", "--porcelain", "--untracked-files=no"], { cwd: d, encoding: "utf8" }).stdout.trim()).toBe("");
   });
 
   it("a red base branch is not blamed on the update", async () => {
-    const r = await runPaired({ dir: repo("exit 1"), base: "main", test: "sh test.sh" });
+    const r = await runPaired({ dir: repo("exit 1"), base: "main", test: "sh test.sh", install: "true" });
     expect(r.observation.attribution).toBe("baseline_red");
   });
 
   it("a flaky test is reported as unstable, not as a regression", async () => {
     const d = repo(`f=$(mktemp -u /tmp/flk-XXXX); c=/tmp/signal-flaky-$(basename $PWD); n=$(cat $c 2>/dev/null || echo 0); echo $((n+1)) > $c; [ $((n % 2)) -eq 1 ]`);
-    const r = await runPaired({ dir: d, base: "main", test: "sh test.sh" });
+    const r = await runPaired({ dir: d, base: "main", test: "sh test.sh", install: "true" });
     expect(["unstable"]).toContain(r.observation.attribution);
+  });
+
+  it("requires an install step; without one there is no baseline and the result is only observational", async () => {
+    await expect(runPaired({ dir: repo(leftMajor), base: "main", test: "sh test.sh", install: null })).rejects.toThrow(/install command is required/);
+    const r = await runPaired({ dir: repo(leftMajor), base: "main", test: "sh test.sh", install: null, allowNoInstall: true });
+    expect(r.observation.attribution).toBe("observational_fail");
+    expect(r.observation.baseline).toBe("not_run");
+  });
+
+  it("a branch that also changes code is never reported as causal", async () => {
+    const d = repo(leftMajor);
+    writeFileSync(join(d, "index.js"), "// adapted to left v2\n");
+    spawnSync("git", ["add", "-A"], { cwd: d });
+    spawnSync("git", ["-c", "user.email=t@t", "-c", "user.name=t", "commit", "-qm", "adapt"], { cwd: d });
+    const r = await runPaired({ dir: d, base: "main", test: "sh test.sh", install: "true" });
+    expect(r.observation.attribution).toBe("observational_fail");
+    expect(r.note).toMatch(/non-dependency/);
+  });
+
+  it("the code under test cannot see the job's OIDC request credentials", async () => {
+    process.env.ACTIONS_ID_TOKEN_REQUEST_TOKEN = "secret-oidc";
+    process.env.ACTIONS_ID_TOKEN_REQUEST_URL = "https://x";
+    try {
+      const r = await runPaired({ dir: repo(`[ -z "$ACTIONS_ID_TOKEN_REQUEST_TOKEN" ] && [ -z "$ACTIONS_ID_TOKEN_REQUEST_URL" ]`), base: "main", test: "sh test.sh", install: "true" });
+      expect(r.observation.attribution).toBe("compatible");
+    } finally {
+      delete process.env.ACTIONS_ID_TOKEN_REQUEST_TOKEN;
+      delete process.env.ACTIONS_ID_TOKEN_REQUEST_URL;
+    }
+  });
+
+  it("side(): retries are clamped, install failures are errors, never 'pass' without a run", async () => {
+    const { side } = await import("../signal/run.ts");
+    const d = mkdtempSync(join(os.tmpdir(), "side-"));
+    expect(side(d, { install: null, test: "true", retries: -5 }, "x").result).toBe("pass");
+    expect(side(d, { install: null, test: "false", retries: NaN }, "x").result).toBe("fail");
+    expect(side(d, { install: "false", test: "true", retries: 1 }, "x")).toMatchObject({ result: "error", phase: "install" });
   });
 });
 
@@ -247,6 +328,33 @@ describe("signal ingestion service", () => {
     const j = await mine!.json();
     expect(j.network.causal.owners).toBe(0);
     expect(j.your_organization.causal.owners).toBe(1);
+  });
+
+  it("a token works once and only for the content it was minted for; read tokens cannot write", async () => {
+    const { iss, post } = await setup();
+    const a = await obs();
+    const b = await obs({ primary: { ecosystem: "npm", package: "react", from: "18.0.0", to: "19.0.0" } });
+    const tok = await iss.sign(claims(audienceFor(a.id)));
+    expect((await post({ observation: a, oidc_token: tok }))!.status).toBe(200);
+    expect((await post({ observation: a, oidc_token: tok }))!.status).toBe(401); // replay
+    expect((await post({ observation: { ...b, id: a.id }, oidc_token: await iss.sign(claims(audienceFor(a.id))) }))!.status).toBe(400); // id/content mismatch
+    expect((await post({ observation: { ...a, id: "query" }, oidc_token: await iss.sign(claims(QUERY_AUDIENCE)) }))!.status).toBe(400);
+    expect((await post({ observation: a, oidc_token: await iss.sign(claims(audienceFor(a.id), { event_name: "push" })) }))!.status).toBe(401); // only PR runs
+    expect((await post({ observation: a, oidc_token: await iss.sign(claims(audienceFor(a.id), { exp: undefined })) }))!.status).toBe(401);
+  });
+
+  it("drops unknown fields and rejects bad enums; bad query bodies are 400s, never crashes", async () => {
+    const { iss, store, deps, post } = await setup();
+    const o = await obs();
+    expect((await post({ observation: { ...o, env: { ...o.env, os: "linux](https://evil)" } }, oidc_token: await iss.sign(claims(audienceFor(o.id))) }))!.status).toBe(400);
+    expect((await post({ observation: { ...o, junk: "x".repeat(1000) }, oidc_token: await iss.sign(claims(audienceFor(o.id))) }))!.status).toBe(200);
+    expect(JSON.stringify([...store.rows.values()][0])).not.toMatch(/junk/);
+    for (const body of ["null", "[]", '{"package": 5}', "{"]) {
+      const r = await handleSignal(new Request("http://x/api/signal/v1/query", { method: "POST", body }), "/api/signal/v1/query", deps);
+      expect(r!.status).toBe(400);
+    }
+    const big = await handleSignal(new Request("http://x/api/signal/v1/query", { method: "POST", body: "x".repeat(200_000) }), "/api/signal/v1/query", deps);
+    expect(big!.status).toBe(413);
   });
 
   it("rejects malformed observations and oversized payloads", async () => {

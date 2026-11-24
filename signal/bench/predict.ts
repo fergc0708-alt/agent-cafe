@@ -9,7 +9,7 @@
 import { readFileSync, writeFileSync, existsSync } from "node:fs";
 import { buildIndex, query, ownerOf } from "../engine.ts";
 import { bumpKind, type Observation } from "../protocol.ts";
-import { loadPrs, type PrRecord } from "../seed/build-seed.ts";
+import { loadPrs, weightsFrom, type PrRecord } from "../seed/build-seed.ts";
 
 const args = process.argv.slice(2);
 const sep = args.indexOf("--");
@@ -21,11 +21,23 @@ const ind: Record<string, { mend?: string; dependabot?: number | null }> = exist
 const byUrl = new Map(obs.map((o) => [o.provenance.source_url!, o]));
 const index = buildIndex(obs);
 
-// sampling weights: we sampled at most N PRs per (package, CI status); weights restore the real class mix
-const totals: Record<string, number> = existsSync(new URL("./totals.json", import.meta.url)) ? JSON.parse(readFileSync(new URL("./totals.json", import.meta.url), "utf8")) : {};
-const sampled = new Map<string, number>();
-for (const p of prs) sampled.set(`${p.package}|${p.ci}`, (sampled.get(`${p.package}|${p.ci}`) ?? 0) + 1);
-const weight = (p: PrRecord) => (totals[`${p.package}|${p.ci}`] ?? sampled.get(`${p.package}|${p.ci}`)!) / sampled.get(`${p.package}|${p.ci}`)!;
+// Sampling weights: each stratum (package x week x CI status) returned at most 100 of `total` PRs, so a PR
+// stands for total/returned PRs. This restores the real failure share and the real mix across strata.
+const totalsFiles = (process.env.TOTALS ?? "").split(",").filter(Boolean);
+if (!totalsFiles.length) throw new Error("TOTALS=<totals.json,...> is required (stratum sizes); refusing to assume weight 1");
+const weight = weightsFrom(totalsFiles);
+/** Within a stratum the sample is the NEWEST 100 PRs, so intra-week timing differs between failure and success
+ *  samples. Evidence for a test PR is therefore cut at the START of its week: no feature can see that timing. */
+const weekStart = (p: PrRecord) => (p.stratum ? p.stratum.split("|").at(-2)! : p.created_at.slice(0, 10));
+/** A package-week is COMPLETE when both its failure and success strata were fully returned (total <= 100): no
+ *  sampling inside it, so evidence from earlier the same week can be used without timing bias. */
+const totalsAll: Record<string, { total: number; returned: number }> = Object.assign({}, ...totalsFiles.map((f) => JSON.parse(readFileSync(f, "utf8"))));
+const completeWeek = (p: PrRecord) => {
+  if (!p.stratum) return false;
+  const [pkg, wk] = p.stratum.split("|");
+  return ["failure", "success"].every((st) => { const t = totalsAll[`${pkg}|${wk}|${st}`]; return t && t.total === t.returned; });
+};
+let EXACT_TIME = false;
 
 const byRepo = new Map<string, PrRecord[]>();
 for (const p of prs) (byRepo.get(p.repo) ?? byRepo.set(p.repo, []).get(p.repo)!).push(p);
@@ -35,10 +47,11 @@ interface Row { pr: PrRecord; y: number; w: number; f: Record<string, number | n
 
 function features(p: PrRecord): Row {
   const owner = `gh:${p.repo.split("/")[0].toLowerCase()}`;
-  const r = query(index, { ecosystem: p.ecosystem, package: p.package, from: p.from, to: p.to, before: p.created_at, excludeOwner: owner });
-  const own = (byRepo.get(p.repo) ?? []).filter((x) => x.created_at < p.created_at);
+  const cut = EXACT_TIME ? p.created_at : weekStart(p);
+  const r = query(index, { ecosystem: p.ecosystem, package: p.package, from: p.from, to: p.to, before: cut, excludeOwner: owner });
+  const own = (byRepo.get(p.repo) ?? []).filter((x) => x.created_at < cut);
   const ownF = own.filter((x) => x.ci === "failure").length;
-  const pkgPool = (index.byPackage.get(`${p.ecosystem}:${p.package.toLowerCase()}`) ?? []).filter((o) => o.observed_at < p.created_at && ownerOf(o) !== owner);
+  const pkgPool = (index.byPackage.get(`${p.ecosystem}:${p.package.toLowerCase()}`) ?? []).filter((o) => o.observed_at < cut && ownerOf(o) !== owner);
   const pkgF = pkgPool.filter((o) => o.attribution === "observational_fail").length;
   const i = ind[`${p.ecosystem}|${p.package}|${p.from}|${p.to}`] ?? {};
   const mendScore = i.mend === undefined ? null : ({ low: 1, neutral: 0.5, high: 0.2, "very high": 0 } as Record<string, number>)[i.mend] ?? null;
@@ -60,33 +73,45 @@ function features(p: PrRecord): Row {
 }
 
 // ---------- metrics ----------
-function auc(rows: { s: number; y: number }[]): number | null {
-  const pos = rows.filter((r) => r.y === 1), neg = rows.filter((r) => r.y === 0);
-  if (!pos.length || !neg.length) return null;
+/** Weighted ROC AUC: P(score of a failure > score of a pass), pairs weighted by sampling weights, ties = 1/2. */
+function auc(rows: { s: number; y: number; w?: number }[]): number | null {
   const all = [...rows].sort((a, b) => a.s - b.s);
-  let rank = 0, sumPos = 0;
+  let negBelow = 0, num = 0, P = 0, N = 0;
   for (let i = 0; i < all.length; ) {
-    let j = i;
-    while (j < all.length && all[j].s === all[i].s) j++;
-    const avg = (i + 1 + j) / 2;
-    for (let k = i; k < j; k++) if (all[k].y === 1) sumPos += avg;
-    rank = j; i = j;
+    let j = i, tp = 0, tn = 0;
+    while (j < all.length && all[j].s === all[i].s) { const w = all[j].w ?? 1; if (all[j].y) tp += w; else tn += w; j++; }
+    num += tp * (negBelow + tn / 2);
+    negBelow += tn; P += tp; N += tn; i = j;
   }
-  void rank;
-  return (sumPos - (pos.length * (pos.length + 1)) / 2) / (pos.length * neg.length);
+  return P && N ? num / (P * N) : null;
 }
-function bootstrapAuc(rows: { s: number; y: number }[], B = 300): [number, number] | null {
-  if (rows.length < 20) return null;
+function mulberry32(seed: number) {
+  return () => {
+    seed |= 0; seed = (seed + 0x6d2b79f5) | 0;
+    let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+/** Bootstrap clustered by OWNER (rows of one owner are resampled together), B = 1000, 90% percentile interval. */
+function clusterBoot<T extends { owner: string }>(rows: T[], stat: (s: T[]) => number | null, B = 1000): [number, number] | null {
+  const groups = new Map<string, T[]>();
+  for (const r of rows) (groups.get(r.owner) ?? groups.set(r.owner, []).get(r.owner)!).push(r);
+  const g = [...groups.values()];
+  if (g.length < 20) return null;
+  const rnd = mulberry32(12345);
   const vals: number[] = [];
-  let seed = 7;
-  const rnd = () => ((seed = (seed * 1103515245 + 12345) % 2147483648) / 2147483648);
   for (let b = 0; b < B; b++) {
-    const s = Array.from({ length: rows.length }, () => rows[Math.floor(rnd() * rows.length)]);
-    const a = auc(s);
-    if (a !== null) vals.push(a);
+    const s: T[] = [];
+    for (let i = 0; i < g.length; i++) s.push(...g[Math.floor(rnd() * g.length)]);
+    const v = stat(s);
+    if (v !== null) vals.push(v);
   }
   vals.sort((a, b) => a - b);
   return [vals[Math.floor(0.05 * vals.length)], vals[Math.floor(0.95 * vals.length)]];
+}
+function bootstrapAuc(rows: { s: number; y: number; w?: number; owner?: string }[]): [number, number] | null {
+  return clusterBoot(rows.map((r) => ({ ...r, owner: r.owner ?? Math.random().toString() })), (s) => auc(s));
 }
 function brier(rows: { s: number; y: number; w: number }[]) {
   const W = rows.reduce((a, r) => a + r.w, 0);
@@ -151,12 +176,12 @@ const result: any = {
   auc: {} as Record<string, unknown>,
 };
 for (const k of ["network", "network_exact_only", "own_history", "semver_major", "package_base", "mend", "dependabot"]) {
-  const sub = test.filter((r) => r.f[k] !== null).map((r) => ({ s: r.f[k] as number, y: r.y }));
+  const sub = test.filter((r) => r.f[k] !== null).map((r) => ({ s: r.f[k] as number, y: r.y, w: r.w, owner: r.pr.repo.split("/")[0] }));
   result.auc[k] = { n: sub.length, auc: auc(sub), ci90: bootstrapAuc(sub) };
 }
 // head-to-head on the SAME rows (only rows where every indicator exists)
 const both = test.filter((r) => r.f.mend !== null && r.f.dependabot !== null && r.f.own_history !== null);
-result.head_to_head = { n: both.length, ...Object.fromEntries(["network", "own_history", "mend", "dependabot", "semver_major"].map((k) => [k, auc(both.map((r) => ({ s: r.f[k] as number, y: r.y })))])) };
+result.head_to_head = { n: both.length, ...Object.fromEntries(["network", "own_history", "mend", "dependabot", "semver_major"].map((k) => [k, auc(both.map((r) => ({ s: r.f[k] as number, y: r.y, w: r.w })))])) };
 
 const Xtr = train.map((r) => design(r, false, base)), Xtr2 = train.map((r) => design(r, true, base));
 const y = train.map((r) => r.y), w = train.map((r) => r.w);
@@ -165,21 +190,13 @@ const sig = (z: number) => 1 / (1 + Math.exp(-z));
 const p1 = test.map((r) => sig(design(r, false, base).reduce((a, x, k) => a + x * b1[k], 0)));
 const p2 = test.map((r) => sig(design(r, true, base).reduce((a, x, k) => a + x * b2[k], 0)));
 result.models = {
-  local_only: { features: "own history + its size + semver major", auc: auc(test.map((r, i) => ({ s: p1[i], y: r.y }))), ci90: bootstrapAuc(test.map((r, i) => ({ s: p1[i], y: r.y }))), brier: brier(test.map((r, i) => ({ s: p1[i], y: r.y, w: r.w }))) },
-  local_plus_network: { features: "+ network estimate (other owners, earlier only)", auc: auc(test.map((r, i) => ({ s: p2[i], y: r.y }))), ci90: bootstrapAuc(test.map((r, i) => ({ s: p2[i], y: r.y }))), brier: brier(test.map((r, i) => ({ s: p2[i], y: r.y, w: r.w }))), coefficients: b2 },
+  local_only: { features: "own history + its size + semver major", auc: auc(test.map((r, i) => ({ s: p1[i], y: r.y, w: r.w }))), ci90: bootstrapAuc(test.map((r, i) => ({ s: p1[i], y: r.y, w: r.w, owner: r.pr.repo.split("/")[0] }))), brier: brier(test.map((r, i) => ({ s: p1[i], y: r.y, w: r.w }))) },
+  local_plus_network: { features: "+ network estimate (other owners, earlier only)", auc: auc(test.map((r, i) => ({ s: p2[i], y: r.y, w: r.w }))), ci90: bootstrapAuc(test.map((r, i) => ({ s: p2[i], y: r.y, w: r.w, owner: r.pr.repo.split("/")[0] }))), brier: brier(test.map((r, i) => ({ s: p2[i], y: r.y, w: r.w }))), coefficients: b2 },
 };
-// paired bootstrap of the AUC gain from adding the network
+// paired, owner-clustered bootstrap of the AUC gain from adding the network
 {
-  const gains: number[] = [];
-  let seed = 11;
-  const rnd = () => ((seed = (seed * 1103515245 + 12345) % 2147483648) / 2147483648);
-  for (let b = 0; b < 300; b++) {
-    const idx = Array.from({ length: test.length }, () => Math.floor(rnd() * test.length));
-    const a1 = auc(idx.map((i) => ({ s: p1[i], y: test[i].y }))), a2 = auc(idx.map((i) => ({ s: p2[i], y: test[i].y })));
-    if (a1 !== null && a2 !== null) gains.push(a2 - a1);
-  }
-  gains.sort((a, b) => a - b);
-  result.models.network_auc_gain_ci90 = [gains[Math.floor(0.05 * gains.length)], gains[Math.floor(0.95 * gains.length)]];
+  const rows = test.map((r, i) => ({ owner: r.pr.repo.split("/")[0], a: { s: p1[i], y: r.y, w: r.w }, b: { s: p2[i], y: r.y, w: r.w } }));
+  result.models.network_auc_gain_ci90 = clusterBoot(rows, (s) => { const a1 = auc(s.map((x) => x.a)), a2 = auc(s.map((x) => x.b)); return a1 === null || a2 === null ? null : a2 - a1; });
 }
 result.calibration_network = calibration(test.map((r) => ({ s: r.f.network as number, y: r.y, w: r.w })));
 result.brier = { network: brier(test.map((r) => ({ s: r.f.network as number, y: r.y, w: r.w }))), base_rate: brier(test.map((r) => ({ s: base, y: r.y, w: r.w }))) };
@@ -191,5 +208,16 @@ result.warnings = {
   own_history_over_50: warnings(test.filter((r) => r.f.own_history !== null), (r) => (r.f.own_history as number) > 0.5),
   semver_major: warnings(test, (r) => r.f.semver_major === 1),
 };
+// Same-week evidence, only on complete package-weeks (no sampling inside them), exact time cutoff.
+{
+  EXACT_TIME = true;
+  const sub = rows.filter((r) => r.pr.created_at >= split && completeWeek(r.pr)).map((r) => features(r.pr));
+  EXACT_TIME = false;
+  result.same_week_complete_strata = {
+    n: sub.length, failures: sub.filter((r) => r.y).length,
+    coverage_any_other_owner_same_target: sub.filter((r) => r.f.network_exact_only !== null || r.covered > 0).length / Math.max(1, sub.length),
+    auc: Object.fromEntries(["network", "own_history", "semver_major", "package_base"].map((k) => { const x = sub.filter((r) => r.f[k] !== null).map((r) => ({ s: r.f[k] as number, y: r.y, w: r.w, owner: r.pr.repo.split("/")[0] })); return [k, { n: x.length, auc: auc(x), ci90: bootstrapAuc(x) }]; })),
+  };
+}
 writeFileSync(outFile, JSON.stringify(result, null, 1));
-console.log(JSON.stringify({ n_test: result.n_test, coverage: result.coverage, auc: Object.fromEntries(Object.entries(result.auc).map(([k, v]: any) => [k, v.auc?.toFixed(3)])), head_to_head: result.head_to_head, models: { local: result.models.local_only.auc, plus_network: result.models.local_plus_network.auc, gain_ci90: result.models.network_auc_gain_ci90 } }, null, 1));
+console.log(JSON.stringify({ same_week: result.same_week_complete_strata, n_test: result.n_test, coverage: result.coverage, auc: Object.fromEntries(Object.entries(result.auc).map(([k, v]: any) => [k, v.auc?.toFixed(3)])), head_to_head: result.head_to_head, models: { local: result.models.local_only.auc, plus_network: result.models.local_plus_network.auc, gain_ci90: result.models.network_auc_gain_ci90 } }, null, 1));
