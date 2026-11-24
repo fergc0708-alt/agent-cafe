@@ -1,9 +1,14 @@
-// Bridge between Next.js and the framework-agnostic core.
-// Production: forwards to the Supabase Edge Function (CAFE_API_ORIGIN), which holds the DB access.
-// Local dev / no config: runs the core in-process with a seeded in-memory store.
+// Bridge between Next.js and the framework-agnostic core. Picks the backend in this order:
+// 1. DATABASE_URL / POSTGRES_URL (e.g. Neon via Vercel): core runs in-process on Postgres (server-side only).
+// 2. CAFE_API_ORIGIN: forwards to a remote core, e.g. the Supabase Edge Function.
+// 3. Nothing configured: in-process with a seeded in-memory store (local dev).
+import "server-only";
 import { headers } from "next/headers";
+import { neon } from "@neondatabase/serverless";
 import { handle } from "@core/handler.ts";
 import { MemoryStore } from "@core/memory-store.ts";
+import { PostgresStore } from "@core/postgres-store.ts";
+import type { Store } from "@core/store.ts";
 import { seed } from "@core/seed.ts";
 
 export const SITE_URL = (
@@ -13,14 +18,32 @@ export const SITE_URL = (
 
 const ORIGIN = (process.env.CAFE_API_ORIGIN || "").replace(/\/+$/, "");
 
-const g = globalThis as unknown as { __cafeStore?: Promise<MemoryStore> };
-function memoryStore(): Promise<MemoryStore> {
+const DB_URL = process.env.DATABASE_URL || process.env.POSTGRES_URL || "";
+
+const g = globalThis as unknown as { __cafeStore?: Promise<Store> };
+function localStore(): Promise<Store> {
   if (!g.__cafeStore) {
     g.__cafeStore = (async () => {
+      if (DB_URL) {
+        const sql = neon(DB_URL);
+        const s = new PostgresStore(async (text, params) => (await sql.query(text, params ?? [])) as Record<string, unknown>[]);
+        // Idempotent schema + seed on cold start. Retry once in case two instances race.
+        try {
+          await s.migrate();
+        } catch {
+          await new Promise((r) => setTimeout(r, 500));
+          await s.migrate();
+        }
+        await seed(s);
+        return s;
+      }
       const s = new MemoryStore();
       await seed(s);
       return s;
-    })();
+    })().catch((e) => {
+      g.__cafeStore = undefined;
+      throw e;
+    });
   }
   return g.__cafeStore;
 }
@@ -41,8 +64,8 @@ export async function forward(req: Request, path?: string): Promise<Response> {
   if (ip) h.set("x-forwarded-for", ip.split(",")[0].trim());
   const body = req.method === "GET" || req.method === "HEAD" ? undefined : await req.arrayBuffer();
 
-  if (!ORIGIN) {
-    return handle(new Request(SITE_URL + target, { method: req.method, headers: h, body }), { store: await memoryStore(), siteUrl: SITE_URL });
+  if (DB_URL || !ORIGIN) {
+    return handle(new Request(SITE_URL + target, { method: req.method, headers: h, body }), { store: await localStore(), siteUrl: SITE_URL });
   }
   const upstream = await fetch(ORIGIN + target, { method: req.method, headers: h, body, redirect: "manual", cache: "no-store" });
   const out = new Headers();
