@@ -8,7 +8,7 @@ inputs:
     description: Test command (e.g. "npm test", "pytest -q")
     required: true
   install:
-    description: Install command run on each side from a clean state (e.g. "npm ci", "uv sync --frozen"). Required: without it the baseline would reuse the update's packages.
+    description: "Install command run on each side from a clean state (e.g. npm ci, uv sync --frozen). Required, because without it the baseline would reuse the update's packages."
     required: true
   working-directory:
     description: Project directory inside the repository (monorepo sub-project)
