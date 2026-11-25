@@ -21,7 +21,8 @@ export interface Delta {
 function relevant(name: string, prefix: string): boolean {
   if (name.startsWith(prefix)) return true;
   const d = name.includes("/") ? name.slice(0, name.lastIndexOf("/") + 1) : "";
-  return LOCKFILES.some((l) => l.match.test(name)) && prefix.startsWith(d); // workspace lockfile at an ancestor
+  // workspaces: the lockfile and the root manifest live in an ancestor directory, and must be reverted together
+  return (LOCKFILES.some((l) => l.match.test(name)) || /(^|\/)(package\.json|pyproject\.toml)$/.test(name)) && prefix.startsWith(d);
 }
 
 /** "auto": the first parent of a PR merge commit is exactly the base the PR is tested against. */

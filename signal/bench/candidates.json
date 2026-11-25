@@ -1,0 +1,1082 @@
+[
+{
+"repo": "awdr74100/next-imagetools",
+"number": 41,
+"package": "typescript",
+"from": "6.0.3",
+"to": "7.0.2",
+"ci": "failure",
+"url": "https://github.com/awdr74100/next-imagetools/pull/41"
+},
+{
+"repo": "massongit/machine-translator-in-browser-llm",
+"number": 270,
+"package": "@types/node",
+"from": "26.6.2",
+"to": "26.6.3",
+"ci": "failure",
+"url": "https://github.com/massongit/machine-translator-in-browser-llm/pull/270"
+},
+{
+"repo": "frederikberg/frederikberg",
+"number": 9,
+"package": "typescript",
+"from": "6.0.3",
+"to": "7.0.2",
+"ci": "failure",
+"url": "https://github.com/frederikberg/frederikberg/pull/9"
+},
+{
+"repo": "kjanat/actions-shells",
+"number": 19,
+"package": "vitest",
+"from": "5.1.0",
+"to": "5.1.1",
+"ci": "failure",
+"url": "https://github.com/kjanat/actions-shells/pull/19"
+},
+{
+"repo": "classicvalues/AA-ionic-login",
+"number": 465,
+"package": "typescript",
+"from": "4.9.5",
+"to": "7.0.2",
+"ci": "failure",
+"url": "https://github.com/classicvalues/AA-ionic-login/pull/465"
+},
+{
+"repo": "lutejka/vite-opentelemetry-inspector",
+"number": 50,
+"package": "vitest",
+"from": "5.0.5",
+"to": "5.1.1",
+"ci": "failure",
+"url": "https://github.com/lutejka/vite-opentelemetry-inspector/pull/50"
+},
+{
+"repo": "guitar0-net/mobile",
+"number": 162,
+"package": "eslint",
+"from": "9.39.5",
+"to": "10.12.0",
+"ci": "failure",
+"url": "https://github.com/guitar0-net/mobile/pull/162"
+},
+{
+"repo": "omnibuf/omnibuf.com",
+"number": 13,
+"package": "typescript",
+"from": "5.9.3",
+"to": "7.0.2",
+"ci": "failure",
+"url": "https://github.com/omnibuf/omnibuf.com/pull/13"
+},
+{
+"repo": "gkwa/atlanticvan",
+"number": 294,
+"package": "@types/node",
+"from": "26.6.5",
+"to": "26.6.6",
+"ci": "failure",
+"url": "https://github.com/gkwa/atlanticvan/pull/294"
+},
+{
+"repo": "ginbing/GSwitch",
+"number": 198,
+"package": "vite",
+"from": "7.3.6",
+"to": "7.3.7",
+"ci": "failure",
+"url": "https://github.com/ginbing/GSwitch/pull/198"
+},
+{
+"repo": "michidk/XKCD-Fullscreen",
+"number": 49,
+"package": "typescript",
+"from": "5.9.3",
+"to": "6.0.3",
+"ci": "failure",
+"url": "https://github.com/michidk/XKCD-Fullscreen/pull/49"
+},
+{
+"repo": "apollographql/server-v4-integration-demos",
+"number": 43,
+"package": "typescript",
+"from": "4.7.4",
+"to": "7.0.2",
+"ci": "failure",
+"url": "https://github.com/apollographql/server-v4-integration-demos/pull/43"
+},
+{
+"repo": "juan-martinez-herrero/automatic-podcast-ai",
+"number": 7,
+"package": "typescript",
+"from": "5.9.3",
+"to": "7.0.2",
+"ci": "failure",
+"url": "https://github.com/juan-martinez-herrero/automatic-podcast-ai/pull/7"
+},
+{
+"repo": "P4suta/mojiokoshi",
+"number": 92,
+"package": "typescript",
+"from": "6.0.3",
+"to": "7.0.2",
+"ci": "failure",
+"url": "https://github.com/P4suta/mojiokoshi/pull/92"
+},
+{
+"repo": "zeke-code/OnigiriBot",
+"number": 261,
+"package": "typescript",
+"from": "6.0.3",
+"to": "7.0.2",
+"ci": "failure",
+"url": "https://github.com/zeke-code/OnigiriBot/pull/261"
+},
+{
+"repo": "rmdes/bsky.rss",
+"number": 56,
+"package": "@types/node",
+"from": "24.19.1",
+"to": "24.19.2",
+"ci": "failure",
+"url": "https://github.com/rmdes/bsky.rss/pull/56"
+},
+{
+"repo": "donmahallem/lerna-coveralls",
+"number": 1507,
+"package": "@types/node",
+"from": "24.13.3",
+"to": "24.19.1",
+"ci": "failure",
+"url": "https://github.com/donmahallem/lerna-coveralls/pull/1507"
+},
+{
+"repo": "jaxxstorm/action-install-gh-release",
+"number": 210,
+"package": "typescript",
+"from": "6.0.3",
+"to": "7.0.2",
+"ci": "failure",
+"url": "https://github.com/jaxxstorm/action-install-gh-release/pull/210"
+},
+{
+"repo": "Code-Hex/graphql-codegen-typescript-validation-schema",
+"number": 1640,
+"package": "vitest",
+"from": "5.1.0",
+"to": "5.1.1",
+"ci": "failure",
+"url": "https://github.com/Code-Hex/graphql-codegen-typescript-validation-schema/pull/1640"
+},
+{
+"repo": "jenkinsci/user-guide-ai-chatbot-plugin",
+"number": 96,
+"package": "typescript",
+"from": "6.0.3",
+"to": "7.0.2",
+"ci": "failure",
+"url": "https://github.com/jenkinsci/user-guide-ai-chatbot-plugin/pull/96"
+},
+{
+"repo": "Ninja-Squad/faidare",
+"number": 337,
+"package": "typescript",
+"from": "6.0.3",
+"to": "7.0.2",
+"ci": "failure",
+"url": "https://github.com/Ninja-Squad/faidare/pull/337"
+},
+{
+"repo": "salute-developers/plasma",
+"number": 3279,
+"package": "vite",
+"from": "4.5.3",
+"to": "5.4.21",
+"ci": "failure",
+"url": "https://github.com/salute-developers/plasma/pull/3279"
+},
+{
+"repo": "Fkinds/discord-aitranslate-bot",
+"number": 62,
+"package": "typescript",
+"from": "5.9.3",
+"to": "7.0.2",
+"ci": "failure",
+"url": "https://github.com/Fkinds/discord-aitranslate-bot/pull/62"
+},
+{
+"repo": "serbetancor/itunes-wrapped-app",
+"number": 43,
+"package": "@types/node",
+"from": "24.19.2",
+"to": "26.6.7",
+"ci": "failure",
+"url": "https://github.com/serbetancor/itunes-wrapped-app/pull/43"
+},
+{
+"repo": "awesometic/nestjs-ip-filter",
+"number": 877,
+"package": "@types/node",
+"from": "24.12.2",
+"to": "24.19.1",
+"ci": "failure",
+"url": "https://github.com/awesometic/nestjs-ip-filter/pull/877"
+},
+{
+"repo": "shishkin/shishkin-org",
+"number": 115,
+"package": "@types/node",
+"from": "24.19.1",
+"to": "24.19.2",
+"ci": "failure",
+"url": "https://github.com/shishkin/shishkin-org/pull/115"
+},
+{
+"repo": "dkimura/lib-sandbox",
+"number": 1182,
+"package": "vite",
+"from": "8.3.7",
+"to": "8.3.8",
+"ci": "failure",
+"url": "https://github.com/dkimura/lib-sandbox/pull/1182"
+},
+{
+"repo": "bifravst/cloudformation-cleaner",
+"number": 1450,
+"package": "@types/node",
+"from": "26.6.5",
+"to": "26.6.6",
+"ci": "failure",
+"url": "https://github.com/bifravst/cloudformation-cleaner/pull/1450"
+},
+{
+"repo": "orchy-mfe/orchy-solid-js-template",
+"number": 457,
+"package": "vitest",
+"from": "3.0.3",
+"to": "5.0.5",
+"ci": "failure",
+"url": "https://github.com/orchy-mfe/orchy-solid-js-template/pull/457"
+},
+{
+"repo": "intechcore/com.intechcore.polarion.extension.admin-menu-organizer",
+"number": 64,
+"package": "typescript",
+"from": "6.0.3",
+"to": "7.0.2",
+"ci": "failure",
+"url": "https://github.com/intechcore/com.intechcore.polarion.extension.admin-menu-organizer/pull/64"
+},
+{
+"repo": "ktsn/liva",
+"number": 44,
+"package": "typescript",
+"from": "7.1.0-beta",
+"to": "7.1.0-dev.20261110.1",
+"ci": "failure",
+"url": "https://github.com/ktsn/liva/pull/44"
+},
+{
+"repo": "position-pal/gui",
+"number": 369,
+"package": "vite",
+"from": "8.3.3",
+"to": "8.3.4",
+"ci": "failure",
+"url": "https://github.com/position-pal/gui/pull/369"
+},
+{
+"repo": "javaBin/frosting",
+"number": 242,
+"package": "eslint",
+"from": "10.12.0",
+"to": "10.13.0",
+"ci": "failure",
+"url": "https://github.com/javaBin/frosting/pull/242"
+},
+{
+"repo": "ScriptedAlchemy/tracedecay",
+"number": 3120,
+"package": "vitest",
+"from": "4.1.10",
+"to": "4.1.11",
+"ci": "failure",
+"url": "https://github.com/ScriptedAlchemy/tracedecay/pull/3120"
+},
+{
+"repo": "jeremiebardon/nestjs-launch-darkly",
+"number": 4,
+"package": "typescript",
+"from": "5.9.3",
+"to": "7.0.2",
+"ci": "failure",
+"url": "https://github.com/jeremiebardon/nestjs-launch-darkly/pull/4"
+},
+{
+"repo": "rrr-pi-rate/stockPriceFrontend",
+"number": 29,
+"package": "typescript",
+"from": "5.9.3",
+"to": "7.0.2",
+"ci": "failure",
+"url": "https://github.com/rrr-pi-rate/stockPriceFrontend/pull/29"
+},
+{
+"repo": "gander-tools/nms-frigate-calc",
+"number": 57,
+"package": "vite",
+"from": "8.3.2",
+"to": "8.3.3",
+"ci": "failure",
+"url": "https://github.com/gander-tools/nms-frigate-calc/pull/57"
+},
+{
+"repo": "pvandervelde/repo_roller",
+"number": 336,
+"package": "@types/node",
+"from": "26.1.0",
+"to": "26.6.5",
+"ci": "failure",
+"url": "https://github.com/pvandervelde/repo_roller/pull/336"
+},
+{
+"repo": "mermaid-js/mermaid",
+"number": 8410,
+"package": "vitest",
+"from": "3.2.7",
+"to": "4.1.11",
+"ci": "failure",
+"url": "https://github.com/mermaid-js/mermaid/pull/8410"
+},
+{
+"repo": "convex/launchdarkly",
+"number": 45,
+"package": "vite",
+"from": "7.3.7",
+"to": "8.3.8",
+"ci": "failure",
+"url": "https://github.com/convex/launchdarkly/pull/45"
+},
+{
+"repo": "kshutkin/niceties",
+"number": 106,
+"package": "@types/node",
+"from": "24.12.0",
+"to": "26.6.6",
+"ci": "failure",
+"url": "https://github.com/kshutkin/niceties/pull/106"
+},
+{
+"repo": "opencollective/opencollective-frontend",
+"number": 12555,
+"package": "typescript",
+"from": "6.0.3",
+"to": "7.0.2",
+"ci": "failure",
+"url": "https://github.com/opencollective/opencollective-frontend/pull/12555"
+},
+{
+"repo": "OmriCat/gratitude-journal",
+"number": 848,
+"package": "vitest",
+"from": "5.0.5",
+"to": "5.1.1",
+"ci": "failure",
+"url": "https://github.com/OmriCat/gratitude-journal/pull/848"
+},
+{
+"repo": "rodverse/rodverse",
+"number": 147,
+"package": "vitest",
+"from": "5.0.5",
+"to": "5.1.0",
+"ci": "failure",
+"url": "https://github.com/rodverse/rodverse/pull/147"
+},
+{
+"repo": "DrDustinEdwards/foxhound",
+"number": 712,
+"package": "vitest",
+"from": "3.2.7",
+"to": "4.1.11",
+"ci": "failure",
+"url": "https://github.com/DrDustinEdwards/foxhound/pull/712"
+},
+{
+"repo": "beforesemicolon/markup",
+"number": 153,
+"package": "typescript",
+"from": "5.9.3",
+"to": "7.0.2",
+"ci": "failure",
+"url": "https://github.com/beforesemicolon/markup/pull/153"
+},
+{
+"repo": "lucasew/ui-lab",
+"number": 138,
+"package": "vite",
+"from": "7.3.8",
+"to": "8.3.8",
+"ci": "failure",
+"url": "https://github.com/lucasew/ui-lab/pull/138"
+},
+{
+"repo": "thasmo/resume",
+"number": 822,
+"package": "eslint",
+"from": "10.11.0",
+"to": "10.12.0",
+"ci": "failure",
+"url": "https://github.com/thasmo/resume/pull/822"
+},
+{
+"repo": "hbstack/preferred-language",
+"number": 1583,
+"package": "eslint",
+"from": "10.14.0",
+"to": "10.15.0",
+"ci": "failure",
+"url": "https://github.com/hbstack/preferred-language/pull/1583"
+},
+{
+"repo": "wolfstar-project/stars-components",
+"number": 365,
+"package": "vite",
+"from": "8.3.2",
+"to": "8.3.3",
+"ci": "failure",
+"url": "https://github.com/wolfstar-project/stars-components/pull/365"
+},
+{
+"repo": "erkamyaman/ngmd",
+"number": 36,
+"package": "vite",
+"from": "8.3.1",
+"to": "8.3.8",
+"ci": "failure",
+"url": "https://github.com/erkamyaman/ngmd/pull/36"
+},
+{
+"repo": "antoncuranz/DollarBridge",
+"number": 13,
+"package": "vite",
+"from": "5.4.11",
+"to": "8.1.6",
+"ci": "failure",
+"url": "https://github.com/antoncuranz/DollarBridge/pull/13"
+},
+{
+"repo": "ArnaudFlaesch/Dash-Web",
+"number": 2109,
+"package": "eslint",
+"from": "10.13.0",
+"to": "10.14.0",
+"ci": "failure",
+"url": "https://github.com/ArnaudFlaesch/Dash-Web/pull/2109"
+},
+{
+"repo": "ebcFlagman/swissbill",
+"number": 15,
+"package": "vite",
+"from": "7.3.7",
+"to": "8.3.5",
+"ci": "failure",
+"url": "https://github.com/ebcFlagman/swissbill/pull/15"
+},
+{
+"repo": "mariosknl/portfolio_new",
+"number": 337,
+"package": "typescript",
+"from": "5.9.3",
+"to": "7.0.2",
+"ci": "failure",
+"url": "https://github.com/mariosknl/portfolio_new/pull/337"
+},
+{
+"repo": "subsquid-labs/squid-substrate-examples",
+"number": 445,
+"package": "@types/node",
+"from": "24.13.0",
+"to": "24.19.1",
+"ci": "failure",
+"url": "https://github.com/subsquid-labs/squid-substrate-examples/pull/445"
+},
+{
+"repo": "pengzhanbo/vite-plugin-mock-dev-server",
+"number": 199,
+"package": "vitest",
+"from": "5.0.0",
+"to": "5.0.3",
+"ci": "failure",
+"url": "https://github.com/pengzhanbo/vite-plugin-mock-dev-server/pull/199"
+},
+{
+"repo": "kotarotaniguchi0523/JobTra-Editor",
+"number": 30,
+"package": "vitest",
+"from": "5.0.1",
+"to": "5.1.1",
+"ci": "failure",
+"url": "https://github.com/kotarotaniguchi0523/JobTra-Editor/pull/30"
+},
+{
+"repo": "ChanningHe/labelgate",
+"number": 35,
+"package": "vitest",
+"from": "3.2.7",
+"to": "4.1.11",
+"ci": "failure",
+"url": "https://github.com/ChanningHe/labelgate/pull/35"
+},
+{
+"repo": "catbee-technologies/catbee-container-studio",
+"number": 47,
+"package": "eslint",
+"from": "9.39.5",
+"to": "10.13.0",
+"ci": "failure",
+"url": "https://github.com/catbee-technologies/catbee-container-studio/pull/47"
+},
+{
+"repo": "zarguell/audio-birdle",
+"number": 569,
+"package": "eslint",
+"from": "10.11.0",
+"to": "10.12.0",
+"ci": "failure",
+"url": "https://github.com/zarguell/audio-birdle/pull/569"
+},
+{
+"repo": "timescale/storybook-addon-md",
+"number": 24,
+"package": "vite",
+"from": "7.3.6",
+"to": "7.3.7",
+"ci": "failure",
+"url": "https://github.com/timescale/storybook-addon-md/pull/24"
+},
+{
+"repo": "JudgeBreddd/P9",
+"number": 131,
+"package": "typescript",
+"from": "6.0.3",
+"to": "7.0.2",
+"ci": "failure",
+"url": "https://github.com/JudgeBreddd/P9/pull/131"
+},
+{
+"repo": "g-kari/lan-p",
+"number": 68,
+"package": "vitest",
+"from": "5.0.5",
+"to": "5.1.0",
+"ci": "failure",
+"url": "https://github.com/g-kari/lan-p/pull/68"
+},
+{
+"repo": "ClipboardHealth/mongo-jobs",
+"number": 27,
+"package": "vitest",
+"from": "4.1.9",
+"to": "4.1.11",
+"ci": "failure",
+"url": "https://github.com/ClipboardHealth/mongo-jobs/pull/27"
+},
+{
+"repo": "ral-facilities/scigateway",
+"number": 1723,
+"package": "typescript",
+"from": "5.9.2",
+"to": "7.0.2",
+"ci": "failure",
+"url": "https://github.com/ral-facilities/scigateway/pull/1723"
+},
+{
+"repo": "nentgroup/viasport-sdk-ts",
+"number": 26,
+"package": "@types/node",
+"from": "24.19.1",
+"to": "24.19.2",
+"ci": "failure",
+"url": "https://github.com/nentgroup/viasport-sdk-ts/pull/26"
+},
+{
+"repo": "anolilab/monorepo-template",
+"number": 312,
+"package": "@types/node",
+"from": "25.9.8",
+"to": "25.9.9",
+"ci": "failure",
+"url": "https://github.com/anolilab/monorepo-template/pull/312"
+},
+{
+"repo": "govoel/voel",
+"number": 1648,
+"package": "vitest",
+"from": "5.0.2",
+"to": "5.0.3",
+"ci": "failure",
+"url": "https://github.com/govoel/voel/pull/1648"
+},
+{
+"repo": "medievalrain/emitter",
+"number": 190,
+"package": "vitest",
+"from": "5.0.4",
+"to": "5.0.5",
+"ci": "failure",
+"url": "https://github.com/medievalrain/emitter/pull/190"
+},
+{
+"repo": "DcBexter/newstockscanner",
+"number": 263,
+"package": "vite",
+"from": "7.0.6",
+"to": "7.3.7",
+"ci": "failure",
+"url": "https://github.com/DcBexter/newstockscanner/pull/263"
+},
+{
+"repo": "p-m-p/shared-worker-utils",
+"number": 666,
+"package": "vite",
+"from": "8.3.1",
+"to": "8.3.2",
+"ci": "failure",
+"url": "https://github.com/p-m-p/shared-worker-utils/pull/666"
+},
+{
+"repo": "VictorNain26/aubesonore",
+"number": 730,
+"package": "vite",
+"from": "8.3.6",
+"to": "8.3.7",
+"ci": "failure",
+"url": "https://github.com/VictorNain26/aubesonore/pull/730"
+},
+{
+"repo": "ai-2070/crew",
+"number": 5,
+"package": "vitest",
+"from": "4.1.12",
+"to": "5.0.5",
+"ci": "failure",
+"url": "https://github.com/ai-2070/crew/pull/5"
+},
+{
+"repo": "shiroinock/ts-template",
+"number": 28,
+"package": "vitest",
+"from": "4.1.12",
+"to": "5.1.0",
+"ci": "failure",
+"url": "https://github.com/shiroinock/ts-template/pull/28"
+},
+{
+"repo": "serhalp/netlify-cache-inspector",
+"number": 496,
+"package": "vitest",
+"from": "5.0.4",
+"to": "5.0.5",
+"ci": "failure",
+"url": "https://github.com/serhalp/netlify-cache-inspector/pull/496"
+},
+{
+"repo": "pschmitt/stricknani",
+"number": 155,
+"package": "vitest",
+"from": "4.1.12",
+"to": "5.1.0",
+"ci": "failure",
+"url": "https://github.com/pschmitt/stricknani/pull/155"
+},
+{
+"repo": "slipmatio/control-knob",
+"number": 131,
+"package": "vitest",
+"from": "5.0.0",
+"to": "5.1.0",
+"ci": "failure",
+"url": "https://github.com/slipmatio/control-knob/pull/131"
+},
+{
+"repo": "hieudoanm/neo.bank",
+"number": 68,
+"package": "typescript",
+"from": "6.0.3",
+"to": "7.0.2",
+"ci": "failure",
+"url": "https://github.com/hieudoanm/neo.bank/pull/68"
+},
+{
+"repo": "storm-software/stormstack",
+"number": 50,
+"package": "vitest",
+"from": "0.32.4",
+"to": "3.2.6",
+"ci": "failure",
+"url": "https://github.com/storm-software/stormstack/pull/50"
+},
+{
+"repo": "lsp-mux/vscode-eslint-lsp",
+"number": 18,
+"package": "typescript",
+"from": "6.0.3",
+"to": "7.0.2",
+"ci": "failure",
+"url": "https://github.com/lsp-mux/vscode-eslint-lsp/pull/18"
+},
+{
+"repo": "thedevappsecguy/vamsi",
+"number": 32,
+"package": "vite",
+"from": "8.0.16",
+"to": "8.3.1",
+"ci": "failure",
+"url": "https://github.com/thedevappsecguy/vamsi/pull/32"
+},
+{
+"repo": "Fluidise/site",
+"number": 47,
+"package": "typescript",
+"from": "5.9.3",
+"to": "7.0.2",
+"ci": "failure",
+"url": "https://github.com/Fluidise/site/pull/47"
+},
+{
+"repo": "keichan110/fuyugyo",
+"number": 289,
+"package": "vitest",
+"from": "4.1.9",
+"to": "4.1.11",
+"ci": "failure",
+"url": "https://github.com/keichan110/fuyugyo/pull/289"
+},
+{
+"repo": "woodpecker-ci/woodpecker",
+"number": 7211,
+"package": "@types/node",
+"from": "25.9.6",
+"to": "25.9.9",
+"ci": "failure",
+"url": "https://github.com/woodpecker-ci/woodpecker/pull/7211"
+},
+{
+"repo": "kobayashiyabako16g/craber",
+"number": 12,
+"package": "vitest",
+"from": "5.0.5",
+"to": "5.1.0",
+"ci": "failure",
+"url": "https://github.com/kobayashiyabako16g/craber/pull/12"
+},
+{
+"repo": "1024pix/pix",
+"number": 18129,
+"package": "@types/node",
+"from": "26.6.4",
+"to": "26.6.5",
+"ci": "failure",
+"url": "https://github.com/1024pix/pix/pull/18129"
+},
+{
+"repo": "baseballyama/rsvelte",
+"number": 4759,
+"package": "vite",
+"from": "8.3.1",
+"to": "8.3.5",
+"ci": "failure",
+"url": "https://github.com/baseballyama/rsvelte/pull/4759"
+},
+{
+"repo": "kleister/kleister-api",
+"number": 2541,
+"package": "vite",
+"from": "8.3.5",
+"to": "8.3.6",
+"ci": "failure",
+"url": "https://github.com/kleister/kleister-api/pull/2541"
+},
+{
+"repo": "JoranOut/laravel-soli-administration",
+"number": 171,
+"package": "typescript",
+"from": "6.0.3",
+"to": "7.0.2",
+"ci": "failure",
+"url": "https://github.com/JoranOut/laravel-soli-administration/pull/171"
+},
+{
+"repo": "igou-io/igou-containers",
+"number": 328,
+"package": "@types/node",
+"from": "22.20.5",
+"to": "26.6.6",
+"ci": "success",
+"url": "https://github.com/igou-io/igou-containers/pull/328"
+},
+{
+"repo": "mikavilpas/dotfiles",
+"number": 1722,
+"package": "typescript",
+"from": "7.1.0-dev.20261014.1",
+"to": "7.1.0-dev.20261015.1",
+"ci": "success",
+"url": "https://github.com/mikavilpas/dotfiles/pull/1722"
+},
+{
+"repo": "kakikubo/lgtmhub",
+"number": 405,
+"package": "@types/node",
+"from": "24.19.2",
+"to": "26.6.6",
+"ci": "success",
+"url": "https://github.com/kakikubo/lgtmhub/pull/405"
+},
+{
+"repo": "it-at-m/parkhausradar",
+"number": 101,
+"package": "vitest",
+"from": "5.0.5",
+"to": "5.1.1",
+"ci": "success",
+"url": "https://github.com/it-at-m/parkhausradar/pull/101"
+},
+{
+"repo": "highemerly/SNStyping",
+"number": 27,
+"package": "@types/node",
+"from": "25.9.5",
+"to": "25.9.9",
+"ci": "success",
+"url": "https://github.com/highemerly/SNStyping/pull/27"
+},
+{
+"repo": "dddsw/dddsw-web",
+"number": 662,
+"package": "vite",
+"from": "8.3.6",
+"to": "8.3.8",
+"ci": "success",
+"url": "https://github.com/dddsw/dddsw-web/pull/662"
+},
+{
+"repo": "tobynguyen27/starter-ts",
+"number": 52,
+"package": "@types/node",
+"from": "26.6.3",
+"to": "26.6.4",
+"ci": "success",
+"url": "https://github.com/tobynguyen27/starter-ts/pull/52"
+},
+{
+"repo": "nyaomaru/divider",
+"number": 558,
+"package": "eslint",
+"from": "10.11.0",
+"to": "10.12.0",
+"ci": "success",
+"url": "https://github.com/nyaomaru/divider/pull/558"
+},
+{
+"repo": "okawak/okawak_blog",
+"number": 323,
+"package": "@types/node",
+"from": "26.6.3",
+"to": "26.6.4",
+"ci": "success",
+"url": "https://github.com/okawak/okawak_blog/pull/323"
+},
+{
+"repo": "kirkanos/Streamdeck-Jellyfin",
+"number": 4,
+"package": "vitest",
+"from": "5.0.2",
+"to": "5.0.3",
+"ci": "success",
+"url": "https://github.com/kirkanos/Streamdeck-Jellyfin/pull/4"
+},
+{
+"repo": "InCogNiTo124/moonrepo",
+"number": 440,
+"package": "typescript",
+"from": "6.0.3",
+"to": "7.0.2",
+"ci": "success",
+"url": "https://github.com/InCogNiTo124/moonrepo/pull/440"
+},
+{
+"repo": "int128/deploy-lambda-action",
+"number": 1411,
+"package": "vitest",
+"from": "5.0.2",
+"to": "5.0.3",
+"ci": "success",
+"url": "https://github.com/int128/deploy-lambda-action/pull/1411"
+},
+{
+"repo": "JoranOut/laravel-soli-administration",
+"number": 172,
+"package": "vite",
+"from": "7.3.8",
+"to": "8.3.8",
+"ci": "success",
+"url": "https://github.com/JoranOut/laravel-soli-administration/pull/172"
+},
+{
+"repo": "AndroidDagashi/AndroidDagashi",
+"number": 3991,
+"package": "eslint",
+"from": "10.14.0",
+"to": "10.15.0",
+"ci": "success",
+"url": "https://github.com/AndroidDagashi/AndroidDagashi/pull/3991"
+},
+{
+"repo": "jojomatik/pixelheads",
+"number": 164,
+"package": "typescript",
+"from": "4.9.4",
+"to": "4.9.5",
+"ci": "success",
+"url": "https://github.com/jojomatik/pixelheads/pull/164"
+},
+{
+"repo": "erm1116/vite-plugin-html-minifier",
+"number": 192,
+"package": "@types/node",
+"from": "20.17.24",
+"to": "24.19.2",
+"ci": "success",
+"url": "https://github.com/erm1116/vite-plugin-html-minifier/pull/192"
+},
+{
+"repo": "convex/geospatial",
+"number": 63,
+"package": "vite",
+"from": "6.4.4",
+"to": "6.4.5",
+"ci": "success",
+"url": "https://github.com/convex/geospatial/pull/63"
+},
+{
+"repo": "m-ehara/portfolio",
+"number": 7,
+"package": "vite",
+"from": "6.4.5",
+"to": "6.4.6",
+"ci": "success",
+"url": "https://github.com/m-ehara/portfolio/pull/7"
+},
+{
+"repo": "0xFl4g/leetcode",
+"number": 3,
+"package": "typescript",
+"from": "5.9.3",
+"to": "7.0.2",
+"ci": "success",
+"url": "https://github.com/0xFl4g/leetcode/pull/3"
+},
+{
+"repo": "yjl9903/bilipack",
+"number": 11,
+"package": "vitest",
+"from": "5.0.0",
+"to": "5.0.3",
+"ci": "success",
+"url": "https://github.com/yjl9903/bilipack/pull/11"
+},
+{
+"repo": "risu729/pateat",
+"number": 124,
+"package": "typescript",
+"from": "6.0.3",
+"to": "7.0.2",
+"ci": "success",
+"url": "https://github.com/risu729/pateat/pull/124"
+},
+{
+"repo": "seijikohara/vizel",
+"number": 823,
+"package": "vite",
+"from": "8.3.5",
+"to": "8.3.6",
+"ci": "success",
+"url": "https://github.com/seijikohara/vizel/pull/823"
+},
+{
+"repo": "xcwds/xcwds",
+"number": 61,
+"package": "@types/node",
+"from": "24.19.1",
+"to": "24.19.2",
+"ci": "success",
+"url": "https://github.com/xcwds/xcwds/pull/61"
+},
+{
+"repo": "Adslot/adslot-ui",
+"number": 2101,
+"package": "vite",
+"from": "7.3.6",
+"to": "7.3.7",
+"ci": "success",
+"url": "https://github.com/Adslot/adslot-ui/pull/2101"
+},
+{
+"repo": "mfakane/wasm-fcs",
+"number": 32,
+"package": "vite",
+"from": "8.3.6",
+"to": "8.3.8",
+"ci": "success",
+"url": "https://github.com/mfakane/wasm-fcs/pull/32"
+},
+{
+"repo": "d-zero-dev/BurgerEditor",
+"number": 1045,
+"package": "@types/node",
+"from": "26.6.4",
+"to": "26.6.5",
+"ci": "success",
+"url": "https://github.com/d-zero-dev/BurgerEditor/pull/1045"
+},
+{
+"repo": "containerbase/eslint-plugin",
+"number": 893,
+"package": "@types/node",
+"from": "22.20.4",
+"to": "22.20.5",
+"ci": "success",
+"url": "https://github.com/containerbase/eslint-plugin/pull/893"
+},
+{
+"repo": "jander99/homelab",
+"number": 445,
+"package": "@types/node",
+"from": "24.19.1",
+"to": "24.19.2",
+"ci": "success",
+"url": "https://github.com/jander99/homelab/pull/445"
+},
+{
+"repo": "webbertakken/livedoc",
+"number": 132,
+"package": "vite",
+"from": "7.3.7",
+"to": "8.3.6",
+"ci": "success",
+"url": "https://github.com/webbertakken/livedoc/pull/132"
+},
+{
+"repo": "cyberuni/gherkin-cli",
+"number": 47,
+"package": "vitest",
+"from": "4.1.9",
+"to": "4.1.12",
+"ci": "success",
+"url": "https://github.com/cyberuni/gherkin-cli/pull/47"
+}
+]

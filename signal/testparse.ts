@@ -8,7 +8,7 @@ export interface FailedTest {
 
 export interface ParsedRun {
   failed: FailedTest[];
-  runner: "junit" | "vitest" | "jest" | "node-test" | "mocha" | "pytest" | "unknown";
+  runner: "junit" | "vitest" | "jest" | "node-test" | "mocha" | "pytest" | "tsc" | "unknown";
   /** Totals when the runner printed them. */
   totals?: { failed: number; passed?: number };
 }
@@ -25,15 +25,27 @@ function firstError(lines: string[], from: number, max = 25): string {
   return "";
 }
 
-export function parseJunit(xml: string): FailedTest[] {
+export function parseJunit(input: string): FailedTest[] {
+  const xml = input.length > 4 << 20 ? input.slice(0, 4 << 20) : input;
   const out: FailedTest[] = [];
-  const re = /<testcase\b([^>]*?)(\/>|>([\s\S]*?)<\/testcase>)/g;
-  const attr = (a: string, k: string) => a.match(new RegExp(`\\b${k}="([^"]*)"`))?.[1]?.replace(/&quot;/g, '"').replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&amp;/g, "&") ?? "";
-  for (const m of xml.matchAll(re)) {
-    const body = m[3] ?? "";
-    const f = body.match(/<(failure|error)\b([^>]*)>?/);
+  const attr = (a: string, k: string) => a.match(new RegExp(`\\b${k}="([^"]*)"`))?.[1]?.replace(/&quot;/g, '"').replace(/&apos;/g, "'").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&amp;/g, "&") ?? "";
+  // linear scan with indexOf (no regex backtracking across the whole file)
+  let pos = 0;
+  while (out.length < 500) {
+    const start = xml.indexOf("<testcase", pos);
+    if (start < 0) break;
+    const tagEnd = xml.indexOf(">", start);
+    if (tagEnd < 0) break;
+    const a = xml.slice(start + 9, tagEnd);
+    let body = "";
+    if (xml[tagEnd - 1] === "/") pos = tagEnd + 1;
+    else {
+      const close = xml.indexOf("</testcase>", tagEnd);
+      body = xml.slice(tagEnd + 1, close < 0 ? Math.min(xml.length, tagEnd + 20000) : close);
+      pos = close < 0 ? tagEnd + 1 : close + 11;
+    }
+    const f = body.match(/<(failure|error)\b([^>]{0,4000})>?/);
     if (!f) continue;
-    const a = m[1];
     const id = [attr(a, "classname") || attr(a, "file"), attr(a, "name")].filter(Boolean).join(" > ");
     const msg = attr(f[2] ?? "", "message") || clean(body.replace(/<[^>]+>/g, " ").split("\n").find((l) => l.trim()) ?? "");
     out.push({ id, message: clean(msg) });
@@ -42,7 +54,7 @@ export function parseJunit(xml: string): FailedTest[] {
 }
 
 export function parseOutput(log: string): ParsedRun {
-  const text = strip(log.length > 8 << 20 ? log.slice(-(8 << 20)) : log);
+  const text = strip(log.length > 1 << 20 ? log.slice(-(1 << 20)) : log);
   const lines = text.split("\n");
   const seen = new Map<string, FailedTest>();
   const add = (id: string, at: number, msg?: string) => {
@@ -58,16 +70,19 @@ export function parseOutput(log: string): ParsedRun {
     const m = l.match(/^(FAILED|ERROR) ([^\s]+(?:::[^\s]+)?)(?: - (.*))?$/);
     if (m && (m[2].includes("::") || /\.py\b/.test(m[2]))) { runner = "pytest"; add(m[2], i, m[3]); }
   }
-  const pt = text.match(/=+ (?:(\d+) failed)?(?:, )?(?:(\d+) passed)?.* in [\d.]+s/);
+  const pt = text.match(/={3,}[ \t](?:(\d+) failed)?(?:, )?(?:(\d+) passed)?[^\n]{0,200} in [\d.]+s/);
   if (runner === "pytest" && pt) totals = { failed: Number(pt[1] ?? 0), passed: pt[2] ? Number(pt[2]) : undefined };
 
   if (runner === "unknown") {
     // vitest: " FAIL  test/a.test.ts > suite > name" ; jest: "  ● suite › name"
+    let jestFile = "";
     for (const [i, l] of lines.entries()) {
       const v = l.match(/^\s*(?:FAIL|×|✗)\s+(\S+\.(?:[cm]?[jt]sx?)\s+>\s+.+)$/);
       if (v) { runner = "vitest"; add(v[1], i); continue; }
+      const jf = l.match(/^\s*FAIL\s+(\S+\.(?:[cm]?[jt]sx?))\s*$/);
+      if (jf) { jestFile = jf[1]; continue; }
       const j = l.match(/^\s*●\s+(.+›.+|[^●]+)$/);
-      if (j && !/Console|Test suite failed to run/.test(j[1])) { runner = "jest"; add(j[1].replace(/\s+›\s+/g, " > "), i); continue; }
+      if (j && !/Console|Test suite failed to run/.test(j[1])) { runner = "jest"; add((jestFile ? jestFile + " > " : "") + j[1].replace(/\s+›\s+/g, " > "), i); continue; }
       if (/^\s*●\s+Test suite failed to run/.test(l)) { runner = "jest"; const file = lines.slice(Math.max(0, i - 3), i).reverse().map((x) => x.match(/FAIL\s+(\S+)/)?.[1]).find(Boolean); add(`${file ?? "suite"} (failed to run)`, i); }
     }
     const vt = text.match(/Tests\s+(\d+) failed(?: \| (\d+) passed)?/);
@@ -88,10 +103,16 @@ export function parseOutput(log: string): ParsedRun {
         deeperFailed = deeperFailed.filter((d) => d <= depth);
         runner = "node-test";
         if (!hasChild) {
-          // the YAML block after a TAP failure carries `error: '...'`
-          let m2 = "";
-          for (let k = i + 1; k < Math.min(lines.length, i + 30); k++) { const e = lines[k].match(/^\s+error:\s*['"|>-]?\s*(.*?)['"]?\s*$/); if (e) { m2 = e[1]; break; } if (/^\s*\.\.\.\s*$/.test(lines[k])) break; }
-          add(t[2], i, m2 || undefined);
+          // the YAML block after a TAP failure carries `location: 'file:line:col'` and `error: '...'`
+          let m2 = "", loc = "";
+          for (let k = i + 1; k < Math.min(lines.length, i + 30); k++) {
+            const e = lines[k].match(/^\s+error:\s*['"|>-]?\s*(.*?)['"]?\s*$/);
+            if (e && !m2) m2 = e[1];
+            const lc = lines[k].match(/^\s+location:\s*['"]?(.*?):\d+:\d+['"]?\s*$/);
+            if (lc && !loc) loc = lc[1].replace(/^.*?\/((?:test|tests|spec|src|lib)\/)/, "$1").split("/").slice(-3).join("/");
+            if (/^\s*\.\.\.\s*$/.test(lines[k])) break;
+          }
+          add(loc ? `${loc} > ${t[2]}` : t[2], i, m2 || undefined);
         }
         deeperFailed.push(depth);
         continue;
@@ -101,13 +122,13 @@ export function parseOutput(log: string): ParsedRun {
       const s = l.match(/^\s*✖ (.+?)(?: \([\d.]+m?s\))?$/);
       if (s && !/^failing tests:?$/i.test(s[1].trim())) { runner = "node-test"; add(s[1], i); }
     }
-    const nt = text.match(/^# fail (\d+)/m);
-    const np = text.match(/^# pass (\d+)/m);
+    const nt = text.match(/^[ \t]*# fail (\d+)/m);
+    const np = text.match(/^[ \t]*# pass (\d+)/m);
     if (nt) totals = { failed: Number(nt[1]), passed: np ? Number(np[1]) : undefined };
   }
   if (runner === "unknown") {
     // mocha: "  1) suite\n       name:\n     Error: ..."
-    const failing = text.match(/^\s*(\d+) failing/m);
+    const failing = text.match(/^[ \t]*(\d+) failing/m);
     if (failing) {
       runner = "mocha";
       for (const [i, l] of lines.entries()) {
@@ -121,7 +142,19 @@ export function parseOutput(log: string): ParsedRun {
       totals = { failed: Number(failing[1]) };
     }
   }
+  if (runner === "unknown") {
+    // TypeScript compiler: "src/a.ts(12,5): error TS2339: ..." or "src/a.ts:12:5 - error TS2339: ..."
+    for (const [i, l] of lines.entries()) {
+      const m = l.match(/^([^\s(:]+\.[cm]?tsx?)(?:\((\d+),\d+\)|:(\d+):\d+)\s*[:-]\s*error (TS\d{4}): (.*)$/);
+      if (m) { runner = "tsc" as ParsedRun["runner"]; add(`${m[1]} ${m[4]}`, i, `${m[4]}: ${m[5]}`); }
+    }
+  }
   return { failed: [...seen.values()].slice(0, 200), runner, totals };
+}
+
+/** Message comparable across runs: numbers, paths, hex ids and durations removed. */
+export function messageKey(m: string): string {
+  return m.toLowerCase().replace(/0x[0-9a-f]+/g, "#").replace(/\d+(\.\d+)?/g, "#").replace(/(\/[\w.@-]+)+/g, "<path>").replace(/\s+/g, " ").trim().slice(0, 160);
 }
 
 /** Failures that are about the machine or the network, not about the code. Any of these invalidates a comparison. */
@@ -135,8 +168,10 @@ const INFRA: [RegExp, string][] = [
   [/\b(EACCES|EPERM): (permission denied|operation not permitted), (mkdir|open|scandir) '\/(?!tmp)/, "file-system permission problem"],
 ];
 
+/** Callers pass install logs, or the failing tests' messages plus the last lines of output: an environment word
+ *  printed by a passing test elsewhere in the log must not turn a real regression into "inconclusive". */
 export function infraProblem(log: string): string | null {
-  const t = log.length > 4 << 20 ? log.slice(-(4 << 20)) : log;
+  const t = log.length > 1 << 20 ? log.slice(-(1 << 20)) : log;
   for (const [re, why] of INFRA) if (re.test(t)) return why;
   return null;
 }

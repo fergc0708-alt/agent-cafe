@@ -122,6 +122,10 @@ tools, and the preview-digest set is bounded (256) so a long session cannot grow
 
 ## Café Signal (GOAT 5): adversarial audit + independent review
 
+> **Note (2026-11-25):** this section describes the earlier Signal network (removed from the product, kept in
+> `experiments/signal-network`). The current threat model of the Signal diagnosis tool is
+> [`signal/SECURITY.md`](../signal/SECURITY.md).
+
 Two separate agents audited `signal/` (same model family as the author, so not fully independent). Findings were
 reproduced with proof-of-concept tests before being fixed. Regression tests: `tests/signal.test.ts` (29 tests).
 
@@ -129,7 +133,7 @@ reproduced with proof-of-concept tests before being fixed. Regression tests: `te
 |---|---|---|
 | S1 | **Sybil + fabricated results.** Free GitHub orgs = free owners. With a 2-owner threshold, 2 fake orgs flipped a 30-owner red signal to `likely_safe`; 1 fake regression overrode 40 passing owners. | **MITIGATED, OPEN by nature.** Verdicts need ≥3 owners and an interval, a single regression is only `single_report`, and contradictions with a large opposite signal are `mixed`. Tokens are accepted from PR events only. A determined attacker with many orgs can still shift verdicts: the network must never gate merges (it does not). |
 | S2 / R11 | An exact-match record shadowed all same-target evidence. | **FIXED**: same-target evidence is pooled; exact matches are a label. |
-| S3 | Code under test (e.g. a malicious postinstall) could mint the job's OIDC tokens. | **FIXED for child processes**: `ACTIONS_ID_TOKEN_*` and runtime tokens are stripped from install/test env. **OPEN:** code in the same job can still tamper with files before the share step. Recommended: share from a separate job (documented). |
+| S3 | Code under test (e.g. a malicious postinstall) could mint the job's OIDC tokens. | **CORRECTED 2026-11-25: this was wrongly marked fixed.** Stripping variables from the child's environment is not a boundary: code running as the same user can read its parent's environment (`/proc/$PPID/environ`) and the runner's memory. The network component this applied to was removed from the product (now `experiments/signal-network`, not shipped). For the current Signal diagnosis tool, see [`signal/SECURITY.md`](../signal/SECURITY.md): the boundary there is the job's permissions (no write token, no secrets), not the environment filter. |
 | S4 | Token replay: one token for any content for 2 h; `exp` unchecked. | **FIXED**: the server recomputes the id from content, each `jti` is single-use, `exp` is required. |
 | S5 | A query token could be used to write (`id:"query"`). | **FIXED**: separate `obs:` / `query` audiences; ids must be 64-hex. |
 | S6 / R1 | No install command meant the baseline reused the update's `node_modules`, so a real regression was reported as "not the update's fault". | **FIXED**: install is required; the baseline runs in a fresh git worktree. |

@@ -1,19 +1,22 @@
 // `signal diagnose`: was it the update?  (exposed as `cafe signal …` and by the GitHub Action in signal/action.yml)
+import { randomBytes } from "node:crypto";
 import { appendFileSync, readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
-import { diagnose, type Diagnosis } from "./diagnose.ts";
+import { diagnose, type CiContext, type Diagnosis } from "./diagnose.ts";
 import { git } from "./exec.ts";
 import { packageLinks, renderMarkdown, renderText } from "./report.ts";
 
-const BOOL = new Set(["no-isolate", "redact", "offline", "allow-persisted-credentials", "help"]);
+const BOOL = new Set(["no-isolate", "redact", "offline", "allow-persisted-credentials", "allow-privileged-event", "help"]);
 
-function flags(argv: string[]) {
+export function flags(argv: string[]) {
   const pos: string[] = [];
   const f: Record<string, string | boolean> = {};
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
     if (!a.startsWith("--")) { pos.push(a); continue; }
-    const [k, v] = a.slice(2).split("=", 2);
+    const eq = a.indexOf("=");
+    const k = eq < 0 ? a.slice(2) : a.slice(2, eq);
+    const v = eq < 0 ? undefined : a.slice(eq + 1); // values may contain "=" (e.g. --test "FOO=1 npm test")
     if (v !== undefined) f[k] = v;
     else if (BOOL.has(k)) f[k] = true;
     else if (argv[i + 1] !== undefined) f[k] = argv[++i];
@@ -31,7 +34,7 @@ fresh install, same machine), then compares which tests fail.
   --install <cmd>         install command (default: detected from the lockfile)
   --test <cmd>            test command (default: package.json "test" script)
   --junit <path>          JUnit XML written by the test command (exact test names)
-  --retries <n>           re-runs of a failing side, 0-3 (default 1)
+  --retries <n>           re-runs of a failing side, 0-3 (default 2)
   --timeout-minutes <n>   per command (default 20)
   --no-isolate            do not search for the responsible update in grouped PRs
   --isolate-budget <n>    max extra runs for that search (default 8)
@@ -40,17 +43,33 @@ fresh install, same machine), then compares which tests fail.
   --redact                show error shapes instead of messages (public repositories)
   --offline               no changelog lookups
   --add-command <cmd>     how to install specific versions during isolation, "{specs}" = name@version list
+  --ci-context <file>     what the project's CI reported (written by ci-context.mjs before any project code runs)
 `;
 
 /** Refuses to run untrusted code where it could act as this repository. */
-export function preflight(dir: string, allowPersisted: boolean, env: Record<string, string | undefined> = process.env): string[] {
+export function preflight(dir: string, allowPersisted: boolean, env: Record<string, string | undefined> = process.env, allowPrivileged = false): string[] {
   const warn: string[] = [];
-  if (env.GITHUB_EVENT_NAME === "pull_request_target") throw new Error("refusing to run on pull_request_target: it executes the PR's code with the base repository's secrets and write token. Use `pull_request`.");
-  const hdr = git(dir, ["config", "--get-regexp", "^http\\..*\\.extraheader$"]).out.trim();
-  if (hdr && !allowPersisted) throw new Error("the checkout persisted a GitHub token in .git/config (the actions/checkout default), and the project's install scripts and tests could read it. Use actions/checkout with `persist-credentials: false`, or pass --allow-persisted-credentials if you accept that risk.");
-  if (hdr) warn.push("a GitHub token is persisted in .git/config and was readable by the code under test");
+  const ev = env.GITHUB_EVENT_NAME ?? "";
+  if (ev === "pull_request_target") throw new Error("refusing to run on pull_request_target: it executes the PR's code with the base repository's secrets and write token. Use `pull_request`.");
+  if (/^(workflow_run|issue_comment|pull_request_review|pull_request_review_comment)$/.test(ev) && !allowPrivileged) {
+    throw new Error(`refusing to run on ${ev}: that event runs with the base repository's token and secrets, and a PR's code must not. Use \`pull_request\`, or pass --allow-privileged-event if this job has no secrets and a read-only token.`);
+  }
+  const cfg = git(dir, ["config", "--local", "--list"]).out;
+  const problems: string[] = [];
+  if (/^http\.([^\n]*\.)?extraheader=/im.test(cfg)) problems.push("an http extraheader (the actions/checkout token)");
+  if (/^remote\.[^\n]*\.url=[a-z+]+:\/\/[^\/\s@]+@/im.test(cfg)) problems.push("credentials inside a remote URL");
+  if (/^url\.[^\n]*@[^\n]*\.insteadof=/im.test(cfg)) problems.push("credentials inside a url.*.insteadOf rewrite");
+  if (/^credential\.([^\n]*\.)?helper=./im.test(cfg)) problems.push("a credential helper");
+  if (problems.length && !allowPersisted) throw new Error(`the repository's .git/config holds ${problems.join(", ")}, and the project's install scripts and tests could read it. Use actions/checkout with \`persist-credentials: false\`, or pass --allow-persisted-credentials if you accept that risk.`);
+  if (problems.length) warn.push(`.git/config holds ${problems.join(", ")}, readable by the code under test`);
   return warn;
 }
+
+/** GitHub workflow-command escaping (for ::error annotations) */
+const escData = (s: string) => s.replace(/%/g, "%25").replace(/\r/g, "%0D").replace(/\n/g, "%0A");
+const escProp = (s: string) => escData(s).replace(/:/g, "%3A").replace(/,/g, "%2C");
+/** GITHUB_OUTPUT values: one line, no control characters */
+const oneLine = (s: string) => s.replace(/[^\w@./+,~-]/g, "").slice(0, 200);
 
 function prTitle(): string | undefined {
   const p = process.env.GITHUB_EVENT_PATH;
@@ -71,16 +90,20 @@ export async function main(argv: string[]): Promise<number> {
   const dir = resolve(typeof f.dir === "string" ? f.dir : ".");
   const failOn = typeof f["fail-on"] === "string" ? f["fail-on"] : "never";
   if (!["regression", "never"].includes(failOn)) throw new Error("--fail-on must be regression or never");
-  const warnings = preflight(dir, f["allow-persisted-credentials"] === true);
+  const warnings = preflight(dir, f["allow-persisted-credentials"] === true, process.env, f["allow-privileged-event"] === true);
   const num = (k: string) => (typeof f[k] === "string" && f[k] !== "" ? Number(f[k]) : undefined);
   const str = (k: string) => (typeof f[k] === "string" && f[k] ? (f[k] as string) : undefined);
+  let ci: CiContext | null = null;
+  if (str("ci-context")) {
+    try { ci = JSON.parse(readFileSync(str("ci-context")!, "utf8")); } catch { ci = { available: false, base: null, head: null, note: "the CI context file could not be read" }; }
+  }
   let d: Diagnosis;
   try {
     d = await diagnose({
       dir, base: str("base") ?? "auto", install: str("install"), test: str("test"), junit: str("junit"),
       retries: num("retries"), timeoutMs: num("timeout-minutes") ? num("timeout-minutes")! * 60_000 : undefined,
       isolate: f["no-isolate"] !== true, isolateBudget: num("isolate-budget"),
-      title: str("title") ?? prTitle(), log: (s) => console.error(s), addCommand: str("add-command"),
+      title: str("title") ?? prTitle(), log: (s) => console.error(s), addCommand: str("add-command"), ci,
     });
   } catch (e) {
     const m = (e as Error).message;
@@ -91,13 +114,21 @@ export async function main(argv: string[]): Promise<number> {
   const linkFor = d.isolation?.culprits?.length ? [...d.isolation.culprits, ...d.delta.direct] : d.delta.direct.length ? d.delta.direct : d.delta.changes;
   const links = await packageLinks(linkFor, f.offline === true);
   const report = renderMarkdown(d, links, { redact: f.redact === true });
+  // Test names and error messages come from untrusted code: stop the runner from parsing them as workflow commands.
+  const token = randomBytes(16).toString("hex");
+  if (process.env.GITHUB_ACTIONS) console.log(`::stop-commands::${token}`);
   console.log(renderText(d));
+  if (process.env.GITHUB_ACTIONS) {
+    console.log(`::${token}::`);
+    const level = d.verdict.startsWith("regression") ? "error" : d.verdict === "compatible" || d.verdict === "pre_existing" ? "notice" : "warning";
+    console.log(`::${level} title=${escProp(`Signal: ${d.verdict} (${d.confidence})`)}::${escData(d.next)}`);
+  }
   if (str("markdown")) writeFileSync(str("markdown")!, report);
   if (str("json")) writeFileSync(str("json")!, JSON.stringify(d, null, 2));
   if (process.env.GITHUB_STEP_SUMMARY) appendFileSync(process.env.GITHUB_STEP_SUMMARY, report + "\n");
   if (process.env.GITHUB_OUTPUT) {
-    const culprit = d.isolation?.status === "single" ? d.isolation.culprits[0].package : d.verdict.startsWith("regression") && d.delta.direct.length === 1 ? d.delta.direct[0].package : "";
-    appendFileSync(process.env.GITHUB_OUTPUT, `verdict=${d.verdict}\nconfidence=${d.confidence}\nculprit=${culprit}\n`);
+    const culprit = d.isolation?.status === "single" ? d.isolation.culprits.map((c) => c.package).join(",") : d.verdict.startsWith("regression") && d.delta.direct.length === 1 ? d.delta.direct[0].package : "";
+    appendFileSync(process.env.GITHUB_OUTPUT, `verdict=${oneLine(d.verdict)}\nconfidence=${oneLine(d.confidence)}\nculprit=${oneLine(culprit)}\n`);
   }
   return failOn === "regression" && d.verdict.startsWith("regression") && d.confidence === "high" ? 1 : 0;
 }

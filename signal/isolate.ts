@@ -23,11 +23,33 @@ export interface Isolation {
 const label = (c: Change) => `${c.package} ${c.from ?? "∅"} → ${c.to ?? "∅"}`;
 const revert = (c: Change): Change => ({ ...c, from: c.to, to: c.from });
 
+/** Packages released together (same target version and same scope or name stem: react + react-dom,
+ *  @babel/core + @babel/preset-env, vitest + @vitest/coverage-v8) are one unit: they usually cannot be installed
+ *  apart because of peer dependencies, and Renovate groups them for that reason. */
+export function units(changes: Change[]): Change[][] {
+  const stem = (n: string) => (n.startsWith("@") ? n.slice(1, n.indexOf("/")) : n.split(/[-./]/)[0]).toLowerCase();
+  const groups = new Map<string, Change[]>();
+  for (const c of changes) {
+    const k = `${stem(c.package)}|${c.to ?? "removed"}`;
+    (groups.get(k) ?? groups.set(k, []).get(k)!).push(c);
+  }
+  return [...groups.values()];
+}
+
 export async function isolate(direct: Change[], probe: Probe, budget = 8): Promise<Isolation> {
+  const us = units(direct);
+  const r = await isolateUnits(us, probe, budget);
+  return r;
+}
+
+async function isolateUnits(unitList: Change[][], probe: Probe, budget: number): Promise<Isolation> {
+  const direct = unitList; // each element is a unit of one or more packages
+  const flat = (xs: Change[][]) => xs.flat();
   const probes: Isolation["probes"] = [];
   const cache = new Map<string, ProbeOutcome>();
   let exhausted = false;
-  const run = async (side: "baseline" | "update", apply: Change[]) => {
+  const run = async (side: "baseline" | "update", applyUnits: Change[][] | Change[]) => {
+    const apply: Change[] = (applyUnits as any[]).flat();
     const key = side + "|" + apply.map(label).sort().join(",");
     if (cache.has(key)) return cache.get(key)!; // identical configuration: never pay for it twice
     if (side === "baseline" && probes.filter((p) => p.side === "baseline").length >= budget) { exhausted = true; return "error" as ProbeOutcome; }
@@ -37,9 +59,10 @@ export async function isolate(direct: Change[], probe: Probe, budget = 8): Promi
     return r.outcome;
   };
   const done = (status: Isolation["status"], culprits: Change[], reason: string, confirmed: Isolation["confirmed"] = { sufficient: null, necessary: null }): Isolation => ({ status, culprits, probes, confirmed, reason });
+  const ulabel = (u: Change[]) => u.map(label).join(" + ");
 
   if (direct.length === 0) return done("not_direct", [], "the PR changes no declared dependency, only transitive ones");
-  if (direct.length === 1) return done("not_needed", direct, "the PR updates a single declared dependency (plus its transitive changes)");
+  if (direct.length === 1) return done(direct[0].length > 1 ? "single" : "not_needed", direct[0], direct[0].length > 1 ? `${ulabel(direct[0])} are released together and updated together` : "the PR updates a single declared dependency (plus its transitive changes)");
 
   // 1. Do the direct updates alone reproduce it? (If not, the cause is in transitive lockfile changes.)
   const all = await run("baseline", direct);
@@ -50,13 +73,13 @@ export async function isolate(direct: Change[], probe: Probe, budget = 8): Promi
   // 2. ddmin (Zeller): find a 1-minimal subset that still reproduces.
   let set = [...direct];
   let n = 2;
-  const stop = (o: ProbeOutcome, what: Change[]) =>
+  const stop = (o: ProbeOutcome, what: Change[][]) =>
     exhausted
-      ? done("inconclusive", [], `stopped at the run budget (${budget} runs) with ${set.length} candidates left: ${set.map(label).join(", ")}`)
-      : done("inconclusive", [], `a probe was ${o === "error" ? "not installable as requested" : "flaky"} (${what.map(label).join(", ")})`);
+      ? done("inconclusive", [], `stopped at the run budget (${budget} runs) with ${set.length} candidates left: ${set.map(ulabel).join(", ")}`)
+      : done("inconclusive", [], `a probe was ${o === "error" ? "not installable as requested" : "flaky"} (${what.map(ulabel).join(", ")})`);
   while (set.length >= 2) {
     const size = Math.ceil(set.length / n);
-    const chunks: Change[][] = [];
+    const chunks: Change[][][] = [];
     for (let i = 0; i < set.length; i += size) chunks.push(set.slice(i, i + size));
     let reduced = false;
     for (const c of chunks) {
@@ -80,11 +103,12 @@ export async function isolate(direct: Change[], probe: Probe, budget = 8): Promi
   }
 
   // 3. Confirm both ways (the confirmation run is not counted against the search budget).
-  const necessary = await run("update", set.map(revert));
+  const necessary = await run("update", flat(set).map(revert));
   const isNecessary = necessary === "clean";
   const sufficient = true; // `set` reproduced on top of the baseline in step 1/2
-  if (necessary === "error" || necessary === "unstable") return done("inconclusive", [], `could not confirm: reverting ${set.map(label).join(", ")} on the update ${necessary === "error" ? "did not install" : "was flaky"}`, { sufficient, necessary: null });
-  if (!isNecessary) return done("inconclusive", set, `${set.map(label).join(" + ")} reproduces the failures on the baseline, but reverting ${set.length > 1 ? "them" : "it"} on the update does not remove them: other changes contribute`, { sufficient, necessary: false });
-  if (set.length === 1) return done("single", set, `${label(set[0])} alone reproduces the failures, and reverting it alone removes them`, { sufficient, necessary: true });
-  return done("interaction", set, `the failures need ${set.map(label).join(" and ")} together; none of them alone reproduces them`, { sufficient, necessary: true });
+  const names = set.map(ulabel).join(" and ");
+  if (necessary === "error" || necessary === "unstable") return done("inconclusive", [], `could not confirm: reverting ${names} on the update ${necessary === "error" ? "did not install" : "was flaky"}`, { sufficient, necessary: null });
+  if (!isNecessary) return done("inconclusive", flat(set), `${names} reproduces the failures on the baseline, but reverting ${set.length > 1 || set[0].length > 1 ? "them" : "it"} on the update does not remove them: other changes contribute`, { sufficient, necessary: false });
+  if (set.length === 1) return done("single", set[0], `${names} alone reproduce${set[0].length > 1 ? "" : "s"} the failures, and reverting ${set[0].length > 1 ? "them" : "it"} alone removes them${set[0].length > 1 ? " (released together, treated as one update)" : ""}`, { sufficient, necessary: true });
+  return done("interaction", flat(set), `the failures need ${names} together; none of them alone reproduces them`, { sufficient, necessary: true });
 }

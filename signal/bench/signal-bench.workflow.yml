@@ -1,0 +1,59 @@
+# NOT ACTIVE. Move to .github/workflows/ only with explicit authorization (it runs third-party projects' code).
+name: Signal benchmark (real PRs)
+on:
+  workflow_dispatch:
+    inputs:
+      repeat: { description: "Also re-run the first N cases (reproducibility)", default: "20" }
+permissions: {}
+jobs:
+  resolve:            # trusted: runs NO project code; read-only token for public API data (the oracles)
+    runs-on: ubuntu-latest
+    permissions: { contents: read }
+    outputs: { matrix: "${{ steps.m.outputs.matrix }}" }
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with: { persist-credentials: false }
+      - run: node signal/bench/resolve.mjs signal/bench/candidates.json cases.json
+        env: { GITHUB_TOKEN: "${{ github.token }}" }
+      - id: m
+        env: { REPEAT: "${{ inputs.repeat }}" }
+        run: |
+          node -e 'const c=require("./cases.json").map((x,i)=>({...x,i})).filter(x=>!x.skip&&x.bot_sha);const r=+process.env.REPEAT||0;
+          const m=[...c.map(x=>({i:x.i,repo:x.repo,sha:x.bot_sha,base:x.base_sha,rep:1})),...c.slice(0,r).map(x=>({i:x.i,repo:x.repo,sha:x.bot_sha,base:x.base_sha,rep:2}))];
+          require("fs").appendFileSync(process.env.GITHUB_OUTPUT,"matrix="+JSON.stringify({include:m.slice(0,250)})+"\n")'
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with: { name: cases, path: cases.json }
+  diagnose:           # untrusted project code: no token permissions, no secrets, ephemeral runner
+    needs: resolve
+    runs-on: ubuntu-latest
+    permissions: {}
+    timeout-minutes: 35
+    strategy: { fail-fast: false, max-parallel: 20, matrix: "${{ fromJSON(needs.resolve.outputs.matrix) }}" }
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with: { path: signal-src, persist-credentials: false }
+      - id: fetch
+        env: { REPO: "${{ matrix.repo }}", SHA: "${{ matrix.sha }}" }
+        run: |
+          git init -q target && cd target && git fetch -q --depth 2 "https://github.com/$REPO" "$SHA" && git checkout -q FETCH_HEAD
+          f=""; for c in .nvmrc .node-version; do [ -f "$c" ] && f="target/$c" && break; done; echo "nvfile=$f" >> "$GITHUB_OUTPUT"
+      - if: steps.fetch.outputs.nvfile != ''
+        continue-on-error: true
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with: { node-version-file: "${{ steps.fetch.outputs.nvfile }}" }
+      - if: steps.fetch.outputs.nvfile == ''
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with: { node-version: "22" }
+      - env: { I: "${{ matrix.i }}", REP: "${{ matrix.rep }}" }
+        run: |
+          corepack enable >/dev/null 2>&1 || true
+          t0=$(date +%s%3N); set +e
+          timeout 1800 node signal-src/dist/cli/cafe.js signal diagnose --dir target --base HEAD~1 --json diag.json --timeout-minutes 12 --isolate-budget 4 --offline > out.txt 2> err.txt; code=$?
+          set -e; t1=$(date +%s%3N); mkdir -p res
+          node -e 'const fs=require("fs");const d=fs.existsSync("diag.json")?JSON.parse(fs.readFileSync("diag.json","utf8")):null;
+          fs.writeFileSync("res/result.json",JSON.stringify({i:+process.env.I,rep:+process.env.REP,exit:+process.argv[1],wall_ms:+process.argv[2],verdict:d?.verdict??null,confidence:d?.confidence??null,
+          isolation:d?.isolation?{status:d.isolation.status,culprits:d.isolation.culprits.map(c=>c.package)}:null,newFailures:d?.newFailures?.length??null,preExisting:d?.preExisting?.length??null,runs:d?.cost?.runs??null,
+          direct:d?.delta?.direct?.length??null,otherFiles:d?.delta?.otherFiles?.length??null,error:d?null:fs.readFileSync("err.txt","utf8").slice(-1500)}))' "$code" "$((t1-t0))"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        if: always()
+        with: { name: "result-${{ matrix.i }}-${{ matrix.rep }}", path: res/result.json }

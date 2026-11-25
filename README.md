@@ -22,12 +22,14 @@ BREAKS ON UPGRADE  Dirent.path was removed in Node 24: use dirent.parentPath (No
 
 Branch `goat/signal`. Not merged to `main`, not deployed, not published to npm.
 
-> **Status (2026-11-24).** `cafe doctor` (below) was stopped by our own benchmark (see
-> [docs/PRODUCT-DECISION.md](docs/PRODUCT-DECISION.md)). The current work is **[Café Signal](signal/README.md)**: on a
-> Renovate/Dependabot PR it runs your tests with and without the update on the same runner and says whether the update
-> caused the failure, `main` was already red, or a test is flaky. Its cross-repository "network" was tested on 4,883
-> real PRs and does **not** predict better than existing indicators ([benchmark](signal/bench/RESULTS.md)); what works
-> is the local, paired attribution.
+> **Status (2026-11-25).**
+> - `cafe doctor` (below) was stopped by our own benchmark ([docs/PRODUCT-DECISION.md](docs/PRODUCT-DECISION.md)).
+> - The current product is **[Signal](signal/README.md)**: on a red Renovate/Dependabot PR it re-runs the tests with
+>   and without the update on the same runner. It names the tests the update breaks, separates them from failures
+>   the base branch already had, isolates the responsible package in grouped PRs, and reports flaky or inconclusive
+>   runs as such.
+> - The cross-repository "network" was removed. It did not predict better than existing indicators; the research
+>   is kept in [experiments/signal-network](experiments/signal-network/).
 
 ## Install and use (2 minutes)
 
@@ -97,7 +99,7 @@ A **capsule** is a minimal broken program, its fix, and a check that must fail o
 
 ## Measured results (honest)
 
-- **Engine and evidence:** 92 automated tests (`npm test`), including OIDC forgery/replay attempts, the evidence semantics and its re-derivation from signatures, the scan, the MCP approval flow, and regressions for every reproduced red-team finding.
+- **Engine and evidence:** 117 automated tests (`npm test`), including OIDC forgery/replay attempts, the evidence semantics and its re-derivation from signatures, the scan, the MCP approval flow, and regressions for every reproduced red-team finding.
 - **Security audit:** two adversarial audits by separate agents (same model family, so not independent in the strong sense). The second found 1 critical, 5 high and 7 medium issues on this iteration (repository-shipped interpreters executed during `doctor`, planted local capsules, a green pass when a runtime was not evaluated, a circular evidence-integrity test, a broad OIDC policy, …); all critical/high and most medium ones are fixed with regression tests. See [docs/SECURITY-THREAT-MODEL.md](docs/SECURITY-THREAT-MODEL.md).
 - **Utility for agents:** a pre-registered controlled evaluation ([`experiments/eval`](experiments/eval/RESULTS.md)): 4 tasks × {with, without} × 2 repetitions, same model, hidden graders. **Both arms solved 8/8; the agents with Agent Café were slower (median 34 s vs 21 s on the wedge tasks).** The pre-registered success rule was not met. On these well-documented breaks the model already knows the fix. The evaluation also exposed two product defects (a detection rule that missed submodule imports; diagnose ruling out the right fix because it only checked the default runtime), both fixed afterwards. **A replication after the fixes (run 2) gave the same picture: 8/8 vs 8/8, +56% median time with Agent Café, and +52% on the task where no capsule applies.** Only one model family was available, so the cross-family run is still pending.
 - **Where it plausibly helps (not yet measured):** catching breaks before any agent or developer time is spent (the CI guard), breaks newer than the model's knowledge, environment traps that look fine locally (the distutils/setuptools case), and "this fix breaks your other supported version".

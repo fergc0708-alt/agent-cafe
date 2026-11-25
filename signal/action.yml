@@ -1,5 +1,5 @@
 name: Signal — was it the dependency update?
-description: "On a red Renovate/Dependabot PR: re-runs the tests with and without the update on the same runner and tells you which tests the update breaks, which were already failing, or that a test is flaky. Runs locally, needs no token, sends nothing."
+description: "On a red Renovate/Dependabot PR: re-runs the tests with and without the update on the same runner and tells you which tests the update breaks, which were already failing, or that a test is flaky. Project code never receives a token."
 branding:
   icon: crosshair
   color: orange
@@ -16,9 +16,12 @@ inputs:
   junit:
     description: "Path (relative to the project) of a JUnit XML report your test command writes, for exact test names"
     default: ""
+  base:
+    description: "Base to compare with (default: auto = the PR merge commit's first parent)"
+    default: "auto"
   retries:
-    description: "Re-runs of a failing side, to tell flaky tests from real failures (0-3)"
-    default: "1"
+    description: "Re-runs of a failing side, to tell flaky tests from real failures (0-3). The baseline always runs 1 + retries times."
+    default: "2"
   timeout-minutes:
     description: "Per install/test command"
     default: "20"
@@ -31,9 +34,21 @@ inputs:
   fail-on:
     description: "regression = fail this job on a high-confidence regression; never = report only"
     default: "never"
+  keep-env:
+    description: "Comma-separated env var names the tests need that look like secrets (e.g. DATABASE_TOKEN). GITHUB_TOKEN and ACTIONS_* are never passed."
+    default: ""
   redact:
     description: "Show error shapes instead of full messages in the summary (public repositories)"
     default: "false"
+  offline:
+    description: "Do not read package metadata from the npm registry (changelog links)"
+    default: "false"
+  ci-context:
+    description: "Read the project's own CI results for the base commit and this PR (checks:read) BEFORE any project code runs, and cross-check the verdict against them"
+    default: "true"
+  github-token:
+    description: "Token used only by the ci-context step, which runs no project code. The step that runs your install and tests never receives it."
+    default: ${{ github.token }}
 outputs:
   verdict:
     description: "regression | regression_on_red | pre_existing | flaky | compatible | inconclusive"
@@ -47,6 +62,15 @@ outputs:
 runs:
   using: composite
   steps:
+    # 1. Trusted step, with the token: reads what the project's CI already reported. No project code runs here.
+    - id: ci
+      if: inputs.ci-context == 'true'
+      shell: bash
+      env:
+        GITHUB_TOKEN: ${{ inputs.github-token }}
+        S_HOME: ${{ github.action_path }}
+      run: node "$S_HOME/ci-context.mjs" "$RUNNER_TEMP/signal-ci-context.json" || echo "::warning::Signal could not read the CI context"
+    # 2. Runs the project's code. No token is passed to this step.
     - id: signal
       shell: bash
       env:
@@ -60,7 +84,11 @@ runs:
         S_BUDGET: ${{ inputs.isolate-budget }}
         S_FAIL: ${{ inputs.fail-on }}
         S_REDACT: ${{ inputs.redact }}
+        S_OFFLINE: ${{ inputs.offline }}
+        S_BASE: ${{ inputs.base }}
+        S_CI: ${{ inputs.ci-context }}
         S_HOME: ${{ github.action_path }}
+        SIGNAL_KEEP_ENV: ${{ inputs.keep-env }}
       run: |
         set -euo pipefail
         command -v node >/dev/null || { echo "::error::Signal needs Node.js >= 20 on PATH (actions/setup-node)"; exit 1; }
@@ -68,10 +96,12 @@ runs:
         [ "$major" -ge 20 ] || { echo "::error::Signal needs Node.js >= 20 (found $(node --version))"; exit 1; }
         # The PR merge commit's first parent is the exact base the PR is tested against.
         [ "$(git rev-list --parents -n 1 HEAD | wc -w)" -ge 3 ] || git fetch --no-tags --depth=2 origin "$GITHUB_SHA" >/dev/null 2>&1 || true
-        args=(signal diagnose --dir "$S_WD" --retries "$S_RETRIES" --timeout-minutes "$S_TIMEOUT" --isolate-budget "$S_BUDGET" --fail-on "$S_FAIL")
+        args=(signal diagnose --dir "$S_WD" --base "$S_BASE" --retries "$S_RETRIES" --timeout-minutes "$S_TIMEOUT" --isolate-budget "$S_BUDGET" --fail-on "$S_FAIL")
         [ -n "$S_INSTALL" ] && args+=(--install "$S_INSTALL")
         [ -n "$S_TEST" ] && args+=(--test "$S_TEST")
         [ -n "$S_JUNIT" ] && args+=(--junit "$S_JUNIT")
         [ "$S_ISOLATE" = "true" ] || args+=(--no-isolate)
         [ "$S_REDACT" = "true" ] && args+=(--redact)
+        [ "$S_OFFLINE" = "true" ] && args+=(--offline)
+        [ "$S_CI" = "true" ] && [ -f "$RUNNER_TEMP/signal-ci-context.json" ] && args+=(--ci-context "$RUNNER_TEMP/signal-ci-context.json")
         node "$S_HOME/../dist/cli/cafe.js" "${args[@]}"
