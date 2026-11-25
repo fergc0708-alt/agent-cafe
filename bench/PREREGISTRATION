@@ -1,0 +1,4 @@
+pre-registration commit: 3f1dc1c023b37037cada623a5a0c88213240a607
+sha256 bench/cases.json:   062aa1577dd402aff7dc15f6b10eda646f22874255627d22676b3414a7d568c7
+sha256 bench/analyze.mjs at pre-registration: f7267343da1f9ebb82c0bf5d6c70b6a998bfb7b02d31f545aca9672346916e06 (changed once since: deviation 1, before any sample case ran)
+signal under test: a95a3ea (dist/ hash logged per job)

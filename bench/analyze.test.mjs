@@ -23,6 +23,9 @@ test("truth classes", () => {
   const failXY = five(() => run(1, [T("a > x", "failed", "boom"), T("a > y", "failed", "old")]));
   assert.equal(truth(side(failY), side(failXY)).cls, "REG_ON_RED");
   assert.equal(truth(side(failY), side(failY)).cls, "PRE_EXISTING");
+  // deviation 1: red here but green in the project's CI → our environment does not reproduce it
+  assert.equal(truth(side(failY), side(failY), { ci_base: { state: "green" } }).cls, "INDET_ENV_MISMATCH");
+  assert.equal(truth(side(failY), side(failXY), { ci_base: { state: "green" } }).cls, "REG_ON_RED");
   const failYnew = five(() => run(1, [T("a > x", "passed"), T("a > y", "failed", "new error")]));
   assert.equal(truth(side(failY), side(failYnew)).cls, "CHANGED");
   // a test failing in only some head runs, never in base: not confirmed either way

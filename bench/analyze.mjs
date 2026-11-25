@@ -54,7 +54,20 @@ function side(r) {
   return { state: "ok", n, passes, perTest, runs };
 }
 
-export function truth(base, head) {
+export function truth(base, head, c = {}) {
+  const t = truthRaw(base, head);
+  // Deviation 1 (PROTOCOL.md): a red reference baseline that the project's own CI saw green means the frozen
+  // commands do not reproduce the project's CI (a missing build step, service, variable). "Nothing changed with
+  // the update" is then an artifact of the environment, not evidence: those negatives become indeterminate.
+  // Positives stay: a test that passes on base and fails on head, in the same environment, is direct evidence.
+  if (t.baseline === "red" && c.ci_base?.state === "green") {
+    t.env_mismatch = true;
+    if (t.cls === "PRE_EXISTING" || t.cls === "FIXED" || t.cls === "CHANGED") return { ...t, cls: "INDET_ENV_MISMATCH", was: t.cls };
+  }
+  return t;
+}
+
+function truthRaw(base, head) {
   const B = side(base), H = side(head);
   const res = (cls, extra = {}) => ({ cls, baseline: B.state === "ok" ? (B.passes === B.n ? "green" : B.passes === 0 ? "red" : "flaky") : "unknown", ...extra });
   if (B.state === "missing" || H.state === "missing") return res("INDET_MISSING");
@@ -147,7 +160,7 @@ function metrics(rows, pick) {
 export function analyze(cases, results) {
   const get = (mode, id) => results[`res-${mode}-${id}`] ?? null;
   const rows = cases.map((c) => {
-    const t = truth(get("ref-base", c.id), get("ref-head", c.id));
+    const t = truth(get("ref-base", c.id), get("ref-head", c.id), c);
     const s = get("signal", c.id), l = get("lastgreen", c.id);
     return {
       id: c.id, repo: c.repo, number: c.number, url: c.url, bot: c.bot, stratum: c.stratum, pm: c.pm, ci_head: c.ci_head?.state, ci_base: c.ci_base?.state,
@@ -164,6 +177,7 @@ export function analyze(cases, results) {
     seg("all", () => true),
     seg("baseline green", (r) => r.truth.baseline === "green"),
     seg("baseline red", (r) => r.truth.baseline === "red"),
+    seg("baseline red, CI agrees (not green)", (r) => r.truth.baseline === "red" && r.ci_base !== "green"),
     seg("baseline flaky", (r) => r.truth.baseline === "flaky"),
     seg("stratum CI red", (r) => r.stratum.endsWith(":red")),
     seg("stratum CI green", (r) => r.stratum.endsWith(":green")),

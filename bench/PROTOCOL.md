@@ -284,4 +284,14 @@ Signal is also reported restricted to the npm cases for a like-for-like comparis
 
 ## Deviations
 
-(none yet)
+1. **2026-11-25, after the plumbing pilot, before any sample case ran: environment-mismatch rule.**
+   - **What the pilot showed:** in case `pilot-renovate-green-027` (not in the sample), the project's CI builds
+     before testing. The frozen test command alone fails identically on both sides ("Cannot find module
+     ../lib/…"). The reference would call that `PRE_EXISTING`, but it only shows that the frozen commands do not
+     reproduce the project's CI.
+   - **Rule added (`truth()` in `analyze.mjs`):** when the reference baseline is red but the project's CI on the
+     base commit was green, `PRE_EXISTING`, `FIXED` and `CHANGED` become `INDET_ENV_MISMATCH`. Positives are kept:
+     a test passing on base and failing on head in the same environment is direct evidence.
+   - **Reporting:** a "baseline red, CI agrees" segment is added.
+   - **Scope:** CI is still not used to make anything a hit or a miss; it only withdraws a reference judgement.
+   - No threshold changed.

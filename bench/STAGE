@@ -1,1 +1,1 @@
-pilot bench/pilot.json
+run bench/cases.json
