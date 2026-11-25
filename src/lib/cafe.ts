@@ -12,25 +12,6 @@ import type { Store } from "@core/store.ts";
 import { seed } from "@core/seed.ts";
 import { fetchGithubJwks, policyFromEnv } from "@core/capsule/oidc.ts";
 import type { RunnerTrust } from "@core/service.ts";
-import { existsSync, readFileSync } from "node:fs";
-import { join } from "node:path";
-import { MemorySignalStore, type SignalDeps, type Stored } from "../../signal/server.ts";
-import type { Observation } from "../../signal/protocol.ts";
-
-/** Café Signal: in-memory store seeded with the public seed dataset. Contributions do not persist across
- * restarts in this mode (no production database is configured for Signal; see README). */
-const gs = globalThis as unknown as { __signal?: SignalDeps };
-function signalDeps(): SignalDeps {
-  if (!gs.__signal) {
-    const p = join(process.cwd(), "signal/seed/observations.json");
-    const seedRows: Stored[] = existsSync(p)
-      ? (JSON.parse(readFileSync(p, "utf8")).observations as Observation[]).map((o) => ({ ...o, scope: "public" as const, key: `seed|${o.id}`, received_at: o.observed_at }))
-      : [];
-    gs.__signal = { store: new MemorySignalStore(seedRows), jwks: () => fetchGithubJwks() };
-  }
-  return gs.__signal;
-}
-
 /** Trusted CI workflows come only from server config (CAFE_TRUSTED_WORKFLOWS); empty = trust none. */
 function runnerTrust(): RunnerTrust {
   return { jwks: () => fetchGithubJwks(), policy: policyFromEnv(process.env.CAFE_TRUSTED_WORKFLOWS) };
@@ -90,7 +71,7 @@ export async function forward(req: Request, path?: string): Promise<Response> {
   const body = req.method === "GET" || req.method === "HEAD" ? undefined : await req.arrayBuffer();
 
   if (DB_URL || !ORIGIN) {
-    return handle(new Request(SITE_URL + target, { method: req.method, headers: h, body }), { store: await localStore(), siteUrl: SITE_URL, trust: runnerTrust(), signal: signalDeps() });
+    return handle(new Request(SITE_URL + target, { method: req.method, headers: h, body }), { store: await localStore(), siteUrl: SITE_URL, trust: runnerTrust() });
   }
   const upstream = await fetch(ORIGIN + target, { method: req.method, headers: h, body, redirect: "manual", cache: "no-store" });
   const out = new Headers();

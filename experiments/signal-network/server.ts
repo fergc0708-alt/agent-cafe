@@ -9,7 +9,7 @@
 //    retries or runs. Per-owner daily quotas cap flooding; each owner is one voice per transition anyway.
 //  - The server recomputes the attribution from the two run results (validate()).
 //  - Observations from private repositories stay private to their owner: never returned to anyone else.
-import { bindingAudience as _unused, verifyGithubOidc, type Jwks, type TrustPolicy } from "../core/capsule/oidc.ts";
+import { bindingAudience as _unused, verifyGithubOidc, type Jwks, type TrustPolicy } from "../../core/capsule/oidc.ts";
 import { buildIndex, query, type Report } from "./engine.ts";
 import { normalizePackage, observationId, validate, type Observation } from "./protocol.ts";
 

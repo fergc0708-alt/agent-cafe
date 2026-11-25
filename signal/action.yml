@@ -1,86 +1,77 @@
-name: Café Signal
-description: On a dependency-update PR, runs your tests with and without the update on the same runner, tells you whether the update caused the failure (or main was already red / a test is flaky), and shows what other projects saw for the same update. Uploads nothing unless you opt in.
+name: Signal — was it the dependency update?
+description: "On a red Renovate/Dependabot PR: re-runs the tests with and without the update on the same runner and tells you which tests the update breaks, which were already failing, or that a test is flaky. Runs locally, needs no token, sends nothing."
 branding:
-  icon: activity
+  icon: crosshair
   color: orange
 inputs:
-  test:
-    description: Test command (e.g. "npm test", "pytest -q")
-    required: true
   install:
-    description: "Install command run on each side from a clean state (e.g. npm ci, uv sync --frozen). Required, because without it the baseline would reuse the update's packages."
-    required: true
+    description: "Install command for each side (default: detected from the lockfile: npm ci / pnpm install --frozen-lockfile / yarn install --frozen-lockfile|--immutable)"
+    default: ""
+  test:
+    description: "Test command (default: the package.json test script)"
+    default: ""
   working-directory:
-    description: Project directory inside the repository (monorepo sub-project)
+    description: "Project directory inside the repository (monorepos: a lockfile at the root is found)"
     default: "."
+  junit:
+    description: "Path (relative to the project) of a JUnit XML report your test command writes, for exact test names"
+    default: ""
   retries:
-    description: Re-runs of a failing side before calling it a failure (flakiness check)
+    description: "Re-runs of a failing side, to tell flaky tests from real failures (0-3)"
     default: "1"
-  fail-on-regression:
-    description: Fail this job only when the update is shown to cause the failure
+  timeout-minutes:
+    description: "Per install/test command"
+    default: "20"
+  isolate:
+    description: "In grouped PRs, search for the responsible update (extra runs, bounded by isolate-budget)"
+    default: "true"
+  isolate-budget:
+    description: "Max extra test runs spent on that search"
+    default: "8"
+  fail-on:
+    description: "regression = fail this job on a high-confidence regression; never = report only"
+    default: "never"
+  redact:
+    description: "Show error shapes instead of full messages in the summary (public repositories)"
     default: "false"
-  share:
-    description: "Opt in: send the sanitized observation (preview it in the job log) to the endpoint. Needs permissions: id-token: write"
-    default: "false"
-  share-public:
-    description: Make a public repository's observation visible to other owners (otherwise it stays in your organization)
-    default: "false"
-  endpoint:
-    description: Café Signal service URL (self-hosted or shared). Empty = use the public seed bundled with the action, offline.
-    default: ""
-  private-packages:
-    description: Comma-separated package patterns that must never leave the runner (e.g. "@acme/*,internal-*")
-    default: ""
 outputs:
-  attribution:
-    description: regression | compatible | baseline_red | upgrade_fixes | unstable | observational_fail | observational_pass
-    value: ${{ steps.run.outputs.attribution }}
-  observation:
-    description: Path of the local observation JSON
-    value: ${{ steps.run.outputs.observation }}
+  verdict:
+    description: "regression | regression_on_red | pre_existing | flaky | compatible | inconclusive"
+    value: ${{ steps.signal.outputs.verdict }}
+  confidence:
+    description: "high | medium | low"
+    value: ${{ steps.signal.outputs.confidence }}
+  culprit:
+    description: "Responsible package when it was isolated (or the only updated one)"
+    value: ${{ steps.signal.outputs.culprit }}
 runs:
   using: composite
   steps:
-    - id: run
+    - id: signal
       shell: bash
       env:
-        SIGNAL_TEST: ${{ inputs.test }}
-        SIGNAL_INSTALL: ${{ inputs.install }}
-        SIGNAL_RETRIES: ${{ inputs.retries }}
-        SIGNAL_FAIL: ${{ inputs.fail-on-regression }}
-        SIGNAL_ENDPOINT: ${{ inputs.endpoint }}
-        SIGNAL_DIR: ${{ github.action_path }}
-        SIGNAL_WD: ${{ inputs.working-directory }}
+        S_INSTALL: ${{ inputs.install }}
+        S_TEST: ${{ inputs.test }}
+        S_WD: ${{ inputs.working-directory }}
+        S_JUNIT: ${{ inputs.junit }}
+        S_RETRIES: ${{ inputs.retries }}
+        S_TIMEOUT: ${{ inputs.timeout-minutes }}
+        S_ISOLATE: ${{ inputs.isolate }}
+        S_BUDGET: ${{ inputs.isolate-budget }}
+        S_FAIL: ${{ inputs.fail-on }}
+        S_REDACT: ${{ inputs.redact }}
+        S_HOME: ${{ github.action_path }}
       run: |
         set -euo pipefail
-        command -v node >/dev/null || { echo "::error::Café Signal needs node >= 20 on PATH"; exit 1; }
-        if [ -z "${GITHUB_BASE_REF:-}" ]; then echo "::notice::Café Signal runs on pull_request events only"; exit 0; fi
-        if [ "${GITHUB_EVENT_NAME:-}" = "pull_request_target" ]; then echo "::error::Café Signal refuses pull_request_target (it would run untrusted PR code with secrets)"; exit 1; fi
+        command -v node >/dev/null || { echo "::error::Signal needs Node.js >= 20 on PATH (actions/setup-node)"; exit 1; }
+        major=$(node -p 'process.versions.node.split(".")[0]')
+        [ "$major" -ge 20 ] || { echo "::error::Signal needs Node.js >= 20 (found $(node --version))"; exit 1; }
         # The PR merge commit's first parent is the exact base the PR is tested against.
-        git fetch --no-tags --depth=2 origin "$GITHUB_SHA" >/dev/null 2>&1 || true
-        obs="$RUNNER_TEMP/cafe-signal-observation.json"
-        args=(signal run --test "$SIGNAL_TEST" --install "$SIGNAL_INSTALL" --retries "$SIGNAL_RETRIES" --out "$obs" --base auto --dir "$SIGNAL_WD")
-        [ -n "$SIGNAL_ENDPOINT" ] && args+=(--endpoint "$SIGNAL_ENDPOINT")
-        [ "$SIGNAL_FAIL" = "true" ] && args+=(--fail-on-regression)
-        set +e
-        node "$SIGNAL_DIR/../dist/cli/cafe.js" "${args[@]}"
-        code=$?
-        set -e
-        if [ -f "$obs" ]; then
-          echo "observation=$obs" >> "$GITHUB_OUTPUT"
-          echo "attribution=$(node -e 'console.log(require(process.argv[1]).attribution)' "$obs")" >> "$GITHUB_OUTPUT"
-        fi
-        exit $code
-    - if: inputs.share == 'true' && inputs.endpoint != '' && steps.run.outputs.observation != ''
-      shell: bash
-      env:
-        SIGNAL_DIR: ${{ github.action_path }}
-        SIGNAL_ENDPOINT: ${{ inputs.endpoint }}
-        SIGNAL_PRIVATE: ${{ inputs.private-packages }}
-        SIGNAL_PUBLIC: ${{ inputs.share-public }}
-        OBS: ${{ steps.run.outputs.observation }}
-      run: |
-        set -euo pipefail
-        node "$SIGNAL_DIR/../dist/cli/cafe.js" signal preview "$OBS" --private-packages "$SIGNAL_PRIVATE"
-        extra=(); [ "$SIGNAL_PUBLIC" = "true" ] && extra+=(--public)
-        node "$SIGNAL_DIR/../dist/cli/cafe.js" signal share "$OBS" --endpoint "$SIGNAL_ENDPOINT" --private-packages "$SIGNAL_PRIVATE" "${extra[@]}"
+        [ "$(git rev-list --parents -n 1 HEAD | wc -w)" -ge 3 ] || git fetch --no-tags --depth=2 origin "$GITHUB_SHA" >/dev/null 2>&1 || true
+        args=(signal diagnose --dir "$S_WD" --retries "$S_RETRIES" --timeout-minutes "$S_TIMEOUT" --isolate-budget "$S_BUDGET" --fail-on "$S_FAIL")
+        [ -n "$S_INSTALL" ] && args+=(--install "$S_INSTALL")
+        [ -n "$S_TEST" ] && args+=(--test "$S_TEST")
+        [ -n "$S_JUNIT" ] && args+=(--junit "$S_JUNIT")
+        [ "$S_ISOLATE" = "true" ] || args+=(--no-isolate)
+        [ "$S_REDACT" = "true" ] && args+=(--redact)
+        node "$S_HOME/../dist/cli/cafe.js" "${args[@]}"

@@ -1,0 +1,7 @@
+{
+  "name": "signal-example-grouped",
+  "private": true,
+  "description": "Grouped update: chalk 4 to 5 (ESM-only, breaks require) together with two compatible updates.",
+  "scripts": { "test": "node --test" },
+  "dependencies": { "chalk": "4.1.2", "ms": "2.1.2", "semver": "7.5.4" }
+}

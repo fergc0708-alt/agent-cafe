@@ -1,0 +1,7 @@
+{
+  "name": "signal-example-flaky",
+  "private": true,
+  "description": "A compatible update on a project with a flaky test.",
+  "scripts": { "test": "node --test" },
+  "dependencies": { "ms": "2.1.2" }
+}

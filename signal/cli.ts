@@ -1,179 +1,103 @@
-// `cafe signal …` — paired upgrade experiments in CI, lookups of what other projects saw, explicit sharing.
-import { appendFileSync, existsSync, readFileSync, writeFileSync } from "node:fs";
-import { createServer } from "node:http";
-import { dirname, join, resolve } from "node:path";
-import { fileURLToPath } from "node:url";
-import { buildIndex, query, type Report } from "./engine.ts";
-import { observationId, shareable, type Observation } from "./protocol.ts";
-import { prTitleFromEvent, runPaired } from "./run.ts";
-import { audienceFor, handleSignal, MemorySignalStore, type Stored } from "./server.ts";
-import { fetchGithubJwks } from "../core/capsule/oidc.ts";
+// `signal diagnose`: was it the update?  (exposed as `cafe signal …` and by the GitHub Action in signal/action.yml)
+import { appendFileSync, readFileSync, writeFileSync } from "node:fs";
+import { resolve } from "node:path";
+import { diagnose, type Diagnosis } from "./diagnose.ts";
+import { git } from "./exec.ts";
+import { packageLinks, renderMarkdown, renderText } from "./report.ts";
 
-const HERE = dirname(fileURLToPath(import.meta.url));
-/** The public seed shipped with the tool (works offline, no network sharing needed). */
-export function seedPath(): string | null {
-  for (const p of [join(HERE, "seed/observations.json"), join(HERE, "../../signal/seed/observations.json")]) if (existsSync(p)) return p;
-  return null;
-}
+const BOOL = new Set(["no-isolate", "redact", "offline", "allow-persisted-credentials", "help"]);
 
 function flags(argv: string[]) {
   const pos: string[] = [];
   const f: Record<string, string | boolean> = {};
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
-    if (a.startsWith("--")) {
-      const [k, v] = a.slice(2).split("=", 2);
-      if (v !== undefined) f[k] = v;
-      else if (argv[i + 1] && !argv[i + 1].startsWith("--") && !["public", "source", "json", "no-network", "share-changes", "fail-on-regression", "no-install"].includes(k)) f[k] = argv[++i];
-      else f[k] = true;
-    } else pos.push(a);
+    if (!a.startsWith("--")) { pos.push(a); continue; }
+    const [k, v] = a.slice(2).split("=", 2);
+    if (v !== undefined) f[k] = v;
+    else if (BOOL.has(k)) f[k] = true;
+    else if (argv[i + 1] !== undefined) f[k] = argv[++i];
+    else throw new Error(`--${k} needs a value`);
   }
   return { pos, f };
 }
 
-const pct = (x: number | null) => (x === null ? "–" : `${Math.round(x * 100)}%`);
+export const HELP = `signal diagnose — was it the dependency update?
 
-/** Everything rendered into a PR/summary that came from other projects is escaped (no links, no markup). */
-export const md = (s: string) => String(s).replace(/[\\`*_{}\[\]()#+!|<>~]/g, (c) => `\\${c}`).replace(/\s+/g, " ").slice(0, 200);
+Runs your tests with the update and, only if they fail, without it (same commit, dependency files reverted,
+fresh install, same machine), then compares which tests fail.
 
-export function renderReport(r: Report, title = "What other projects saw"): string {
-  const L = [`### ${title}: \`${md(r.query.package)}\` ${md(r.query.from)} → ${md(r.query.to)}`, ""];
-  const n = `(${r.causal.owners} owners with paired evidence, ${r.observational.owners} with CI status only)`;
-  const v = {
-    known_regression: `⚠️ **Regression reproduced by several independent projects** ${n}`,
-    single_report: `🟡 **One project reproduced a regression**; not enough to conclude ${n}`,
-    likely_safe: `✅ Other projects took this update without regressions ${n}`,
-    mixed: `⚠️ **Mixed or contradictory results** ${n}`,
-    insufficient_evidence: `ℹ️ **Not enough evidence** to say anything ${n}`,
-  }[r.verdict];
-  L.push(v, "", r.summary, "");
-  L.push("| evidence | independent owners | failed | estimate | 90% interval |", "|---|---|---|---|---|");
-  L.push(`| paired experiments (causal) | ${r.causal.owners} | ${r.causal.failures} | ${pct(r.causal.mean)} | ${r.causal.ci90 ? `${pct(r.causal.ci90[0])}–${pct(r.causal.ci90[1])}` : "–"} |`);
-  // CI-status-only estimates were measured to be miscalibrated (bench/RESULTS.md): counts only, no percentage.
-  L.push(`| CI status only (not causal) | ${r.observational.owners} | ${r.observational.failures} | not shown (uncalibrated) | – |`);
-  L.push("", `Prior: ${r.causal.prior.from}. Match level: ${r.match}.`);
-  if (r.sampled) L.push("", "CI-status counts include the public seed, a stratified sample in which failures are over-represented: do not read them as a failure rate.");
-  if (r.fingerprints.length) L.push("", "**Failure signatures** (normalized):", ...r.fingerprints.map((f) => `- ${md(f.signature)} (${f.owners} owners)`));
-  if (r.environments.length) L.push("", `**Environments seen:** ${r.environments.map((e) => `${md(e.runtime)}/${md(e.os)}: ${e.failures}/${e.owners} failed`).join(" · ")}`);
-  if (r.your_env_tested === false) L.push("", "Your runtime has **not** been observed for this update.");
-  const src = r.evidence.filter((e) => e.source).slice(0, 5);
-  if (src.length) L.push("", "Sources: " + src.filter((e) => /^https:\/\/github\.com\/[\w.-]+\/[\w.-]+\/(pull|commit)\/\w+$/.test(e.source!)).map((e) => `[${e.attribution}](${e.source})`).join(" · "));
-  return L.join("\n");
+  --base <ref>            base to compare with (default: auto = the PR merge commit's first parent)
+  --install <cmd>         install command (default: detected from the lockfile)
+  --test <cmd>            test command (default: package.json "test" script)
+  --junit <path>          JUnit XML written by the test command (exact test names)
+  --retries <n>           re-runs of a failing side, 0-3 (default 1)
+  --timeout-minutes <n>   per command (default 20)
+  --no-isolate            do not search for the responsible update in grouped PRs
+  --isolate-budget <n>    max extra runs for that search (default 8)
+  --fail-on <regression|never>  exit 1 on a high-confidence regression (default never)
+  --markdown <file>       write the report;  --json <file>  write the full diagnosis
+  --redact                show error shapes instead of messages (public repositories)
+  --offline               no changelog lookups
+  --add-command <cmd>     how to install specific versions during isolation, "{specs}" = name@version list
+`;
+
+/** Refuses to run untrusted code where it could act as this repository. */
+export function preflight(dir: string, allowPersisted: boolean, env: Record<string, string | undefined> = process.env): string[] {
+  const warn: string[] = [];
+  if (env.GITHUB_EVENT_NAME === "pull_request_target") throw new Error("refusing to run on pull_request_target: it executes the PR's code with the base repository's secrets and write token. Use `pull_request`.");
+  const hdr = git(dir, ["config", "--get-regexp", "^http\\..*\\.extraheader$"]).out.trim();
+  if (hdr && !allowPersisted) throw new Error("the checkout persisted a GitHub token in .git/config (the actions/checkout default), and the project's install scripts and tests could read it. Use actions/checkout with `persist-credentials: false`, or pass --allow-persisted-credentials if you accept that risk.");
+  if (hdr) warn.push("a GitHub token is persisted in .git/config and was readable by the code under test");
+  return warn;
 }
 
-function renderRun(o: Observation, other: number, files: string[]): string {
-  const meaning: Record<string, string> = {
-    regression: "❌ **The update breaks the tests.** Baseline (same code, old dependencies, same runner) passes; the update fails, reproducibly.",
-    compatible: "✅ **Compatible here.** Baseline and update both pass.",
-    baseline_red: "⚪ **Not caused by the update.** The tests already fail with the old dependencies on this runner. Fix the base branch first; this PR is not the culprit.",
-    upgrade_fixes: "✅ The update **fixes** a failure that the old dependencies had.",
-    unstable: "🟡 **Flaky.** A side gave different results on retry; the result cannot be attributed to the update.",
-    observational_fail: "❌ The update fails (no baseline could be run).",
-    observational_pass: "✅ The update passes (no baseline could be run).",
-  };
-  const L = [`## Café Signal: \`${o.primary.package}\` ${o.primary.from} → ${o.primary.to}`, "", meaning[o.attribution], ""];
-  L.push(`| | result |`, `|---|---|`, `| baseline (dependencies reverted) | ${o.baseline} |`, `| candidate (the update) | ${o.candidate} |`);
-  L.push("", `Environment: ${o.env?.runtime} ${o.env?.runtime_version} · ${o.env?.os}/${o.env?.arch}. Dependency changes: ${o.changes.length} (${o.changes.filter((c) => c.direct).length} direct) in ${files.join(", ")}.`);
-
-  if (o.fingerprints.length) L.push("", "Errors that appear only with the update (shape only; your logs stay on the runner):", ...o.fingerprints.map((f) => `- ${md(f)}`));
-  return L.join("\n");
-}
-
-async function lookup(eco: string, pkg: string, from: string, to: string, f: Record<string, string | boolean>, env: Observation["env"] = null): Promise<Report | null> {
-  if (typeof f.endpoint === "string") {
-    const u = new URL("/api/signal/v1/query", f.endpoint);
-    for (const [k, v] of Object.entries({ ecosystem: eco, package: pkg, from, to, ...(env ? { runtime: env.runtime, runtime_version: env.runtime_version } : {}) })) u.searchParams.set(k, v);
-    const r = await fetch(u);
-    if (!r.ok) throw new Error(`signal endpoint: HTTP ${r.status}`);
-    return ((await r.json()) as { network: Report }).network;
+function prTitle(): string | undefined {
+  const p = process.env.GITHUB_EVENT_PATH;
+  if (!p) return undefined;
+  try {
+    return JSON.parse(readFileSync(p, "utf8"))?.pull_request?.title;
+  } catch {
+    return undefined;
   }
-  const db = typeof f.db === "string" ? f.db : seedPath();
-  if (!db) return null;
-  const obs: Observation[] = JSON.parse(readFileSync(db, "utf8")).observations;
-  return query(buildIndex(obs), { ecosystem: eco as any, package: pkg, from, to, env });
-}
-
-async function requestOidc(audience: string): Promise<string> {
-  const url = process.env.ACTIONS_ID_TOKEN_REQUEST_URL, tok = process.env.ACTIONS_ID_TOKEN_REQUEST_TOKEN;
-  if (!url || !tok) throw new Error("no GitHub Actions OIDC available (needs `permissions: id-token: write` in a GitHub-hosted job)");
-  const r = await fetch(`${url}&audience=${encodeURIComponent(audience)}`, { headers: { Authorization: `Bearer ${tok}` } });
-  if (!r.ok) throw new Error(`OIDC request failed: HTTP ${r.status}`);
-  return ((await r.json()) as { value: string }).value;
 }
 
 export async function main(argv: string[]): Promise<number> {
   const [sub, ...rest] = argv;
-  const { pos, f } = flags(rest);
-  const summary = (md: string) => {
-    console.log(md);
-    if (process.env.GITHUB_STEP_SUMMARY) appendFileSync(process.env.GITHUB_STEP_SUMMARY, md + "\n\n");
-  };
-  switch (sub) {
-    case "run": {
-      if (typeof f.test !== "string") throw new Error("usage: cafe signal run --test '<cmd>' [--install '<cmd>'] [--base origin/main] [--out obs.json]");
-      const base = typeof f.base === "string" ? f.base : "auto";
-      let out;
-      try {
-        out = await runPaired({ dir: resolve(typeof f.dir === "string" ? f.dir : "."), base, test: f.test, install: typeof f.install === "string" ? f.install : null, allowNoInstall: f["no-install"] === true, retries: f.retries ? Number(f.retries) : 1, title: typeof f.title === "string" ? f.title : prTitleFromEvent(), log: (s) => console.error(s) });
-      } catch (e) {
-        if (/no dependency update found/.test((e as Error).message)) { console.log(`[signal] ${(e as Error).message}: nothing to do.`); return 0; }
-        throw e;
-      }
-      const o = out.observation;
-      writeFileSync(typeof f.out === "string" ? f.out : "cafe-signal-observation.json", JSON.stringify(o, null, 2));
-      summary(renderRun(o, out.otherFilesChanged, out.depFiles) + (out.note ? `\n\nNote: ${out.note}.` : ""));
-      if (!f["no-network"]) {
-        const r = await lookup(o.primary.ecosystem, o.primary.package, o.primary.from, o.primary.to, f, o.env).catch((e) => (console.error(`[signal] lookup failed: ${e.message}`), null));
-        if (r) summary(renderReport(r));
-      }
-      // Exit code: fail only on an attributed regression (never on a red baseline or flakiness).
-      return o.attribution === "regression" && f["fail-on-regression"] ? 1 : 0;
-    }
-    case "lookup": {
-      const [eco, pkg, from, to] = pos;
-      if (!eco || !pkg || !from || !to) throw new Error("usage: cafe signal lookup <npm|pypi> <package> <from> <to> [--db file | --endpoint url] [--json]");
-      const r = await lookup(eco, pkg, from, to, f);
-      if (!r) throw new Error("no seed database found; pass --db or --endpoint");
-      console.log(f.json ? JSON.stringify(r, null, 2) : renderReport(r));
-      return 0;
-    }
-    case "preview": {
-      const o: Observation = JSON.parse(readFileSync(pos[0] ?? "cafe-signal-observation.json", "utf8"));
-      const priv = typeof f["private-packages"] === "string" ? f["private-packages"].split(",").map((s) => s.trim()).filter(Boolean) : [];
-      const sh = shareable(o, { privatePackages: priv, includeChanges: f["share-changes"] === true });
-      sh.id = await observationId(sh);
-      console.log("This is EXACTLY what `cafe signal share` would send (nothing else leaves this machine):\n");
-      console.log(JSON.stringify(sh, null, 2));
-      return 0;
-    }
-    case "share": {
-      if (typeof f.endpoint !== "string") throw new Error("usage: cafe signal share obs.json --endpoint <url> [--public] [--source] [--private-packages '@acme/*']");
-      const o: Observation = JSON.parse(readFileSync(pos[0] ?? "cafe-signal-observation.json", "utf8"));
-      const priv = typeof f["private-packages"] === "string" ? f["private-packages"].split(",").map((s) => s.trim()).filter(Boolean) : [];
-      const s = shareable(o, { privatePackages: priv, includeChanges: f["share-changes"] === true });
-      s.id = await observationId(s); // the id covers exactly what is sent
-      const token = await requestOidc(audienceFor(s.id));
-      const r = await fetch(new URL("/api/signal/v1/observations", f.endpoint), { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ observation: s, oidc_token: token, share_public: f.public === true, share_source: f.source === true }) });
-      console.log(`${r.status} ${await r.text()}`);
-      return r.ok ? 0 : 1;
-    }
-    case "serve": {
-      const port = Number(f.port ?? 8787);
-      const seed = (typeof f.db === "string" ? f.db : seedPath()) ?? null;
-      const rows: Stored[] = seed ? (JSON.parse(readFileSync(seed, "utf8")).observations as Observation[]).map((o) => ({ ...o, scope: "public" as const, key: `seed|${o.id}`, received_at: o.observed_at })) : [];
-      const store = new MemorySignalStore(rows);
-      createServer(async (req, res) => {
-        const body = req.method === "POST" ? await new Promise<string | null>((ok) => { let b = ""; req.on("data", (c) => { b += c; if (b.length > 64_000) { ok(null); req.destroy(); } }); req.on("end", () => ok(b)); }) : undefined;
-        if (body === null) { res.writeHead(413); res.end(); return; }
-        const request = new Request(`http://localhost:${port}${req.url}`, { method: req.method, body, headers: { "content-type": "application/json" } });
-        const r = (await handleSignal(request, new URL(request.url).pathname, { store, jwks: () => fetchGithubJwks() })) ?? new Response("not found", { status: 404 });
-        res.writeHead(r.status, { "content-type": r.headers.get("content-type") ?? "text/plain" });
-        res.end(await r.text());
-      }).listen(port, () => console.error(`[signal] serving ${rows.length} seed observations on http://localhost:${port}/api/signal/v1/`));
-      return await new Promise<number>(() => {});
-    }
-    default:
-      console.log("cafe signal run|lookup|preview|share|serve");
-      return sub ? 2 : 0;
+  if (!sub || sub === "help" || sub === "--help") { console.log(HELP); return 0; }
+  if (sub !== "diagnose" && sub !== "run") { console.error(`unknown command "${sub}"\n\n${HELP}`); return 2; }
+  const { f } = flags(rest);
+  if (f.help) { console.log(HELP); return 0; }
+  const dir = resolve(typeof f.dir === "string" ? f.dir : ".");
+  const failOn = typeof f["fail-on"] === "string" ? f["fail-on"] : "never";
+  if (!["regression", "never"].includes(failOn)) throw new Error("--fail-on must be regression or never");
+  const warnings = preflight(dir, f["allow-persisted-credentials"] === true);
+  const num = (k: string) => (typeof f[k] === "string" && f[k] !== "" ? Number(f[k]) : undefined);
+  const str = (k: string) => (typeof f[k] === "string" && f[k] ? (f[k] as string) : undefined);
+  let d: Diagnosis;
+  try {
+    d = await diagnose({
+      dir, base: str("base") ?? "auto", install: str("install"), test: str("test"), junit: str("junit"),
+      retries: num("retries"), timeoutMs: num("timeout-minutes") ? num("timeout-minutes")! * 60_000 : undefined,
+      isolate: f["no-isolate"] !== true, isolateBudget: num("isolate-budget"),
+      title: str("title") ?? prTitle(), log: (s) => console.error(s), addCommand: str("add-command"),
+    });
+  } catch (e) {
+    const m = (e as Error).message;
+    if (/^no dependency change/.test(m)) { console.log(`Signal: ${m}. Nothing to diagnose.`); return 0; }
+    throw e;
   }
+  for (const w of warnings) d.limits.push(`Security: ${w}.`);
+  const linkFor = d.isolation?.culprits?.length ? [...d.isolation.culprits, ...d.delta.direct] : d.delta.direct.length ? d.delta.direct : d.delta.changes;
+  const links = await packageLinks(linkFor, f.offline === true);
+  const report = renderMarkdown(d, links, { redact: f.redact === true });
+  console.log(renderText(d));
+  if (str("markdown")) writeFileSync(str("markdown")!, report);
+  if (str("json")) writeFileSync(str("json")!, JSON.stringify(d, null, 2));
+  if (process.env.GITHUB_STEP_SUMMARY) appendFileSync(process.env.GITHUB_STEP_SUMMARY, report + "\n");
+  if (process.env.GITHUB_OUTPUT) {
+    const culprit = d.isolation?.status === "single" ? d.isolation.culprits[0].package : d.verdict.startsWith("regression") && d.delta.direct.length === 1 ? d.delta.direct[0].package : "";
+    appendFileSync(process.env.GITHUB_OUTPUT, `verdict=${d.verdict}\nconfidence=${d.confidence}\nculprit=${culprit}\n`);
+  }
+  return failOn === "regression" && d.verdict.startsWith("regression") && d.confidence === "high" ? 1 : 0;
 }

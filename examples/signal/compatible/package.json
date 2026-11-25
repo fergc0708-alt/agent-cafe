@@ -1,0 +1,7 @@
+{
+  "name": "signal-example-compatible",
+  "private": true,
+  "description": "A compatible patch update.",
+  "scripts": { "test": "node --test" },
+  "dependencies": { "ms": "2.1.2" }
+}

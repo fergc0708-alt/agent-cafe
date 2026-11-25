@@ -1,43 +1,56 @@
-name: Café Signal end-to-end
-# Real paired experiment on a real dependency-update PR against goat/* branches (examples/signal-demo), then a real
-# GitHub OIDC token is minted for the observation and verified by a local Signal service against GitHub's live keys.
+name: Signal end-to-end
+# Real npm packages, real lockfiles, a real dependency-update PR against goat/* branches. Each example has a
+# known expected diagnosis; the job fails if Signal says anything else.
 on:
   pull_request:
     branches: ["goat/**"]
-    paths: ["examples/signal-demo/**", "signal/**", "dist/signal/**"]
+    paths: ["examples/signal/**", "signal/**", "dist/signal/**", ".github/workflows/signal-e2e.yml"]
 permissions:
   contents: read
-  id-token: write
 jobs:
-  signal:
+  diagnose:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { dir: examples/signal/grouped, verdict: regression, culprit: chalk }
+          - { dir: examples/signal/red-main, verdict: regression_on_red, culprit: chalk }
+          - { dir: examples/signal/compatible, verdict: compatible, culprit: "" }
+          - { dir: examples/signal/flaky, verdict: flaky, culprit: "" }
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 2
+          persist-credentials: false
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with: { node-version: "22" }
-      - name: Start a local Café Signal service (self-hosted mode)
-        run: |
-          node dist/cli/cafe.js signal serve --port 8787 > /tmp/signal-serve.log 2>&1 &
-          for i in $(seq 1 30); do curl -s localhost:8787/api/signal/v1/query >/dev/null && break; sleep 1; done
       - id: signal
         uses: ./signal
         with:
-          working-directory: examples/signal-demo
-          install: npm ci --ignore-scripts --no-audit --no-fund
-          test: npm test
-          share: "true"
-          endpoint: http://localhost:8787
-          share-public: "true"
-      - name: The update must be attributed, shared with a verified identity, and queryable
+          working-directory: ${{ matrix.dir }}
+      - name: Signal must reach the expected diagnosis
         env:
-          ATTR: ${{ steps.signal.outputs.attribution }}
+          GOT: ${{ steps.signal.outputs.verdict }}
+          CULPRIT: ${{ steps.signal.outputs.culprit }}
+          WANT: ${{ matrix.verdict }}
+          WANT_CULPRIT: ${{ matrix.culprit }}
         run: |
-          set -euo pipefail
-          cat /tmp/signal-serve.log
-          test "$ATTR" = "regression" || { echo "expected regression, got $ATTR"; exit 1; }
-          q=$(curl -s "localhost:8787/api/signal/v1/query?ecosystem=npm&package=chalk&from=4.1.2&to=5.3.0")
-          echo "$q" | head -c 2000
-          echo "$q" | node -e 'const r=JSON.parse(require("fs").readFileSync(0,"utf8")).network; if(r.causal.owners!==1||r.causal.failures!==1||r.verdict!=="single_report"){console.error("unexpected",r.verdict,r.causal);process.exit(1)}'
-          # the checkout must be untouched by the baseline (it ran in a separate worktree)
+          echo "verdict=$GOT culprit=$CULPRIT"
+          test "$GOT" = "$WANT"
+          test "$CULPRIT" = "$WANT_CULPRIT"
           test -z "$(git status --porcelain --untracked-files=no)"
           test "$(git worktree list | wc -l)" = "1"
+  refuses-persisted-credentials:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with: { fetch-depth: 2 }   # default persist-credentials: true -> Signal must refuse to run project code
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with: { node-version: "22" }
+      - id: signal
+        continue-on-error: true
+        uses: ./signal
+        with:
+          working-directory: examples/signal/compatible
+      - run: test "${{ steps.signal.outcome }}" = "failure"
