@@ -47,11 +47,11 @@ for (const c of cands) {
   const full = { ...c, ci_head: x.ci_head, ci_base: x.ci_base, ci_read_at: x.read_at, inject: injection(c) };
   if (n[c.stratum] < KEEP[c.stratum]) {
     n[c.stratum]++;
-    kept.push({ id: `${c.bot}-${want}-${String(n[c.stratum]).padStart(3, "0")}`, ...full, sample_id: c.id });
+    kept.push({ ...full, id: c.id }); // the sampler's id (stratum + rank in sampled order)
     log.push({ key: `${c.repo}#${c.number}`, stratum: c.stratum, decision: "kept" });
   } else if (np[c.stratum] < PILOT_N[c.stratum]) {
     np[c.stratum]++;
-    pilot.push({ id: `pilot-${c.bot}-${want}-${np[c.stratum]}`, ...full, sample_id: c.id });
+    pilot.push({ ...full, id: `pilot-${c.id}` });
     log.push({ key: `${c.repo}#${c.number}`, stratum: c.stratum, decision: "pilot (not analysed)" });
   } else log.push({ key: `${c.repo}#${c.number}`, stratum: c.stratum, decision: "excluded", reason: "beyond quota" });
 }

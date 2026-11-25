@@ -1,0 +1,3386 @@
+[
+ {
+  "key": "endazon/ai-stock-trading#1629",
+  "head_sha": "5843e0921d43102ff63c230b3dd9af476de4f6dc",
+  "base_sha": "d4ebaeb383e3be83115bbc264ac609c65202ed3d",
+  "ci_head": {
+   "state": "red",
+   "complete": true,
+   "total": 21,
+   "pending": 0,
+   "failed": [
+    "frontend-e2e"
+   ],
+   "passed": 16,
+   "checks": [
+    {
+     "name": "report-failure",
+     "app": "github-actions",
+     "conclusion": "skipped",
+     "status": "completed",
+     "completed_at": "2026-11-11T00:42:37Z"
+    },
+    {
+     "name": "e2e-flaky-streak",
+     "app": "github-actions",
+     "conclusion": "skipped",
+     "status": "completed",
+     "completed_at": "2026-11-11T00:42:36Z"
+    },
+    {
+     "name": "build-and-test",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-11T00:43:31Z"
+    },
+    {
+     "name": "report-failure",
+     "app": "github-actions",
+     "conclusion": "skipped",
+     "status": "completed",
+     "completed_at": "2026-11-11T00:38:06Z"
+    },
+    {
+     "name": "Vulnerable transitive dependencies",
+     "app": "github-actions",
+     "conclusion": "skipped",
+     "status": "completed",
+     "completed_at": "2026-11-11T00:36:24Z"
+    },
+    {
+     "name": "claude-review",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-11T00:37:09Z"
+    },
+    {
+     "name": "commit-messages",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-11T00:42:30Z"
+    },
+    {
+     "name": "static-checks",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-11T00:43:17Z"
+    },
+    {
+     "name": "Secret scan (gitleaks)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-11T00:38:06Z"
+    },
+    {
+     "name": "backend-test (3)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-11T00:40:16Z"
+    },
+    {
+     "name": "scripts-tests",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-11T00:42:52Z"
+    },
+    {
+     "name": "frontend-e2e",
+     "app": "github-actions",
+     "conclusion": "failure",
+     "status": "completed",
+     "completed_at": "2026-11-11T00:42:36Z"
+    },
+    {
+     "name": "backend-test (1)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-11T00:37:30Z"
+    },
+    {
+     "name": "backend-test (2)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-11T00:41:53Z"
+    },
+    {
+     "name": "backend-test (4)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-11T00:39:07Z"
+    },
+    {
+     "name": "lint",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-11T00:38:16Z"
+    },
+    {
+     "name": "Dependency review",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-11T00:37:25Z"
+    },
+    {
+     "name": "frontend",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-11T00:39:02Z"
+    },
+    {
+     "name": "pr-size",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-11T00:38:28Z"
+    },
+    {
+     "name": "pr-title",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-11T00:38:38Z"
+    },
+    {
+     "name": "submit-nuget",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-11T00:39:17Z"
+    }
+   ]
+  },
+  "ci_base": {
+   "state": "red",
+   "complete": true,
+   "total": 52,
+   "pending": 0,
+   "failed": [
+    "submit-nuget"
+   ],
+   "passed": 28,
+   "checks": [
+    {
+     "name": "claude",
+     "app": "github-actions",
+     "conclusion": "skipped",
+     "status": "completed",
+     "completed_at": "2026-11-12T01:53:27Z"
+    },
+    {
+     "name": "claude",
+     "app": "github-actions",
+     "conclusion": "skipped",
+     "status": "completed",
+     "completed_at": "2026-11-12T01:41:32Z"
+    },
+    {
+     "name": "claude",
+     "app": "github-actions",
+     "conclusion": "skipped",
+     "status": "completed",
+     "completed_at": "2026-11-12T01:41:30Z"
+    },
+    {
+     "name": "claude",
+     "app": "github-actions",
+     "conclusion": "skipped",
+     "status": "completed",
+     "completed_at": "2026-11-12T01:41:28Z"
+    },
+    {
+     "name": "claude",
+     "app": "github-actions",
+     "conclusion": "skipped",
+     "status": "completed",
+     "completed_at": "2026-11-12T01:41:26Z"
+    },
+    {
+     "name": "claude",
+     "app": "github-actions",
+     "conclusion": "skipped",
+     "status": "completed",
+     "completed_at": "2026-11-12T01:41:25Z"
+    },
+    {
+     "name": "claude",
+     "app": "github-actions",
+     "conclusion": "skipped",
+     "status": "completed",
+     "completed_at": "2026-11-12T01:41:23Z"
+    },
+    {
+     "name": "claude",
+     "app": "github-actions",
+     "conclusion": "skipped",
+     "status": "completed",
+     "completed_at": "2026-11-12T01:41:22Z"
+    },
+    {
+     "name": "report-failure",
+     "app": "github-actions",
+     "conclusion": "skipped",
+     "status": "completed",
+     "completed_at": "2026-11-12T00:09:08Z"
+    },
+    {
+     "name": "integration-e2e",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-12T00:09:08Z"
+    },
+    {
+     "name": "Dependabot",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-11T00:35:44Z"
+    },
+    {
+     "name": "Dependabot",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-11T00:38:16Z"
+    },
+    {
+     "name": "Dependabot",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-11T00:36:14Z"
+    },
+    {
+     "name": "Dependabot",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-11T00:35:15Z"
+    },
+    {
+     "name": "Dependabot",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-11T00:34:38Z"
+    },
+    {
+     "name": "report-failure",
+     "app": "github-actions",
+     "conclusion": "skipped",
+     "status": "completed",
+     "completed_at": "2026-11-10T22:58:37Z"
+    },
+    {
+     "name": "integration-e2e",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-10T22:58:37Z"
+    },
+    {
+     "name": "report-failure",
+     "app": "github-actions",
+     "conclusion": "skipped",
+     "status": "completed",
+     "completed_at": "2026-11-10T01:20:56Z"
+    },
+    {
+     "name": "integration-e2e",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-10T01:20:56Z"
+    },
+    {
+     "name": "report-failure",
+     "app": "github-actions",
+     "conclusion": "skipped",
+     "status": "completed",
+     "completed_at": "2026-11-09T11:02:09Z"
+    },
+    {
+     "name": "report-failure",
+     "app": "github-actions",
+     "conclusion": "skipped",
+     "status": "completed",
+     "completed_at": "2026-11-09T11:01:30Z"
+    },
+    {
+     "name": "Dependency review",
+     "app": "github-actions",
+     "conclusion": "skipped",
+     "status": "completed",
+     "completed_at": "2026-11-09T11:01:01Z"
+    },
+    {
+     "name": "Secret scan (gitleaks)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-09T11:01:17Z"
+    },
+    {
+     "name": "Vulnerable transitive dependencies",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-09T11:02:09Z"
+    },
+    {
+     "name": "Analyze (csharp)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-09T11:01:29Z"
+    },
+    {
+     "name": "report-failure",
+     "app": "github-actions",
+     "conclusion": "skipped",
+     "status": "completed",
+     "completed_at": "2026-11-09T06:12:21Z"
+    },
+    {
+     "name": "watch",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-09T06:12:21Z"
+    },
+    {
+     "name": "report-failure",
+     "app": "github-actions",
+     "conclusion": "skipped",
+     "status": "completed",
+     "completed_at": "2026-11-08T21:47:47Z"
+    },
+    {
+     "name": "integration-e2e",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-08T21:47:47Z"
+    },
+    {
+     "name": "report-failure",
+     "app": "github-actions",
+     "conclusion": "skipped",
+     "status": "completed",
+     "completed_at": "2026-11-08T09:28:58Z"
+    },
+    {
+     "name": "report-failure",
+     "app": "github-actions",
+     "conclusion": "skipped",
+     "status": "completed",
+     "completed_at": "2026-11-08T09:27:18Z"
+    },
+    {
+     "name": "Analyze (csharp)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-08T09:27:18Z"
+    },
+    {
+     "name": "integration-e2e",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-08T09:28:58Z"
+    },
+    {
+     "name": "report-failure",
+     "app": "github-actions",
+     "conclusion": "skipped",
+     "status": "completed",
+     "completed_at": "2026-11-08T09:18:05Z"
+    },
+    {
+     "name": "e2e-flaky-streak",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-08T09:18:05Z"
+    },
+    {
+     "name": "report-failure",
+     "app": "github-actions",
+     "conclusion": "skipped",
+     "status": "completed",
+     "completed_at": "2026-11-08T09:16:48Z"
+    },
+    {
+     "name": "build-and-test",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-08T09:16:11Z"
+    },
+    {
+     "name": "changelog",
+     "app": "github-actions",
+     "conclusion": "skipped",
+     "status": "completed",
+     "completed_at": "2026-11-08T09:15:49Z"
+    },
+    {
+     "name": "submit-nuget",
+     "app": "github-actions",
+     "conclusion": "failure",
+     "status": "completed",
+     "completed_at": "2026-11-08T09:16:52Z"
+    },
+    {
+     "name": "commit-messages",
+     "app": "github-actions",
+     "conclusion": "skipped",
+     "status": "completed",
+     "completed_at": "2026-11-08T09:15:49Z"
+    },
+    {
+     "name": "Dependency review",
+     "app": "github-actions",
+     "conclusion": "skipped",
+     "status": "completed",
+     "completed_at": "2026-11-08T09:15:49Z"
+    },
+    {
+     "name": "frontend",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-08T09:16:45Z"
+    },
+    {
+     "name": "backend-test (3)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-08T09:15:59Z"
+    },
+    {
+     "name": "scripts-tests",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-08T09:16:33Z"
+    },
+    {
+     "name": "backend-test (1)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-08T09:16:00Z"
+    },
+    {
+     "name": "frontend-e2e",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-08T09:17:53Z"
+    },
+    {
+     "name": "backend-test (4)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-08T09:15:59Z"
+    },
+    {
+     "name": "static-checks",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-08T09:17:01Z"
+    },
+    {
+     "name": "backend-test (2)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-08T09:16:00Z"
+    },
+    {
+     "name": "lint",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-08T09:15:59Z"
+    },
+    {
+     "name": "Secret scan (gitleaks)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-08T09:16:06Z"
+    },
+    {
+     "name": "Vulnerable transitive dependencies",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-08T09:16:48Z"
+    }
+   ]
+  },
+  "read_at": "2026-11-25T16:58:24.746Z"
+ },
+ {
+  "key": "greyhaven-ai/autocontext#1509",
+  "head_sha": "562f33a9f5bbcf9c5f387d3fd58b762296d91648",
+  "base_sha": "f8711194be3d1ba8a408f2fb3698bdd94934c128",
+  "ci_head": {
+   "state": "red",
+   "complete": true,
+   "total": 35,
+   "pending": 0,
+   "failed": [
+    "ts-test",
+    "ts-test-shards (3)",
+    "lint"
+   ],
+   "passed": 32,
+   "checks": [
+    {
+     "name": "test",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-11T01:07:46Z"
+    },
+    {
+     "name": "ts-test",
+     "app": "github-actions",
+     "conclusion": "failure",
+     "status": "completed",
+     "completed_at": "2026-11-11T00:38:54Z"
+    },
+    {
+     "name": "ts-test-shards (2)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-11T00:37:53Z"
+    },
+    {
+     "name": "openai-sdk-matrix-python (1.82.0)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-11T00:37:21Z"
+    },
+    {
+     "name": "anthropic-sdk-matrix-python (0.49.0)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-11T00:37:25Z"
+    },
+    {
+     "name": "ts-test-shards (4)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-11T00:38:48Z"
+    },
+    {
+     "name": "ts-test-shards (3)",
+     "app": "github-actions",
+     "conclusion": "failure",
+     "status": "completed",
+     "completed_at": "2026-11-11T00:38:28Z"
+    },
+    {
+     "name": "anthropic-sdk-matrix-python (0.51.0)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-11T00:37:01Z"
+    },
+    {
+     "name": "openai-sdk-matrix-ts (4.104.0)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-11T00:37:30Z"
+    },
+    {
+     "name": "openai-sdk-matrix-ts (7.10.0)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-11T00:37:12Z"
+    },
+    {
+     "name": "anthropic-sdk-matrix-python (0.50.0)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-11T00:37:03Z"
+    },
+    {
+     "name": "openai-sdk-matrix-python (1.84.0)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-11T00:36:58Z"
+    },
+    {
+     "name": "lint",
+     "app": "github-actions",
+     "conclusion": "failure",
+     "status": "completed",
+     "completed_at": "2026-11-11T00:36:28Z"
+    },
+    {
+     "name": "python-test-shards (4)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-11T01:07:02Z"
+    },
+    {
+     "name": "ts-test-shards (1)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-11T00:37:47Z"
+    },
+    {
+     "name": "pi-test",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-11T00:38:25Z"
+    },
+    {
+     "name": "smoke",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-11T00:36:37Z"
+    },
+    {
+     "name": "anthropic-sdk-matrix-ts (0.41.0)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-11T00:37:04Z"
+    },
+    {
+     "name": "openai-sdk-matrix-python (1.83.0)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-11T00:37:10Z"
+    },
+    {
+     "name": "anthropic-sdk-matrix-ts (0.40.0)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-11T00:37:03Z"
+    },
+    {
+     "name": "python-test-shards (5)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-11T00:51:55Z"
+    },
+    {
+     "name": "openai-sdk-matrix-ts (4.103.0)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-11T00:37:32Z"
+    },
+    {
+     "name": "python-test-shards (6)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-11T00:53:01Z"
+    },
+    {
+     "name": "python-test-shards (1)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-11T00:56:47Z"
+    },
+    {
+     "name": "npm-release-age",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-11T00:36:10Z"
+    },
+    {
+     "name": "sandbox-integration",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-11T00:37:16Z"
+    },
+    {
+     "name": "python-test-shards (3)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-11T00:42:11Z"
+    },
+    {
+     "name": "python-test-shards (2)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-11T00:58:40Z"
+    },
+    {
+     "name": "optional-runtime-security",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-11T00:36:44Z"
+    },
+    {
+     "name": "openai-sdk-matrix-ts (4.102.0)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-11T00:36:59Z"
+    },
+    {
+     "name": "ts-lint",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-11T00:36:22Z"
+    },
+    {
+     "name": "anthropic-sdk-matrix-ts (0.39.0)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-11T00:36:58Z"
+    },
+    {
+     "name": "package-boundaries",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-11T00:36:37Z"
+    },
+    {
+     "name": "dependency-security",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-11T00:36:09Z"
+    },
+    {
+     "name": "kernel-lifecycle-windows",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-11T00:36:43Z"
+    }
+   ]
+  },
+  "ci_base": {
+   "state": "red",
+   "complete": true,
+   "total": 50,
+   "pending": 0,
+   "failed": [
+    "Dependabot",
+    "Dependabot"
+   ],
+   "passed": 47,
+   "checks": [
+    {
+     "name": "Dependabot",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-25T00:40:41Z"
+    },
+    {
+     "name": "Dependabot",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-25T00:35:11Z"
+    },
+    {
+     "name": "Dependabot",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-25T00:34:17Z"
+    },
+    {
+     "name": "Dependabot",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-25T00:34:50Z"
+    },
+    {
+     "name": "Dependabot",
+     "app": "github-actions",
+     "conclusion": "failure",
+     "status": "completed",
+     "completed_at": "2026-11-25T00:36:00Z"
+    },
+    {
+     "name": "Dependabot",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-18T00:42:30Z"
+    },
+    {
+     "name": "Dependabot",
+     "app": "github-actions",
+     "conclusion": "failure",
+     "status": "completed",
+     "completed_at": "2026-11-18T00:35:40Z"
+    },
+    {
+     "name": "Dependabot",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-18T00:35:17Z"
+    },
+    {
+     "name": "Dependabot",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-18T00:35:12Z"
+    },
+    {
+     "name": "Dependabot",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-18T00:34:30Z"
+    },
+    {
+     "name": "Dependabot",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-11T00:41:25Z"
+    },
+    {
+     "name": "Dependabot",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-11T00:35:18Z"
+    },
+    {
+     "name": "Dependabot",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-11T00:35:35Z"
+    },
+    {
+     "name": "Dependabot",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-11T00:35:02Z"
+    },
+    {
+     "name": "Dependabot",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-11T00:34:17Z"
+    },
+    {
+     "name": "test",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-07T01:12:20Z"
+    },
+    {
+     "name": "ts-test",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-07T00:42:21Z"
+    },
+    {
+     "name": "npm-release-age",
+     "app": "github-actions",
+     "conclusion": "skipped",
+     "status": "completed",
+     "completed_at": "2026-11-07T00:39:46Z"
+    },
+    {
+     "name": "ts-test-shards (4)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-07T00:42:16Z"
+    },
+    {
+     "name": "anthropic-sdk-matrix-python (0.50.0)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-07T00:40:23Z"
+    },
+    {
+     "name": "openai-sdk-matrix-ts (7.10.0)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-07T00:41:01Z"
+    },
+    {
+     "name": "python-test-shards (4)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-07T01:11:32Z"
+    },
+    {
+     "name": "openai-sdk-matrix-ts (4.104.0)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-07T00:40:46Z"
+    },
+    {
+     "name": "anthropic-sdk-matrix-python (0.49.0)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-07T00:40:21Z"
+    },
+    {
+     "name": "openai-sdk-matrix-ts (4.103.0)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-07T00:40:53Z"
+    },
+    {
+     "name": "pi-test",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-07T00:41:59Z"
+    },
+    {
+     "name": "ts-test-shards (2)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-07T00:40:50Z"
+    },
+    {
+     "name": "openai-sdk-matrix-python (1.83.0)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-07T00:40:33Z"
+    },
+    {
+     "name": "ts-test-shards (3)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-07T00:41:49Z"
+    },
+    {
+     "name": "openai-sdk-matrix-python (1.84.0)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-07T00:40:36Z"
+    },
+    {
+     "name": "anthropic-sdk-matrix-ts (0.39.0)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-07T00:40:44Z"
+    },
+    {
+     "name": "python-test-shards (1)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-07T00:51:07Z"
+    },
+    {
+     "name": "anthropic-sdk-matrix-ts (0.40.0)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-07T00:40:53Z"
+    },
+    {
+     "name": "python-test-shards (5)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-07T00:58:46Z"
+    },
+    {
+     "name": "python-test-shards (3)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-07T00:45:48Z"
+    },
+    {
+     "name": "python-test-shards (6)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-07T00:56:34Z"
+    },
+    {
+     "name": "optional-runtime-security",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-07T00:40:32Z"
+    },
+    {
+     "name": "kernel-lifecycle-windows",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-07T00:40:58Z"
+    },
+    {
+     "name": "sandbox-integration",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-07T00:40:48Z"
+    },
+    {
+     "name": "anthropic-sdk-matrix-ts (0.41.0)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-07T00:40:58Z"
+    },
+    {
+     "name": "ts-test-shards (1)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-07T00:41:08Z"
+    },
+    {
+     "name": "openai-sdk-matrix-ts (4.102.0)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-07T00:40:55Z"
+    },
+    {
+     "name": "python-test-shards (2)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-07T01:01:47Z"
+    },
+    {
+     "name": "ts-lint",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-07T00:40:09Z"
+    },
+    {
+     "name": "openai-sdk-matrix-python (1.82.0)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-07T00:40:30Z"
+    },
+    {
+     "name": "smoke",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-07T00:40:08Z"
+    },
+    {
+     "name": "anthropic-sdk-matrix-python (0.51.0)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-07T00:40:22Z"
+    },
+    {
+     "name": "dependency-security",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-07T00:40:19Z"
+    },
+    {
+     "name": "package-boundaries",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-07T00:40:24Z"
+    },
+    {
+     "name": "lint",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-07T00:40:30Z"
+    }
+   ]
+  },
+  "read_at": "2026-11-25T16:58:26.169Z"
+ },
+ {
+  "key": "tryplover/Plover#404",
+  "head_sha": "908b82776b920fe9127641392bac771ca6221c25",
+  "base_sha": "9663ca6f12a10b19128694f5c3bd9d59bf3d789d",
+  "ci_head": {
+   "state": "red",
+   "complete": true,
+   "total": 3,
+   "pending": 0,
+   "failed": [
+    "Typecheck / Lint / Test",
+    "Fix Lockfile Mismatch",
+    "auto-merge"
+   ],
+   "passed": 0,
+   "checks": [
+    {
+     "name": "Typecheck / Lint / Test",
+     "app": "github-actions",
+     "conclusion": "failure",
+     "status": "completed",
+     "completed_at": "2026-10-05T16:30:12Z"
+    },
+    {
+     "name": "Fix Lockfile Mismatch",
+     "app": "github-actions",
+     "conclusion": "failure",
+     "status": "completed",
+     "completed_at": "2026-10-05T16:30:12Z"
+    },
+    {
+     "name": "auto-merge",
+     "app": "github-actions",
+     "conclusion": "failure",
+     "status": "completed",
+     "completed_at": "2026-10-05T16:30:10Z"
+    }
+   ]
+  },
+  "ci_base": {
+   "state": "red",
+   "complete": true,
+   "total": 4,
+   "pending": 0,
+   "failed": [
+    "Typecheck / Lint / Test"
+   ],
+   "passed": 3,
+   "checks": [
+    {
+     "name": "Dependabot",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-05T16:25:22Z"
+    },
+    {
+     "name": "Dependabot",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-05T16:32:01Z"
+    },
+    {
+     "name": "Dependabot",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-05T16:27:54Z"
+    },
+    {
+     "name": "Typecheck / Lint / Test",
+     "app": "github-actions",
+     "conclusion": "failure",
+     "status": "completed",
+     "completed_at": "2026-10-04T21:14:02Z"
+    }
+   ]
+  },
+  "read_at": "2026-11-25T16:58:27.322Z"
+ },
+ {
+  "key": "spaceninja/logbook#168",
+  "head_sha": "41ad82bd9a4471d11ad7133e99a1b7089313d429",
+  "base_sha": "ff7caf31b0e3bdded5a8a48324b70639d8895e55",
+  "ci_head": {
+   "state": "green",
+   "complete": true,
+   "total": 2,
+   "pending": 0,
+   "failed": [],
+   "passed": 2,
+   "checks": [
+    {
+     "name": "ci",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-05T16:46:48Z"
+    }
+   ]
+  },
+  "ci_base": {
+   "state": "green",
+   "complete": true,
+   "total": 3,
+   "pending": 0,
+   "failed": [],
+   "passed": 2,
+   "checks": [
+    {
+     "name": "sync",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-05T20:55:59Z"
+    },
+    {
+     "name": "sync",
+     "app": "github-actions",
+     "conclusion": "cancelled",
+     "status": "completed",
+     "completed_at": "2026-10-05T20:47:52Z"
+    },
+    {
+     "name": "ci",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-04T21:32:19Z"
+    }
+   ]
+  },
+  "read_at": "2026-11-25T16:58:28.352Z"
+ },
+ {
+  "key": "remoteoss/remote-flows#1695",
+  "head_sha": "db6525736374c48303ab9a8c661863442a824140",
+  "base_sha": "d45679d27825f102116437794ac4974aed030245",
+  "ci_head": {
+   "state": "green",
+   "complete": true,
+   "total": 19,
+   "pending": 0,
+   "failed": [],
+   "passed": 18,
+   "checks": [
+    {
+     "name": "Contract Details Schema Canary (main)",
+     "app": "github-actions",
+     "conclusion": "skipped",
+     "status": "completed",
+     "completed_at": "2026-10-23T02:36:44Z"
+    },
+    {
+     "name": "Contract Details Schema Canary (pinned, PR)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-23T02:39:23Z"
+    },
+    {
+     "name": "E2E Tests",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-23T02:39:45Z"
+    },
+    {
+     "name": "Compare Coverage",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-23T02:36:15Z"
+    },
+    {
+     "name": "Enforce Conventional Commit Title",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-23T02:35:24Z"
+    },
+    {
+     "name": "Enforce Conventional Commit Title",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-23T02:32:27Z"
+    },
+    {
+     "name": "Enforce Conventional Commit Title",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-23T02:32:11Z"
+    },
+    {
+     "name": "Cursor Bugbot",
+     "app": "cursor",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-23T02:32:08Z"
+    },
+    {
+     "name": "Deploy Remote Flows Preview",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-23T02:33:35Z"
+    },
+    {
+     "name": "Generate Base Coverage",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-23T02:34:03Z"
+    },
+    {
+     "name": "Build and Check Exports",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-23T02:32:57Z"
+    },
+    {
+     "name": "Tests with Coverage",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-23T02:35:47Z"
+    },
+    {
+     "name": "Example App Checks",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-23T02:32:51Z"
+    },
+    {
+     "name": "Deploy Cost Calculator Preview",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-23T02:33:19Z"
+    },
+    {
+     "name": "Lint and Format",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-23T02:32:24Z"
+    },
+    {
+     "name": "Verify openapi-ts codegen still runs",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-23T02:32:04Z"
+    },
+    {
+     "name": "Enforce Conventional Commit Title",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-23T02:31:38Z"
+    },
+    {
+     "name": "Check bundle size",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-23T02:32:07Z"
+    }
+   ]
+  },
+  "ci_base": {
+   "state": "green",
+   "complete": true,
+   "total": 15,
+   "pending": 0,
+   "failed": [],
+   "passed": 14,
+   "checks": [
+    {
+     "name": "Deploy Cost Calculator to Production",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-23T02:36:16Z"
+    },
+    {
+     "name": "Deploy Remote Flows to Production",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-23T02:36:14Z"
+    },
+    {
+     "name": "Update Coverage Badge",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-23T02:34:03Z"
+    },
+    {
+     "name": "E2E Tests",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-23T02:35:22Z"
+    },
+    {
+     "name": "Contract Details Schema Canary (pinned, PR)",
+     "app": "github-actions",
+     "conclusion": "skipped",
+     "status": "completed",
+     "completed_at": "2026-10-23T02:29:54Z"
+    },
+    {
+     "name": "Lint and Format",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-23T02:30:22Z"
+    },
+    {
+     "name": "Deploy Remote Flows Preview",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-23T02:30:51Z"
+    },
+    {
+     "name": "Deploy Cost Calculator Preview",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-23T02:30:55Z"
+    },
+    {
+     "name": "Build and Check Exports",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-23T02:30:25Z"
+    },
+    {
+     "name": "Unit Tests",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-23T02:33:19Z"
+    },
+    {
+     "name": "Example App Checks",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-23T02:30:22Z"
+    },
+    {
+     "name": "Release",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-23T02:30:12Z"
+    },
+    {
+     "name": "Contract Details Schema Canary (main)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-23T02:43:29Z"
+    },
+    {
+     "name": "Update bundle size badge",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-23T02:30:24Z"
+    },
+    {
+     "name": "Coverage Report",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-23T02:33:23Z"
+    }
+   ]
+  },
+  "read_at": "2026-11-25T16:58:29.586Z"
+ },
+ {
+  "key": "AutomatosAI/automatos-ai#1336",
+  "head_sha": "961a23deb2782f6c0c2ef4c8ae67bfeff6b47893",
+  "base_sha": "10c59c25975e7964dcb6b41c723b736fabd90ae8",
+  "ci_head": {
+   "state": "red",
+   "complete": true,
+   "total": 46,
+   "pending": 0,
+   "failed": [
+    "Browser e2e (non-required)"
+   ],
+   "passed": 28,
+   "checks": [
+    {
+     "name": "orchestrator-tests",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:11:13Z"
+    },
+    {
+     "name": "publish ${{ matrix.image.name }}",
+     "app": "github-actions",
+     "conclusion": "skipped",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:08:38Z"
+    },
+    {
+     "name": "image report",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:08:53Z"
+    },
+    {
+     "name": "CodeQL",
+     "app": "github-advanced-security",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:06:23Z"
+    },
+    {
+     "name": "sim harness units (stdlib)",
+     "app": "github-actions",
+     "conclusion": "skipped",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:05:08Z"
+    },
+    {
+     "name": "CLI host (PRD-234) — fake-claude end to end (non-required)",
+     "app": "github-actions",
+     "conclusion": "skipped",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:05:08Z"
+    },
+    {
+     "name": "Graphiti-vs-baseline gate (non-required)",
+     "app": "github-actions",
+     "conclusion": "skipped",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:05:08Z"
+    },
+    {
+     "name": "NL2SQL eval (non-required)",
+     "app": "github-actions",
+     "conclusion": "skipped",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:05:08Z"
+    },
+    {
+     "name": "Schema-drift check (four writers) (non-required)",
+     "app": "github-actions",
+     "conclusion": "skipped",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:05:08Z"
+    },
+    {
+     "name": "CLI host on Windows — ConPTY (non-required)",
+     "app": "github-actions",
+     "conclusion": "skipped",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:05:08Z"
+    },
+    {
+     "name": "Retrieval-recall eval (non-required)",
+     "app": "github-actions",
+     "conclusion": "skipped",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:05:08Z"
+    },
+    {
+     "name": "Alembic from-zero — exactly one head (non-required)",
+     "app": "github-actions",
+     "conclusion": "skipped",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:05:08Z"
+    },
+    {
+     "name": "W3 reference goldens re-recorded with the replaced libraries (PRD-262) (non-required)",
+     "app": "github-actions",
+     "conclusion": "skipped",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:05:08Z"
+    },
+    {
+     "name": "agent-opt-worker (PRD-262) — locked image, token on every route (non-required)",
+     "app": "github-actions",
+     "conclusion": "skipped",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:05:08Z"
+    },
+    {
+     "name": "Operating-graph uplift eval (non-required)",
+     "app": "github-actions",
+     "conclusion": "skipped",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:05:08Z"
+    },
+    {
+     "name": "Orchestrator module + integration tests (F056) (non-required)",
+     "app": "github-actions",
+     "conclusion": "skipped",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:05:08Z"
+    },
+    {
+     "name": "Memory-recall eval (non-required)",
+     "app": "github-actions",
+     "conclusion": "skipped",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:05:08Z"
+    },
+    {
+     "name": "Prod images built with default args carry production behaviour (non-required)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:12:52Z"
+    },
+    {
+     "name": "Frontend CI (tsc baselined, vitest, eslint, route-contract) (non-required)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:12:44Z"
+    },
+    {
+     "name": "orchestrator-tests shard 0/1 (select)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:11:06Z"
+    },
+    {
+     "name": "build frontend (amd64)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:08:38Z"
+    },
+    {
+     "name": "build frontend (arm64)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:08:11Z"
+    },
+    {
+     "name": "promote-edge — move edge to the sha that booted on both arches",
+     "app": "github-actions",
+     "conclusion": "skipped",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:03:40Z"
+    },
+    {
+     "name": "publish media-assets",
+     "app": "github-actions",
+     "conclusion": "skipped",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:03:40Z"
+    },
+    {
+     "name": "scan",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:05:13Z"
+    },
+    {
+     "name": "smoke-images (${{ matrix.arch }}) — pull and boot the published images (non-required)",
+     "app": "github-actions",
+     "conclusion": "skipped",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:03:40Z"
+    },
+    {
+     "name": "check-shopify-isolation",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:07:36Z"
+    },
+    {
+     "name": "Source rebuild reuses the npm and pip installs after make clean (non-required)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:11:19Z"
+    },
+    {
+     "name": "Signed-off-by on every commit",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:05:23Z"
+    },
+    {
+     "name": "Which images this change builds",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:04:44Z"
+    },
+    {
+     "name": "Fresh-clone make build -> /health 200 (non-required)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:09:44Z"
+    },
+    {
+     "name": "make up (pull request, amd64) — the merge base's published images, nothing built (non-required)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:07:18Z"
+    },
+    {
+     "name": "Pack the theme from the Design Kit",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:05:46Z"
+    },
+    {
+     "name": "Backend boot with egress blackholed -> /health 200 (non-required)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:06:49Z"
+    },
+    {
+     "name": "Which lanes this change needs",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:05:08Z"
+    },
+    {
+     "name": "Browser e2e (non-required)",
+     "app": "github-actions",
+     "conclusion": "failure",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:59:03Z"
+    },
+    {
+     "name": "smoke-images (pull request, amd64) — boot the images built in this job (non-required)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:15:58Z"
+    },
+    {
+     "name": "Analyze (python)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:09:07Z"
+    },
+    {
+     "name": "import-linter",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:04:41Z"
+    },
+    {
+     "name": "Code standards on changed lines (ruff, function length, nesting) (non-required)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:04:53Z"
+    },
+    {
+     "name": "Backend boot with egress refused -> /health 200 (non-required)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:06:52Z"
+    },
+    {
+     "name": "No newly tracked file over 5 MB",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:04:25Z"
+    },
+    {
+     "name": "Analyze (javascript-typescript)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:06:31Z"
+    },
+    {
+     "name": "Scan history for secrets",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:05:25Z"
+    },
+    {
+     "name": "scan",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:04:56Z"
+    }
+   ]
+  },
+  "ci_base": {
+   "state": "green",
+   "complete": true,
+   "total": 59,
+   "pending": 0,
+   "failed": [],
+   "passed": 54,
+   "checks": [
+    {
+     "name": "orchestrator-tests",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:17:58Z"
+    },
+    {
+     "name": "promote-edge — move edge to the sha that booted on both arches",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:13:09Z"
+    },
+    {
+     "name": "smoke-images (pull request, amd64) — boot the images built in this job (non-required)",
+     "app": "github-actions",
+     "conclusion": "skipped",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:09:20Z"
+    },
+    {
+     "name": "make up (pull request, amd64) — the merge base's published images, nothing built (non-required)",
+     "app": "github-actions",
+     "conclusion": "skipped",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:09:20Z"
+    },
+    {
+     "name": "smoke-images (amd64) — pull and boot the published images (non-required)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:12:41Z"
+    },
+    {
+     "name": "smoke-images (arm64) — pull and boot the published images (non-required)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:12:08Z"
+    },
+    {
+     "name": "publish api",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:09:15Z"
+    },
+    {
+     "name": "publish frontend",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:08:36Z"
+    },
+    {
+     "name": "publish workspace-worker",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:08:48Z"
+    },
+    {
+     "name": "image report",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:07:50Z"
+    },
+    {
+     "name": "Scan history for secrets",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:07:28Z"
+    },
+    {
+     "name": "Dependabot",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:03:33Z"
+    },
+    {
+     "name": "CLI host on Windows — ConPTY (non-required)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:03:02Z"
+    },
+    {
+     "name": "sim harness units (stdlib)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:06:32Z"
+    },
+    {
+     "name": "orchestrator-tests shard 1/4 (full)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:16:57Z"
+    },
+    {
+     "name": "Schema-drift check (four writers) (non-required)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:03:11Z"
+    },
+    {
+     "name": "Prod images built with default args carry production behaviour (non-required)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:10:10Z"
+    },
+    {
+     "name": "Orchestrator module + integration tests (F056) (non-required)",
+     "app": "github-actions",
+     "conclusion": "cancelled",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:33:00Z"
+    },
+    {
+     "name": "CLI host (PRD-234) — fake-claude end to end (non-required)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:07:23Z"
+    },
+    {
+     "name": "Frontend CI (tsc baselined, vitest, eslint, route-contract) (non-required)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:12:25Z"
+    },
+    {
+     "name": "Graphiti-vs-baseline gate (non-required)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:03:26Z"
+    },
+    {
+     "name": "Memory-recall eval (non-required)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:07:13Z"
+    },
+    {
+     "name": "orchestrator-tests shard 0/4 (full)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:15:03Z"
+    },
+    {
+     "name": "agent-opt-worker (PRD-262) — locked image, token on every route (non-required)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:04:21Z"
+    },
+    {
+     "name": "W3 reference goldens re-recorded with the replaced libraries (PRD-262) (non-required)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:04:22Z"
+    },
+    {
+     "name": "Operating-graph uplift eval (non-required)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:06:02Z"
+    },
+    {
+     "name": "orchestrator-tests shard 2/4 (full)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:12:59Z"
+    },
+    {
+     "name": "NL2SQL eval (non-required)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:03:35Z"
+    },
+    {
+     "name": "orchestrator-tests shard 3/4 (full)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:09:39Z"
+    },
+    {
+     "name": "Retrieval-recall eval (non-required)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:06:49Z"
+    },
+    {
+     "name": "Alembic from-zero — exactly one head (non-required)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:04:35Z"
+    },
+    {
+     "name": "build workspace-worker (arm64)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:05:43Z"
+    },
+    {
+     "name": "build frontend (amd64)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:04:21Z"
+    },
+    {
+     "name": "build workspace-worker (amd64)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:04:59Z"
+    },
+    {
+     "name": "build agent-opt-worker (amd64)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:04:14Z"
+    },
+    {
+     "name": "build media-render (amd64)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:04:57Z"
+    },
+    {
+     "name": "build api (arm64)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:05:23Z"
+    },
+    {
+     "name": "build frontend (arm64)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:04:58Z"
+    },
+    {
+     "name": "build api (amd64)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:04:53Z"
+    },
+    {
+     "name": "build media-render (arm64)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:05:15Z"
+    },
+    {
+     "name": "publish media-assets",
+     "app": "github-actions",
+     "conclusion": "skipped",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:02:06Z"
+    },
+    {
+     "name": "Code standards on changed lines (ruff, function length, nesting) (non-required)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:02:41Z"
+    },
+    {
+     "name": "windows-style-checkout (windows-latest)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:02:36Z"
+    },
+    {
+     "name": "scan",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:02:21Z"
+    },
+    {
+     "name": "windows-style-checkout (ubuntu-latest)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:02:26Z"
+    },
+    {
+     "name": "Which images this change builds",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:02:15Z"
+    },
+    {
+     "name": "No newly tracked file over 5 MB",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:02:21Z"
+    },
+    {
+     "name": "Which lanes this change needs",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:02:15Z"
+    },
+    {
+     "name": "check-shopify-isolation",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:02:18Z"
+    },
+    {
+     "name": "Analyze (python)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:09:28Z"
+    },
+    {
+     "name": "Analyze (javascript-typescript)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:06:18Z"
+    },
+    {
+     "name": "Pack the theme from the Design Kit",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:02:34Z"
+    },
+    {
+     "name": "Browser e2e (non-required)",
+     "app": "github-actions",
+     "conclusion": "cancelled",
+     "status": "completed",
+     "completed_at": "2026-10-26T16:02:44Z"
+    },
+    {
+     "name": "Every action pinned to a commit, composites included",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:02:18Z"
+    },
+    {
+     "name": "import-linter",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-26T15:02:23Z"
+    }
+   ]
+  },
+  "read_at": "2026-11-25T16:58:31.737Z"
+ },
+ {
+  "key": "trollus22/opengym#4",
+  "head_sha": "f0600892c5d92ae3bb4ca8014f2006c7049d64c9",
+  "base_sha": "54fa5914f60227c30f8ab60b4f681279b7cf74f3",
+  "ci_head": {
+   "state": "red",
+   "complete": true,
+   "total": 3,
+   "pending": 0,
+   "failed": [
+    "test",
+    "api",
+    "api-image"
+   ],
+   "passed": 0,
+   "checks": [
+    {
+     "name": "test",
+     "app": "github-actions",
+     "conclusion": "failure",
+     "status": "completed",
+     "completed_at": "2026-10-11T11:03:36Z"
+    },
+    {
+     "name": "api",
+     "app": "github-actions",
+     "conclusion": "failure",
+     "status": "completed",
+     "completed_at": "2026-10-11T11:03:25Z"
+    },
+    {
+     "name": "api-image",
+     "app": "github-actions",
+     "conclusion": "failure",
+     "status": "completed",
+     "completed_at": "2026-10-11T11:02:58Z"
+    }
+   ]
+  },
+  "ci_base": {
+   "state": "red",
+   "complete": true,
+   "total": 10,
+   "pending": 0,
+   "failed": [
+    "build",
+    "api",
+    "api-image",
+    "test",
+    "build (api, ./api, ./api/Dockerfile)"
+   ],
+   "passed": 4,
+   "checks": [
+    {
+     "name": "deploy",
+     "app": "github-actions",
+     "conclusion": "skipped",
+     "status": "completed",
+     "completed_at": "2026-10-11T11:02:34Z"
+    },
+    {
+     "name": "Build IPA for SideStore / AltStore",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-11T11:02:06Z"
+    },
+    {
+     "name": "build",
+     "app": "github-actions",
+     "conclusion": "failure",
+     "status": "completed",
+     "completed_at": "2026-10-11T11:02:34Z"
+    },
+    {
+     "name": "api",
+     "app": "github-actions",
+     "conclusion": "failure",
+     "status": "completed",
+     "completed_at": "2026-10-11T11:02:07Z"
+    },
+    {
+     "name": "api-image",
+     "app": "github-actions",
+     "conclusion": "failure",
+     "status": "completed",
+     "completed_at": "2026-10-11T11:02:19Z"
+    },
+    {
+     "name": "test",
+     "app": "github-actions",
+     "conclusion": "failure",
+     "status": "completed",
+     "completed_at": "2026-10-11T11:02:14Z"
+    },
+    {
+     "name": "build (api, ./api, ./api/Dockerfile)",
+     "app": "github-actions",
+     "conclusion": "failure",
+     "status": "completed",
+     "completed_at": "2026-10-11T11:02:47Z"
+    },
+    {
+     "name": "build (web, ., ./web/Dockerfile)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-11T11:02:42Z"
+    },
+    {
+     "name": "Build IPA for SideStore / AltStore",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-11T11:00:50Z"
+    },
+    {
+     "name": "Build IPA for SideStore / AltStore",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-11T11:01:18Z"
+    }
+   ]
+  },
+  "read_at": "2026-11-25T16:58:32.714Z"
+ },
+ {
+  "key": "tada5hi/ilingo#1035",
+  "head_sha": "a67efcc3e017d5122544fd4f0aed69525f617cad",
+  "base_sha": "383992c056d55f573b6eadaf18ad899a05d706fa",
+  "ci_head": {
+   "state": "red",
+   "complete": true,
+   "total": 9,
+   "pending": 0,
+   "failed": [
+    "Lint"
+   ],
+   "passed": 8,
+   "checks": [
+    {
+     "name": "Smoke (bun)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-15T00:07:00Z"
+    },
+    {
+     "name": "Bundle size",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-15T00:07:01Z"
+    },
+    {
+     "name": "Tests (Node 24)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-15T00:06:59Z"
+    },
+    {
+     "name": "Lint",
+     "app": "github-actions",
+     "conclusion": "failure",
+     "status": "completed",
+     "completed_at": "2026-10-15T00:07:05Z"
+    },
+    {
+     "name": "Smoke (node)",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-15T00:06:52Z"
+    },
+    {
+     "name": "Build",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-15T00:06:33Z"
+    },
+    {
+     "name": "Checkout and Install",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-15T00:06:03Z"
+    },
+    {
+     "name": "Build & deploy docs",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-15T00:06:23Z"
+    }
+   ]
+  },
+  "ci_base": {
+   "state": "red",
+   "complete": true,
+   "total": 234,
+   "pending": 0,
+   "failed": [
+    "Dependabot",
+    "Dependabot",
+    "Dependabot",
+    "Dependabot",
+    "Dependabot",
+    "Dependabot",
+    "Dependabot",
+    "Dependabot",
+    "Dependabot",
+    "Dependabot",
+    "Dependabot",
+    "Dependabot",
+    "Dependabot",
+    "Dependabot",
+    "Dependabot",
+    "Dependabot",
+    "Dependabot",
+    "Dependabot",
+    "Dependabot",
+    "Dependabot",
+    "Dependabot",
+    "Dependabot"
+   ],
+   "passed": 212,
+   "checks": [
+    {
+     "name": "Dependabot",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-27T00:04:28Z"
+    },
+    {
+     "name": "Dependabot",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-27T00:04:59Z"
+    },
+    {
+     "name": "Dependabot",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-27T00:03:00Z"
+    },
+    {
+     "name": "Dependabot",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-27T00:02:56Z"
+    },
+    {
+     "name": "Dependabot",
+     "app": "github-actions",
+     "conclusion": "failure",
+     "status": "completed",
+     "completed_at": "2026-10-26T18:26:22Z"
+    },
+    {
+     "name": "Dependabot",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-26T00:04:51Z"
+    },
+    {
+     "name": "Dependabot",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-26T00:04:32Z"
+    },
+    {
+     "name": "Dependabot",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-26T00:03:04Z"
+    },
+    {
+     "name": "Dependabot",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-26T00:03:09Z"
+    },
+    {
+     "name": "Dependabot",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-23T00:05:13Z"
+    },
+    {
+     "name": "Dependabot",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-23T00:04:22Z"
+    },
+    {
+     "name": "Dependabot",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-23T00:02:45Z"
+    },
+    {
+     "name": "Dependabot",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-23T00:02:54Z"
+    },
+    {
+     "name": "Dependabot",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-22T00:04:35Z"
+    },
+    {
+     "name": "Dependabot",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-22T00:04:11Z"
+    },
+    {
+     "name": "Dependabot",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-22T00:02:48Z"
+    },
+    {
+     "name": "Dependabot",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-22T00:02:53Z"
+    },
+    {
+     "name": "Dependabot",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-21T00:04:12Z"
+    },
+    {
+     "name": "Dependabot",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-21T00:05:01Z"
+    },
+    {
+     "name": "Dependabot",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-21T00:02:50Z"
+    },
+    {
+     "name": "Dependabot",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-21T00:02:59Z"
+    },
+    {
+     "name": "Dependabot",
+     "app": "github-actions",
+     "conclusion": "failure",
+     "status": "completed",
+     "completed_at": "2026-10-20T21:57:24Z"
+    },
+    {
+     "name": "Dependabot",
+     "app": "github-actions",
+     "conclusion": "failure",
+     "status": "completed",
+     "completed_at": "2026-10-20T21:49:57Z"
+    },
+    {
+     "name": "Dependabot",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-20T21:41:25Z"
+    },
+    {
+     "name": "Dependabot",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-20T00:07:09Z"
+    },
+    {
+     "name": "Dependabot",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-20T00:04:02Z"
+    },
+    {
+     "name": "Dependabot",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-20T00:02:54Z"
+    },
+    {
+     "name": "Dependabot",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-20T00:02:52Z"
+    },
+    {
+     "name": "Dependabot",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-19T00:05:11Z"
+    },
+    {
+     "name": "Dependabot",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-19T00:04:16Z"
+    },
+    {
+     "name": "Dependabot",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-19T00:03:00Z"
+    },
+    {
+     "name": "Dependabot",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-19T00:02:52Z"
+    },
+    {
+     "name": "Dependabot",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-16T00:04:28Z"
+    },
+    {
+     "name": "Dependabot",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-16T00:04:53Z"
+    },
+    {
+     "name": "Dependabot",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-16T00:02:49Z"
+    },
+    {
+     "name": "Dependabot",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-16T00:02:59Z"
+    },
+    {
+     "name": "Dependabot",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-15T00:03:58Z"
+    },
+    {
+     "name": "Dependabot",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-15T00:05:29Z"
+    },
+    {
+     "name": "Dependabot",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-15T00:02:40Z"
+    },
+    {
+     "name": "Dependabot",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-15T00:02:33Z"
+    },
+    {
+     "name": "Dependabot",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-14T10:22:22Z"
+    },
+    {
+     "name": "Dependabot",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-14T10:23:42Z"
+    },
+    {
+     "name": "Dependabot",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-14T10:20:39Z"
+    },
+    {
+     "name": "Dependabot",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-14T10:20:35Z"
+    },
+    {
+     "name": "Dependabot",
+     "app": "github-actions",
+     "conclusion": "failure",
+     "status": "completed",
+     "completed_at": "2026-10-12T13:31:28Z"
+    },
+    {
+     "name": "Dependabot",
+     "app": "github-actions",
+     "conclusion": "failure",
+     "status": "completed",
+     "completed_at": "2026-10-12T13:27:04Z"
+    },
+    {
+     "name": "Dependabot",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-12T12:00:19Z"
+    },
+    {
+     "name": "Dependabot",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-12T12:00:11Z"
+    },
+    {
+     "name": "Dependabot",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-12T12:00:05Z"
+    },
+    {
+     "name": "Dependabot",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-12T12:00:01Z"
+    },
+    {
+     "name": "Dependabot",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-12T12:00:07Z"
+    },
+    {
+     "name": "Dependabot",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-12T12:00:03Z"
+    },
+    {
+     "name": "Dependabot",
+     "app": "github-actions",
+     "conclusion": "failure",
+     "status": "completed",
+     "completed_at": "2026-10-12T12:00:09Z"
+    },
+    {
+     "name": "Dependabot",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-12T00:07:27Z"
+    },
+    {
+     "name": "Dependabot",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-12T00:06:26Z"
+    },
+    {
+     "name": "Dependabot",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-12T00:04:52Z"
+    },
+    {
+     "name": "Dependabot",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-12T00:04:59Z"
+    },
+    {
+     "name": "Dependabot",
+     "app": "github-actions",
+     "conclusion": "failure",
+     "status": "completed",
+     "completed_at": "2026-10-11T20:52:43Z"
+    },
+    {
+     "name": "Dependabot",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-09T00:05:35Z"
+    },
+    {
+     "name": "Dependabot",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-09T00:02:54Z"
+    }
+   ]
+  },
+  "read_at": "2026-11-25T16:58:37.747Z"
+ },
+ {
+  "key": "zarguell/cooklang-recipes#45",
+  "head_sha": "e58f2fdd087cac49e53ae7ca5c4cb5038c984cce",
+  "base_sha": "592c470c1707dc3b183d03f975c65871b9d5e921",
+  "ci_head": {
+   "state": "red",
+   "complete": true,
+   "total": 8,
+   "pending": 0,
+   "failed": [
+    "Deploy to GitHub Pages"
+   ],
+   "passed": 7,
+   "checks": [
+    {
+     "name": "Deploy to GitHub Pages",
+     "app": "github-actions",
+     "conclusion": "failure",
+     "status": "completed",
+     "completed_at": "2026-10-15T23:42:18Z"
+    },
+    {
+     "name": "semgrep-cloud-platform/scan",
+     "app": "semgrep-code-zarguell",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-15T23:43:17Z"
+    },
+    {
+     "name": "Build Astro Site",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-15T23:42:16Z"
+    },
+    {
+     "name": "StepSecurity Harden-Runner",
+     "app": "stepsecurity-actions-security",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-15T23:42:22Z"
+    },
+    {
+     "name": "GitGuardian Security Checks",
+     "app": "gitguardian",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-15T23:41:50Z"
+    }
+   ]
+  },
+  "ci_base": {
+   "state": "green",
+   "complete": true,
+   "total": 4,
+   "pending": 0,
+   "failed": [],
+   "passed": 4,
+   "checks": [
+    {
+     "name": "Deploy to GitHub Pages",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-15T19:27:45Z"
+    },
+    {
+     "name": "Build Astro Site",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-15T19:27:31Z"
+    }
+   ]
+  },
+  "read_at": "2026-11-25T16:58:38.943Z"
+ },
+ {
+  "key": "digicatapult/renovate-config#1262",
+  "head_sha": "052ab7d4e3154a7a4e30cceef7d7a075174948d4",
+  "base_sha": "5e0ae516100563bb26afe0000132c38c59230442",
+  "ci_head": {
+   "state": "green",
+   "complete": true,
+   "total": 10,
+   "pending": 0,
+   "failed": [],
+   "passed": 4,
+   "checks": [
+    {
+     "name": "synchronise-pr-version-npm / synchronise-version",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-22T09:25:27Z"
+    },
+    {
+     "name": "synchronise-pr-version-npm / synchronise-version",
+     "app": "github-actions",
+     "conclusion": "cancelled",
+     "status": "completed",
+     "completed_at": "2026-10-22T09:25:06Z"
+    },
+    {
+     "name": "synchronise-pr-version-npm / synchronise-version",
+     "app": "github-actions",
+     "conclusion": "cancelled",
+     "status": "completed",
+     "completed_at": "2026-10-22T09:25:06Z"
+    },
+    {
+     "name": "synchronise-pr-version-npm / synchronise-version",
+     "app": "github-actions",
+     "conclusion": "cancelled",
+     "status": "completed",
+     "completed_at": "2026-10-22T09:25:06Z"
+    },
+    {
+     "name": "synchronise-pr-version-npm / synchronise-version",
+     "app": "github-actions",
+     "conclusion": "cancelled",
+     "status": "completed",
+     "completed_at": "2026-10-22T09:25:05Z"
+    },
+    {
+     "name": "synchronise-pr-version-npm / synchronise-version",
+     "app": "github-actions",
+     "conclusion": "cancelled",
+     "status": "completed",
+     "completed_at": "2026-10-22T09:25:05Z"
+    },
+    {
+     "name": "scan-secrets / trufflehog",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-22T09:25:17Z"
+    },
+    {
+     "name": "synchronise-pr-version-npm / synchronise-version",
+     "app": "github-actions",
+     "conclusion": "cancelled",
+     "status": "completed",
+     "completed_at": "2026-10-22T09:25:05Z"
+    },
+    {
+     "name": "Validate Renovate config",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-22T09:25:33Z"
+    }
+   ]
+  },
+  "ci_base": {
+   "state": "green",
+   "complete": true,
+   "total": 4,
+   "pending": 0,
+   "failed": [],
+   "passed": 3,
+   "checks": [
+    {
+     "name": "synchronise-trunk-version-npm / synchronise-pull-requests",
+     "app": "github-actions",
+     "conclusion": "skipped",
+     "status": "completed",
+     "completed_at": "2026-10-22T09:23:36Z"
+    },
+    {
+     "name": "synchronise-trunk-version-npm / find-pull-requests",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-22T09:23:35Z"
+    },
+    {
+     "name": "scan-secrets / trufflehog",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-22T09:23:52Z"
+    },
+    {
+     "name": "Validate Renovate config",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-22T09:23:47Z"
+    }
+   ]
+  },
+  "read_at": "2026-11-25T16:58:40.129Z"
+ },
+ {
+  "key": "GiganticMinecraft/seichi-portal-frontend#1158",
+  "head_sha": "f921063a5fa8d226ad540164a6f94754da01b128",
+  "base_sha": "90dea66c8d2a09b673cfbdc30bf9de0e03de8a1d",
+  "ci_head": {
+   "state": "red",
+   "complete": true,
+   "total": 8,
+   "pending": 0,
+   "failed": [
+    "OpenAPI codegen check"
+   ],
+   "passed": 7,
+   "checks": [
+    {
+     "name": "Label pull request by branch name",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-03T17:29:59Z"
+    },
+    {
+     "name": "Build",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-03T17:30:45Z"
+    },
+    {
+     "name": "Unit test",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-03T17:30:34Z"
+    },
+    {
+     "name": "Lint & Format",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-03T17:31:09Z"
+    },
+    {
+     "name": "Component test",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-03T17:31:25Z"
+    },
+    {
+     "name": "OpenAPI codegen check",
+     "app": "github-actions",
+     "conclusion": "failure",
+     "status": "completed",
+     "completed_at": "2026-10-03T17:30:37Z"
+    },
+    {
+     "name": "Type check",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-03T17:30:45Z"
+    }
+   ]
+  },
+  "ci_base": {
+   "state": "red",
+   "complete": true,
+   "total": 10,
+   "pending": 0,
+   "failed": [
+    "OpenAPI codegen check"
+   ],
+   "passed": 7,
+   "checks": [
+    {
+     "name": "Merge manifest and sign image",
+     "app": "github-actions",
+     "conclusion": "skipped",
+     "status": "completed",
+     "completed_at": "2026-10-03T14:33:42Z"
+    },
+    {
+     "name": "Build and push docker image (${{ matrix.platform }})",
+     "app": "github-actions",
+     "conclusion": "skipped",
+     "status": "completed",
+     "completed_at": "2026-10-03T14:33:42Z"
+    },
+    {
+     "name": "Type check",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-03T14:34:14Z"
+    },
+    {
+     "name": "Component test",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-03T14:35:04Z"
+    },
+    {
+     "name": "Lint & Format",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-03T14:34:45Z"
+    },
+    {
+     "name": "OpenAPI codegen check",
+     "app": "github-actions",
+     "conclusion": "failure",
+     "status": "completed",
+     "completed_at": "2026-10-03T14:34:12Z"
+    },
+    {
+     "name": "Build",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-03T14:34:29Z"
+    },
+    {
+     "name": "Unit test",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-03T14:34:08Z"
+    },
+    {
+     "name": "Check release eligibility",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-03T14:33:41Z"
+    },
+    {
+     "name": "E2E test",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-10-03T14:34:37Z"
+    }
+   ]
+  },
+  "read_at": "2026-11-25T16:58:41.432Z"
+ },
+ {
+  "key": "NapLink/NapLink#226",
+  "head_sha": "5339e4928eda7fd0c5a63d04cd74bb701fb56cbd",
+  "base_sha": "13d4af2b8232a94888550fe1c56a3dacc5b83fb1",
+  "ci_head": {
+   "state": "red",
+   "complete": true,
+   "total": 9,
+   "pending": 0,
+   "failed": [
+    "build (24.x)"
+   ],
+   "passed": 6,
+   "checks": [
+    {
+     "name": "Socket Security: Pull Request Alerts",
+     "app": "socket-security",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-09T19:57:12Z"
+    },
+    {
+     "name": "Sourcery review",
+     "app": "sourcery-ai",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-09T19:57:16Z"
+    },
+    {
+     "name": "Socket Security: Project Report",
+     "app": "socket-security",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-09T19:57:04Z"
+    },
+    {
+     "name": "dependabot",
+     "app": "github-actions",
+     "conclusion": "skipped",
+     "status": "completed",
+     "completed_at": "2026-11-09T19:57:01Z"
+    },
+    {
+     "name": "build (24.x)",
+     "app": "github-actions",
+     "conclusion": "failure",
+     "status": "completed",
+     "completed_at": "2026-11-09T19:57:18Z"
+    },
+    {
+     "name": "build (26.x)",
+     "app": "github-actions",
+     "conclusion": "cancelled",
+     "status": "completed",
+     "completed_at": "2026-11-09T19:57:19Z"
+    },
+    {
+     "name": "renovate",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-09T19:57:12Z"
+    }
+   ]
+  },
+  "ci_base": {
+   "state": "green",
+   "complete": true,
+   "total": 3,
+   "pending": 0,
+   "failed": [],
+   "passed": 3,
+   "checks": [
+    {
+     "name": "Dependabot",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-09T08:21:19Z"
+    },
+    {
+     "name": "Dependabot",
+     "app": "github-actions",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-06T08:13:48Z"
+    },
+    {
+     "name": "Socket Security: Project Report",
+     "app": "socket-security",
+     "conclusion": "success",
+     "status": "completed",
+     "completed_at": "2026-11-06T04:58:01Z"
+    }
+   ]
+  },
+  "read_at": "2026-11-25T16:58:42.648Z"
+ }
+]

@@ -1,1 +1,1 @@
-freeze-ci bench/candidates.json
+pilot bench/pilot.json

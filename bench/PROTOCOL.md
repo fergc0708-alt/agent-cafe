@@ -49,12 +49,19 @@ The green strata exist to measure false accusations where the update most likely
 - The project has a `test` script that is not npm's placeholder.
 - The checkout has at most 20,000 files.
 
-**CI snapshot** (`bench/freeze-ci.mjs`, run in a workflow that executes no project code):
+**CI snapshot** (`bench/freeze-ci.mjs`, run in a workflow that executes no project code; it reads the public API
+anonymously, and when a shard exceeded the anonymous rate limit it fell back to the job token, which has no
+permissions; run 45659626130; snapshot files in `bench/ci-snapshot/`):
 - It records the check runs and statuses of the head and of its parent.
 - A candidate is kept only if the snapshot confirms its stratum.
 - In sampled order, the first 100 / 25 confirmed per stratum form `bench/cases.json`.
 - The next confirmed ones (2, 2, 1, 0) form `bench/pilot.json`, used only to test the plumbing and never analysed.
 - `bench/freeze-log.json` lists every decision.
+
+**Frozen result of the selection:** 290 candidates screened from 3,000 logged PRs; 250 kept (100 + 100 + 25 + 25)
+and 5 pilot cases. Exclusions after the CI snapshot: 7 red-stratum heads now green, 1 green-stratum head now red,
+3 with unknown CI, and 24 beyond the quota. By package manager: npm 133, pnpm 94, yarn classic 5, yarn berry 18.
+131 of the 250 have per-test evidence (vitest 108, jest 23).
 
 **SHAs.** Each case records `head_sha` (the bot commit) and `base_sha` (its parent). Every execution fetches
 exactly these SHAs. If a SHA is no longer fetchable, the case is `INDET_ENV`; it is not replaced.
