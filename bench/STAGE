@@ -1,1 +1,1 @@
-smoke bench/smoke.json
+freeze-ci bench/candidates.json

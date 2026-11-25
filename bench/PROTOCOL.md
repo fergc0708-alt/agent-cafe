@@ -181,7 +181,7 @@ base runs.
 | `INSTALL_REG` | base installs, head does not, after two attempts each | separate (reported apart) |
 | `INDET_*` | missing/env/base-install/timeout; red baseline without per-test evidence; a test failing in only some head runs and never in base (`INDET_FLAKY_NEW`); unmatched ids | **indeterminate**: never counted as hit or miss |
 
-Error messages are compared after normalization: first non-empty line, ANSI removed, run directory → `<root>`,
+Error messages are compared after normalization: the first 4 non-empty lines that are not stack frames (jest's first line is generic; the expected/received values follow), ANSI removed, run directory → `<root>`,
 `:line:col` → `:L:C`, durations → `<dur>`.
 
 **Baseline segment** of a case: green (base passed all runs), red (failed all), flaky (mixed), unknown (no

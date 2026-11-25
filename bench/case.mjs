@@ -71,8 +71,10 @@ function fetchSource(sha, depth) {
 // ---------------------------------------------------------------- per-test results (jest/vitest JSON, independent parser)
 const ANSI = /\u001b\[[0-9;]*[A-Za-z]/g;
 export function normMessage(m) {
-  const line = String(m ?? "").replace(ANSI, "").split("\n").map((l) => l.trim()).find(Boolean) ?? "";
-  return line.split(PROJ).join("<root>").split(WORK).join("<root>").replace(/:\d+:\d+/g, ":L:C").replace(/\d+(\.\d+)?\s?(ms|s)\b/g, "<dur>").replace(/\s+/g, " ").slice(0, 300);
+  // first 4 non-empty lines that are not stack frames: jest's first line is generic ("expect(received).toBe(expected)");
+  // the expected/received values follow
+  const line = String(m ?? "").replace(ANSI, "").split("\n").map((l) => l.trim()).filter((l) => l && !/^at\s/.test(l)).slice(0, 4).join(" | ");
+  return line.split(PROJ).join("<root>").split(WORK).join("<root>").replace(/:\d+:\d+/g, ":L:C").replace(/\d+(\.\d+)?\s?(ms|s)\b/g, "<dur>").replace(/\s+/g, " ").slice(0, 600);
 }
 function readTests(file) {
   let j;
