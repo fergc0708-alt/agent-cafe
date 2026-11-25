@@ -295,3 +295,17 @@ Signal is also reported restricted to the npm cases for a like-for-like comparis
    - **Reporting:** a "baseline red, CI agrees" segment is added.
    - **Scope:** CI is still not used to make anything a hit or a miss; it only withdraws a reference judgement.
    - No threshold changed.
+2. **2026-11-25, AFTER the results were seen: Node-version mismatch.**
+   - **What was found:** while inspecting a disagreement between Signal and the reference (`dependabot-red-058`),
+     the Node ranges in the frozen cases (e.g. `>=20.0.0`) turned out to resolve to different versions on
+     different runners. `actions/setup-node` prefers a version already cached on the runner image, and three image
+     versions were in use. In 28 of the 250 cases, `ref-base`, `ref-head` and `signal` did not all run on the same
+     Node version (24.22.3 vs 26.13.1).
+   - **Why it matters:** in those cases base and head no longer differ only in their dependency files, which is the
+     premise of the reference. In 058 the reference's "regression" is a Node 24 → 26 difference (`localStorage`),
+     not the update.
+   - **Rule (`--node-check` in `analyze.mjs`):** those cases become `INDET_NODE_MISMATCH`.
+   - **This is a post-hoc correction.** The report gives both the results under the frozen rules and with the
+     correction, and says which one each number comes from.
+   - **Harness flaw for a future run:** resolve the Node version once, at freeze time, and pin it.
+   - No threshold changed.

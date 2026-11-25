@@ -13,3 +13,4 @@ supabase/functions/cafe/core/
 supabase/.temp/
 .vercel
 .env*
+bench/results/

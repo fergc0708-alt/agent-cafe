@@ -157,10 +157,16 @@ function metrics(rows, pick) {
   };
 }
 
-export function analyze(cases, results) {
+export function analyze(cases, results, opts = {}) {
   const get = (mode, id) => results[`res-${mode}-${id}`] ?? null;
   const rows = cases.map((c) => {
-    const t = truth(get("ref-base", c.id), get("ref-head", c.id), c);
+    let t = truth(get("ref-base", c.id), get("ref-head", c.id), c);
+    // Deviation 2 (PROTOCOL.md): a Node.js range resolved to different versions on different runners. A case whose
+    // reference sides, or Signal, ran on different Node versions is not a controlled comparison.
+    if (opts.nodeCheck) {
+      const v = ["ref-base", "ref-head", "signal"].map((m) => get(m, c.id)?.project_node).filter(Boolean);
+      if (new Set(v).size > 1) t = { ...t, cls: "INDET_NODE_MISMATCH", was: t.cls, nodes: v };
+    }
     const s = get("signal", c.id), l = get("lastgreen", c.id);
     return {
       id: c.id, repo: c.repo, number: c.number, url: c.url, bot: c.bot, stratum: c.stratum, pm: c.pm, ci_head: c.ci_head?.state, ci_base: c.ci_base?.state,
@@ -251,7 +257,11 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     const f = join(DIR, `res-${m}-${c.id}`, "result.json");
     if (existsSync(f)) { try { results[`res-${m}-${c.id}`] = JSON.parse(readFileSync(f, "utf8")); } catch { results[`res-${m}-${c.id}`] = { errors: ["unreadable result"] }; } }
   }
-  const a = analyze(cases, results);
+  // project Node version actually used, from the trusted sandbox log of each job
+  for (const [k, r] of Object.entries(results)) {
+    try { r.project_node = readFileSync(join(DIR, k, "sandbox.txt"), "utf8").match(/project node: (v[\d.]+)/)?.[1] ?? null; } catch { /* none */ }
+  }
+  const a = analyze(cases, results, { nodeCheck: process.argv.includes("--node-check") });
   mkdirSync(OUTDIR, { recursive: true });
   writeFileSync(join(OUTDIR, "analysis.json"), JSON.stringify(a, null, 1));
   console.log(JSON.stringify({ cases: a.cases, classes: a.classes, decision: a.decision, red: a.red_baseline }, null, 1));

@@ -1,0 +1,4 @@
+freeze-ci: 45659626130
+pilot (not analysed): signal 45660829188, ref-base 45660828994, ref-head 45660829016, lastgreen 45660829229
+smoke (own example PR, not analysed): signal 45653421542, ref-base 45653422027, ref-head 45653421676, lastgreen 45653421821
+main run (bench/cases.json): signal 45663276062, ref-base 45663276068, ref-head 45663276139, lastgreen 45663276158
