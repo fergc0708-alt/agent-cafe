@@ -3,5 +3,5 @@
   "private": true,
   "description": "A compatible update on a project with a flaky test.",
   "scripts": { "test": "node --test" },
-  "dependencies": { "ms": "2.1.2" }
+  "dependencies": { "ms": "2.1.3" }
 }
