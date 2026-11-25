@@ -8,3 +8,7 @@
 | research/10-exec-reliability.md | execution/verification/reliability: false-done, runaway spend, noisy evals; providers+funded vendors hold it | done |
 | research/30-context-cost.md | memory/context/cost: quota+cache economics, overruns, tool bloat (native), AGENTS.md demand | done |
 | research/50-hypotheses.md | 34 hypotheses, 31 killed with reasons, 3 finalists | done |
+| reviews/critic-A-cache.md | critic A: cache optimizer is a feature, not a company | done |
+| reviews/critic-C-verify.md | critic C: verification is per-integration, a feature | done |
+| reviews/critic-B-spend.md | critic B: hard caps already ship everywhere | done |
+| reviews/verdict-independent.md | independent verdict: KILL; no unfair kills; 3 missed categories checked (LatAm rails MCP, agent-readiness audits, SaaS sandboxes) all absorbed/crowded | done |

@@ -1,15 +1,13 @@
 # STATE (zero-base refoundation)
 
-Updated: 2026-11-25. Mandate: "GOAT — ZERO-BASE REFOUNDATION" + Annex A (pasted by Fer, 2026-11-25).
-Branch: goat/zero-base (from main). History kept in goat/signal, goat/signal-bench, goat/prove, goat/evidence-network, goat/experiments.
+Updated: 2026-11-25. Status: **CLOSED — verdict KILL** (independent reviewer; Opus concurs).
 
-## Phase
-1. Audit + research: DONE
-2. 34 hypotheses → 3 finalists: DONE
-3. Adversarial critic per finalist: IN PROGRESS
-4. Frozen-criteria experiment on survivor(s)
-5. Independent verification → GO / EXPLORE / KILL
+- 4 research domains + post-mortem → 34 hypotheses → 3 finalists (cache optimizer, spend governor, outcome
+  verification) → all 3 destroyed by independent critics → independent verdict KILL, no unfair kills.
+- Nothing built on purpose: no hypothesis survived, and the mandate forbids building something mediocre.
+- Binding constraint: no outreach and no capital, against providers that absorb each agent-infra fix within months.
+- Next decision belongs to Fer: (a) authorize a bounded outreach test (~20 conversations, written kill criteria,
+  no build before 5 named people describe a cost unprompted), or (b) move effort to businesses with a named payer.
 
-## Rules carried over
-No merge to main, no public deploy, no packages, no third-party contact, no new spend, no foreign code outside the
-authorized isolation, no deletion of historical work.
+Model usage: Opus orchestrated; 10 Sonnet (medium) agents did research, critique and review; Haiku not needed
+(mechanical work was done with scripts). Subagent token totals as reported by the harness: see the final report.
