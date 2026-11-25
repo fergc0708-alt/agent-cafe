@@ -37,21 +37,28 @@ can only make a job fail, Signal never approves, merges or comments, and nothing
    accidental leaks (a test that prints its environment, a tool that uploads it), not a determined attacker.
 4. **Fresh HOME and TMPDIR per side.** No `~/.npmrc`, `~/.git-credentials`, `~/.ssh`, `gh` config or shared caches
    between the two sides.
-5. **Process groups.** Each command runs in its own process group; when it exits or times out, the whole group
-   is killed, so a background process started by an install script cannot alter the baseline run. A process that
-   escapes with `setsid` or double-forks into a new session is **not** caught.
-6. **Tamper detection.** Signal fingerprints the repository's `.git/config`, `info/`, `hooks/`, `HEAD` and the
-   runner's workflow-command files before running project code, and compares after. Any change makes the verdict
-   `inconclusive` and says so. A careful attacker can restore files or avoid these paths: detection, not prevention.
-7. **No workflow-command injection.** Project output never reaches the runner's stdout (it goes to a file). Signal's
-   own printout of test names and errors is wrapped in `::stop-commands::<random>`; `GITHUB_OUTPUT` values are
-   reduced to safe characters.
+5. **Leftover processes.** Each command runs in its own process group, and every process gets a random per-run
+   marker in its environment. When the command exits or times out, Signal kills the group and then (Linux) every
+   process still carrying the marker, which also catches processes that left the group (`setpgid`, `set -m` jobs,
+   `setsid`). A process that leaves the group **and** replaces its environment is not caught.
+6. **Tamper detection.** Signal hashes the repository's git control files (`config`, `info/`, `hooks/`, `HEAD`,
+   following `.git` files in worktrees and submodules) and the runner's workflow-command files before running
+   project code, and compares after. Any change makes the verdict `inconclusive` and says so. An attacker who
+   knows this can restore the files before exiting or use paths that are not watched: detection, not prevention.
+7. **Workflow commands: accidental injection only.** Project output goes to a file, not to the runner. Signal's
+   own printout of test names and errors is wrapped in `::stop-commands::<random>`, and `GITHUB_OUTPUT` values
+   are reduced to safe characters, so a test *named* `::error::…` cannot inject a command. **A malicious update
+   can still write workflow commands directly** to the runner's output (as the same user it can open the
+   runner's own file descriptors through `/proc`), including fake Signal annotations, or `::stop-commands::` to
+   hide Signal's. This is the same class as forging the verdict, and is why the verdict is only advice.
 8. **No markdown/HTML injection in the summary.** Everything from the project or the registry is escaped; mentions,
    issue references and autolinks are defused; links only point to github.com and npmjs.com; `redact: true`
    replaces messages with their shape for public repositories.
 9. **Bounded parsing.** Outputs are read from a capped tail (2 MB), parsers use linear scans and bounded regexes.
 10. **Shell safety.** Package specs passed to the isolation install are validated against npm name/version
     syntax and quoted; `{specs}` substitution cannot inject `$`-patterns.
+11. **No writes through symlinks in the trusted phase.** When restoring the old dependency files into the baseline
+    tree, Signal refuses a path that is (or goes through) a symbolic link in the PR's commit.
 
 ## The token step
 
@@ -67,6 +74,7 @@ in the runner's memory for the whole job, which is why the job's permissions are
 - **Pristine trees are writable.** The two exported trees that each run copies from are owned by the same user; a
   malicious update could edit them to influence later runs. Effect: a forged verdict (already possible).
 - **Escaping processes.** See point 5.
+- **Workflow commands and outputs can be forged** by the code under test. See point 7.
 - **Proxy URLs** are passed to the code under test when the runner uses them (installs fail otherwise). If your
   proxy URL embeds credentials, the code under test sees them, as it does in your normal CI.
 - **Outbound requests by Signal:** GitHub API (CI context, read-only) and the npm registry (changelog links). Both

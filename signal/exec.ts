@@ -6,7 +6,8 @@
 // (c) cannot leave processes behind that alter the next run, and (d) is caught when it touches the places Signal
 // relies on (the repository's .git, the runner's workflow-command files). See signal/SECURITY.md.
 import { spawn, spawnSync } from "node:child_process";
-import { closeSync, cpSync, existsSync, mkdirSync, mkdtempSync, openSync, readdirSync, readFileSync, readSync, rmSync, statSync, writeFileSync } from "node:fs";
+import { createHash, randomBytes } from "node:crypto";
+import { closeSync, cpSync, existsSync, lstatSync, mkdirSync, mkdtempSync, openSync, readdirSync, readFileSync, readSync, rmSync, statSync, writeFileSync } from "node:fs";
 import os from "node:os";
 import { dirname, join } from "node:path";
 
@@ -36,6 +37,15 @@ export function materialize(root: string, ref: string, files: string[] = [], rev
   if (r.status !== 0) { removeTree(dir); throw new Error(`could not export ${ref}: ${(r.stderr ?? "").trim().split("\n")[0]}`); }
   if (revertTo) {
     for (const f of files) {
+      // the exported tree comes from the PR: a dependency file (or a directory above it) may be a symlink to a
+      // path outside the export. Never write through one.
+      const parts = f.split("/");
+      for (let i = 1; i <= parts.length; i++) {
+        const q = join(dir, ...parts.slice(0, i));
+        let link = false;
+        try { link = lstatSync(q).isSymbolicLink(); } catch { break; /* does not exist: nothing to follow */ }
+        if (link) { removeTree(dir); throw new Error(`refusing to restore ${f}: ${parts.slice(0, i).join("/")} is a symbolic link in this commit`); }
+      }
       const p = join(dir, f);
       const blob = spawnSync("git", ["-c", "core.hooksPath=/dev/null", "-c", "core.fsmonitor=false", "cat-file", "blob", `${revertTo}:${f}`], { cwd: root, env: gitEnv(), maxBuffer: 256 << 20 });
       if (blob.status === 0) { mkdirSync(dirname(p), { recursive: true }); writeFileSync(p, blob.stdout); }
@@ -92,11 +102,11 @@ export function childEnv(home: string, base: NodeJS.ProcessEnv = process.env): N
 
 // ---------------------------------------------------------------- running untrusted commands
 
-export interface ShResult { ok: boolean; timedOut: boolean; code: number | null; ms: number; log: string }
+export interface ShResult { ok: boolean; timedOut: boolean; code: number | null; ms: number; log: string; truncated: boolean }
 
 const TAIL = 2 << 20; // only the last 2 MB of output are kept: enough to parse failures, huge logs cannot crash Signal
 
-function tail(file: string): string {
+function tail(file: string): { text: string; cut: boolean } {
   try {
     const size = statSync(file).size;
     const fd = openSync(file, "r");
@@ -104,8 +114,19 @@ function tail(file: string): string {
     const buf = Buffer.alloc(len);
     readSync(fd, buf, 0, len, size - len);
     closeSync(fd);
-    return buf.toString("utf8");
-  } catch { return ""; }
+    return { text: buf.toString("utf8"), cut: size > TAIL };
+  } catch { return { text: "", cut: false }; }
+}
+
+/** Linux: kills every process still carrying this run's marker, including ones that left the process group
+ *  (setpgid, `set -m` jobs). A process that also cleared its environment is not found. */
+function sweep(marker: string): void {
+  if (process.platform !== "linux") return;
+  let pids: string[] = [];
+  try { pids = readdirSync("/proc").filter((p) => /^\d+$/.test(p) && Number(p) !== process.pid); } catch { return; }
+  for (const p of pids) {
+    try { if (readFileSync(`/proc/${p}/environ`).includes(marker)) process.kill(Number(p), "SIGKILL"); } catch { /* gone or not ours */ }
+  }
 }
 
 /** Runs `cmd` in its own process group with output to a file. When it exits or times out the whole group is killed,
@@ -115,10 +136,12 @@ export function sh(dir: string, cmd: string, timeoutMs: number, env: NodeJS.Proc
   const logDir = mkdtempSync(join(os.tmpdir(), "signal-log-"));
   const logFile = join(logDir, "out");
   const fd = openSync(logFile, "w");
+  const marker = `SIGNAL_RUN=${randomBytes(12).toString("hex")}`;
+  const runEnv = { ...env, SIGNAL_RUN: marker.slice(11) };
   return new Promise((resolve) => {
     let timedOut = false;
     let finished = false;
-    const child = spawn("sh", ["-c", cmd], { cwd: dir, env, detached: true, stdio: ["ignore", fd, fd] });
+    const child = spawn("sh", ["-c", cmd], { cwd: dir, env: runEnv, detached: true, stdio: ["ignore", fd, fd] });
     const killGroup = () => { try { if (child.pid) process.kill(-child.pid, "SIGKILL"); } catch { /* gone */ } };
     const timer = setTimeout(() => { timedOut = true; killGroup(); }, timeoutMs);
     const done = (code: number | null) => {
@@ -126,10 +149,11 @@ export function sh(dir: string, cmd: string, timeoutMs: number, env: NodeJS.Proc
       finished = true;
       clearTimeout(timer);
       killGroup(); // leftovers of the group
+      sweep(marker); // and those that left it
       closeSync(fd);
-      const log = tail(logFile);
+      const t = tail(logFile);
       removeTree(logDir);
-      resolve({ ok: code === 0 && !timedOut, timedOut, code, ms: Date.now() - t0, log });
+      resolve({ ok: code === 0 && !timedOut, timedOut, code, ms: Date.now() - t0, log: t.text, truncated: t.cut });
     };
     child.on("error", () => done(127));
     child.on("exit", (code) => done(code));
@@ -142,15 +166,29 @@ export function sh(dir: string, cmd: string, timeoutMs: number, env: NodeJS.Proc
  *  workflow-command files (outputs, env, path, summary). Compared before and after project code runs. */
 export function fingerprint(repoRoot: string): Map<string, string> {
   const m = new Map<string, string>();
-  const add = (p: string) => {
+  const add = (p: string, depth = 0) => {
     try {
-      const st = statSync(p);
-      if (st.isDirectory()) { for (const f of readdirSync(p)) add(join(p, f)); return; }
-      m.set(p, `${st.size}:${st.mtimeMs}`);
+      const st = lstatSync(p);
+      if (st.isDirectory() && depth < 3) { m.set(p, "dir"); for (const f of readdirSync(p)) add(join(p, f), depth + 1); return; }
+      if (st.isSymbolicLink()) { m.set(p, "link"); return; }
+      // content, not size+mtime: a same-size edit with the mtime restored is still seen (files here are small)
+      m.set(p, st.size > 8 << 20 ? `big:${st.size}:${st.mtimeMs}` : createHash("sha256").update(readFileSync(p)).digest("hex"));
     } catch { m.set(p, "absent"); }
   };
-  const gitDir = join(repoRoot, ".git");
-  for (const p of ["config", "info", "hooks", "commondir", "HEAD"]) add(join(gitDir, p));
+  // `.git` is a file in worktrees and submodules: follow it to the real git directory (and its common dir)
+  let gitDir = join(repoRoot, ".git");
+  const dirs = new Set<string>();
+  try {
+    if (lstatSync(gitDir).isFile()) {
+      add(gitDir);
+      const g = readFileSync(gitDir, "utf8").match(/^gitdir:\s*(.+)$/m)?.[1]?.trim();
+      if (g) gitDir = g.startsWith("/") ? g : join(repoRoot, g);
+    }
+    dirs.add(gitDir);
+    const common = readFileSync(join(gitDir, "commondir"), "utf8").trim();
+    if (common) dirs.add(common.startsWith("/") ? common : join(gitDir, common));
+  } catch { dirs.add(gitDir); }
+  for (const g of dirs) for (const p of ["config", "info", "hooks", "commondir", "HEAD"]) add(join(g, p));
   for (const k of ["GITHUB_ENV", "GITHUB_OUTPUT", "GITHUB_PATH", "GITHUB_STEP_SUMMARY", "GITHUB_STATE"]) if (process.env[k]) add(process.env[k]!);
   if (process.env.RUNNER_TEMP) add(join(process.env.RUNNER_TEMP, "_runner_file_commands"));
   return m;

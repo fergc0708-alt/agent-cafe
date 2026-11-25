@@ -6,13 +6,13 @@
 // TESTS fail (and how), so a red main neither hides a regression nor gets blamed on the update.
 //
 // Order matters for security: every git operation happens before any project code runs (see exec.ts).
-import { mkdtempSync, readFileSync } from "node:fs";
+import { mkdtempSync, readFileSync, realpathSync, rmSync } from "node:fs";
 import os from "node:os";
 import { join } from "node:path";
 import type { Change } from "./protocol.ts";
 import { dependencyDelta, type Delta } from "./delta.ts";
 import { addCommand, changedSince, childEnv, copyTree, detectCommands, fingerprint, git, installedVersion, materialize, removeTree, safeSpec, sh, type PackageManager } from "./exec.ts";
-import { infraProblem, messageKey, parseJunit, parseOutput, type FailedTest } from "./testparse.ts";
+import { infraProblem, messageKey, normalizer, parseJunit, parseOutput, type FailedTest } from "./testparse.ts";
 import { isolate, type Isolation, type Probe } from "./isolate.ts";
 
 export type Verdict =
@@ -33,6 +33,7 @@ export interface RunRecord {
   failed: FailedTest[];
   runner: string;
   infra: string | null;
+  truncated?: boolean; // the failure list may be partial (output or failure cap)
   tail?: string[]; // last lines of a failed install (untrusted text; escaped when rendered)
 }
 
@@ -132,12 +133,21 @@ export async function diagnose(o: Options): Promise<Diagnosis> {
   const limits: string[] = [];
   const ci = o.ci ?? null;
 
-  const readFailures = (dir: string, out: string) => {
+  // Each run happens in its own temporary directory: paths are normalized away so that the same failure has the
+  // same id and message on both sides.
+  const readFailures = (dir: string, out: string, home: string, outCut = false) => {
+    let real = dir;
+    try { real = realpathSync(dir); } catch { /* keep */ }
+    const norm = normalizer(dir, real, home, os.tmpdir());
+    const fix = (fs: FailedTest[]) => fs.map((f) => ({ id: norm(f.id), message: norm(f.message) }));
     if (o.junit) {
-      try { return { failed: parseJunit(readFileSync(join(dir, o.junit), "utf8")), runner: "junit" }; } catch { /* fall back to output */ }
+      try {
+        const j = parseJunit(readFileSync(join(dir, o.junit), "utf8"));
+        return { failed: fix(j), runner: "junit", truncated: !!j.truncated };
+      } catch { /* fall back to output */ }
     }
-    const p = parseOutput(out);
-    return { failed: p.failed, runner: p.runner };
+    const p = parseOutput(norm(out));
+    return { failed: fix(p.failed), runner: p.runner, truncated: !!p.truncated || outCut };
   };
   // Environment words count only where the failure is: the failing tests' messages, or the last lines when no
   // test could be named. A passing test that prints ECONNRESET does not make a real regression "inconclusive".
@@ -146,7 +156,8 @@ export async function diagnose(o: Options): Promise<Diagnosis> {
   // One side = its exported tree, a fresh HOME, install once, test 1..N times.
   const runSide = async (side: "update" | "baseline", attempts: number, stopOnPass: boolean) => {
     const dir = join(fresh(side), d.prefix);
-    const env = childEnv(newHome(), baseEnv);
+    const home = newHome();
+    const env = childEnv(home, baseEnv);
     const recs: RunRecord[] = [];
     log(`[signal] ${side}: install (${install})`);
     const i = await sh(dir, install, timeout, env);
@@ -156,9 +167,10 @@ export async function diagnose(o: Options): Promise<Diagnosis> {
     }
     for (let a = 1; a <= attempts; a++) {
       log(`[signal] ${side}: test run ${a}/${attempts} (${test})`);
+      if (o.junit) rmSync(join(dir, o.junit), { force: true }); // a run that crashes must not reuse the last report
       const r = await sh(dir, test, timeout, env);
-      const f = readFailures(dir, r.log);
-      recs.push({ side, attempt: a, phase: "test", ok: r.ok, timedOut: r.timedOut, ms: r.ms, failed: f.failed, runner: f.runner, infra: r.ok ? null : infraOf(f.failed, r.log) });
+      const f = readFailures(dir, r.log, home, r.truncated);
+      recs.push({ side, attempt: a, phase: "test", ok: r.ok, timedOut: r.timedOut, ms: r.ms, failed: f.failed, runner: f.runner, infra: r.ok ? null : infraOf(f.failed, r.log), truncated: f.truncated || undefined });
       if (r.timedOut || (stopOnPass && r.ok)) break;
       if (side === "update" && a === 1 && r.ok) break; // fail-first: a passing update needs nothing else
       const tests = recs.filter((x) => x.phase === "test");
@@ -278,13 +290,28 @@ export async function diagnose(o: Options): Promise<Diagnosis> {
     const bPassed = bTests.filter((r) => r.ok).length;
     const bPass = bPassed === bTests.length;
     const bFlaky = bPassed > 0 && !bPass;
-    const bFailed = intersect(bTests.filter((r) => !r.ok));
+    const bFailing = bTests.filter((r) => !r.ok);
+    // fails in EVERY baseline run (only possible when no baseline run passed)
+    const bAlways = bPass || bFlaky ? [] : intersect(bFailing);
+    // fails in ANY baseline run: a test that failed even once without the update is never "new"
+    const bUnion = new Set(bFailing.flatMap((r) => r.failed.map((f) => f.id)));
+    const bSometimes = [...bUnion].filter((id) => !bAlways.some((f) => f.id === id));
     const bInfra = bTests.map((r) => r.infra).find(Boolean);
     const identified = uFailed.length > 0;
+    const truncated = [...uAll, ...bTests].some((r) => r.truncated);
     const reasons: string[] = [
       `with the update: failed ${uAll.length}/${uAll.length} runs${identified ? ` (${uFailed.length} failing test${uFailed.length > 1 ? "s" : ""} identified, ${uAll[0].runner} output)` : " (failing tests could not be identified from the output)"}`,
       `without it (same commit, only ${d.files.join(", ")} reverted, fresh install, same runner): ${bPass ? `passed ${bTests.length}/${bTests.length}` : bFlaky ? `flaky (${bPassed}/${bTests.length} passed)` : `failed ${bTests.length}/${bTests.length}`}`,
     ];
+    const flippedAll = [...new Set([...uFlipped, ...bSometimes])];
+    // confidence caps that apply to every comparison verdict
+    const caps = (v: Pending): Pending => {
+      if (uAll.length < 2 || bTests.length < 2) capConfidence(v, "medium", "a side ran only once (retries 0), so a flaky test is not ruled out");
+      if (sharedPython(install)) capConfidence(v, "medium", "both sides may have shared one Python interpreter");
+      if (truncated && !bPass) capConfidence(v, "low", "the failure lists were cut (very large output or more than 200 failures), so comparing them can invent differences");
+      return v;
+    };
+    const verdictOut = (v: Pending) => finish(anchor(caps(v)));
 
     const doIsolate = async (newIds: Set<string>): Promise<Isolation | null> => {
       if (!canIsolate) return null;
@@ -293,7 +320,8 @@ export async function diagnose(o: Options): Promise<Diagnosis> {
       const probe: Probe = async (side, apply) => {
         const src = fresh(side);
         const dir = join(src, d.prefix);
-        const env = childEnv(newHome(), baseEnv);
+        const home = newHome();
+        const env = childEnv(home, baseEnv);
         try {
           if (apply.some((c) => !c.to)) return { outcome: "error", note: "removing a dependency cannot be applied in isolation" };
           const specs = apply.map((c) => `${c.package}@${c.to}`);
@@ -309,10 +337,13 @@ export async function diagnose(o: Options): Promise<Diagnosis> {
             const got = installedVersion(dir, c.package);
             if (got !== c.to) return { outcome: "error", note: `${c.package} installed as ${got ?? "missing"}, not ${c.to}` };
           }
+          if (o.junit) rmSync(join(dir, o.junit), { force: true });
           const r = await sh(dir, test, timeout, env);
-          const f = readFailures(dir, r.log).failed;
+          const f = readFailures(dir, r.log, home, r.truncated).failed;
           runs.push({ side, attempt: 0, phase: "test", ok: r.ok, timedOut: r.timedOut, ms: r.ms, failed: f, runner: "probe", infra: null });
           if (r.timedOut) return { outcome: "error", note: "timed out" };
+          // a failing run with no identifiable test (crash at import, suite error) is not evidence of "clean"
+          if (newIds.size && !r.ok && f.length === 0) return { outcome: "error", note: "the tests failed without naming a failing test" };
           const hasNew = newIds.size ? f.some((x) => newIds.has(x.id)) : !r.ok;
           return { outcome: hasNew ? "new_failures" : "clean" };
         } finally {
@@ -323,69 +354,76 @@ export async function diagnose(o: Options): Promise<Diagnosis> {
       return isolate(d.direct, probe, budget);
     };
     const culpritOf = (iso: Isolation | null) => (iso?.status === "single" && iso.culprits.length === 1 ? iso.culprits[0] : d.direct.length === 1 ? d.direct[0] : null);
+    const nextFor = (culprit: Change | null, iso: Isolation | null, onRed = false) =>
+      culprit
+        ? `Fix the code for ${culprit.package} ${culprit.to}, or keep ${culprit.package} at ${culprit.from} (Renovate: allowedVersions "<${culprit.to}"; Dependabot: an ignore rule)${d.direct.length > 1 ? " and merge the other updates separately" : ""}${onRed ? "; the pre-existing failures are a separate problem" : ""}.`
+        : iso?.status === "single" ? `Upgrade ${iso.culprits.map((c) => c.package).join(" and ")} together and fix the code for them; merge the other updates separately.`
+        : iso?.status === "interaction" ? `Upgrade ${iso.culprits.map((c) => c.package).join(" and ")} together and fix them as one change; merge the other updates separately.`
+        : onRed ? "Fix the new failures below (the pre-existing ones are a separate problem on the base branch)."
+        : "Read the new failures below; split the group to find the responsible update if needed.";
 
-    if (bFlaky) {
-      return finish({ verdict: "flaky", confidence: "medium", reasons: [...reasons, "the baseline itself gives different results on identical runs"], merge: "Not attributable: the suite is unstable without the update too.", next: "Fix the flaky tests on the base branch first.", newFailures: [], preExisting: bFailed, flipped: uFlipped });
-    }
     if (!bPass && bInfra) {
-      return finish({ verdict: "inconclusive", confidence: "low", reasons: [...reasons, `the baseline failures show ${bInfra}, so the two sides are not comparable`], merge: "Unknown.", next: "Re-run the job; if it persists, the tests need network or resources this runner lacks.", newFailures: uFailed, preExisting: [], flipped: uFlipped });
+      return finish({ verdict: "inconclusive", confidence: "low", reasons: [...reasons, `the baseline failures show ${bInfra}, so the two sides are not comparable`], merge: "Unknown.", next: "Re-run the job; if it persists, the tests need network or resources this runner lacks.", newFailures: uFailed, preExisting: [], flipped: flippedAll });
     }
-    if (bPass) {
-      const iso = await doIsolate(ids(uFailed));
-      const culprit = culpritOf(iso);
-      let v: Pending = {
-        verdict: "regression", confidence: identified ? "high" : "medium",
-        reasons: [...reasons, ...(identified ? [] : ["confidence is medium because the failing tests could not be named (pass `junit` for exact test names)"])],
-        merge: "Do not merge: the update breaks tests that pass without it.",
-        next: culprit
-          ? `Fix the code for ${culprit.package} ${culprit.to}, or keep ${culprit.package} at ${culprit.from} (Renovate: allowedVersions "<${culprit.to}"; Dependabot: an ignore rule)${d.direct.length > 1 ? " and merge the other updates separately" : ""}.`
-          : iso?.status === "single" ? `Upgrade ${iso.culprits.map((c) => c.package).join(" and ")} together and fix the code for them; merge the other updates separately.`
-          : iso?.status === "interaction" ? `Upgrade ${iso.culprits.map((c) => c.package).join(" and ")} together and fix them as one change; merge the other updates separately.`
-          : "Read the new failures below; split the group to find the responsible update if needed.",
-        newFailures: uFailed, preExisting: [], flipped: uFlipped, isolation: iso,
-      };
-      if (bTests.length < 2 && v.confidence === "high") v = capConfidence(v, "medium", "the baseline ran only once (retries 0), so a flaky test is not ruled out");
-      if (sharedPython(install)) v = capConfidence(v, "medium", "both sides may have shared one Python interpreter");
-      return finish(anchor(v));
-    }
-    // ---------- baseline fails reproducibly ----------
-    if (!identified || bFailed.length === 0) {
-      return finish(anchor({
+    if (!identified) {
+      if (bPass) {
+        const iso = await doIsolate(new Set());
+        return verdictOut({ verdict: "regression", confidence: "medium", reasons: [...reasons, "confidence is medium because the failing tests could not be named (pass `junit` for exact test names)"], merge: "Do not merge: the update breaks tests that pass without it.", next: nextFor(culpritOf(iso), iso), newFailures: [], preExisting: [], flipped: flippedAll, isolation: iso });
+      }
+      if (bFlaky) return finish({ verdict: "flaky", confidence: "medium", reasons: [...reasons, "the baseline itself gives different results on identical runs"], merge: "Not attributable: the suite is unstable without the update too.", next: "Fix the flaky tests on the base branch first.", newFailures: [], preExisting: [], flipped: flippedAll });
+      return verdictOut({
         verdict: "pre_existing", confidence: "low",
         reasons: [...reasons, "both fail, but the failing tests could not be compared (not identified in the output), so a new failure hidden behind the old ones cannot be ruled out"],
         merge: "The baseline is already red; this PR cannot be judged until it is fixed.", next: "Fix the base branch, then re-run this PR. Pass `junit` so Signal can compare individual tests.",
-        newFailures: [], preExisting: bFailed, flipped: uFlipped,
-      }));
+        newFailures: [], preExisting: bAlways, flipped: flippedAll,
+      });
     }
-    const newOnes = uFailed.filter((f) => !bFailed.some((x) => x.id === f.id));
-    const fixed = bFailed.filter((f) => !uFailed.some((x) => x.id === f.id));
-    // same test red on both sides, but with a different error in every run: the update changed how it fails
+    // tests that failed in every run with the update and in no run without it
+    const newOnes = uFailed.filter((f) => !bUnion.has(f.id));
+    // same test red in every run on both sides, but with a different error: the update changed how it fails
     const keys = (rs: RunRecord[], id: string) => new Set(rs.map((r) => messageKey(r.failed.find((f) => f.id === id)?.message ?? "")));
-    const bFail = bTests.filter((r) => !r.ok);
     const changed = uFailed
-      .filter((f) => bFailed.some((x) => x.id === f.id))
-      .filter((f) => { const ku = keys(uAll, f.id), kb = keys(bFail, f.id); return ku.size === 1 && kb.size === 1 && [...ku][0] !== [...kb][0] && [...ku][0] !== "" && [...kb][0] !== ""; })
-      .map((f) => ({ id: f.id, before: bFailed.find((x) => x.id === f.id)!.message, after: f.message }));
-    if (newOnes.length === 0 && changed.length === 0) {
-      let v: Pending = {
-        verdict: "pre_existing", confidence: sameIds(uFailed, bFailed) ? "high" : "medium",
-        reasons: [...reasons, sameIds(uFailed, bFailed) ? `exactly the same ${bFailed.length} test(s) fail without the update, with the same errors` : `every test that fails with the update also fails without it, the same way${fixed.length ? ` (and ${fixed.length} pass with it)` : ""}`],
-        merge: d.otherFiles.length ? "Not caused by the dependency update: the same tests fail with the old dependencies on this branch's code." : "Not caused by the update: the base branch is already red. Safe to merge as far as the update is concerned.",
-        next: `Fix ${bFailed.slice(0, 2).map((f) => f.id).join(", ")}${bFailed.length > 2 ? ", …" : ""} ${d.otherFiles.length ? "(this branch also changes other files: check them first)" : "on the base branch"}; this PR can be judged independently.`,
-        newFailures: [], preExisting: bFailed, flipped: uFlipped,
+      .filter((f) => bAlways.some((x) => x.id === f.id))
+      .filter((f) => { const ku = keys(uAll, f.id), kb = keys(bFailing, f.id); return ku.size === 1 && kb.size === 1 && [...ku][0] !== [...kb][0] && [...ku][0] !== "" && [...kb][0] !== ""; })
+      .map((f) => ({ id: f.id, before: bAlways.find((x) => x.id === f.id)!.message, after: f.message }));
+    if (newOnes.length) {
+      const iso = await doIsolate(ids(newOnes));
+      const onRed = bAlways.length > 0;
+      const v: Pending = {
+        verdict: onRed ? "regression_on_red" : "regression",
+        confidence: bFlaky ? "medium" : "high",
+        reasons: [...reasons,
+          ...(onRed ? [`${newOnes.length} test(s) fail only with the update; ${bAlways.length} already failed without it`] : []),
+          ...(bFlaky ? [`the baseline is flaky, but ${newOnes.length > 1 ? "these tests" : "this test"} failed in every run with the update and in none without it`] : [])],
+        merge: onRed ? "Do not merge: besides the failures already on the base branch, the update breaks other tests." : "Do not merge: the update breaks tests that pass without it.",
+        next: nextFor(culpritOf(iso), iso, onRed),
+        newFailures: newOnes, changedFailures: changed, preExisting: bAlways.filter((f) => !changed.some((c) => c.id === f.id)), flipped: flippedAll, isolation: iso,
       };
-      if (d.otherFiles.length) v = capConfidence(v, "low", `the branch also changes ${d.otherFiles.length} non-dependency file(s), which are on both sides`);
-      return finish(anchor(v));
+      return verdictOut(v);
     }
-    const iso = newOnes.length ? await doIsolate(ids(newOnes)) : null;
-    const culprit = culpritOf(iso);
-    return finish(anchor({
-      verdict: "regression_on_red", confidence: newOnes.length ? "high" : "medium",
-      reasons: [...reasons, newOnes.length ? `${newOnes.length} test(s) fail only with the update; ${bFailed.length} already failed without it` : `no new failing test, but ${changed.length} test(s) that already failed now fail with a different error`],
-      merge: "Do not merge: besides the failures already on the base branch, the update breaks other tests (or breaks them differently).",
-      next: culprit ? `Fix the code for ${culprit.package} ${culprit.to} or keep it at ${culprit.from}; the pre-existing failures are a separate problem.` : changed.length && !newOnes.length ? `Compare the errors of ${changed[0].id} before and after the update (below).` : "Fix the new failures below (the pre-existing ones are a separate problem on the base branch).",
-      newFailures: newOnes, changedFailures: changed, preExisting: bFailed.filter((f) => !changed.some((c) => c.id === f.id)), flipped: uFlipped, isolation: iso,
-    }));
+    if (bFlaky) {
+      return finish({ verdict: "flaky", confidence: "medium", reasons: [...reasons, "the baseline itself gives different results on identical runs, and every test failing with the update also failed in some run without it"], merge: "Not attributable: the suite is unstable without the update too.", next: "Fix the flaky tests on the base branch first.", newFailures: [], preExisting: [], flipped: flippedAll });
+    }
+    if (changed.length) {
+      return verdictOut({
+        verdict: "regression_on_red", confidence: "medium",
+        reasons: [...reasons, `no new failing test, but ${changed.length} test(s) that already failed now fail with a different error`],
+        merge: "Do not merge yet: the update changes how already-failing tests fail.",
+        next: `Compare the errors of ${changed[0].id} before and after the update (below).`,
+        newFailures: [], changedFailures: changed, preExisting: bAlways.filter((f) => !changed.some((c) => c.id === f.id)), flipped: flippedAll,
+      });
+    }
+    const fixed = bAlways.filter((f) => !uFailed.some((x) => x.id === f.id));
+    const same = sameIds(uFailed, bAlways) && bSometimes.length === 0;
+    let v: Pending = {
+      verdict: "pre_existing", confidence: same ? "high" : "medium",
+      reasons: [...reasons, same ? `exactly the same ${bAlways.length} test(s) fail without the update, with the same errors` : `every test that fails with the update also fails without it, the same way${fixed.length ? ` (and ${fixed.length} pass with it)` : ""}`],
+      merge: d.otherFiles.length ? "Not caused by the dependency update: the same tests fail with the old dependencies on this branch's code." : "Not caused by the update: the base branch is already red. Safe to merge as far as the update is concerned.",
+      next: `Fix ${bAlways.slice(0, 2).map((f) => f.id).join(", ")}${bAlways.length > 2 ? ", …" : ""} ${d.otherFiles.length ? "(this branch also changes other files: check them first)" : "on the base branch"}; this PR can be judged independently.`,
+      newFailures: [], preExisting: bAlways, flipped: flippedAll,
+    };
+    if (d.otherFiles.length) v = capConfidence(v, "low", `the branch also changes ${d.otherFiles.length} non-dependency file(s), which are on both sides`);
+    return verdictOut(v);
   } finally {
     cleanup();
   }

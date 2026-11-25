@@ -9,7 +9,10 @@ import { parseJunit, parseOutput, infraProblem } from "../signal/testparse.ts";
 import { npmLock, pnpmLock, requirements, tomlLock, yarnLock, updateFromTitle, diffVersions } from "../signal/lockfiles.ts";
 import { diagnose } from "../signal/diagnose.ts";
 import { isolate, type Probe } from "../signal/isolate.ts";
-import { childEnv, detectCommands, sh } from "../signal/exec.ts";
+import { childEnv, detectCommands, fingerprint, changedSince, materialize, sh } from "../signal/exec.ts";
+import { packageLinks } from "../signal/report.ts";
+import { messageKey } from "../signal/testparse.ts";
+import { utimesSync, statSync, symlinkSync } from "node:fs";
 import { flags, preflight } from "../signal/cli.ts";
 import { units } from "../signal/isolate.ts";
 import { renderMarkdown, md } from "../signal/report.ts";
@@ -366,5 +369,109 @@ describe("report", () => {
     expect(r).toMatch(/Already failing without the update \(1\)/);
     expect(r).toMatch(/Limits of this run/);
     expect(renderMarkdown(d, {}, { redact: true })).not.toMatch(/pad is not a function/);
+  });
+});
+
+// ---------------------------------------------------------------- findings of the second red-team pass
+describe("red-team regressions", () => {
+  const commitFiles = (dir: string, files: Record<string, string>) => {
+    for (const [f, src] of Object.entries(files)) { mkdirSync(join(dir, f, ".."), { recursive: true }); writeFileSync(join(dir, f), src); }
+    spawnSync("git", ["add", "-A"], { cwd: dir });
+    spawnSync("git", ["-c", "user.email=t@t", "-c", "user.name=t", "commit", "-qm", "files"], { cwd: dir });
+  };
+  // a counter per run directory: deterministic stand-in for a flaky test
+  const nth = "const fs=require('fs');const k='.cnt';const n=Number(fs.existsSync(k)?fs.readFileSync(k,'utf8'):0);fs.writeFileSync(k,String(n+1));const upd=fs.readFileSync('package-lock.json','utf8').includes('2.0.0')||fs.readFileSync('package-lock.json','utf8').includes('1.1.0');";
+
+  it("H1: the same failure has the same id on both sides wherever the test file lives", async () => {
+    const dir = repo({ base: { right: "1.0.0" }, update: { right: "1.1.0" }, tests: {} });
+    commitFiles(dir, { "__tests__/a.test.js": MAIN_RED, "b.test.js": MAIN_RED.replace("already broken on main", "root broken") });
+    const d = await run(dir, { test: "node --test --test-reporter=tap __tests__/a.test.js b.test.js" });
+    expect(d.verdict).toBe("pre_existing");
+    expect(d.preExisting.map((f) => f.id).sort()).toEqual(["__tests__/a.test.js > already broken on main", "b.test.js > root broken"]);
+  });
+
+  it("H2: a test that failed in some baseline runs is never 'new'", async () => {
+    const Y = T("flaky Y", nth + "assert.ok(!upd && n===0,'flake');"); // update: always fails; baseline: fails from run 2
+    const d = await run(repo({ base: { right: "1.0.0" }, update: { right: "1.1.0" }, tests: { "a.test.js": MAIN_RED + Y } }), { retries: 2 });
+    expect(d.newFailures).toEqual([]);
+    expect(d.verdict).not.toMatch(/regression/);
+  });
+
+  it("H3: a flaky baseline does not hide a test that fails every time with the update and never without it", async () => {
+    const F = T("flaky F", nth + "assert.ok(upd||n>0,'flake');"); // baseline: fails on run 1 only
+    const d = await run(repo({ base: { left: "1.0.0" }, update: { left: "2.0.0" }, tests: { "a.test.js": PAD + F } }), { retries: 2 });
+    expect(d.verdict).toBe("regression");
+    expect(d.confidence).toBe("medium");
+    expect(d.newFailures.map((f) => f.id)).toEqual(["test/a.test.js > pads"]);
+  });
+
+  it("H4: an absolute temporary path in an error does not make the same failure look different", async () => {
+    const R = T("reads fixture", "require('fs').readFileSync(require('path').join(process.cwd(),'test/fixtures/missing.json'));");
+    for (let i = 0; i < 2; i++) {
+      const d = await run(repo({ base: { right: "1.0.0" }, update: { right: "1.1.0" }, tests: { "a.test.js": R } }));
+      expect(d.verdict).toBe("pre_existing");
+    }
+    expect(messageKey("ENOENT: open '/tmp/signal-update-HSquum/x.json'")).toBe(messageKey("ENOENT: open '/tmp/signal-baseline-g8d8iY/x.json'"));
+  });
+
+  it("M4: with a single run per side, no comparison verdict is high confidence", async () => {
+    const d = await run(repo({ base: { right: "1.0.0" }, update: { right: "1.1.0" }, tests: { "a.test.js": MAIN_RED } }), { retries: 0, ci: ci("red", "red") });
+    expect(d.verdict).toBe("pre_existing");
+    expect(d.confidence).toBe("medium");
+  });
+
+  it("M3: a crashed run does not reuse the previous run's JUnit report", async () => {
+    // run 1 writes a JUnit file naming a failure; later runs crash before writing it
+    const cmd = "node -e \"const fs=require('fs');if(!fs.existsSync('.ran')){fs.writeFileSync('.ran','1');fs.writeFileSync('junit.xml','<testsuite><testcase classname=\\'a\\' name=\\'x\\'><failure message=\\'boom\\'/></testcase></testsuite>');}process.exit(1)\"";
+    const d = await run(repo({ base: { left: "1.0.0" }, update: { left: "2.0.0" }, tests: { "a.test.js": OK } }), { test: cmd, junit: "junit.xml", retries: 1 });
+    expect(d.verdict).not.toBe("regression");
+  });
+
+  it("L3: refuses to restore a dependency file through a symlink", () => {
+    const dir = repo({ base: { right: "1.0.0" }, update: { right: "1.1.0" }, tests: { "a.test.js": OK } });
+    const victim = join(mkdtempSync(join(os.tmpdir(), "signal-victim-")), "v.txt");
+    writeFileSync(victim, "keep");
+    rmSync(join(dir, "package-lock.json"));
+    symlinkSync(victim, join(dir, "package-lock.json"));
+    spawnSync("git", ["add", "-A"], { cwd: dir });
+    spawnSync("git", ["-c", "user.email=t@t", "-c", "user.name=t", "commit", "-qm", "link"], { cwd: dir });
+    expect(() => materialize(dir, "HEAD", ["package-lock.json"], "HEAD~1")).toThrow(/symbolic link/);
+    expect(readFileSync(victim, "utf8")).toBe("keep");
+  });
+
+  it("L4: package names from the lockfile never become links", async () => {
+    const bad: Change = { ecosystem: "npm", package: "x)<br>[Approve](https://evil.example/", from: "1.0.0", to: "1.0.1", direct: true };
+    expect(await packageLinks([bad], true)).toEqual({});
+  });
+
+  it("L5: hostile lines parse in linear time", () => {
+    const t0 = Date.now();
+    parseOutput("not ok 1 - x" + " ".repeat(40_000) + "y\n");
+    parseOutput("=".repeat(40_000) + "\n");
+    parseOutput("  ✖ " + "a ".repeat(40_000) + "\n");
+    parseOutput("    error: '" + "'".repeat(40_000) + "\n");
+    parseJunit("<testcase name=\"a\"><failure>" + "<".repeat(40_000) + "</testcase>");
+    expect(Date.now() - t0).toBeLessThan(1000);
+  });
+
+  it("L7: tamper detection sees a same-size edit with the mtime restored", () => {
+    const dir = repo({ base: { right: "1.0.0" }, update: { right: "1.1.0" }, tests: { "a.test.js": OK } });
+    const cfg = join(dir, ".git", "config");
+    const before = fingerprint(dir);
+    const st = statSync(cfg);
+    const txt = readFileSync(cfg, "utf8");
+    writeFileSync(cfg, txt.replace("bare = false", "bare = fals3"));
+    utimesSync(cfg, st.atime, st.mtime);
+    expect(changedSince(before, dir).some((p) => p.endsWith("config"))).toBe(true);
+  });
+
+  it("L1: kills processes that left the process group", async () => {
+    const m = join(mkdtempSync(join(os.tmpdir(), "signal-pg-")), "alive");
+    const env = childEnv(mkdtempSync(join(os.tmpdir(), "signal-h-")));
+    const esc = `node -e "const {spawn}=require('child_process');spawn(process.execPath,['-e','setTimeout(()=>require(\\'fs\\').writeFileSync(${JSON.stringify(m).replace(/"/g, "\\'")},\\'x\\'),1200)'],{detached:true,stdio:'ignore'}).unref()"`;
+    const r = await sh(os.tmpdir(), esc, 10_000, env);
+    expect(r.ok).toBe(true);
+    await new Promise((res) => setTimeout(res, 1800));
+    expect(existsSync(m)).toBe(false);
   });
 });

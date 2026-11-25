@@ -1,5 +1,16 @@
 // Which tests failed, and with what message, from a test run's output (or JUnit XML). Best effort and explicit about
 // it: when no failing test can be identified, callers say "tests not identified" instead of guessing.
+/** Replaces the run's own directory (and Signal's temporary paths) so the same failure has the same id and message
+ *  on both sides, which run in different temporary directories. */
+export function normalizer(...dirs) {
+    const ds = [...new Set(dirs.filter((d) => d && d.length > 1))].sort((a, b) => b.length - a.length);
+    return (s) => {
+        let out = s;
+        for (const d of ds)
+            out = out.split(d + "/").join("").split(d).join("<project>");
+        return out.replace(/signal-(update|baseline|home|src|log|h)-[A-Za-z0-9]{6}/g, "signal-$1");
+    };
+}
 const strip = (s) => s.replace(/\x1b\[[0-9;]*[A-Za-z]/g, "").replace(/\r/g, "");
 const clean = (s) => strip(s).replace(/\s+/g, " ").trim().slice(0, 300);
 const ERRLINE = /(?:Error|Exception|AssertionError|assert|expected|Expected|Received|toBe|toEqual|Cannot |is not a function|is not defined|Unexpected|failed|ERR_)/;
@@ -30,24 +41,29 @@ export function parseJunit(input) {
             pos = tagEnd + 1;
         else {
             const close = xml.indexOf("</testcase>", tagEnd);
-            body = xml.slice(tagEnd + 1, close < 0 ? Math.min(xml.length, tagEnd + 20000) : close);
+            body = xml.slice(tagEnd + 1, Math.min(close < 0 ? xml.length : close, tagEnd + 20000));
             pos = close < 0 ? tagEnd + 1 : close + 11;
         }
         const f = body.match(/<(failure|error)\b([^>]{0,4000})>?/);
         if (!f)
             continue;
         const id = [attr(a, "classname") || attr(a, "file"), attr(a, "name")].filter(Boolean).join(" > ");
-        const msg = attr(f[2] ?? "", "message") || clean(body.replace(/<[^>]+>/g, " ").split("\n").find((l) => l.trim()) ?? "");
+        const msg = attr(f[2] ?? "", "message") || clean(body.replace(/<[^<>]{0,500}>/g, " ").split("\n").find((l) => l.trim()) ?? "");
         out.push({ id, message: clean(msg) });
     }
-    return out;
+    const res = out;
+    if (out.length >= 500 || input.length > 4 << 20)
+        res.truncated = true;
+    return res;
 }
 export function parseOutput(log) {
-    const text = strip(log.length > 1 << 20 ? log.slice(-(1 << 20)) : log);
-    const lines = text.split("\n");
+    const cut = log.length > 1 << 20;
+    const text = strip(cut ? log.slice(-(1 << 20)) : log);
+    // every pattern below runs per line, on lines capped at 2,000 characters: hostile output cannot make it slow
+    const lines = text.split("\n").map((l) => (l.length > 2000 ? l.slice(0, 2000) : l));
     const seen = new Map();
     const add = (id, at, msg) => {
-        id = id.replace(/\s+\d+(\.\d+)?\s?m?s$/, "").replace(/\s+/g, " ").trim().slice(0, 240);
+        id = id.slice(0, 400).replace(/\s+\d+(\.\d+)?\s?m?s$/, "").replace(/\s+/g, " ").trim().slice(0, 240);
         if (!id || seen.has(id))
             return;
         seen.set(id, { id, message: msg ? clean(msg) : firstError(lines, at + 1) });
@@ -56,13 +72,13 @@ export function parseOutput(log) {
     let totals;
     // pytest: "FAILED tests/test_x.py::test_y - AssertionError: ..." / "ERROR tests/test_x.py - ImportError"
     for (const [i, l] of lines.entries()) {
-        const m = l.match(/^(FAILED|ERROR) ([^\s]+(?:::[^\s]+)?)(?: - (.*))?$/);
+        const m = l.match(/^(FAILED|ERROR) (\S+)(?: - (.*))?$/);
         if (m && (m[2].includes("::") || /\.py\b/.test(m[2]))) {
             runner = "pytest";
             add(m[2], i, m[3]);
         }
     }
-    const pt = text.match(/={3,}[ \t](?:(\d+) failed)?(?:, )?(?:(\d+) passed)?[^\n]{0,200} in [\d.]+s/);
+    const pt = runner === "pytest" ? lines.map((l) => l.match(/^=+[ \t](?:(\d+) failed)?(?:, )?(?:(\d+) passed)?[^\n]{0,200} in [\d.]+s/)).find(Boolean) : null;
     if (runner === "pytest" && pt)
         totals = { failed: Number(pt[1] ?? 0), passed: pt[2] ? Number(pt[2]) : undefined };
     if (runner === "unknown") {
@@ -105,8 +121,9 @@ export function parseOutput(log) {
         // so a "not ok" whose deeper children already failed is an aggregate, not a separate failure.
         let deeperFailed = [];
         for (const [i, l] of lines.entries()) {
-            const t = l.match(/^(\s*)not ok \d+ - (.+?)(?:\s+#\s+(?:TODO|SKIP).*)?$/);
-            if (t && !/#\s*(TODO|SKIP)/i.test(l)) {
+            const t = l.match(/^(\s*)not ok \d+ - (.*)$/);
+            if (t && !/#\s*(TODO|SKIP)/i.test(l) && t[2].trim()) {
+                t[2] = t[2].trim();
                 const depth = t[1].length;
                 const hasChild = deeperFailed.some((d) => d > depth);
                 deeperFailed = deeperFailed.filter((d) => d <= depth);
@@ -115,12 +132,15 @@ export function parseOutput(log) {
                     // the YAML block after a TAP failure carries `location: 'file:line:col'` and `error: '...'`
                     let m2 = "", loc = "";
                     for (let k = i + 1; k < Math.min(lines.length, i + 30); k++) {
-                        const e = lines[k].match(/^\s+error:\s*['"|>-]?\s*(.*?)['"]?\s*$/);
+                        const e = lines[k].match(/^\s+error:\s*(.*)$/);
                         if (e && !m2)
-                            m2 = e[1];
-                        const lc = lines[k].match(/^\s+location:\s*['"]?(.*?):\d+:\d+['"]?\s*$/);
-                        if (lc && !loc)
-                            loc = lc[1].replace(/^.*?\/((?:test|tests|spec|src|lib)\/)/, "$1").split("/").slice(-3).join("/");
+                            m2 = e[1].trim().replace(/^['"|>-]\s*/, "").replace(/['"]$/, "");
+                        const lc = lines[k].match(/^\s+location:\s*(.*)$/);
+                        if (lc && !loc) {
+                            const p = lc[1].trim().replace(/^['"]|['"]$/g, "").replace(/:\d+:\d+$/, "").replace(/^file:\/\//, "");
+                            // callers normalize the run directory away; an absolute path left means "outside the project"
+                            loc = p.startsWith("/") ? p.split("/").slice(-2).join("/") : p;
+                        }
                         if (/^\s*\.\.\.\s*$/.test(lines[k]))
                             break;
                     }
@@ -132,10 +152,10 @@ export function parseOutput(log) {
             const okm = l.match(/^(\s*)ok \d+ - /);
             if (okm)
                 deeperFailed = deeperFailed.filter((d) => d <= okm[1].length);
-            const s = l.match(/^\s*✖ (.+?)(?: \([\d.]+m?s\))?$/);
-            if (s && !/^failing tests:?$/i.test(s[1].trim())) {
+            const s = l.match(/^\s*✖ (.*)$/);
+            if (s && s[1].trim() && !/^failing tests:?$/i.test(s[1].trim())) {
                 runner = "node-test";
-                add(s[1], i);
+                add(s[1].replace(/ \([\d.]+m?s\)$/, ""), i);
             }
         }
         const nt = text.match(/^[ \t]*# fail (\d+)/m);
@@ -153,9 +173,10 @@ export function parseOutput(log) {
                 if (m) {
                     const parts = [m[2]];
                     for (let k = i + 1; k < Math.min(lines.length, i + 6); k++) {
-                        const n = lines[k].match(/^\s{5,}(.+?):?$/);
-                        if (n && !ERRLINE.test(n[1]))
-                            parts.push(n[1]);
+                        const n = lines[k].match(/^\s{5,}(\S.*)$/);
+                        const v = n?.[1].replace(/:$/, "");
+                        if (v && !ERRLINE.test(v))
+                            parts.push(v);
                         else
                             break;
                     }
@@ -175,11 +196,12 @@ export function parseOutput(log) {
             }
         }
     }
-    return { failed: [...seen.values()].slice(0, 200), runner, totals };
+    return { failed: [...seen.values()].slice(0, 200), runner, totals, truncated: cut || seen.size > 200 || undefined };
 }
 /** Message comparable across runs: numbers, paths, hex ids and durations removed. */
 export function messageKey(m) {
-    return m.toLowerCase().replace(/0x[0-9a-f]+/g, "#").replace(/\d+(\.\d+)?/g, "#").replace(/(\/[\w.@-]+)+/g, "<path>").replace(/\s+/g, " ").trim().slice(0, 160);
+    // paths first (a temporary directory's random suffix must not leak into the key), then ids and numbers
+    return m.slice(0, 2000).toLowerCase().replace(/(?:[a-z]:)?(?:\/[^\s'"`:)(]+)+/g, "<path>").replace(/0x[0-9a-f]+/g, "#").replace(/\d+(\.\d+)?/g, "#").replace(/\s+/g, " ").trim().slice(0, 160);
 }
 /** Failures that are about the machine or the network, not about the code. Any of these invalidates a comparison. */
 const INFRA = [

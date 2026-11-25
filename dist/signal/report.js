@@ -1,14 +1,17 @@
 import { bumpKind, shape } from "./protocol.js";
 // Also defuses @mentions (would notify people), #123/GH-123 refs and autolinks, using an invisible joiner.
 export const md = (s) => String(s).replace(/[\\`*_{}[\]()#+!|<>~]/g, (c) => `\\${c}`).replace(/@/g, "@\u2060").replace(/:\/\//g, ":\u2060//").replace(/\bwww\./gi, (w) => w.slice(0, 3) + "\u2060.").replace(/\s+/g, " ").trim();
-const code = (s) => "`" + String(s).replace(/`/g, "ˋ").replace(/\s+/g, " ").slice(0, 200) + "`";
+const code = (s) => "`" + String(s).replace(/`/g, "ˋ").replace(/\|/g, "¦").replace(/\s+/g, " ").slice(0, 200) + "`";
+const NPM_NAME = /^(?:@[a-z0-9][a-z0-9._~-]*\/)?[a-z0-9][a-z0-9._~-]*$/i;
+const VERSION = /^[0-9A-Za-z.+_~-]{1,64}$/;
 /** Changelog/compare links from the npm registry (best effort, 4 s timeout, only github.com URLs kept). */
 export async function packageLinks(changes, offline = false) {
     const out = {};
     for (const c of changes.slice(0, 6)) {
-        if (c.ecosystem !== "npm")
+        // names and versions come from the PR's lockfile: only well-formed ones get links
+        if (c.ecosystem !== "npm" || !NPM_NAME.test(c.package) || (c.to && !VERSION.test(c.to)) || (c.from && !VERSION.test(c.from)))
             continue;
-        const npm = `https://www.npmjs.com/package/${c.package}`;
+        const npm = `https://www.npmjs.com/package/${c.package.split("/").map(encodeURIComponent).join("/")}`;
         out[c.package] = { npm };
         if (offline)
             continue;
@@ -23,7 +26,7 @@ export async function packageLinks(changes, offline = false) {
             if (!m)
                 continue;
             const repo = `https://github.com/${m[1]}/${m[2]}`;
-            out[c.package] = { npm, repo, releases: `${repo}/releases`, ...(c.from && c.to ? { compare: `${repo}/compare/v${c.from}...v${c.to}` } : {}) };
+            out[c.package] = { npm, repo, releases: `${repo}/releases`, ...(c.from && c.to ? { compare: `${repo}/compare/v${encodeURIComponent(c.from)}...v${encodeURIComponent(c.to)}` } : {}) };
         }
         catch { /* offline or slow: links are optional */ }
     }
@@ -63,7 +66,8 @@ export function renderMarkdown(d, links = {}, opts = {}) {
     L.push(`**Confidence: ${d.confidence}.** ${d.reasons.map((r) => md(cap(r))).join(". ")}.`, "");
     if (d.isolation && d.isolation.status !== "not_needed") {
         const iso = d.isolation;
-        const title = { single: "Responsible update (confirmed both ways)", interaction: "Updates that only fail together", not_direct: "Not caused by the declared updates", inconclusive: "Responsible update: not isolated", not_needed: "" }[iso.status];
+        const both = iso.confirmed.sufficient === true && iso.confirmed.necessary === true;
+        const title = { single: both ? "Responsible update (confirmed both ways)" : "Responsible update (not separately confirmed)", interaction: "Updates that only fail together", not_direct: "Not caused by the declared updates", inconclusive: "Responsible update: not isolated", not_needed: "" }[iso.status];
         L.push(`#### ${title}`, "");
         if (iso.culprits.length && (iso.status === "single" || iso.status === "interaction"))
             L.push(...iso.culprits.map((c) => `- **${md(ch(c))}**${links[c.package]?.compare ? ` · [changes](${links[c.package].compare}) · [releases](${links[c.package].releases})` : ""}`));
