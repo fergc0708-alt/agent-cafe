@@ -1,0 +1,1501 @@
+{
+ "counts": {
+  "renovate:red": 100,
+  "dependabot:red": 100,
+  "renovate:green": 25,
+  "dependabot:green": 25
+ },
+ "pilot": {
+  "renovate:red": 2,
+  "dependabot:red": 2,
+  "renovate:green": 1,
+  "dependabot:green": 0
+ },
+ "log": [
+  {
+   "key": "foXaCe/apexcharts-card#230",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "arlac77/rpm-codec#1305",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "endazon/ai-stock-trading#1629",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "gawakawa/flake-templates#448",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "patkub/infra#68",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "kadioko/KodiFlow#17",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "wevm/viem#5453",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "cv-cat/catbus#66",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "Sophie97x/sophie-interactive-cv#24",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "ayosomo/commitvista#32",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "SiLeBAT/zoonotify-cms#410",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "stubbi/openxet#158",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "doocs/md#2015",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "soroban-forge-labs/soroban-lens#262",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "JovaniPink/chess-lab#60",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "jb9k62/good2go#18",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "talstilkol/connect#51",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "mwarkentin/lazy-dog#11",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "4troDev/clay-web#20",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "razethion/myoc#245",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "rled7/automated-continuous-deployment-workflow#34",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "mdresch/my-portfolio-menno#386",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "r0si/sovereign#52",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "Rhys-Lindmark/market-for-impact#396",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "demokratiloftet/atproto-sandbox#14",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "leonardocnl/vecka#19",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "NiyiOke/open-shed-card-engine#34",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "greyhaven-ai/autocontext#1509",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "tmttn/talentenraad#852",
+   "stratum": "renovate:green",
+   "decision": "kept"
+  },
+  {
+   "key": "stentorium/stentor#3352",
+   "stratum": "renovate:green",
+   "decision": "kept"
+  },
+  {
+   "key": "amariliodeoliveira/love-quiz#245",
+   "stratum": "renovate:green",
+   "decision": "kept"
+  },
+  {
+   "key": "mirror-kt/proof-dictionary#407",
+   "stratum": "renovate:green",
+   "decision": "kept"
+  },
+  {
+   "key": "kintone/js-sdk#4021",
+   "stratum": "renovate:green",
+   "decision": "kept"
+  },
+  {
+   "key": "bountyoperator/bounty-operator#8",
+   "stratum": "dependabot:green",
+   "decision": "kept"
+  },
+  {
+   "key": "yuvrajsingh2428/openforge#65",
+   "stratum": "dependabot:green",
+   "decision": "kept"
+  },
+  {
+   "key": "vinayakkulkarni/nxui#359",
+   "stratum": "dependabot:green",
+   "decision": "kept"
+  },
+  {
+   "key": "gixrda/openway#29",
+   "stratum": "dependabot:green",
+   "decision": "kept"
+  },
+  {
+   "key": "overcodelions/overapi#9",
+   "stratum": "dependabot:green",
+   "decision": "kept"
+  },
+  {
+   "key": "starknet-innovation/starknet-start#61",
+   "stratum": "dependabot:green",
+   "decision": "kept"
+  },
+  {
+   "key": "fibu01/BrokenPlateJA#4",
+   "stratum": "dependabot:green",
+   "decision": "kept"
+  },
+  {
+   "key": "LightningMarshal/NextQuest#81",
+   "stratum": "dependabot:green",
+   "decision": "kept"
+  },
+  {
+   "key": "ViBiOh/l3miage#303",
+   "stratum": "dependabot:green",
+   "decision": "kept"
+  },
+  {
+   "key": "UniversalMediaServer/api#1701",
+   "stratum": "dependabot:green",
+   "decision": "kept"
+  },
+  {
+   "key": "shiron-dev/eslint-config#1367",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "inclusive-design/linter-configs#47",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "moltenmarshmallows/mosaiq#780",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "philwolstenholme/syntax-quiz#599",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "p-m-p/shared-worker-utils#677",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "edutogether/googler#16",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "Holytrashbag/svey#20",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "legend-esc/carbonchain#1043",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "LamTanPhu/portfolio-frontend#29",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "tryplover/Plover#404",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "JackyCooper0127/node-express-boilerplate#418",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "Qureshi-DH/hearth#7",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "syedhafiz264-star/Option-B-Local-Development#7",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "nikoteressi/alpaka-desktop#250",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "MeilCli/common-lint-reporter#3110",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "Pedr0-Henrique/FlowCRM#9",
+   "stratum": "dependabot:red",
+   "decision": "excluded",
+   "reason": "CI head is green, stratum red"
+  },
+  {
+   "key": "IntersectMBO/evolution-sdk#593",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "martinnovak22/fitapp#93",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "RobinTail/express-zod-api#3741",
+   "stratum": "renovate:green",
+   "decision": "kept"
+  },
+  {
+   "key": "nicholasgriffintn/ai-platform#2625",
+   "stratum": "renovate:green",
+   "decision": "kept"
+  },
+  {
+   "key": "kpool09122/kpool-frontend#429",
+   "stratum": "renovate:green",
+   "decision": "kept"
+  },
+  {
+   "key": "enbu-net/enbu#376",
+   "stratum": "renovate:green",
+   "decision": "kept"
+  },
+  {
+   "key": "harryzcy/mailbox-browser#4138",
+   "stratum": "renovate:green",
+   "decision": "kept"
+  },
+  {
+   "key": "d-zero-dev/kamado#274",
+   "stratum": "renovate:green",
+   "decision": "kept"
+  },
+  {
+   "key": "h13/apps-script-custom-functions#192",
+   "stratum": "renovate:green",
+   "decision": "kept"
+  },
+  {
+   "key": "mmhige0/LyricDataCreator#297",
+   "stratum": "renovate:green",
+   "decision": "kept"
+  },
+  {
+   "key": "readur/readur#932",
+   "stratum": "renovate:green",
+   "decision": "kept"
+  },
+  {
+   "key": "form8ion/gitea-workflows#277",
+   "stratum": "renovate:green",
+   "decision": "kept"
+  },
+  {
+   "key": "openameba/spindle#2216",
+   "stratum": "renovate:green",
+   "decision": "kept"
+  },
+  {
+   "key": "slmingol/swarlehtaire#150",
+   "stratum": "renovate:green",
+   "decision": "excluded",
+   "reason": "CI head is unknown, stratum green"
+  },
+  {
+   "key": "andipaetzold/tttt-discord#1511",
+   "stratum": "renovate:green",
+   "decision": "kept"
+  },
+  {
+   "key": "netlify/build#7262",
+   "stratum": "renovate:green",
+   "decision": "kept"
+  },
+  {
+   "key": "failed-successfully/ngx-darkbox-gallery-library#2347",
+   "stratum": "renovate:green",
+   "decision": "kept"
+  },
+  {
+   "key": "freelensapp/freelens-rabbitmq-extension#59",
+   "stratum": "renovate:green",
+   "decision": "kept"
+  },
+  {
+   "key": "spaceninja/logbook#168",
+   "stratum": "renovate:green",
+   "decision": "kept"
+  },
+  {
+   "key": "browser-use/browser-use-pi#28",
+   "stratum": "dependabot:green",
+   "decision": "kept"
+  },
+  {
+   "key": "remarkablemark/youtube-video-id#655",
+   "stratum": "dependabot:green",
+   "decision": "kept"
+  },
+  {
+   "key": "blacksmith-infosec/risk-assessments#296",
+   "stratum": "dependabot:green",
+   "decision": "kept"
+  },
+  {
+   "key": "ChainSafe/lodestar#10272",
+   "stratum": "dependabot:green",
+   "decision": "kept"
+  },
+  {
+   "key": "fthiess/pbe-address-book#287",
+   "stratum": "dependabot:green",
+   "decision": "kept"
+  },
+  {
+   "key": "RustedAperture/memeBucket#20",
+   "stratum": "dependabot:green",
+   "decision": "kept"
+  },
+  {
+   "key": "nbx-liz/LizyStudio#687",
+   "stratum": "dependabot:green",
+   "decision": "kept"
+  },
+  {
+   "key": "kgrizz-git/SpotiBye#37",
+   "stratum": "dependabot:green",
+   "decision": "kept"
+  },
+  {
+   "key": "Ismail-2001/Inventory-Management-AI-Employee#44",
+   "stratum": "dependabot:green",
+   "decision": "kept"
+  },
+  {
+   "key": "microsoft/typespec#12109",
+   "stratum": "dependabot:green",
+   "decision": "kept"
+  },
+  {
+   "key": "lupu60/nestjs-toolbox#872",
+   "stratum": "dependabot:green",
+   "decision": "kept"
+  },
+  {
+   "key": "outline/outline#13957",
+   "stratum": "dependabot:green",
+   "decision": "kept"
+  },
+  {
+   "key": "bcgov/jasper#1368",
+   "stratum": "dependabot:green",
+   "decision": "excluded",
+   "reason": "CI head is unknown, stratum green"
+  },
+  {
+   "key": "scalytics/kafSIEM#162",
+   "stratum": "dependabot:green",
+   "decision": "kept"
+  },
+  {
+   "key": "contentful/forma-36#3744",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "unixfg/radiacode#50",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "yottaapp/yotta#32",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "Artificial-Source/AVA#88",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "Nisan-Sinai/LD-Event-Design#141",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "Turbo-IDE/scratch-gui#12",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "yomote/mind-inbox#538",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "navikt/loggkamel-frontend#28",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "Heey-Global/verity#1799",
+   "stratum": "renovate:green",
+   "decision": "kept"
+  },
+  {
+   "key": "jellyrock/jellyrock.app#143",
+   "stratum": "renovate:green",
+   "decision": "kept"
+  },
+  {
+   "key": "remoteoss/remote-flows#1695",
+   "stratum": "renovate:green",
+   "decision": "kept"
+  },
+  {
+   "key": "ai-ecoverse/slicc-kernel#1481",
+   "stratum": "renovate:green",
+   "decision": "kept"
+  },
+  {
+   "key": "rdf-connect/sds-storage-writer-ts#129",
+   "stratum": "renovate:green",
+   "decision": "pilot (not analysed)"
+  },
+  {
+   "key": "Topsort/analytics.js#444",
+   "stratum": "renovate:green",
+   "decision": "excluded",
+   "reason": "beyond quota"
+  },
+  {
+   "key": "smeet666/mcp-books#94",
+   "stratum": "renovate:green",
+   "decision": "excluded",
+   "reason": "beyond quota"
+  },
+  {
+   "key": "DavideCarvalho/adonis-agora-agent#450",
+   "stratum": "renovate:green",
+   "decision": "excluded",
+   "reason": "beyond quota"
+  },
+  {
+   "key": "Marthijs-Berfelo/buddy-harmony#744",
+   "stratum": "dependabot:green",
+   "decision": "kept"
+  },
+  {
+   "key": "anthony-liddle/react-data-table#1",
+   "stratum": "dependabot:green",
+   "decision": "kept"
+  },
+  {
+   "key": "pdz1804/vuon-chung#7",
+   "stratum": "dependabot:green",
+   "decision": "excluded",
+   "reason": "beyond quota"
+  },
+  {
+   "key": "DeeJ6126/DeeJ6126.github.io#9",
+   "stratum": "dependabot:green",
+   "decision": "excluded",
+   "reason": "beyond quota"
+  },
+  {
+   "key": "LumenFidei/zscaler-upskill#10",
+   "stratum": "dependabot:green",
+   "decision": "excluded",
+   "reason": "beyond quota"
+  },
+  {
+   "key": "demogxp-mig/prometheus#16",
+   "stratum": "dependabot:green",
+   "decision": "excluded",
+   "reason": "CI head is red, stratum green"
+  },
+  {
+   "key": "hmcts/adoption-web#1872",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "gkwa/eastwould#427",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "Alneb/atlas#16",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "Shudesu/x-harness-oss#47",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "Kronos-Integration/message#1184",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "bobthebob58/HVL-INTERAKTIV#15",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "OpenLDES/LDES-admin#19",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "jamyouss/mnemos#13",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "RangerRick/moment-javaformat#2025",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "ceearrbee/matrixvtt#17",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "Chronote-gg/Chronote#456",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "webstackdev/digest-engine-marketing#57",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "RandyNorthrup/watermark-pro#36",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "AutomatosAI/automatos-ai#1336",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "Peace-001/StormSale#5",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "VSX-Vogel-Software/contract-manager#27",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "whiteboard-works/biteworthy#938",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "savonije/football-stats#57",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "deregut/shirone#12",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "linuxfoundation/lfx-changelog#292",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "esm-bundle/react-18next#883",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "ToxaNn1/slovo#21",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "randytarampi/lwip#241",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "bins26-sandbox/Claude-Code_Automation#40",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "reconmap/reconmap#281",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "soney/interstate#27",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "nobrufonseca02-sys/fortify#10",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "kerokero-1245/piyopiyo-kotoba#1",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "chamals3n4/OpenATS#97",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "codearena-oss/codearena#39",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "ElevenID/marty-ui#1262",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "PabiMathipa/single-page-application-paballo#58",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "yurist38/linkedin-video-downloader#65",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "shyden-labs/shyden.co.uk#694",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "ackervekenbm/jukebox#83",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "lazbutton/button#6",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "cytomine/cytomine#1333",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "StarOrga/Verse-Companion-Web#757",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "trollus22/opengym#4",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "heyyysandyyy/dotted#260",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "DeadHead04/skillEd#5",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "ganeshkalyank/unitastic#75",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "RaydanAridiCS/vialb.link#19",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "Lets-Decode-AI/Uttr#28",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "jpscalero/ghostlink#16",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "MayuranThanushan/TaskFlow#28",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "aholstenson/atvik#193",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "Vitalmet/fastify-school-app#2",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "digitalefficiency/restomatch#302",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "erwanmarega/Portfolio#12",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "BehindGate/deploy-action#40",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "Alik532UA/DeviantBlaze#8",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "csmart/aeronautes#308",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "scratchmasterj21/gfatyping-2#26",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "JoshuaRosales7/RedReturn#6",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "FrancoCazal/WhisperDocs#10",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "timo-reymann/mealie-mcp-server#54",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "JMS-1/the-adventure#505",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "fabieu/parquet-viewer#7",
+   "stratum": "dependabot:red",
+   "decision": "kept"
+  },
+  {
+   "key": "VanillaIceCube/Notoli#921",
+   "stratum": "dependabot:red",
+   "decision": "excluded",
+   "reason": "CI head is green, stratum red"
+  },
+  {
+   "key": "Kobar-Project/KoBar#83",
+   "stratum": "dependabot:red",
+   "decision": "pilot (not analysed)"
+  },
+  {
+   "key": "julianajohn7202-stack/Linkora-social#458",
+   "stratum": "dependabot:red",
+   "decision": "pilot (not analysed)"
+  },
+  {
+   "key": "SanKyu-Lab/circle-flags-ui#256",
+   "stratum": "dependabot:red",
+   "decision": "excluded",
+   "reason": "beyond quota"
+  },
+  {
+   "key": "tada5hi/ilingo#1035",
+   "stratum": "dependabot:red",
+   "decision": "excluded",
+   "reason": "beyond quota"
+  },
+  {
+   "key": "db-ux-design-system/examples#2860",
+   "stratum": "dependabot:red",
+   "decision": "excluded",
+   "reason": "beyond quota"
+  },
+  {
+   "key": "nisyuu/makasete-ai#333",
+   "stratum": "dependabot:red",
+   "decision": "excluded",
+   "reason": "beyond quota"
+  },
+  {
+   "key": "ministryofjustice/laa-cla-operator-app#217",
+   "stratum": "dependabot:red",
+   "decision": "excluded",
+   "reason": "beyond quota"
+  },
+  {
+   "key": "everybody-eats-nz/volunteer-portal#1348",
+   "stratum": "dependabot:red",
+   "decision": "excluded",
+   "reason": "beyond quota"
+  },
+  {
+   "key": "Light-Brands/foundation#15",
+   "stratum": "dependabot:red",
+   "decision": "excluded",
+   "reason": "beyond quota"
+  },
+  {
+   "key": "KarlLivesey/sf-flow-plugin#80",
+   "stratum": "dependabot:red",
+   "decision": "excluded",
+   "reason": "beyond quota"
+  },
+  {
+   "key": "dskhys0222/dskhys#193",
+   "stratum": "dependabot:red",
+   "decision": "excluded",
+   "reason": "beyond quota"
+  },
+  {
+   "key": "Evergreen-production/evergreen#32",
+   "stratum": "dependabot:red",
+   "decision": "excluded",
+   "reason": "beyond quota"
+  },
+  {
+   "key": "isabellafmv/octaris#9",
+   "stratum": "dependabot:red",
+   "decision": "excluded",
+   "reason": "beyond quota"
+  },
+  {
+   "key": "Automaat/sailor-buddy#470",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "vuepress-theme-hope/vuepress-theme-hope#5461",
+   "stratum": "renovate:red",
+   "decision": "excluded",
+   "reason": "CI head is green, stratum red"
+  },
+  {
+   "key": "digital-grease/tangible#60",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "pedrosantosdev/wordpress-consumer-nuxt#1056",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "tambo-ai/tambo#3043",
+   "stratum": "renovate:red",
+   "decision": "excluded",
+   "reason": "CI head is green, stratum red"
+  },
+  {
+   "key": "signalco-io/signalco#7136",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "Mister-Hope/configs#3",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "o11ylite/o11ylite#413",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "JSPrismarine/JSPrismarine#2627",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "activeclub/homepage#753",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "rpeters1430/yt-dlp-GUI#152",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "ScorpiusDraconis83/https-github.com-16CentAstrology-app-1#191",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "gauntface/simple-push-demo#435",
+   "stratum": "renovate:red",
+   "decision": "excluded",
+   "reason": "CI head is unknown, stratum red"
+  },
+  {
+   "key": "vercube/vercube#1356",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "Djeisen642/typescript-template#369",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "zarguell/cooklang-recipes#45",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "rohitjain00/ClockApp#48",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "lyonjs/shortvid.io#1407",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "libnyanpasu/clash-nyanpasu#5677",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "headsdownapp/headsdown-sdk#127",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "fdm-monster/fdm-monster#5498",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "vedeneevadp-spec/Planner#164",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "mlx-node/mlx-node#198",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "ForgeRock/ping-javascript-sdk#856",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "nota9x/StarryBio#160",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "k35o/storybook-framework-hono-vite#165",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "SchweizerischeBundesbahnen/DAS#2939",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "gredice/gredice#5276",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "dosigner/sasoo#108",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "Fkinds/discord-aitranslate-bot#66",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "approvers/site#970",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "dorasto/sayr#350",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "Adyen/adyen-web#4270",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "canonical/charmhub.io#2445",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "siemens/wfx#559",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "georgyo/avalon#571",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "HiroshiIgarash/koremina#498",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "hello-nrfcloud/backend#1787",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "brpaz/networth-tracker#110",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "Vaskeladden/uptime-monitor#18",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "digicatapult/renovate-config#1262",
+   "stratum": "renovate:red",
+   "decision": "excluded",
+   "reason": "CI head is green, stratum red"
+  },
+  {
+   "key": "jpmorganchase/salt-ds#7085",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "levino/shipyard-pocketbase-app-template#3",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "ZideStudio/SlotFinder#1361",
+   "stratum": "renovate:red",
+   "decision": "excluded",
+   "reason": "CI head is green, stratum red"
+  },
+  {
+   "key": "CDLUC3/dmptool-narrative-generator#124",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "voidcatcn/vchp#172",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "chrisns/repomanager#1722",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "MustardSeedNetworks/stem#1620",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "hannoeru/hannoeru.me#591",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "equisoft-actions/sarif-annotator#518",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "nrosier/metawrangler#62",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "studiometa/productive-tools#191",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "calvertjadon/n8n-nodes-openpgp#66",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "rodcordeiro/banky#301",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "EntrustCorporation/aws-api-gateway-authorizer-sample#283",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "zachlysobey/z-megarepo#139",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "MissionAppFaithTech/MissionAppBackend#152",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "Gerschtli/chattengauer-gudensberg#129",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "nextcloud/text#9428",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "m1m0zzz/tremolo-ui#435",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "RikiyaOta/rss-news-site#78",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "bindreams/hole#1051",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "still-forest/canopy#799",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "la3rence/node-express-example#322",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "smithclay/cloudflare-codemode-monty#23",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "GiganticMinecraft/seichi-portal-frontend#1158",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "ariakit/ariakit#7724",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "Code-Hex/graphql-codegen-typescript-validation-schema#1594",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "trpc/trpc#7635",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "cmintey/wishlist#800",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "Brooooooklyn/lzma#419",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "denisvmedia/inventario#2730",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "3rdprints/gsd-dashboard#362",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "tompiarulli/2028-games-guide#151",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "derliebemarcus/homeassistant_custom_oven_card#60",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "benjamincanac/whichcodingtools#229",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "vidavidorra/semantic-release-config#40",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "anolilab/semantic-release#544",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "logto-io/js#1206",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "XoRHub/waas#259",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "tskovlund/kammer#445",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "tigrisdata/storage#381",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "yukimemi/hakari#209",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "damisparks/damisparks-nuxt-portfolio#582",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "zendev-lab/ulota#643",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "NeuroNetIQ/trader-marketplace#69",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "flint-fyi/flint#3735",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "wppconnect-team/wa-js#3771",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "RareFormLabs/vue3-gettext#370",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "slipmatio/control-knob#136",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "NapLink/NapLink#226",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "wingkwong/react-quiz-component#471",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "OpenCTI-Platform/opencti#19226",
+   "stratum": "renovate:red",
+   "decision": "kept"
+  },
+  {
+   "key": "Toshi7878/YTyping#447",
+   "stratum": "renovate:red",
+   "decision": "pilot (not analysed)"
+  },
+  {
+   "key": "1natsu172/Outside-YouTube-Player-Bar#914",
+   "stratum": "renovate:red",
+   "decision": "pilot (not analysed)"
+  },
+  {
+   "key": "dylang/source-map-diff#435",
+   "stratum": "renovate:red",
+   "decision": "excluded",
+   "reason": "beyond quota"
+  },
+  {
+   "key": "vortex-rdf/vortex-rdf#100",
+   "stratum": "renovate:red",
+   "decision": "excluded",
+   "reason": "beyond quota"
+  },
+  {
+   "key": "prettier/prettier#20327",
+   "stratum": "renovate:red",
+   "decision": "excluded",
+   "reason": "CI head is green, stratum red"
+  },
+  {
+   "key": "vivid-planet/dextinity#6969",
+   "stratum": "renovate:red",
+   "decision": "excluded",
+   "reason": "beyond quota"
+  },
+  {
+   "key": "candrews/jumpstart#5189",
+   "stratum": "renovate:red",
+   "decision": "excluded",
+   "reason": "beyond quota"
+  },
+  {
+   "key": "Simple-With-Us/BotFleet#2081",
+   "stratum": "renovate:red",
+   "decision": "excluded",
+   "reason": "beyond quota"
+  },
+  {
+   "key": "scriptex/atanas.info#3587",
+   "stratum": "renovate:red",
+   "decision": "excluded",
+   "reason": "beyond quota"
+  },
+  {
+   "key": "chrillep/chrillep.github.io#726",
+   "stratum": "renovate:red",
+   "decision": "excluded",
+   "reason": "beyond quota"
+  }
+ ]
+}
