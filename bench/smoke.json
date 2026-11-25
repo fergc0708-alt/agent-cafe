@@ -1,0 +1,74 @@
+[
+ {
+  "bot": "renovate",
+  "stratum": "smoke",
+  "repo": "fergc0708-alt/agent-cafe",
+  "number": 10,
+  "url": "https://github.com/fergc0708-alt/agent-cafe/pull/10",
+  "head_sha": "373eb402c62225edf13290790eaa37a354f4e62d",
+  "base_sha": "8c5061625b54ab5a4ab14b3c281d5a4088c8be57",
+  "lockfile": "examples/signal/grouped/package-lock.json",
+  "pm": "npm",
+  "pmSpec": "npm (bundled with node)",
+  "install": "npm ci --no-audit --no-fund",
+  "test": "npm test",
+  "node": "22",
+  "nodeFrom": "default",
+  "pnp": false,
+  "inject": null,
+  "test_script": "node --test",
+  "test_script_same_at_base": true,
+  "ci_head": {
+   "state": "red",
+   "failed": [
+    "diagnose"
+   ],
+   "passed": 1,
+   "pending": 0
+  },
+  "ci_base": {
+   "state": "green",
+   "failed": [],
+   "passed": 3,
+   "pending": 0
+  },
+  "id": "smoke-1",
+  "project_dir": "examples/signal/grouped"
+ },
+ {
+  "bot": "renovate",
+  "stratum": "smoke",
+  "repo": "fergc0708-alt/agent-cafe",
+  "number": 10,
+  "url": "https://github.com/fergc0708-alt/agent-cafe/pull/10",
+  "head_sha": "373eb402c62225edf13290790eaa37a354f4e62d",
+  "base_sha": "8c5061625b54ab5a4ab14b3c281d5a4088c8be57",
+  "lockfile": "examples/signal/red-main/package-lock.json",
+  "pm": "npm",
+  "pmSpec": "npm (bundled with node)",
+  "install": "npm ci --no-audit --no-fund",
+  "test": "npm test",
+  "node": "22",
+  "nodeFrom": "default",
+  "pnp": false,
+  "inject": null,
+  "test_script": "node --test",
+  "test_script_same_at_base": true,
+  "ci_head": {
+   "state": "red",
+   "failed": [
+    "diagnose"
+   ],
+   "passed": 1,
+   "pending": 0
+  },
+  "ci_base": {
+   "state": "green",
+   "failed": [],
+   "passed": 3,
+   "pending": 0
+  },
+  "id": "smoke-2",
+  "project_dir": "examples/signal/red-main"
+ }
+]
