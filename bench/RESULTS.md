@@ -293,3 +293,42 @@ None.
 
 Signal job (minutes): {"n":249,"median_min":0.4,"p90_min":5.6,"total_min":470}. lastgreen job: {"n":133,"median_min":0.5,"p90_min":6.9,"total_min":485}.
 
+
+---
+
+## Independent verification
+
+A separate agent re-derived the main numbers from the raw archive with its own classifier, without using
+`analyze.mjs`. It confirmed:
+- the 8 positives and each tool's answer on them;
+- 99 negatives with 0 Signal accusations;
+- the 14 red-baseline cases and 14/14 agreement;
+- a random spot-check of 10 negatives;
+- every interval.
+
+Judgement calls it flagged (none changes a conclusion):
+- `dependabot-red-041` counts as PRE_EXISTING. Its suite-error message varies within each side; a stricter reading
+  makes it indeterminate, giving 98 negatives and 13/13.
+- `dependabot-red-051` and `renovate-red-029` are probably real regressions: Jest suites fail to load only with the
+  update. They are indeterminate by rule, because the ids do not match. This works against Signal, which answered
+  `regression` on both.
+
+## Findings beyond the metrics
+
+Defects in Signal at `a95a3ea` exposed by the run. Not fixed, because the benchmark froze the tool.
+1. **Crashes on Node < 22.12:** "Cannot use import statement outside a module". 3 cases (Node 18.20, 20.11, 21.7)
+   got no answer. The Action's documented minimum of Node 20 is wrong.
+2. **"No dependency change" on real dependency PRs:** 3 cases (pnpm workspace and npm subdirectory lockfiles); the
+   lockfile parsing misses them.
+3. **Test ids prefixed with `<project>`** when the project is in a subdirectory. Cosmetic; comparisons are
+   unaffected.
+4. **Signal's own environment can differ from the project's.** In `dependabot-red-077` its baseline failed where
+   the reference base passed (the suspected cause is no `.git`, or the allowlisted environment). The CI
+   cross-check turned a would-be false exoneration into `inconclusive`.
+
+Flaws in the benchmark harness:
+- Node ranges resolved differently per runner (deviation 2).
+- 18 "install regressions" are mostly npm `ERESOLVE` peer conflicts under strict `npm ci`; some projects' CIs use
+  looser installs.
+- 50 cases are red on both sides without per-test evidence, so they cannot be judged. Signal said `pre_existing`
+  on 30 of them; that is unverifiable here.
