@@ -9,5 +9,5 @@ Updated: 2026-11-25. Status: **CLOSED — verdict KILL** (independent reviewer; 
 - Next decision belongs to Fer: (a) authorize a bounded outreach test (~20 conversations, written kill criteria,
   no build before 5 named people describe a cost unprompted), or (b) move effort to businesses with a named payer.
 
-Model usage: Opus orchestrated; 10 Sonnet (medium) agents did research, critique and review; Haiku not needed
-(mechanical work was done with scripts). Subagent token totals as reported by the harness: see the final report.
+Model usage: Opus orchestrated; 9 Sonnet (medium) agents did research, critique and review; Haiku not needed
+(mechanical work was done with scripts). Subagent tokens reported by the harness: 895,453 in total across the 9 agents (Opus usage not reported by the environment).
